@@ -523,7 +523,7 @@ private fun Spotlight(item: AlbumItem, onOpen: () -> Unit) {
             Spacer(Modifier.width(8.dp))
             Box(
                 Modifier.size(44.dp).clip(CircleShape).background(MaterialTheme.colorScheme.onSurface).border(1.5.dp, com.prism.music.ui.theme.PrismTokens.spectrumRing(), CircleShape)
-                    .clickable(onClickLabel = "Play ${item.title}") {
+                    .clickable(onClickLabel = "Play ${item.title}".localized()) {
                         scope.launch {
                             val songs = release ?: runCatching { c.ytm.album(item.id).songs }.getOrNull().orEmpty()
                             if (songs.isNotEmpty()) c.player.playQueue(songs, 0, QueueSource(QueueKind.ALBUM, item.title))

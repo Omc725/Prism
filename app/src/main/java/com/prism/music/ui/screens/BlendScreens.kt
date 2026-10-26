@@ -430,11 +430,11 @@ fun BlendScreen(who: String, bottomPadding: Dp) {
                 BlendCover(
                     e,
                     Modifier.align(Alignment.CenterHorizontally).widthIn(max = 280.dp).fillMaxWidth(0.72f).aspectRatio(1f)
-                        .clickable(onClickLabel = "Pick a cover") { pickCover.launch(androidx.activity.result.PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+                        .clickable(onClickLabel = "Pick a cover".localized()) { pickCover.launch(androidx.activity.result.PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
                 )
                 Spacer(Modifier.height(16.dp))
                 if (blend.sharedArtists.isNotEmpty()) Text(
-                    "You both play ${com.prism.music.data.foryou.MadeForYou.namesLine(blend.sharedArtists)}",
+                    "You both play ${com.prism.music.data.foryou.MadeForYou.namesLine(blend.sharedArtists)}".localized(),
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 if (blend.sharedGenres.isNotEmpty()) Text(
@@ -478,9 +478,9 @@ fun BlendScreen(who: String, bottomPadding: Dp) {
         }
         if (discover.isNotEmpty()) item("discover") {
             Column {
-                SectionHeader("Discover together", strapline = "New to you both, like what you share")
+                SectionHeader("Discover together".localized(), strapline = "New to you both, like what you share".localized())
                 LazyRow(contentPadding = PaddingValues(horizontal = 14.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    items(discover, key = { it.id }) { s -> ItemCard(SongItem(s), width = 140.dp) { c.player.playQueue(discover, discover.indexOf(s), QueueSource(QueueKind.PLAYLIST, "Discover together")) } }
+                    items(discover, key = { it.id }) { s -> ItemCard(SongItem(s), width = 140.dp) { c.player.playQueue(discover, discover.indexOf(s), QueueSource(QueueKind.PLAYLIST, "Discover together".localized(context))) } }
                 }
             }
         }

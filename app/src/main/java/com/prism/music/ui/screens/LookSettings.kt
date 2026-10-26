@@ -318,7 +318,7 @@ fun LookCard(look: Look, selected: Boolean, modifier: Modifier = Modifier, onCli
             .then(if (selected) Modifier.border(2.dp, PrismTokens.spectrum, ui.tile) else Modifier.border(1.dp, scheme.onSurface.copy(alpha = 0.08f), ui.tile))
             .semantics { role = Role.RadioButton; this.selected = selected }
             // A long press opens the card's ⋯ too, as every other card in Prism does.
-            .combinedClickable(onClickLabel = "Use ${look.name}", onLongClickLabel = onMore?.let { "More for ${look.name}" }, onLongClick = onMore, onClick = onClick)
+            .combinedClickable(onClickLabel = "Use ${look.name}".localized(), onLongClickLabel = onMore?.let { "More for ${look.name}".localized() }, onLongClick = onMore, onClick = onClick)
             .padding(8.dp),
     ) {
         BoxWithConstraints(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {

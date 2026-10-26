@@ -876,7 +876,7 @@ private fun Header(type: CollectionType, page: CollectionPage, art: String?, cov
         Modifier.fillMaxWidth().statusBarsPadding().padding(top = 64.dp, start = 24.dp, end = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Box(Modifier.clip(cover).clickable(enabled = coverKey != null, onClickLabel = "Change picture", onClick = onEditCover)) {
+        Box(Modifier.clip(cover).clickable(enabled = coverKey != null, onClickLabel = "Change picture".localized(), onClick = onEditCover)) {
             if (art != null) {
                 Artwork(art, Modifier.size(248.dp).shadow(30.dp, cover), cover, size = 900)
             } else {

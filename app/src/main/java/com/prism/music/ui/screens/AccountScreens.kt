@@ -116,7 +116,7 @@ private fun AvatarPicker(selected: String?, photoChosen: Boolean, onPhotos: () -
                 Box(
                     Modifier.size(56.dp).clip(CircleShape).background(com.prism.music.ui.components.glassFill(1.6f))
                         .border(if (photoChosen) 2.dp else 1.dp, if (photoChosen) PrismTokens.spectrumRing() else com.prism.music.ui.components.glassEdge(), CircleShape)
-                        .clickable(onClickLabel = "Pick a photo") { onPhotos() },
+                        .clickable(onClickLabel = "Pick a photo".localized()) { onPhotos() },
                     contentAlignment = Alignment.Center,
                 ) { Icon(PrismIcons.Photo, null, Modifier.size(24.dp), tint = MaterialTheme.colorScheme.onSurface) }
                 Text("Photos".localized(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, modifier = Modifier.padding(top = 4.dp))

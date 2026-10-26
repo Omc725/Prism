@@ -392,6 +392,8 @@ object LocalizedStrings {
         "Customize by tapping: hold the Settings tab, or turn it on in Appearance, then tap the mini player, tab bar, player or a Home section" to "Dokunarak özelleştirin: Ayarlar sekmesini basılı tutun veya Görünüm'de açın, ardından mini oynatıcıya, sekme çubuğuna, oynatıcıya veya bir Ana Sayfa bölümüne dokunun",
         "Customize home" to "Ana sayfayı özelleştir",
         "Customize this" to "Bunu özelleştir",
+        "Discover together" to "Birlikte keşfedin",
+        "New to you both, like what you share" to "İkiniz için de yeni, paylaştıklarınız gibi",
         "DJ mode and Crossfade" to "DJ modu ve Çapraz Geçiş",
         "Daily Mixes group the artists you play by what goes together" to "Günlük Miksler, dinlediğiniz sanatçıları birbirine uyumlarına göre gruplar",
         "Dark" to "Koyu",
@@ -1116,6 +1118,7 @@ object LocalizedStrings {
         "Skip silence" to "Sessizliği atla",
         "Skip silent stretches between songs" to "Şarkılar arasındaki sessiz bölümleri atla",
         "Skip to the best part" to "En iyi kısma atla",
+        "Set your own best part" to "Kendi en iyi kısmınızı belirleyin",
         "Skip tour" to "Turu atla",
         "Slims down as you scroll" to "Kaydırdıkça incelir",
         "Smaller things that make Prism yours." to "Prism'i size özel kılan daha küçük detaylar.",
@@ -2571,6 +2574,8 @@ object LocalizedStrings {
         "Customize by tapping: hold the Settings tab, or turn it on in Appearance, then tap the mini player, tab bar, player or a Home section" to "Toxunaraq fərdiləşdirin: Parametrlər vərəqəsini basıb saxlayın və ya Görünüşdə aktiv edin, sonra mini oxuducuya, vərəqə panelinə, oxuducuya və ya Əsas Səhifə bölməsinə toxunun",
         "Customize home" to "Əsas səhifəni fərdiləşdir",
         "Customize this" to "Bunu fərdiləşdir",
+        "Discover together" to "Birlikdə kəşf edin",
+        "New to you both, like what you share" to "Hər ikiniz üçün yeni, paylaşdıqlarınız kimi",
         "DJ mode and Crossfade" to "DJ rejimi və Çarpaz Keçid",
         "Daily Mixes group the artists you play by what goes together" to "Gündəlik Mikslər dinlədiyiniz sənətçiləri bir-birinə uyğunluğuna görə qruplaşdırır",
         "Dark" to "Qaranlıq",
@@ -3295,6 +3300,7 @@ object LocalizedStrings {
         "Skip silence" to "Səssizliyi keç",
         "Skip silent stretches between songs" to "Mahnılar arasındakı səssiz hissələri keç",
         "Skip to the best part" to "Ən yaxşı hissəyə keç",
+        "Set your own best part" to "Öz ən yaxşı hissənizi təyin edin",
         "Skip tour" to "Turu keç",
         "Slims down as you scroll" to "Sürüşdürdükcə incəlir",
         "Smaller things that make Prism yours." to "Prism-i sizə özəl edən daha kiçik detallar.",
@@ -4554,6 +4560,10 @@ object LocalizedStrings {
     private val lessThanMinShortRegex = Regex("""^<1\s+min$""")
     private val searchInRegex = Regex("""^Search in\s*(.*)$""")
     private val titleCountRegex = Regex("""^(.*?)\s*·\s*(\d+)$""")
+    private val playbackSpeedRegex = Regex("""^Playback speed\s*(.*)$""")
+    private val playTitleRegex = Regex("""^Play\s+(.*)$""")
+    private val useLookRegex = Regex("""^Use\s+(.*)$""")
+    private val moreForLookRegex = Regex("""^More for\s+(.*)$""")
     private val spaceToUseRegex = Regex("""^Space to use:\s*(.*)$""")
     private val storageInfoRegex = Regex("""^About\s+(.*?)\s+songs\s+·\s+(.*?)\s+used\s+·\s+(.*?)\s+free on the phone.*$""")
     private val aboutSongsRegex = Regex("""^About\s+([\d\.,]+)\s+songs?$""")
@@ -5135,6 +5145,42 @@ object LocalizedStrings {
             val title = get(m.groupValues[1], context)
             val count = m.groupValues[2]
             return "$title · $count"
+        }
+
+        playbackSpeedRegex.matchEntire(clean)?.let { m ->
+            val speed = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "Oynatma hızı: $speed"
+                "az" -> "Oxutma sürəti: $speed"
+                else -> clean
+            }
+        }
+
+        playTitleRegex.matchEntire(clean)?.let { m ->
+            val title = get(m.groupValues[1], context)
+            return when (lang) {
+                "tr" -> "$title çal"
+                "az" -> "$title oxut"
+                else -> clean
+            }
+        }
+
+        useLookRegex.matchEntire(clean)?.let { m ->
+            val name = get(m.groupValues[1], context)
+            return when (lang) {
+                "tr" -> "$name kullan"
+                "az" -> "$name istifadə et"
+                else -> clean
+            }
+        }
+
+        moreForLookRegex.matchEntire(clean)?.let { m ->
+            val name = get(m.groupValues[1], context)
+            return when (lang) {
+                "tr" -> "$name için daha fazla"
+                "az" -> "$name üçün daha çox"
+                else -> clean
+            }
         }
 
         spaceToUseRegex.matchEntire(clean)?.let { m ->

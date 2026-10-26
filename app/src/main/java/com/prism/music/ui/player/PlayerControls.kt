@@ -412,7 +412,7 @@ fun BoxScope.BestPartChip(): Boolean {
         Modifier.align(Alignment.Center).clip(tag).background(Color.White.copy(alpha = 0.08f))
             .border(1.dp, com.prism.music.ui.theme.PrismTokens.spectrumRing(), tag)
             .combinedClickable(
-                onClickLabel = "Skip to the best part", onLongClickLabel = "Set your own best part",
+                onClickLabel = "Skip to the best part".localized(), onLongClickLabel = "Set your own best part".localized(),
                 onLongClick = { haptics.tick(); BestPartEditor.open = true },
             ) { haptics.tick(); pc.seekToLyric(start) }
             .padding(horizontal = 10.dp, vertical = 3.dp),
@@ -829,7 +829,7 @@ private fun PlayerButtonGlyph(
             if (speed == 1f) BottomGlyph(PrismIcons.Speed, stringResource(R.string.player_speed), false, { pc.setMusicSpeed(next) }, width, enabled = !s.isLive)
             else Box(
                 Modifier.size(width = width, height = BOTTOM_ACTION_SIZE).clip(CircleShape).background(Color.White.copy(alpha = 0.16f))
-                    .clickable(onClickLabel = "Playback speed ${speedText(speed)}") { haptics.tick(); pc.setMusicSpeed(next) },
+                    .clickable(onClickLabel = "Playback speed ${speedText(speed)}".localized()) { haptics.tick(); pc.setMusicSpeed(next) },
                 contentAlignment = Alignment.Center,
             ) {
                 Text(speedText(speed), style = MaterialTheme.typography.labelLarge.copy(fontFeatureSettings = "tnum"), color = Color.White)
@@ -874,7 +874,7 @@ private fun EpisodeActionRow(queueOpen: Boolean, onToggleQueue: () -> Unit) {
             Box(
                 Modifier.height(BOTTOM_ACTION_SIZE).clip(CircleShape)
                     .background(if (speed != 1f) Color.White.copy(alpha = 0.14f) else Color.Transparent)
-                    .clickable(onClickLabel = "Playback speed $label") {
+                    .clickable(onClickLabel = "Playback speed $label".localized()) {
                         haptics.tick()
                         pc.setEpisodeSpeed(EPISODE_SPEEDS[(EPISODE_SPEEDS.indexOf(speed) + 1).mod(EPISODE_SPEEDS.size)])
                     }

@@ -1,6 +1,7 @@
 package com.prism.music.ui.screens
 
 import androidx.compose.ui.graphics.Color
+import com.prism.music.ui.i18n.localized
 import androidx.compose.foundation.border
 import com.prism.music.ui.components.PrismButton
 import com.prism.music.ui.components.PrismFilledTonalButton
@@ -107,7 +108,7 @@ private fun Idle() {
             if (nearby.isEmpty()) Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                 com.prism.music.ui.components.PrismSpinner(Modifier.size(18.dp), stroke = 2.dp)
                 Spacer(Modifier.width(12.dp))
-                Text("Looking on this network…", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Looking on this network…".localized(), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             nearby.forEach { n ->
                 Item(n.name, "Tap to join with their code", onClick = { joinTarget = n }, icon = PrismIcons.Groups)
@@ -136,21 +137,21 @@ private fun JoinDialog(name: String, askAddress: Boolean, onDismiss: () -> Unit,
     var code by remember { mutableStateOf("") }
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Join $name") },
+        title = { Text(if (name.startsWith("a ")) "Join a session".localized() else "Join".localized() + " $name") },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 if (askAddress) com.prism.music.ui.components.PrismTextField(
-                    address, { address = it.trim() }, label = { Text("Address on the host's screen") }, placeholder = { Text("192.168.1.20") },
+                    address, { address = it.trim() }, label = { Text("Address on the host's screen".localized()) }, placeholder = { Text("192.168.1.20") },
                     singleLine = true, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri), modifier = Modifier.fillMaxWidth(),
                 )
                 com.prism.music.ui.components.PrismTextField(
-                    code, { code = it.filter(Char::isDigit).take(4) }, label = { Text("Session code") }, singleLine = true,
+                    code, { code = it.filter(Char::isDigit).take(4) }, label = { Text("Session code".localized()) }, singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword), modifier = Modifier.fillMaxWidth(),
                 )
             }
         },
-        confirmButton = { PrismTextButton(onClick = { onJoin(address, code) }, enabled = code.length == 4 && (!askAddress || address.isNotBlank())) { Text("Join") } },
-        dismissButton = { PrismTextButton(onClick = onDismiss) { Text("Cancel") } },
+        confirmButton = { PrismTextButton(onClick = { onJoin(address, code) }, enabled = code.length == 4 && (!askAddress || address.isNotBlank())) { Text("Join".localized()) } },
+        dismissButton = { PrismTextButton(onClick = onDismiss) { Text("Cancel".localized()) } },
     )
 }
 
@@ -159,7 +160,7 @@ private fun Joining(name: String) {
     Row(Modifier.fillMaxWidth().padding(24.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
         com.prism.music.ui.components.PrismSpinner(Modifier.size(22.dp), stroke = 2.dp)
         Spacer(Modifier.width(14.dp))
-        Text("Joining $name…", style = MaterialTheme.typography.titleMedium)
+        Text("Joining".localized() + " $name…", style = MaterialTheme.typography.titleMedium)
     }
 }
 
@@ -181,28 +182,28 @@ private fun Hosting(s: TogetherState.Hosting) {
                 style = MaterialTheme.typography.displayMedium.copy(fontWeight = FontWeight.Light, letterSpacing = 0.08.em, brush = com.prism.music.ui.theme.PrismTokens.spectrum(com.prism.music.ui.theme.LocalIsDark.current)),
             )
             Text(
-                "Friends open Listen together in Prism on the same Wi-Fi, tap your session and enter this code.",
+                "Friends open Listen together in Prism on the same Wi-Fi, tap your session and enter this code.".localized(),
                 style = MaterialTheme.typography.bodySmall, color = ink.copy(alpha = 0.85f), textAlign = TextAlign.Center,
             )
             s.address?.let {
                 Text(
-                    "Not showing up for them? They can join with " + if (s.port == Together.PORT) it else "$it:${s.port}",
+                    "Not showing up for them? They can join with ".localized() + (if (s.port == Together.PORT) it else "$it:${s.port}"),
                     style = MaterialTheme.typography.labelMedium, color = ink.copy(alpha = 0.7f), textAlign = TextAlign.Center,
                     modifier = Modifier.padding(top = 8.dp),
                 )
             }
         }
-        NowPlayingCard(song, if (song == null) "Play something and everyone hears it" else "Everyone in the session hears this")
-        Group("Listening (${s.guests.size})") {
-            if (s.guests.isEmpty()) Note("No one yet.")
+        NowPlayingCard(song, (if (song == null) "Play something and everyone hears it" else "Everyone in the session hears this").localized())
+        Group("Listening".localized() + " (${s.guests.size})") {
+            if (s.guests.isEmpty()) Note("No one yet.".localized())
             s.guests.forEach { g -> Item(g, null, onClick = {}, icon = PrismIcons.Headphones) }
             Toggle("Guests can control playback", "Play, pause and skip from their phones too. They can always add songs.", s.guestsControl) { c.together.setGuestsControl(it) }
         }
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             PrismFilledTonalButton(onClick = { nav.go(Routes.SEARCH) }, Modifier.weight(1f)) {
-                Icon(PrismIcons.Search, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text("Find songs")
+                Icon(PrismIcons.Search, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text("Find songs".localized())
             }
-            PrismOutlinedButton(onClick = { c.together.leave() }, Modifier.weight(1f)) { Text("End session") }
+            PrismOutlinedButton(onClick = { c.together.leave() }, Modifier.weight(1f)) { Text("End session".localized()) }
         }
     }
 }
@@ -233,9 +234,9 @@ private fun GuestView(s: TogetherState.Guest) {
         Note("Add songs from any song's ⋯ menu: they go to ${s.hostName}'s queue.")
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             PrismButton(onClick = { nav.go(Routes.SEARCH) }, Modifier.weight(1f)) {
-                Icon(PrismIcons.Search, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text("Add songs")
+                Icon(PrismIcons.Search, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text("Add songs".localized())
             }
-            PrismOutlinedButton(onClick = { c.together.leave() }, Modifier.weight(1f)) { Text("Leave") }
+            PrismOutlinedButton(onClick = { c.together.leave() }, Modifier.weight(1f)) { Text("Leave".localized()) }
         }
     }
 }
@@ -245,17 +246,17 @@ private fun GuestView(s: TogetherState.Guest) {
 private fun HostControls(now: Msg.State) {
     val c = LocalContainer.current
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
-        IconButton(onClick = { c.together.control("previous") }) { Icon(PrismIcons.Previous, "Previous", Modifier.size(30.dp)) }
+        IconButton(onClick = { c.together.control("previous") }) { Icon(PrismIcons.Previous, "Previous".localized(), Modifier.size(30.dp)) }
         Spacer(Modifier.width(18.dp))
         Box(
             Modifier.size(58.dp).clip(CircleShape).background(MaterialTheme.colorScheme.onSurface).border(1.5.dp, com.prism.music.ui.theme.PrismTokens.spectrumRing(), CircleShape)
                 .clickable { c.together.control(if (now.playing) "pause" else "play") },
             contentAlignment = Alignment.Center,
         ) {
-            Icon(if (now.playing) PrismIcons.Pause else PrismIcons.Play, if (now.playing) "Pause" else "Play", Modifier.size(32.dp), tint = MaterialTheme.colorScheme.surface)
+            Icon(if (now.playing) PrismIcons.Pause else PrismIcons.Play, (if (now.playing) "Pause" else "Play").localized(), Modifier.size(32.dp), tint = MaterialTheme.colorScheme.surface)
         }
         Spacer(Modifier.width(18.dp))
-        IconButton(onClick = { c.together.control("next") }) { Icon(PrismIcons.Next, "Next", Modifier.size(30.dp)) }
+        IconButton(onClick = { c.together.control("next") }) { Icon(PrismIcons.Next, "Next".localized(), Modifier.size(30.dp)) }
     }
 }
 
@@ -270,7 +271,7 @@ private fun NowPlayingCard(song: Song?, caption: String) {
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
             Eyebrow(caption)
-            Text(song?.title ?: "Nothing playing yet", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            Text(song?.title ?: "Nothing playing yet".localized(), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium, maxLines = 2, overflow = TextOverflow.Ellipsis)
             song?.let { Text(it.artistText, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis) }
         }
     }
@@ -298,10 +299,10 @@ private fun BigCard(icon: androidx.compose.ui.graphics.vector.ImageVector, title
     ) {
         Box(Modifier.size(48.dp).border(1.5.dp, com.prism.music.ui.theme.PrismTokens.spectrumRing(), CircleShape), contentAlignment = Alignment.Center) { Icon(icon, null, Modifier.size(24.dp), tint = ink) }
         Spacer(Modifier.height(10.dp))
-        Text(title, style = MaterialTheme.typography.titleLarge, color = ink)
-        Text(body, style = MaterialTheme.typography.bodyMedium, color = ink.copy(alpha = 0.85f))
+        Text(title.localized(), style = MaterialTheme.typography.titleLarge, color = ink)
+        Text(body.localized(), style = MaterialTheme.typography.bodyMedium, color = ink.copy(alpha = 0.85f))
         Spacer(Modifier.height(14.dp))
-        PrismButton(onClick = onClick) { Text(action) }
+        PrismButton(onClick = onClick) { Text(action.localized()) }
     }
 }
 

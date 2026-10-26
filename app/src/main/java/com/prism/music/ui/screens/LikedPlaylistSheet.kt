@@ -1,6 +1,7 @@
 package com.prism.music.ui.screens
 
 import com.prism.music.ui.components.PrismButton
+import com.prism.music.ui.i18n.localized
 import com.prism.music.ui.components.PrismTextButton
 import com.prism.music.ui.theme.PrismIcons
 import com.prism.music.data.friendlyMessage
@@ -72,15 +73,15 @@ fun LikedPlaylistSheet(art: String?, onDismiss: () -> Unit) {
     if (confirmDelete) {
         AlertDialog(
             onDismissRequest = { confirmDelete = false },
-            title = { Text("Delete the playlist?") },
-            text = { Text("\"${title ?: "The playlist"}\" will be deleted from your YouTube Music account. Your liked songs stay liked.") },
+            title = { Text("Delete the playlist?".localized()) },
+            text = { Text("\"${title ?: "The playlist"}\" will be deleted from your YouTube Music account. Your liked songs stay liked.".localized()) },
             confirmButton = {
                 PrismTextButton(onClick = {
                     confirmDelete = false
                     scope.launch { mirror.stop(delete = true).onFailure { toast("Couldn't delete it: ${it.friendlyMessage()}") } }
-                }) { Text("Delete", color = scheme.error) }
+                }) { Text("Delete".localized(), color = scheme.error) }
             },
-            dismissButton = { PrismTextButton(onClick = { confirmDelete = false }) { Text("Cancel") } },
+            dismissButton = { PrismTextButton(onClick = { confirmDelete = false }) { Text("Cancel".localized()) } },
         )
     }
 
@@ -92,17 +93,16 @@ fun LikedPlaylistSheet(art: String?, onDismiss: () -> Unit) {
         )
         when {
             !settings.isLoggedIn -> Text(
-                "Sign in to YouTube Music to turn Liked songs into a playlist of your own.",
+                "Sign in to YouTube Music to turn Liked songs into a playlist of your own.".localized(),
                 style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 24.dp),
             )
             id == null -> Column(Modifier.padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
-                    "Makes a YouTube Music playlist of every song you've liked, one you can share, pin or open in other apps. " +
-                        "Prism keeps it up to date: songs you like are added, songs you unlike are taken out.",
+                    "Makes a YouTube Music playlist of every song you've liked, one you can share, pin or open in other apps. Prism keeps it up to date: songs you like are added, songs you unlike are taken out.".localized(),
                     style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant,
                 )
-                com.prism.music.ui.components.PrismTextField(name, { name = it.take(150) }, label = { Text("Name") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+                com.prism.music.ui.components.PrismTextField(name, { name = it.take(150) }, label = { Text("Name".localized()) }, singleLine = true, modifier = Modifier.fillMaxWidth())
                 Segmented(listOf("PRIVATE", "UNLISTED", "PUBLIC"), privacy, { when (it) { "PRIVATE" -> "Private"; "UNLISTED" -> "Unlisted"; else -> "Public" } }) { privacy = it }
                 PrismButton(
                     onClick = {
@@ -120,8 +120,8 @@ fun LikedPlaylistSheet(art: String?, onDismiss: () -> Unit) {
                     if (making) {
                         CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp, color = scheme.onPrimary)
                         Spacer(Modifier.width(10.dp))
-                        Text("Making it…")
-                    } else Text("Make playlist", fontWeight = FontWeight.Medium)
+                        Text("Making it…".localized())
+                    } else Text("Make playlist".localized(), fontWeight = FontWeight.Medium)
                 }
             }
             else -> {

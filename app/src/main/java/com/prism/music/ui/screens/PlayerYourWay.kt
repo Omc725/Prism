@@ -1,5 +1,6 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.ui.i18n.localized
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -179,6 +180,7 @@ private fun SampleScreen(modifier: Modifier, content: @Composable BoxScope.() ->
 fun PlayerButtonsGroup() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
+    val context = androidx.compose.ui.platform.LocalContext.current
     val chosen = s.playerButtons
     Group("Buttons", info = "Pick ${PlayerButton.MIN} to ${PlayerButton.MAX} for the row under the controls. Hold one (or drag its grip) to put them in your order. The rest stay in the player's ⋯ menu.") {
         // The row as it'll be.
@@ -186,12 +188,12 @@ fun PlayerButtonsGroup() {
             Row(
                 Modifier.align(Alignment.Center).clip(CircleShape).background(Color.White.copy(alpha = 0.10f)).border(1.dp, Color.White.copy(alpha = 0.16f), CircleShape).padding(horizontal = 10.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically,
-            ) { chosen.forEach { Icon(buttonIcon(it), it.label, Modifier.size(22.dp), tint = Color.White.copy(alpha = 0.85f)) } }
+            ) { chosen.forEach { Icon(buttonIcon(it), it.label(context), Modifier.size(22.dp), tint = Color.White.copy(alpha = 0.85f)) } }
         }
         // The picked ones, in their order, to drag; then the rest to pick from.
         com.prism.music.ui.components.ReorderList(chosen, { it }, { prefs.setPlayerButtons(it) }) { b, i, held, mod ->
             OrderRow(
-                b.label, buttonIcon(b), true,
+                b.label(context), buttonIcon(b), true,
                 canCheck = chosen.size > PlayerButton.MIN,
                 onCheck = { v -> if (!v) prefs.setPlayerButtons(chosen - b) },
                 onUp = if (i > 0) ({ prefs.setPlayerButtons(chosen.toMutableList().apply { add(i - 1, removeAt(i)) }) }) else null,
@@ -201,12 +203,12 @@ fun PlayerButtonsGroup() {
         }
         PlayerButton.entries.filter { it !in chosen }.forEach { b ->
             OrderRow(
-                b.label, buttonIcon(b), false, canCheck = chosen.size < PlayerButton.MAX,
+                b.label(context), buttonIcon(b), false, canCheck = chosen.size < PlayerButton.MAX,
                 onCheck = { v -> if (v) prefs.setPlayerButtons(chosen + b) }, onUp = null, onDown = null,
             )
         }
         if (chosen != PlayerButton.DEFAULT) com.prism.music.ui.components.PrismTextButton({ prefs.setPlayerButtons(PlayerButton.DEFAULT) }, Modifier.padding(start = 12.dp)) {
-            Text("Back to Lyrics, Video and Up next")
+            Text("Back to Lyrics, Video and Up next".localized())
         }
     }
     SessionButtonsGroup()
@@ -222,16 +224,16 @@ private fun SessionButtonsGroup() {
         // The notification as it'll look: previous, play, next and the first two beside them.
         SampleScreen(Modifier.padding(horizontal = 16.dp, vertical = 6.dp).fillMaxWidth().height(56.dp)) {
             Row(Modifier.align(Alignment.Center), horizontalArrangement = Arrangement.spacedBy(18.dp), verticalAlignment = Alignment.CenterVertically) {
-                chosen.getOrNull(0)?.let { Icon(sessionIcon(it), it.label, Modifier.size(20.dp), tint = Ink) }
+                chosen.getOrNull(0)?.let { Icon(sessionIcon(it), it.label.localized(), Modifier.size(20.dp), tint = Ink) }
                 Icon(PrismIcons.Previous, null, Modifier.size(22.dp), tint = Color.White)
                 Box(Modifier.size(30.dp).clip(CircleShape).background(Color.White), contentAlignment = Alignment.Center) { Icon(PrismIcons.Pause, null, Modifier.size(16.dp), tint = Color.Black) }
                 Icon(PrismIcons.Next, null, Modifier.size(22.dp), tint = Color.White)
-                chosen.getOrNull(1)?.let { Icon(sessionIcon(it), it.label, Modifier.size(20.dp), tint = Ink) }
+                chosen.getOrNull(1)?.let { Icon(sessionIcon(it), it.label.localized(), Modifier.size(20.dp), tint = Ink) }
             }
         }
         com.prism.music.ui.components.ReorderList(chosen, { it }, { prefs.setSessionButtons(it) }) { b, i, held, mod ->
             OrderRow(
-                b.label, sessionIcon(b), true, canCheck = true,
+                b.label.localized(), sessionIcon(b), true, canCheck = true,
                 onCheck = { v -> if (!v) prefs.setSessionButtons(chosen - b) },
                 onUp = if (i > 0) ({ prefs.setSessionButtons(chosen.toMutableList().apply { add(i - 1, removeAt(i)) }) }) else null,
                 onDown = if (i < chosen.lastIndex) ({ prefs.setSessionButtons(chosen.toMutableList().apply { add(i + 1, removeAt(i)) }) }) else null,
@@ -240,12 +242,12 @@ private fun SessionButtonsGroup() {
         }
         SessionButton.entries.filter { it !in chosen }.forEach { b ->
             OrderRow(
-                b.label, sessionIcon(b), false, canCheck = true,
+                b.label.localized(), sessionIcon(b), false, canCheck = true,
                 onCheck = { v -> if (v) prefs.setSessionButtons(chosen + b) }, onUp = null, onDown = null,
             )
         }
         if (chosen != SessionButton.DEFAULT) com.prism.music.ui.components.PrismTextButton({ prefs.setSessionButtons(SessionButton.DEFAULT) }, Modifier.padding(start = 12.dp)) {
-            Text("Back to Prism's buttons")
+            Text("Back to Prism's buttons".localized())
         }
     }
 }
@@ -262,15 +264,15 @@ private fun OrderRow(
 ) {
     val scheme = MaterialTheme.colorScheme
     Row(modifier.fillMaxWidth().padding(start = 8.dp, end = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-        PrismCheck(on, enabled = canCheck, label = label, onChange = onCheck)
+        PrismCheck(on, enabled = canCheck, label = label.localized(), onChange = onCheck)
         Icon(icon, null, Modifier.size(20.dp), tint = if (on) scheme.onSurface else scheme.onSurfaceVariant)
         Spacer(Modifier.width(12.dp))
-        Text(label, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge, color = if (on) scheme.onSurface else scheme.onSurfaceVariant)
+        Text(label.localized(), Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge, color = if (on) scheme.onSurface else scheme.onSurfaceVariant)
         if (on && !held) {
-            IconButton(onClick = { onUp?.invoke() }, enabled = onUp != null) { Icon(PrismIcons.ChevronUp, "Move $label up") }
-            IconButton(onClick = { onDown?.invoke() }, enabled = onDown != null) { Icon(PrismIcons.ChevronDown, "Move $label down") }
+            IconButton(onClick = { onUp?.invoke() }, enabled = onUp != null) { Icon(PrismIcons.ChevronUp, "Move %s up".localized(label.localized())) }
+            IconButton(onClick = { onDown?.invoke() }, enabled = onDown != null) { Icon(PrismIcons.ChevronDown, "Move %s down".localized(label.localized())) }
         } else if (held) Spacer(Modifier.width(96.dp))
-        if (grip != null) com.prism.music.ui.components.DragGrip(grip.padding(start = 4.dp, end = 8.dp), "Drag $label")
+        if (grip != null) com.prism.music.ui.components.DragGrip(grip.padding(start = 4.dp, end = 8.dp), "Drag %s".localized(label.localized()))
     }
 }
 
@@ -316,7 +318,7 @@ fun PlayerArrangeGroup() {
             val shown = when (part) { DeckPart.STRIP -> s.lyricsOnPlayer; DeckPart.VOLUME -> !s.hideVolumeBar; else -> true }
             val hideable = part == DeckPart.STRIP || part == DeckPart.VOLUME
             OrderRow(
-                part.label, deckIcon(part), shown || !hideable, canCheck = hideable,
+                part.label.localized(), deckIcon(part), shown || !hideable, canCheck = hideable,
                 onCheck = { v -> if (part == DeckPart.STRIP) prefs.setLyricsOnPlayer(v) else prefs.setHideVolumeBar(!v) },
                 onUp = if (i > 0) ({ prefs.setPlayerDeck(order.toMutableList().apply { add(i - 1, removeAt(i)) }) }) else null,
                 onDown = if (i < order.lastIndex) ({ prefs.setPlayerDeck(order.toMutableList().apply { add(i + 1, removeAt(i)) }) }) else null,
@@ -324,7 +326,7 @@ fun PlayerArrangeGroup() {
             )
         }
         if (order != DeckPart.entries) com.prism.music.ui.components.PrismTextButton({ prefs.setPlayerDeck(DeckPart.entries) }, Modifier.padding(start = 12.dp)) {
-            Text("Back to Prism's order")
+            Text("Back to Prism's order".localized())
         }
         // GitHub #116: a volume just for Prism, for phones whose volume buttons don't work (or to keep other apps' as they are).
         Label(

@@ -1,6 +1,7 @@
 package com.prism.music.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import com.prism.music.ui.i18n.localized
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,7 +39,7 @@ fun MoodsScreen(bottomPadding: Dp) {
                     if (tiles.isEmpty()) return@forEach
                     item(key = "h:$title") {
                         Text(
-                            title, style = MaterialTheme.typography.titleLarge,
+                            title.localized(), style = MaterialTheme.typography.titleLarge,
                             modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 10.dp),
                         )
                     }

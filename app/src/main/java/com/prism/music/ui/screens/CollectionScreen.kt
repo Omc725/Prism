@@ -1,6 +1,7 @@
 package com.prism.music.ui.screens
 
 import com.prism.music.ui.theme.lit
+import com.prism.music.ui.i18n.localized
 import androidx.compose.ui.draw.shadow
 import androidx.compose.foundation.border
 import com.prism.music.ui.components.PrismTextButton
@@ -459,10 +460,10 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     confirm?.let { (text, action) ->
         AlertDialog(
             onDismissRequest = { confirm = null },
-            title = { Text("Delete downloads") },
-            text = { Text(text) },
-            confirmButton = { PrismTextButton(onClick = { action(); confirm = null }) { Text("Delete") } },
-            dismissButton = { PrismTextButton(onClick = { confirm = null }) { Text("Cancel") } },
+            title = { Text("Delete downloads".localized()) },
+            text = { Text(text.localized()) },
+            confirmButton = { PrismTextButton(onClick = { action(); confirm = null }) { Text("Delete".localized()) } },
+            dismissButton = { PrismTextButton(onClick = { confirm = null }) { Text("Cancel".localized()) } },
         )
     }
     var coverSheet by remember { mutableStateOf(false) }
@@ -579,25 +580,25 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                             }
                             DropdownMenu(sortMenu, { sortMenu = false }) {
                                 SortMode.entries.filter { it != SortMode.OLDEST || type == CollectionType.DOWNLOADS }.forEach { m ->
-                                    DropdownMenuItem({ Text(sortLabel(m, type)) }, { pickSort(m); sortMenu = false }, trailingIcon = { if (m == sort) Icon(PrismIcons.Check, null) })
+                                    DropdownMenuItem({ Text(sortLabel(m, type).localized()) }, { pickSort(m); sortMenu = false }, trailingIcon = { if (m == sort) Icon(PrismIcons.Check, null) })
                                 }
                                 HorizontalDivider()
-                                DropdownMenuItem({ Text("Group by genre") }, { toggleGenreGroups(); sortMenu = false }, trailingIcon = { if (groupByGenre) Icon(PrismIcons.Check, null) })
+                                DropdownMenuItem({ Text("Group by genre".localized()) }, { toggleGenreGroups(); sortMenu = false }, trailingIcon = { if (groupByGenre) Icon(PrismIcons.Check, null) })
                             }
                         }
                     }
                 }
                 if (showGenres && genreCounts.isNotEmpty()) item(key = "genres") {
                     LazyRow(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        item { com.prism.music.ui.components.PrismChip(genreFilter == null, { genreFilter = null }, "All", idle = frosted) }
+                        item { com.prism.music.ui.components.PrismChip(genreFilter == null, { genreFilter = null }, "All".localized(), idle = frosted) }
                         items(genreCounts) { (g, n) ->
                             com.prism.music.ui.components.PrismChip(genreFilter == g, { genreFilter = if (genreFilter == g) null else g }, "$g · $n", idle = frosted)
                         }
                     }
                 }
                 if (visible.isEmpty()) item {
-                    if (query.isNotBlank()) EmptyState(PrismIcons.Search, "No matches", "Nothing in $title matches \"${query.trim()}\"" + if (loadingMore) " yet — more songs are still loading." else ".")
-                    else EmptyState(when (type) { CollectionType.LIKED -> PrismIcons.HeartFilled; CollectionType.DOWNLOADS -> PrismIcons.DownloadDone; else -> PrismIcons.Song }, if (genreFilter != null) "No $genreFilter songs" else "Nothing here yet",
+                    if (query.isNotBlank()) EmptyState(PrismIcons.Search, "No matches".localized(), "Nothing in $title matches \"${query.trim()}\"" + if (loadingMore) " yet — more songs are still loading." else ".")
+                    else EmptyState(when (type) { CollectionType.LIKED -> PrismIcons.HeartFilled; CollectionType.DOWNLOADS -> PrismIcons.DownloadDone; else -> PrismIcons.Song }, if (genreFilter != null) "No $genreFilter songs" else "Nothing here yet".localized(),
                         when (type) {
                             CollectionType.LIKED -> "Like songs from the player and they'll show up here."
                             CollectionType.PRISM -> "Add songs from any song's menu (⋯ or a long press) → Add to playlist."
@@ -744,8 +745,8 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     }
     if (deleting) AlertDialog(
         onDismissRequest = { deleting = false },
-        title = { Text("Delete playlist?") },
-        text = { Text(if (type == CollectionType.PRISM) "\"$title\" will be deleted from this phone. The songs in it stay where they are." else "\"$title\" will be deleted from your YouTube Music account.") },
+        title = { Text("Delete playlist?".localized()) },
+        text = { Text(if (type == CollectionType.PRISM) "\"$title\" will be deleted from this phone. The songs in it stay where they are.".localized() else "\"$title\" will be deleted from your YouTube Music account.".localized()) },
         confirmButton = {
             PrismTextButton(onClick = {
                 deleting = false
@@ -755,9 +756,9 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                         .onSuccess { nav.back() }
                         .onFailure { Toast.makeText(context, "Couldn't delete \"$title\": ${it.friendlyMessage()}", Toast.LENGTH_LONG).show() }
                 }
-            }) { Text("Delete", color = MaterialTheme.colorScheme.error) }
+            }) { Text("Delete".localized(), color = MaterialTheme.colorScheme.error) }
         },
-        dismissButton = { PrismTextButton(onClick = { deleting = false }) { Text("Cancel") } },
+        dismissButton = { PrismTextButton(onClick = { deleting = false }) { Text("Cancel".localized()) } },
     )
     if (sharing) ShareSheet(shareTarget()) { sharing = false }
 }
@@ -888,7 +889,7 @@ private fun Header(type: CollectionType, page: CollectionPage, art: String?, cov
                 }
             }
             if (coverKey != null) GlassSurface(Modifier.align(Alignment.BottomEnd).padding(10.dp).size(40.dp), shape = RoundedCornerShape(50), onMedia = true, inPage = true) {
-                Box(contentAlignment = Alignment.Center) { Icon(PrismIcons.Edit, "Change picture", Modifier.size(20.dp)) }
+                Box(contentAlignment = Alignment.Center) { Icon(PrismIcons.Edit, "Change picture".localized(), Modifier.size(20.dp)) }
             }
         }
         Spacer(Modifier.height(20.dp))
@@ -1103,27 +1104,27 @@ private fun EditPlaylistDialog(title: String, description: String, privacy: Stri
     var p by remember { mutableStateOf(privacy ?: "PRIVATE") }
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Edit playlist") },
+        title = { Text("Edit playlist".localized()) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                com.prism.music.ui.components.PrismTextField(t, { t = it.take(150) }, label = { Text("Name") }, singleLine = true, modifier = Modifier.fillMaxWidth())
-                com.prism.music.ui.components.PrismTextField(d, { d = it.take(5000) }, label = { Text("Description") }, minLines = 2, maxLines = 5, modifier = Modifier.fillMaxWidth())
+                com.prism.music.ui.components.PrismTextField(t, { t = it.take(150) }, label = { Text("Name".localized()) }, singleLine = true, modifier = Modifier.fillMaxWidth())
+                com.prism.music.ui.components.PrismTextField(d, { d = it.take(5000) }, label = { Text("Description".localized()) }, minLines = 2, maxLines = 5, modifier = Modifier.fillMaxWidth())
                 // A Prism playlist (no [privacy]) is only on this phone: nobody else can open it anyway.
                 if (privacy == null) return@Column
-                Text("Who can open it", style = MaterialTheme.typography.labelLarge)
+                Text("Who can open it".localized(), style = MaterialTheme.typography.labelLarge)
                 com.prism.music.ui.components.Segmented(listOf("PRIVATE", "UNLISTED", "PUBLIC"), p, { when (it) { "PRIVATE" -> "Private"; "UNLISTED" -> "Unlisted"; else -> "Public" } }) { p = it }
                 Text(
                     when (p) {
-                        "PRIVATE" -> "Only you can see it."
-                        "UNLISTED" -> "Anyone with the link can open it; it doesn't show up in search."
-                        else -> "Anyone can find it and open it."
+                        "PRIVATE" -> "Only you can see it.".localized()
+                        "UNLISTED" -> "Anyone with the link can open it; it doesn't show up in search.".localized()
+                        else -> "Anyone can find it and open it.".localized()
                     },
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         },
-        confirmButton = { PrismTextButton(onClick = { onSave(t.trim().ifBlank { title }, d.trim(), p) }) { Text("Save") } },
-        dismissButton = { PrismTextButton(onClick = onDismiss) { Text("Cancel") } },
+        confirmButton = { PrismTextButton(onClick = { onSave(t.trim().ifBlank { title }, d.trim(), p) }) { Text("Save".localized()) } },
+        dismissButton = { PrismTextButton(onClick = onDismiss) { Text("Cancel".localized()) } },
     )
 }
 
@@ -1143,11 +1144,11 @@ private fun CoverSheet(key: String, songs: List<Song>, onDismiss: () -> Unit) {
     val covers = remember(songs) { songs.mapNotNull { it.thumbnail }.distinctBy { hiRes(it, 120) }.take(30) }
     androidx.compose.material3.ModalBottomSheet(onDismissRequest = onDismiss) {
         Column(Modifier.padding(bottom = 28.dp)) {
-            Text("Playlist picture", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(horizontal = 24.dp))
+            Text("Playlist picture".localized(), style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(horizontal = 24.dp))
             Spacer(Modifier.height(8.dp))
             androidx.compose.material3.ListItem(
-                headlineContent = { Text("Choose a photo") },
-                supportingContent = { Text("From your phone's photos") },
+                headlineContent = { Text("Choose a photo".localized()) },
+                supportingContent = { Text("From your phone's photos".localized()) },
                 leadingContent = { Icon(PrismIcons.Photo, null) },
                 colors = androidx.compose.material3.ListItemDefaults.colors(containerColor = Color.Transparent),
                 modifier = Modifier.clickable {
@@ -1156,7 +1157,7 @@ private fun CoverSheet(key: String, songs: List<Song>, onDismiss: () -> Unit) {
             )
             if (covers.isNotEmpty()) {
                 Text(
-                    "Or a cover from this playlist", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    "Or a cover from this playlist".localized(), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(start = 24.dp, top = 8.dp, bottom = 8.dp),
                 )
                 LazyRow(contentPadding = PaddingValues(horizontal = 20.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -1169,13 +1170,13 @@ private fun CoverSheet(key: String, songs: List<Song>, onDismiss: () -> Unit) {
                 }
             }
             if (c.covers.custom(key) != null) androidx.compose.material3.ListItem(
-                headlineContent = { Text("Use the original picture") },
+                headlineContent = { Text("Use the original picture".localized()) },
                 leadingContent = { Icon(PrismIcons.History, null) },
                 colors = androidx.compose.material3.ListItemDefaults.colors(containerColor = Color.Transparent),
                 modifier = Modifier.padding(top = 8.dp).clickable { c.covers.reset(key); onDismiss() },
             )
             Text(
-                "The picture shows everywhere in Prism, including Android Auto. YouTube Music keeps its own.",
+                "The picture shows everywhere in Prism, including Android Auto. YouTube Music keeps its own.".localized(),
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 12.dp),
             )
@@ -1229,8 +1230,8 @@ private fun DownloadsInfo(songs: List<Song>, ask: (String, () -> Unit) -> Unit) 
             )
         }
         if (active.isNotEmpty()) Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Downloading ${active.size}…", style = MaterialTheme.typography.labelMedium, color = scheme.primary)
-            PrismTextButton(onClick = { ask("Cancel ${active.size} downloads that haven't finished?") { c.downloads.removeMany(active.keys) } }) { Text("Cancel") }
+            Text("Downloading ${active.size}…".localized(), style = MaterialTheme.typography.labelMedium, color = scheme.primary)
+            PrismTextButton(onClick = { ask("Cancel ${active.size} downloads that haven't finished?") { c.downloads.removeMany(active.keys) } }) { Text("Cancel".localized()) }
         }
         val unfinished = remember(all) { all.values.filter { it.state != Download.STATE_COMPLETED } }
         if (unfinished.isNotEmpty()) DownloadQueueStatus(unfinished)
@@ -1260,14 +1261,14 @@ fun DownloadQueueStatus(unfinished: Collection<com.prism.music.download.Download
     if (waiting && queued > 0) Row(verticalAlignment = Alignment.CenterVertically) {
         Text("$queued waiting for Wi-Fi", style = MaterialTheme.typography.labelMedium, color = scheme.onSurfaceVariant)
         // It switches the setting off for good (Settings → Downloads & storage), so it says so.
-        PrismTextButton(onClick = { c.settings.setDownloadWifiOnly(false) }) { Text("Turn off Wi-Fi only") }
+        PrismTextButton(onClick = { c.settings.setDownloadWifiOnly(false) }) { Text("Turn off Wi-Fi only".localized()) }
     }
     var showFailed by remember { mutableStateOf(false) }
     if (failed > 0) Row(verticalAlignment = Alignment.CenterVertically) {
         Text(if (failed == 1) "1 download failed" else "$failed downloads failed", style = MaterialTheme.typography.labelMedium, color = scheme.error)
         // Which ones, and why (#98).
-        PrismTextButton(onClick = { showFailed = true }) { Text("See which") }
-        PrismTextButton(onClick = { c.downloads.retryFailed() }) { Text("Try again") }
+        PrismTextButton(onClick = { showFailed = true }) { Text("See which".localized()) }
+        PrismTextButton(onClick = { c.downloads.retryFailed() }) { Text("Try again".localized()) }
     }
     if (showFailed) FailedDownloadsSheet { showFailed = false }
 }
@@ -1308,8 +1309,8 @@ fun FailedDownloadsSheet(onDismiss: () -> Unit) {
                             style = MaterialTheme.typography.bodySmall, color = scheme.error, maxLines = 3,
                         )
                     }
-                    IconButton(onClick = { c.downloads.retryFailed(setOf(id)) }) { Icon(PrismIcons.Refresh, "Try again") }
-                    IconButton(onClick = { c.downloads.removeMany(setOf(id)) }) { Icon(PrismIcons.Delete, "Remove") }
+                    IconButton(onClick = { c.downloads.retryFailed(setOf(id)) }) { Icon(PrismIcons.Refresh, "Try again".localized()) }
+                    IconButton(onClick = { c.downloads.removeMany(setOf(id)) }) { Icon(PrismIcons.Delete, "Remove".localized()) }
                 }
             }
         }
@@ -1318,8 +1319,8 @@ fun FailedDownloadsSheet(onDismiss: () -> Unit) {
             Modifier.padding(start = 28.dp, top = 8.dp), style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
         )
         Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 14.dp), horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)) {
-            PrismTextButton(onClick = { close { c.downloads.removeMany(failed.map { it.first }) } }) { Text("Remove all") }
-            com.prism.music.ui.components.PrismButton(onClick = { close { c.downloads.retryFailed() } }) { Text("Try all again") }
+            PrismTextButton(onClick = { close { c.downloads.removeMany(failed.map { it.first }) } }) { Text("Remove all".localized()) }
+            com.prism.music.ui.components.PrismButton(onClick = { close { c.downloads.retryFailed() } }) { Text("Try all again".localized()) }
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.ui.i18n.localized
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Icon
@@ -62,17 +63,17 @@ fun ConnectSettings() {
                     onClick = {
                         address?.let {
                             clipboard.setText(AnnotatedString(it))
-                            android.widget.Toast.makeText(context, "Copied", android.widget.Toast.LENGTH_SHORT).show()
+                            android.widget.Toast.makeText(context, "Copied".localized(context), android.widget.Toast.LENGTH_SHORT).show()
                         }
                     },
-                ) { if (address != null) Icon(PrismIcons.Copy, "Copy", tint = MaterialTheme.colorScheme.onSurfaceVariant) }
+                ) { if (address != null) Icon(PrismIcons.Copy, "Copy".localized(), tint = MaterialTheme.colorScheme.onSurfaceVariant) }
                 Item("Pairing code", "${code.take(3)} ${code.drop(3)} · one browser per code", onClick = { remote.auth.newCode(); tick++ }) {
-                    Icon(PrismIcons.Refresh, "New code", tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Icon(PrismIcons.Refresh, "New code".localized(), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 browsers.forEach { b ->
                     Item(b.name, "Paired ${day(b.pairedAt)} · last used ${day(b.lastSeen)}", onClick = {}) {
                         androidx.compose.material3.IconButton(onClick = { remote.auth.forget(b.id); tick++ }) {
-                            Icon(PrismIcons.Close, "Unpair ${b.name}", tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Icon(PrismIcons.Close, "Unpair %s".localized(b.name), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
                 }
@@ -93,7 +94,7 @@ fun ConnectSettings() {
             paired.forEach { (id, name) ->
                 Item(name, "Paired", onClick = {}) {
                     androidx.compose.material3.IconButton(onClick = { handoff.forget(id) }) {
-                        Icon(PrismIcons.Close, "Forget $name", tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Icon(PrismIcons.Close, "Forget %s".localized(name), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }

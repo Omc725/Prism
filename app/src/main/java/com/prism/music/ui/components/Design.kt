@@ -1,5 +1,8 @@
 package com.prism.music.ui.components
 
+import com.prism.music.R
+import com.prism.music.ui.i18n.localized
+import androidx.compose.ui.res.stringResource
 import com.prism.music.ui.theme.PrismIcons
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -88,9 +91,9 @@ fun ScreenHeader(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(Modifier.weight(1f)) {
-            Text(title, style = pageTitleStyle(), maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(title.localized(), style = pageTitleStyle(), maxLines = 1, overflow = TextOverflow.Ellipsis)
             if (!subtitle.isNullOrBlank()) Text(
-                subtitle, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                subtitle.localized(), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1, overflow = TextOverflow.Ellipsis,
             )
         }
@@ -120,19 +123,20 @@ fun FloatingDisc(modifier: Modifier = Modifier, content: @Composable androidx.co
 /** A header action: a round of glass (a floating disc, [FloatingDisc], when it floats over a photo or artwork). */
 @Composable
 fun RoundAction(icon: ImageVector, description: String, modifier: Modifier = Modifier, glass: Boolean = false, enabled: Boolean = true, onClick: () -> Unit) {
+    val localizedDesc = description.localized()
     val tint = MaterialTheme.colorScheme.onSurface.copy(alpha = if (enabled) 1f else 0.38f)
     if (glass) {
         FloatingDisc(modifier) { ink ->
-            Box(Modifier.fillMaxSize().clickable(enabled = enabled, onClickLabel = description, onClick = onClick), contentAlignment = Alignment.Center) {
-                Icon(icon, description, Modifier.size(22.dp), tint = ink.copy(alpha = if (enabled) 1f else 0.38f))
+            Box(Modifier.fillMaxSize().clickable(enabled = enabled, onClickLabel = localizedDesc, onClick = onClick), contentAlignment = Alignment.Center) {
+                Icon(icon, localizedDesc, Modifier.size(22.dp), tint = ink.copy(alpha = if (enabled) 1f else 0.38f))
             }
         }
     } else {
         Box(
             modifier.size(42.dp).clip(CircleShape).background(glassFill(1.4f)).border(1.dp, glassEdge(), CircleShape)
-                .clickable(enabled = enabled, onClickLabel = description, onClick = onClick),
+                .clickable(enabled = enabled, onClickLabel = localizedDesc, onClick = onClick),
             contentAlignment = Alignment.Center,
-        ) { Icon(icon, description, Modifier.size(22.dp), tint = tint) }
+        ) { Icon(icon, localizedDesc, Modifier.size(22.dp), tint = tint) }
     }
 }
 
@@ -191,8 +195,8 @@ fun SubPage(
         ) {
             item(key = "subpage:title") {
                 Column(Modifier.padding(start = 20.dp - horizontalPadding.coerceAtMost(20.dp), end = 20.dp, bottom = 10.dp)) {
-                    Text(title, style = pageTitleStyle(), maxLines = 2, overflow = TextOverflow.Ellipsis)
-                    if (!subtitle.isNullOrBlank()) Text(subtitle, style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant)
+                    Text(title.localized(), style = pageTitleStyle(), maxLines = 2, overflow = TextOverflow.Ellipsis)
+                    if (!subtitle.isNullOrBlank()) Text(subtitle.localized(), style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant)
                 }
             }
             content()
@@ -211,9 +215,9 @@ fun SubPage(
                 .statusBarsPadding()
                 .height(60.dp),
         ) {
-            if (showBack) RoundAction(PrismIcons.ArrowBack, "Back", Modifier.align(Alignment.CenterStart).padding(start = 12.dp), glass = true) { nav.back() }
+            if (showBack) RoundAction(PrismIcons.ArrowBack, stringResource(R.string.action_back), Modifier.align(Alignment.CenterStart).padding(start = 12.dp), glass = true) { nav.back() }
             Text(
-                title, Modifier.align(Alignment.Center).padding(horizontal = 72.dp).graphicsLayer { alpha = bar },
+                title.localized(), Modifier.align(Alignment.Center).padding(horizontal = 72.dp).graphicsLayer { alpha = bar },
                 style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,
             )
             Row(
@@ -240,7 +244,7 @@ fun PrismChip(selected: Boolean, onClick: () -> Unit, label: String, modifier: M
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (icon != null) { Icon(icon, null, Modifier.size(18.dp), tint = fg); Spacer(Modifier.width(6.dp)) }
-        Text(label, style = MaterialTheme.typography.labelLarge, color = fg, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        Text(label.localized(), style = MaterialTheme.typography.labelLarge, color = fg, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 }
 
@@ -279,7 +283,7 @@ fun <T> Segmented(options: List<T>, selected: T, label: (T) -> String, modifier:
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    label(o), style = MaterialTheme.typography.labelLarge, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    label(o).localized(), style = MaterialTheme.typography.labelLarge, maxLines = 1, overflow = TextOverflow.Ellipsis,
                     color = fg, modifier = Modifier.padding(horizontal = 6.dp),
                 )
             }
@@ -300,7 +304,7 @@ fun <T> ChoiceFlow(options: List<T>, selected: (T) -> Boolean, label: (T) -> Str
 @Composable
 fun Eyebrow(text: String, modifier: Modifier = Modifier, color: Color = MaterialTheme.colorScheme.onSurfaceVariant) {
     Text(
-        text.uppercase(), modifier, style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.1.em),
+        text.localized().uppercase(), modifier, style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.1.em),
         color = color, maxLines = 1,
     )
 }

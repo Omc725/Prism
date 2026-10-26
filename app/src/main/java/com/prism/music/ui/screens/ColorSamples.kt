@@ -1,5 +1,6 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.ui.i18n.localized
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -179,7 +180,7 @@ fun ColorStage(c: ThemeColors, song: Song?, modifier: Modifier = Modifier, compa
                 StageCover(song, 60.dp, 12.dp)
                 Spacer(Modifier.width(14.dp))
                 Column(Modifier.weight(1f)) {
-                    Text("ALBUM", color = c.ink3, style = type.labelSmall, letterSpacing = 1.4.sp, maxLines = 1)
+                    Text("ALBUM".localized(), color = c.ink3, style = type.labelSmall, letterSpacing = 1.4.sp, maxLines = 1)
                     Text(album, color = s.onBackground, style = type.titleLarge, fontWeight = FontWeight.Light, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(artist, Modifier.weight(1f, fill = false), color = accent, style = type.bodyMedium, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -228,8 +229,8 @@ fun ColorStage(c: ThemeColors, song: Song?, modifier: Modifier = Modifier, compa
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column(Modifier.weight(1f)) {
-                    Text("Smart Downloads", color = s.onBackground, style = type.bodyMedium, maxLines = 1)
-                    Text("Ready for when you're offline", color = c.ink2, style = type.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text("Smart Downloads".localized(), color = s.onBackground, style = type.bodyMedium, maxLines = 1)
+                    Text("Ready for when you're offline".localized(), color = c.ink2, style = type.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
                 StageSwitch(c)
             }
@@ -335,7 +336,7 @@ fun ColorSample(c: ThemeColors, modifier: Modifier = Modifier, marks: Boolean = 
                 }
                 if (marks) PartMark(ColorPart.LIGHT, c, Modifier.padding(start = 5.dp))
                 Spacer(Modifier.weight(1f))
-                Text("MORE", color = accent, fontSize = 8.5.sp, lineHeight = 10.sp, fontWeight = FontWeight.Bold, letterSpacing = 0.6.sp)
+                Text("MORE".localized(), color = accent, fontSize = 8.5.sp, lineHeight = 10.sp, fontWeight = FontWeight.Bold, letterSpacing = 0.6.sp)
             }
         }
         // ③ in the page's corner (① and ② sit beside their parts above).
@@ -356,7 +357,7 @@ fun TextSample(c: ThemeColors, modifier: Modifier = Modifier) {
         Text("The Weeknd · 2020", color = c.ink2, fontSize = 9.5.sp, lineHeight = 12.sp, maxLines = 1)
         Box(Modifier.fillMaxWidth().height(1.dp).background(c.line))
         Text("In Your Eyes", color = s.onBackground, fontSize = 11.sp, lineHeight = 13.sp, fontWeight = FontWeight.Medium, maxLines = 1)
-        Text("3 min · Explicit", color = c.ink3, fontSize = 9.5.sp, lineHeight = 12.sp, maxLines = 1)
+        Text("3 min · Explicit".localized(), color = c.ink3, fontSize = 9.5.sp, lineHeight = 12.sp, maxLines = 1)
     }
 }
 
@@ -375,10 +376,10 @@ fun ChoiceCard(title: String, detail: String?, selected: Boolean, modifier: Modi
         example()
         Spacer(Modifier.height(8.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(title, Modifier.weight(1f), style = MaterialTheme.typography.labelLarge, color = scheme.onSurface)
-            if (selected) Icon(PrismIcons.CheckCircle, "Picked", Modifier.size(18.dp), tint = scheme.onSurface)
+            Text(title.localized(), Modifier.weight(1f), style = MaterialTheme.typography.labelLarge, color = scheme.onSurface)
+            if (selected) Icon(PrismIcons.CheckCircle, "Picked".localized(), Modifier.size(18.dp), tint = scheme.onSurface)
         }
-        if (detail != null) Text(detail, style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant, minLines = 2, maxLines = 3)
+        if (detail != null) Text(detail.localized(), style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant, minLines = 2, maxLines = 3)
     }
 }
 

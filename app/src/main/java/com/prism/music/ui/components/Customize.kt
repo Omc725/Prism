@@ -1,5 +1,7 @@
 package com.prism.music.ui.components
 
+import com.prism.music.ui.i18n.localized
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -110,8 +112,8 @@ fun CustomizingPill(modifier: Modifier = Modifier) {
         ) {
             Icon(PrismIcons.Customize, null, Modifier.size(18.dp), tint = scheme.inverseOnSurface)
             Spacer(Modifier.width(10.dp))
-            Text("Tap anything outlined to change it", style = MaterialTheme.typography.bodyMedium, color = scheme.inverseOnSurface)
-            PrismTextButton({ c.customizing.value = false }) { Text("Done", color = scheme.inversePrimary) }
+            Text("Tap anything outlined to change it".localized(), style = MaterialTheme.typography.bodyMedium, color = scheme.inverseOnSurface)
+            PrismTextButton({ c.customizing.value = false }) { Text("Done".localized(), color = scheme.inversePrimary) }
         }
     }
 }
@@ -144,12 +146,12 @@ fun LookUndoBar(modifier: Modifier = Modifier) {
                 .padding(start = 18.dp, end = 6.dp, top = 2.dp, bottom = 2.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(n.label, Modifier.weight(1f, fill = false), style = MaterialTheme.typography.bodyMedium, color = scheme.inverseOnSurface, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(n.label.localized(), Modifier.weight(1f, fill = false), style = MaterialTheme.typography.bodyMedium, color = scheme.inverseOnSurface, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Spacer(Modifier.width(8.dp))
             PrismTextButton({ note = null; n.undo?.invoke() ?: c.looks.undo() }) {
                 Icon(PrismIcons.Undo, null, Modifier.size(16.dp), tint = scheme.inversePrimary)
                 Spacer(Modifier.width(6.dp))
-                Text("Undo", color = scheme.inversePrimary)
+                Text("Undo".localized(), color = scheme.inversePrimary)
             }
         }
     }

@@ -1,5 +1,7 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.ui.i18n.localized
+
 import android.content.Intent
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -101,8 +103,8 @@ fun LookStrip(pinned: Boolean = false) {
     }
     Column(Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Column(Modifier.padding(start = 4.dp)) {
-            Text("Your Prism", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Light)
-            Text("Home, the player and lyrics, as you change them", style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant)
+            Text("Your Prism".localized(), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Light)
+            Text("Home, the player and lyrics, as you change them".localized(), style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant)
         }
         BoxWithConstraints(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
             val w = ((maxWidth - 24.dp) / 3).coerceAtMost(132.dp)
@@ -166,12 +168,12 @@ private fun LooksSettings() {
             )
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 edited?.let { e ->
-                    PrismButton({ scope.launch { c.looks.update(e) } }) { Icon(PrismIcons.Update, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Update") }
-                    PrismOutlinedButton({ saving = true }) { Icon(PrismIcons.Add, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Save as new") }
-                } ?: PrismButton({ saving = true }) { Icon(PrismIcons.Add, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Save as a Look") }
-                if (now != null && edited == null) PrismOutlinedButton({ sharing = now }) { Icon(PrismIcons.Share, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Share") }
+                    PrismButton({ scope.launch { c.looks.update(e) } }) { Icon(PrismIcons.Update, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Update".localized()) }
+                    PrismOutlinedButton({ saving = true }) { Icon(PrismIcons.Add, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Save as new".localized()) }
+                } ?: PrismButton({ saving = true }) { Icon(PrismIcons.Add, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Save as a Look".localized()) }
+                if (now != null && edited == null) PrismOutlinedButton({ sharing = now }) { Icon(PrismIcons.Share, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Share".localized()) }
             }
-            edited?.let { e -> PrismTextButton({ apply(e) }) { Icon(PrismIcons.Undo, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Go back to ${e.name} as saved", maxLines = 1, overflow = TextOverflow.Ellipsis) } }
+            edited?.let { e -> PrismTextButton({ apply(e) }) { Icon(PrismIcons.Undo, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Go back to ${e.name} as saved".localized(), maxLines = 1, overflow = TextOverflow.Ellipsis) } }
             // Icons are drawn as Prism starts: a Look with other icons shows them after a restart.
             if (c.looks.iconsNeedRestart()) PrismTextButton({
                 val launch = context.packageManager.getLaunchIntentForPackage(context.packageName)
@@ -179,7 +181,7 @@ private fun LooksSettings() {
                     context.startActivity(Intent.makeRestartActivityTask(launch.component).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
                     Runtime.getRuntime().exit(0)
                 }
-            }) { Icon(PrismIcons.Refresh, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Restart Prism to see its icons") }
+            }) { Icon(PrismIcons.Refresh, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Restart Prism to see its icons".localized()) }
         }
 
         Group("Prism's Looks") {
@@ -330,9 +332,9 @@ fun LookCard(look: Look, selected: Boolean, modifier: Modifier = Modifier, onCli
         Spacer(Modifier.height(8.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(look.name, Modifier.weight(1f), style = MaterialTheme.typography.labelLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            if (selected) Icon(PrismIcons.CheckCircle, "In use", Modifier.size(18.dp))
+            if (selected) Icon(PrismIcons.CheckCircle, "In use".localized(), Modifier.size(18.dp))
             // Yours, in use with changes not saved into it yet.
-            if (changed) Icon(PrismIcons.Edit, "In use, changed since saved", Modifier.size(16.dp), tint = scheme.onSurfaceVariant)
+            if (changed) Icon(PrismIcons.Edit, "In use, changed since saved".localized(), Modifier.size(16.dp), tint = scheme.onSurfaceVariant)
             if (onMore != null) Icon(
                 PrismIcons.More, "More for ${look.name}",
                 Modifier.padding(start = 2.dp).size(32.dp).clip(RoundedCornerShape(50)).clickable(onClick = onMore).padding(6.dp),
@@ -382,14 +384,14 @@ private fun NameDialog(title: String, label: String, initial: String, onDismiss:
     var name by remember { mutableStateOf(initial) }
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(title) },
+        title = { Text(title.localized()) },
         text = {
             com.prism.music.ui.components.PrismTextField(
-                name, { name = it.take(Look.MAX_NAME) }, Modifier.fillMaxWidth(), singleLine = true, label = { Text(label) },
+                name, { name = it.take(Look.MAX_NAME) }, Modifier.fillMaxWidth(), singleLine = true, label = { Text(label.localized()) },
             )
         },
-        confirmButton = { PrismTextButton({ onDone(name) }, enabled = name.isNotBlank()) { Text("Save") } },
-        dismissButton = { PrismTextButton(onDismiss) { Text("Cancel") } },
+        confirmButton = { PrismTextButton({ onDone(name) }, enabled = name.isNotBlank()) { Text("Save".localized()) } },
+        dismissButton = { PrismTextButton(onDismiss) { Text("Cancel".localized()) } },
     )
 }
 
@@ -409,15 +411,15 @@ private fun ShareLookSheet(look: Look, onDismiss: () -> Unit) {
     var withFont by remember { mutableStateOf(false) }
     ActionSheet(null, onDismiss) { close ->
         Column(Modifier.fillMaxWidth().padding(horizontal = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("Share ${look.name}", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Medium))
+            Text("Share ${look.name}".localized(), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Medium))
             Spacer(Modifier.height(12.dp))
             if (code.length <= LookCode.MAX_QR_CHARS) {
                 Box(Modifier.widthIn(max = 260.dp).fillMaxWidth().aspectRatio(1f).clip(RoundedCornerShape(18.dp)).background(Color.White).padding(10.dp)) {
                     QrCode(code, Modifier.fillMaxSize())
                 }
                 Spacer(Modifier.height(8.dp))
-                Text("Scan it in Prism: Appearance → Looks → Scan", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
-            } else Text("Too much for a QR code: send it as text or a file", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Scan it in Prism: Appearance → Looks → Scan".localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+            } else Text("Too much for a QR code: send it as text or a file".localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             if (hasPhotos || hasFont) Text(
                 "Codes leave out photos and your own font; a file can carry them.",
                 Modifier.padding(top = 8.dp), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center,
@@ -427,7 +429,7 @@ private fun ShareLookSheet(look: Look, onDismiss: () -> Unit) {
                 PrismButton({
                     val text = "Here's my Prism Look, \"${look.name}\". Share this message to Prism to see it:\n\n$code"
                     context.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, text), "Send ${look.name}"))
-                }) { Text("Send as text") }
+                }) { Text("Send as text".localized()) }
                 PrismOutlinedButton({
                     scope.launch {
                         val r = runCatching {
@@ -446,7 +448,7 @@ private fun ShareLookSheet(look: Look, onDismiss: () -> Unit) {
                             context.startActivity(Intent.createChooser(send, "Send ${look.name}"))
                         }.onFailure { Toast.makeText(context, it.message ?: "Couldn't make the file", Toast.LENGTH_LONG).show() }
                     }
-                }) { Text("Send as a file") }
+                }) { Text("Send as a file".localized()) }
             }
         }
         if (hasPhotos || hasFont) Column(Modifier.padding(start = 12.dp, end = 12.dp, top = 10.dp)) {
@@ -482,12 +484,12 @@ private fun PendingLookDialog(look: Look) {
             Row {
                 PrismTextButton({
                     done()
-                    scope.launch { c.looks.keep(look); Toast.makeText(context, "Saved to your Looks", Toast.LENGTH_SHORT).show() }
-                }) { Text("Save") }
-                PrismTextButton({ done(); scope.launch { c.looks.apply(look) } }) { Text("Use it") }
+                    scope.launch { c.looks.keep(look); Toast.makeText(context, "Saved to your Looks".localized(context), Toast.LENGTH_SHORT).show() }
+                }) { Text("Save".localized()) }
+                PrismTextButton({ done(); scope.launch { c.looks.apply(look) } }) { Text("Use it".localized()) }
             }
         },
-        dismissButton = { PrismTextButton(::done) { Text("Not now") } },
+        dismissButton = { PrismTextButton(::done) { Text("Not now".localized()) } },
     )
 }
 

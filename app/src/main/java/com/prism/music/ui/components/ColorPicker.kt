@@ -1,5 +1,7 @@
 package com.prism.music.ui.components
 
+import com.prism.music.ui.i18n.localized
+
 import android.graphics.Bitmap
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -181,11 +183,11 @@ fun ColorPickerSheet(
             reset?.let { (label, action) -> PrismTextButton({ close { action() } }, Modifier.fillMaxWidth()) { Text(label) } }
 
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                PrismOutlinedButton({ close {} }, Modifier.weight(1f)) { Text("Cancel") }
+                PrismOutlinedButton({ close {} }, Modifier.weight(1f)) { Text("Cancel".localized()) }
                 PrismButton({
                     c.savedColors.used(color)
                     close { onPick(color) }
-                }, Modifier.weight(1f)) { Text("Use this color") }
+                }, Modifier.weight(1f)) { Text("Use this color".localized()) }
             }
         }
     }
@@ -225,9 +227,10 @@ fun ColorWheel(hue: Float, sat: Float, value: Float, modifier: Modifier = Modifi
                 2 -> change(h0, ((d.x + half) / (2 * half)).coerceIn(0f, 1f), (1f - (d.y + half) / (2 * half)).coerceIn(0f, 1f))
             }
         }
+        val wheelDesc = "Color wheel".localized()
         Canvas(
             Modifier.size(side)
-                .semantics { contentDescription = "Color wheel" }
+                .semantics { contentDescription = wheelDesc }
                 .pointerInput(px) { detectTapGestures { handle(it, true) } }
                 .pointerInput(px) {
                     detectDragGestures(onDragStart = { handle(it, true) }, onDragEnd = { dragging = 0 }) { ch, _ -> handle(ch.position, false) }
@@ -315,15 +318,15 @@ private fun HexField(color: Int, onColor: (Int) -> Unit) {
     }
     PrismTextField(
         text, ::take, Modifier.fillMaxWidth(), singleLine = true,
-        label = { Text("Color code") },
+        label = { Text("Color code".localized()) },
         placeholder = { Text("#3A86FF") },
         isError = bad,
-        supportingText = if (bad) ({ Text("A code is 6 hex digits, like #3A86FF") }) else null,
+        supportingText = if (bad) ({ Text("A code is 6 hex digits, like #3A86FF".localized()) }) else null,
         keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters, imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { ColorMath.parseHex(text)?.let { onColor(it or (0xFF shl 24)) } }),
         trailingIcon = {
             Icon(
-                PrismIcons.Copy, "Paste a color code",
+                PrismIcons.Copy, "Paste a color code".localized(),
                 Modifier.size(44.dp).clip(CircleShape).clickable { clipboard.getText()?.text?.let { take(it.trim().take(12)) } }.padding(11.dp),
             )
         },
@@ -418,7 +421,7 @@ private fun Readability(color: Int) {
         val ink = if (onWhite) 0xFFFFFFFF.toInt() else 0xFF000000.toInt()
         Column(Modifier.weight(1f).clip(RoundedCornerShape(14.dp)).background(Color(color)).padding(10.dp)) {
             Text("Aa", color = Color(ink), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium)
-            Text("Text on it · ${ColorMath.readability(ink, color).label}", color = Color(ink).copy(alpha = 0.8f), style = MaterialTheme.typography.labelSmall)
+            Text("Text on it · ${ColorMath.readability(ink, color).label}".localized(), color = Color(ink).copy(alpha = 0.8f), style = MaterialTheme.typography.labelSmall)
         }
     }
 }
@@ -449,7 +452,7 @@ private fun PhotoDropper(bitmap: Bitmap, onDismiss: () -> Unit, onPick: (Int) ->
         Column(Modifier.fillMaxSize().background(Color.Black).navigationBarsPadding()) {
             Row(Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
                 RoundAction(PrismIcons.Close, "Close", glass = true, onClick = onDismiss)
-                Text("Tap or drag to pick a color", Modifier.weight(1f).padding(horizontal = 12.dp), color = Color.White, style = MaterialTheme.typography.bodyMedium)
+                Text("Tap or drag to pick a color".localized(), Modifier.weight(1f).padding(horizontal = 12.dp), color = Color.White, style = MaterialTheme.typography.bodyMedium)
             }
             Box(
                 Modifier.weight(1f).fillMaxWidth().onSizeChanged { box = it }

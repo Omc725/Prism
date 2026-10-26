@@ -1,5 +1,6 @@
 package com.prism.music.ui.player
 
+import com.prism.music.ui.i18n.localized
 import com.prism.music.ui.theme.withLyricsFont
 import kotlin.math.roundToInt
 import androidx.compose.ui.unit.em
@@ -393,7 +394,7 @@ fun CurrentLyricStrip(state: LyricsState, isPlaying: Boolean, onClick: () -> Uni
             // A podcast episode has no lyrics to look for: the line keeps its room, empty.
             state.song.isEpisode -> Text(" ", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(vertical = 4.dp))
             lines.isNotEmpty() && !synced -> StripRow(onClick, note = true) {
-                Text("Open lyrics", style = MaterialTheme.typography.titleMedium, color = Color.White, maxLines = 1)
+                Text("Open lyrics".localized(), style = MaterialTheme.typography.titleMedium, color = Color.White, maxLines = 1)
             }
             lines.isNotEmpty() -> {
                 val clock = rememberLyricClock(isPlaying)
@@ -402,8 +403,8 @@ fun CurrentLyricStrip(state: LyricsState, isPlaying: Boolean, onClick: () -> Uni
                 val firstSung = remember(lines) { lines.indexOfFirst { !it.isGap } }
                 val instrumental = current == null || current.isGap
                 val text = when {
-                    instrumental && index < firstSung -> "Intro"
-                    instrumental -> "Instrumental"
+                    instrumental && index < firstSung -> "Intro".localized()
+                    instrumental -> "Instrumental".localized()
                     else -> current!!.text
                 }
                 // A right-to-left line (Arabic, Hebrew…) runs from the right of the strip, its arrow at its end on the left.
@@ -432,16 +433,16 @@ fun CurrentLyricStrip(state: LyricsState, isPlaying: Boolean, onClick: () -> Uni
             }
             // On mobile data with "Lyrics on mobile data" off (#95): opening them looks them up.
             state.waiting -> StripRow(onClick, note = false) {
-                Text("Tap to load lyrics", style = MaterialTheme.typography.titleMedium, color = Color.White.copy(alpha = 0.55f), maxLines = 1)
+                Text("Tap to load lyrics".localized(), style = MaterialTheme.typography.titleMedium, color = Color.White.copy(alpha = 0.55f), maxLines = 1)
             }
             state.unavailable -> {
                 var visible by remember(state.song.id) { mutableStateOf(true) }
                 LaunchedEffect(state.song.id) { delay(4000); visible = false }
                 val a by animateFloatAsState(if (visible) 0.55f else 0f, tween(900), label = "na")
-                Text("Lyrics not available", style = MaterialTheme.typography.titleMedium, color = Color.White, maxLines = 1,
+                Text("Lyrics not available".localized(), style = MaterialTheme.typography.titleMedium, color = Color.White, maxLines = 1,
                     modifier = Modifier.padding(vertical = 4.dp).graphicsLayer { alpha = a })
             }
-            else -> Text("Looking for lyrics…", style = MaterialTheme.typography.titleMedium, color = Color.White.copy(alpha = 0.55f), maxLines = 1, modifier = Modifier.padding(vertical = 4.dp))
+            else -> Text("Looking for lyrics…".localized(), style = MaterialTheme.typography.titleMedium, color = Color.White.copy(alpha = 0.55f), maxLines = 1, modifier = Modifier.padding(vertical = 4.dp))
         }
     }
 }
@@ -778,7 +779,7 @@ fun LyricsPanel(
     if (lines.isEmpty()) {
         Box(modifier.pointerInput(Unit) { detectTapGestures { onRevealControls() } }, contentAlignment = Alignment.Center) {
             if (state.loading) CircularProgressIndicator(color = Color.White, strokeWidth = 3.dp)
-            else Text("No lyrics for this track", style = MaterialTheme.typography.titleMedium, color = Color.White.copy(alpha = 0.6f))
+            else Text("No lyrics for this track".localized(), style = MaterialTheme.typography.titleMedium, color = Color.White.copy(alpha = 0.6f))
         }
         return
     }
@@ -1010,15 +1011,15 @@ private fun GapDots(line: LyricLine, until: Long, clock: State<Long>, active: Bo
 @Composable
 fun LyricsStatusWithChange(state: LyricsState, onChange: () -> Unit) {
     val status = when {
-        state.loading -> "Looking for lyrics…"
-        state.lyrics == null -> "No lyrics found"
+        state.loading -> "Looking for lyrics…".localized()
+        state.lyrics == null -> "No lyrics found".localized()
         else -> "Lyrics from ${state.lyrics!!.source.label}"
     }
     Row(Modifier.fillMaxWidth().offset(y = 6.dp).padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
         Text(status, style = MaterialTheme.typography.titleMedium, color = Color.White.copy(alpha = 0.55f), maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
         Spacer(Modifier.width(8.dp))
         Text(
-            "Change", style = MaterialTheme.typography.titleMedium, color = Color.White.copy(alpha = 0.72f), textDecoration = TextDecoration.Underline,
+            "Change".localized(), style = MaterialTheme.typography.titleMedium, color = Color.White.copy(alpha = 0.72f), textDecoration = TextDecoration.Underline,
             modifier = Modifier.clickable(remember { MutableInteractionSource() }, indication = null, onClick = onChange),
         )
     }
@@ -1037,10 +1038,10 @@ fun LyricsProviderSheet(state: LyricsState, onDismiss: () -> Unit) {
     // The same frosted sheet as the player's ⋯ menu it opens from.
     com.prism.music.ui.components.ActionSheet(state.song.thumbnail, onDismiss) { close ->
         Row(Modifier.fillMaxWidth().padding(start = 24.dp, end = 16.dp, bottom = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text("Lyrics source", style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f))
+            Text("Lyrics source".localized(), style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f))
             // Up top, where it can't scroll out of reach.
             state.source?.let {
-                com.prism.music.ui.components.PrismChip(false, { state.redownload(); close {} }, "Re-download", icon = PrismIcons.Refresh)
+                com.prism.music.ui.components.PrismChip(false, { state.redownload(); close {} }, "Re-download".localized(), icon = PrismIcons.Refresh)
             }
         }
         state.source?.let { src ->
@@ -1068,18 +1069,18 @@ fun LyricsProviderSheet(state: LyricsState, onDismiss: () -> Unit) {
                             color = when { chosen -> scheme.primary; st == ProviderState.NONE -> scheme.onSurface.copy(alpha = 0.4f); else -> scheme.onSurface },
                         )
                         Text(
-                            when (st) {
+                            (when (st) {
                                 ProviderState.LOADING, ProviderState.UNKNOWN -> "Checking…"
                                 ProviderState.FOUND_KARAOKE -> "Karaoke · lights up word by word"
                                 ProviderState.FOUND_SYNCED -> "Time-synced lines"
                                 ProviderState.FOUND_PLAIN -> "Plain text"
                                 ProviderState.NONE -> "Not available for this song"
-                            } + if (starred && st != ProviderState.NONE) " · Censored" else "",
+                            }).localized() + if (starred && st != ProviderState.NONE) " · Censored" else "",
                             style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
                         )
                     }
                     when {
-                        chosen -> Icon(PrismIcons.Check, "Selected", tint = scheme.primary)
+                        chosen -> Icon(PrismIcons.Check, "Selected".localized(), tint = scheme.primary)
                         st == ProviderState.LOADING -> CircularProgressIndicator(Modifier.size(18.dp), color = scheme.onSurfaceVariant, strokeWidth = 2.dp)
                     }
                 }
@@ -1110,10 +1111,10 @@ private fun SearchAsPane(state: LyricsState, sources: List<LyricsSource>, onSear
             Icon(PrismIcons.Search, null, tint = scheme.onSurfaceVariant, modifier = Modifier.size(20.dp))
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f)) {
-                Text("Search with another title", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
+                Text("Search with another title".localized(), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
                 Text(
                     current?.let { (t, a) -> "Looking up \"$t\"" + if (a.isNotBlank()) " by $a" else "" }
-                        ?: "When the lyrics are listed under a different name",
+                        ?: "When the lyrics are listed under a different name".localized(),
                     style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis,
                 )
             }
@@ -1121,12 +1122,12 @@ private fun SearchAsPane(state: LyricsState, sources: List<LyricsSource>, onSear
         if (open) Column(Modifier.padding(start = 16.dp, end = 16.dp, bottom = 14.dp)) {
             // The keyboard covers the pane's foot: its own key goes on to Artist, then searches.
             com.prism.music.ui.components.PrismTextField(
-                title, { title = it }, Modifier.fillMaxWidth(), label = { Text("Title") }, singleLine = true,
+                title, { title = it }, Modifier.fillMaxWidth(), label = { Text("Title".localized()) }, singleLine = true,
                 keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(imeAction = androidx.compose.ui.text.input.ImeAction.Next),
             )
             Spacer(Modifier.height(8.dp))
             com.prism.music.ui.components.PrismTextField(
-                artist, { artist = it }, Modifier.fillMaxWidth(), label = { Text("Artist") }, singleLine = true,
+                artist, { artist = it }, Modifier.fillMaxWidth(), label = { Text("Artist".localized()) }, singleLine = true,
                 keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(imeAction = androidx.compose.ui.text.input.ImeAction.Search),
                 keyboardActions = androidx.compose.foundation.text.KeyboardActions(onSearch = {
                     if (title.isNotBlank()) { state.searchAgainAs(title, artist, sources); onSearched() }
@@ -1136,11 +1137,11 @@ private fun SearchAsPane(state: LyricsState, sources: List<LyricsSource>, onSear
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (current != null) com.prism.music.ui.components.PrismTextButton(onClick = {
                     state.searchAgainAs("", "", sources); onSearched()
-                }) { Text("Use the song's own") }
+                }) { Text("Use the song's own".localized()) }
                 Spacer(Modifier.weight(1f))
                 com.prism.music.ui.components.PrismButton(enabled = title.isNotBlank(), onClick = {
                     state.searchAgainAs(title, artist, sources); onSearched()
-                }) { Text("Search") }
+                }) { Text("Search".localized()) }
             }
         }
     }

@@ -154,6 +154,7 @@ object SettingsIndex {
         SettingEntry(L, "Pages", "Page titles"),
         SettingEntry(L, "Pages", "Album & playlist cards"),
         SettingEntry(L, "Search", "Open the keyboard", "search typing"),
+        SettingEntry(L, "Language", "App language", "language locale translation turkish azerbaijani dil turkce azerbaycan"),
         // Player
         SettingEntry(P, "Look", "Background", "player blur cover color"),
         SettingEntry(P, "Look", "Show background"),

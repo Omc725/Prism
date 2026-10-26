@@ -1,5 +1,8 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.R
+import com.prism.music.ui.i18n.localized
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.border
 import com.prism.music.ui.components.PrismButton
 import com.prism.music.ui.components.PrismTextButton
@@ -73,13 +76,22 @@ import com.prism.music.ui.theme.LocalContainer
 import kotlinx.coroutines.launch
 
 // The phone's own music files have their own page (Local files, from Playlists), with Songs, Artists and Albums.
-private enum class LibTab(val label: String) { PLAYLISTS("Playlists"), SONGS("Songs"), ALBUMS("Albums"), ARTISTS("Artists"), HISTORY("History"), DOWNLOADS("Downloads") }
+private enum class LibTab(val titleRes: Int, val label: String) {
+    PLAYLISTS(R.string.lib_tab_playlists, "Playlists"),
+    SONGS(R.string.lib_tab_songs, "Songs"),
+    ALBUMS(R.string.lib_tab_albums, "Albums"),
+    ARTISTS(R.string.lib_tab_artists, "Artists"),
+    HISTORY(R.string.lib_tab_history, "History"),
+    DOWNLOADS(R.string.lib_tab_downloads, "Downloads");
+
+    fun label(context: android.content.Context): String = context.getString(titleRes)
+}
 
 /** One row of History (#118): a play, or a run of plays of the same song one after another. */
 private data class HistoryEntry(val song: com.prism.music.data.model.Song, val at: Long, val times: Int)
 
 /** Plays on this phone under day headings (Today, Yesterday, the weekday, then the date), repeats in a row folded into one. */
-private fun historyByDay(rows: List<com.prism.music.data.db.HistoryRow>, now: Long = System.currentTimeMillis()): List<Pair<String, List<HistoryEntry>>> {
+private fun historyByDay(rows: List<com.prism.music.data.db.HistoryRow>, context: android.content.Context, now: Long = System.currentTimeMillis()): List<Pair<String, List<HistoryEntry>>> {
     val entries = mutableListOf<HistoryEntry>()
     for (r in rows) {
         val last = entries.lastOrNull()
@@ -88,12 +100,13 @@ private fun historyByDay(rows: List<com.prism.music.data.db.HistoryRow>, now: Lo
     }
     val today = dayStart(now)
     val dayMs = 86_400_000L
-    val dateFormat = java.text.SimpleDateFormat(android.text.format.DateFormat.getBestDateTimePattern(java.util.Locale.getDefault(), "EEEdMMMyyyy"), java.util.Locale.getDefault())
-    val weekday = java.text.SimpleDateFormat("EEEE", java.util.Locale.getDefault())
+    val locale = context.resources.configuration.locales[0] ?: java.util.Locale.getDefault()
+    val dateFormat = java.text.SimpleDateFormat(android.text.format.DateFormat.getBestDateTimePattern(locale, "EEEdMMMyyyy"), locale)
+    val weekday = java.text.SimpleDateFormat("EEEE", locale)
     return entries.groupBy { dayStart(it.at) }.map { (day, list) ->
         val title = when {
-            day >= today -> "Today"
-            day >= today - dayMs -> "Yesterday"
+            day >= today -> context.getString(R.string.history_today)
+            day >= today - dayMs -> context.getString(R.string.history_yesterday)
             day > today - 7 * dayMs -> weekday.format(java.util.Date(day))
             else -> dateFormat.format(java.util.Date(day))
         }
@@ -126,6 +139,7 @@ fun LibraryScreen(bottomPadding: Dp) {
     val c = LocalContainer.current
     val nav = LocalNavigator.current
     val settings = LocalAppSettings.current
+    val context = androidx.compose.ui.platform.LocalContext.current
     val playlists by c.library.playlists.collectAsState()
     val remoteAlbums by c.library.albums.collectAsState()
     val remoteArtists by c.library.artists.collectAsState()
@@ -235,20 +249,20 @@ fun LibraryScreen(bottomPadding: Dp) {
     }
 
     Column(Modifier.fillMaxSize()) {
-        com.prism.music.ui.components.ScreenHeader("Library") {
+        com.prism.music.ui.components.ScreenHeader(stringResource(R.string.library_title)) {
             if (settings.isLoggedIn) {
                 if (sync == SyncState.SYNCING) Box(Modifier.size(42.dp), contentAlignment = Alignment.Center) { com.prism.music.ui.components.PrismSpinner(Modifier.size(22.dp), stroke = 2.dp) }
-                else com.prism.music.ui.components.RoundAction(PrismIcons.Sync, "Sync with YouTube Music") { scope.launch { c.library.sync() } }
+                else com.prism.music.ui.components.RoundAction(PrismIcons.Sync, stringResource(R.string.library_sync_ytm)) { scope.launch { c.library.sync() } }
             }
             // Pick and order the Playlists tab's tiles (it was a tile of its own at the end of them until 1.7.5).
-            com.prism.music.ui.components.RoundAction(PrismIcons.Edit, "Edit tiles") { editingTiles = true }
+            com.prism.music.ui.components.RoundAction(PrismIcons.Edit, stringResource(R.string.library_edit_tiles)) { editingTiles = true }
             com.prism.music.ui.components.RoundAction(
                 if (asList) PrismIcons.Customize else PrismIcons.Queue,
-                if (asList) "Show as grid" else "Show as list",
+                if (asList) stringResource(R.string.library_view_grid) else stringResource(R.string.library_view_list),
             ) { c.settings.setLibraryView(if (asList) com.prism.music.data.prefs.LibraryView.GRID else com.prism.music.data.prefs.LibraryView.LIST) }
-            if (com.prism.music.data.prefs.NavTab.SETTINGS !in settings.navTabs) com.prism.music.ui.components.RoundAction(PrismIcons.SettingsFilled, "Settings") { nav.go(Routes.SETTINGS) }
+            if (com.prism.music.data.prefs.NavTab.SETTINGS !in settings.navTabs) com.prism.music.ui.components.RoundAction(PrismIcons.SettingsFilled, stringResource(R.string.settings_title)) { nav.go(Routes.SETTINGS) }
         }
-        PagerChips(LibTab.entries.map { it.label }, pager)
+        PagerChips(LibTab.entries.map { it.label(context) }, pager)
 
         HorizontalPager(pager, Modifier.weight(1f), beyondViewportPageCount = 1) { page ->
             val tab = LibTab.entries[page]
@@ -260,7 +274,7 @@ fun LibraryScreen(bottomPadding: Dp) {
             var historyLimit by rememberSaveable { androidx.compose.runtime.mutableIntStateOf(300) }
             val phoneHistory = if (tab == LibTab.HISTORY) {
                 val rows by remember(historyLimit) { c.db.plays().historyFlow(historyLimit, 10_000) }.collectAsState(null)
-                remember(rows) { rows?.let { it.size to historyByDay(it) } }
+                remember(rows, context) { rows?.let { it.size to historyByDay(it, context) } }
             } else null
             var accountReload by remember { androidx.compose.runtime.mutableIntStateOf(0) }
             val accountHistory = if (tab == LibTab.HISTORY) {
@@ -291,7 +305,7 @@ fun LibraryScreen(bottomPadding: Dp) {
                                 LibTab.ALBUMS -> EmptyState(PrismIcons.Album, "No albums yet", "Tap the bookmark on an album's page to keep it here. Albums you like or download songs from show up too.")
                                 else -> EmptyState(PrismIcons.Person, "No artists yet", "Star an artist on their page, or like their songs, and they show up here.")
                             }
-                            PrismTextButton(onClick = { nav.go(Routes.LOGIN) }) { Text("Or sign in to sync your YouTube Music library") }
+                            PrismTextButton(onClick = { nav.go(Routes.LOGIN) }) { Text("Or sign in to sync your YouTube Music library".localized()) }
                         } else {
                             EmptyState(PrismIcons.LibraryFilled, "Nothing here yet", "Like or download songs, or star artists, and they'll show up here.")
                         }
@@ -327,15 +341,15 @@ fun LibraryScreen(bottomPadding: Dp) {
                         if (!settings.isLoggedIn && prismLists.isEmpty()) item(span = { GridItemSpan(maxLineSpan) }) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 EmptyState(PrismIcons.QueueMusic, "Your playlists", "Make one with New playlist, or from any song's menu (Add to playlist). They're kept on this phone, no account needed.")
-                                PrismTextButton(onClick = { nav.go(Routes.LOGIN) }) { Text("Or sign in to bring your YouTube Music playlists") }
+                                PrismTextButton(onClick = { nav.go(Routes.LOGIN) }) { Text("Or sign in to bring your YouTube Music playlists".localized()) }
                             }
                         }
                         if (myPlaylists.size > 1) item(span = { GridItemSpan(maxLineSpan) }) {
                             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(end = 8.dp)) {
                                 if (rearranging) Text(
-                                    "Hold and drag, or use the arrows", style = MaterialTheme.typography.labelLarge,
+                                    "Hold and drag, or use the arrows".localized(), style = MaterialTheme.typography.labelLarge,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1f).padding(start = 8.dp),
-                                ) else SortBar("${myPlaylists.size} playlists", PlaylistSort.entries, playlistSort, { it.label }, Modifier.weight(1f)) {
+                                ) else SortBar("${myPlaylists.size} playlists".localized(), PlaylistSort.entries, playlistSort, { it.label }, Modifier.weight(1f)) {
                                     c.library.setPlaylistSort(it.name)
                                 }
                                 com.prism.music.ui.components.PrismChip(
@@ -402,7 +416,7 @@ fun LibraryScreen(bottomPadding: Dp) {
                                 sections == null -> item(span = { GridItemSpan(maxLineSpan) }) {
                                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                         EmptyState(PrismIcons.History, "Couldn't load your history", result.exceptionOrNull()?.friendlyMessage() ?: "Try again in a moment.")
-                                        PrismTextButton(onClick = { accountReload++ }) { Text("Try again") }
+                                        PrismTextButton(onClick = { accountReload++ }) { Text("Try again".localized()) }
                                     }
                                 }
                                 sections.isEmpty() -> item(span = { GridItemSpan(maxLineSpan) }) {
@@ -431,7 +445,7 @@ fun LibraryScreen(bottomPadding: Dp) {
                             }
                             if (count >= historyLimit) item(span = { GridItemSpan(maxLineSpan) }) {
                                 Box(Modifier.fillMaxWidth().padding(8.dp), contentAlignment = Alignment.Center) {
-                                    PrismTextButton(onClick = { historyLimit += 300 }) { Text("Show more") }
+                                    PrismTextButton(onClick = { historyLimit += 300 }) { Text("Show more".localized()) }
                                 }
                             }
                         }
@@ -472,11 +486,11 @@ fun LibraryScreen(bottomPadding: Dp) {
         val context = androidx.compose.ui.platform.LocalContext.current
         AlertDialog(
             onDismissRequest = { deleting = null },
-            title = { Text("Delete playlist?") },
+            title = { Text("Delete playlist?".localized()) },
             text = {
                 Text(
-                    if (com.prism.music.data.PrismLibrary.isPrismList(p.id)) "\"${p.title}\" will be deleted from this phone. The songs in it stay where they are."
-                    else "\"${p.title}\" will be deleted from your YouTube Music account. If it's someone else's playlist, it's only removed from your library.",
+                    (if (com.prism.music.data.PrismLibrary.isPrismList(p.id)) "\"${p.title}\" will be deleted from this phone. The songs in it stay where they are."
+                    else "\"${p.title}\" will be deleted from your YouTube Music account. If it's someone else's playlist, it's only removed from your library.").localized(),
                 )
             },
             confirmButton = {
@@ -488,9 +502,9 @@ fun LibraryScreen(bottomPadding: Dp) {
                             android.widget.Toast.makeText(context, "Couldn't delete \"${p.title}\": ${it.friendlyMessage()}", android.widget.Toast.LENGTH_LONG).show()
                         }
                     }
-                }) { Text("Delete", color = MaterialTheme.colorScheme.error) }
+                }) { Text("Delete".localized(), color = MaterialTheme.colorScheme.error) }
             },
-            dismissButton = { PrismTextButton(onClick = { deleting = null }) { Text("Cancel") } },
+            dismissButton = { PrismTextButton(onClick = { deleting = null }) { Text("Cancel".localized()) } },
         )
     }
 }
@@ -522,11 +536,11 @@ private fun RearrangePlaylists(playlists: List<com.prism.music.data.model.Browse
                 maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
             )
             if (!held) {
-                IconButton(onClick = { move(i, i - 1) }, enabled = i > 0) { Icon(PrismIcons.ChevronUp, "Move ${p.title} up") }
-                IconButton(onClick = { move(i, i + 1) }, enabled = i < playlists.lastIndex) { Icon(PrismIcons.ChevronDown, "Move ${p.title} down") }
+                IconButton(onClick = { move(i, i - 1) }, enabled = i > 0) { Icon(PrismIcons.ChevronUp, "Move %s up".localized(p.title)) }
+                IconButton(onClick = { move(i, i + 1) }, enabled = i < playlists.lastIndex) { Icon(PrismIcons.ChevronDown, "Move %s down".localized(p.title)) }
             } else Spacer(Modifier.width(96.dp))
             // The grip moves the playlist at once; the rest of the row after a hold.
-            com.prism.music.ui.components.DragGrip(Modifier.dragHandle().padding(end = 8.dp), "Drag ${p.title}")
+            com.prism.music.ui.components.DragGrip(Modifier.dragHandle().padding(end = 8.dp), "Drag %s".localized(p.title))
         }
     }
 }
@@ -573,8 +587,8 @@ private fun ShortcutTile(title: String, subtitle: String, icon: ImageVector, asL
             Cover(Modifier.size(56.dp), ui.smallArt, 26.dp)
             Spacer(Modifier.width(14.dp))
             Column {
-                Text(title, style = MaterialTheme.typography.bodyLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.Medium)
-                Text(subtitle, style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant)
+                Text(title.localized(), style = MaterialTheme.typography.bodyLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.Medium)
+                Text(subtitle.localized(), style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant)
             }
         }
         return
@@ -582,8 +596,8 @@ private fun ShortcutTile(title: String, subtitle: String, icon: ImageVector, asL
     Column(Modifier.padding(4.dp).clip(ui.tile).combinedClickable(onClick = onClick, onLongClick = onLongClick).padding(4.dp)) {
         Cover(Modifier.fillMaxWidth().aspectRatio(1f), ui.art, 56.dp)
         Spacer(Modifier.height(8.dp))
-        Text(title, style = MaterialTheme.typography.titleSmall)
-        Text(subtitle, style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant)
+        Text(title.localized(), style = MaterialTheme.typography.titleSmall)
+        Text(subtitle.localized(), style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant)
     }
 }
 
@@ -598,9 +612,9 @@ fun LibraryTilesSheet(onDismiss: () -> Unit) {
     val tiles = s.libraryTiles
     com.prism.music.ui.components.PrismSheet(onDismiss) { _ ->
         Column(Modifier.fillMaxWidth().verticalScroll(androidx.compose.foundation.rememberScrollState()).padding(bottom = 24.dp)) {
-            Text("Library tiles", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(horizontal = 20.dp))
+            Text("Library tiles".localized(), style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(horizontal = 20.dp))
             Text(
-                "Tick the tiles to show at the top of Library; hold one to move it.",
+                "Tick the tiles to show at the top of Library; hold one to move it.".localized(),
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 4.dp, bottom = 8.dp),
             )
@@ -608,27 +622,27 @@ fun LibraryTilesSheet(onDismiss: () -> Unit) {
             fun TileRow(t: LibraryTile, i: Int, modifier: Modifier, grip: Modifier?, held: Boolean) {
                 val on = t in tiles
                 Row(modifier.fillMaxWidth().padding(start = 8.dp, end = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                    PrismCheck(on, label = t.label) { v -> prefs.setLibraryTiles(if (v) tiles + t else tiles - t) }
+                    PrismCheck(on, label = t.label.localized()) { v -> prefs.setLibraryTiles(if (v) tiles + t else tiles - t) }
                     Text(
-                        t.label, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge,
+                        t.label.localized(), Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge,
                         color = if (on) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     if (on && !held) {
                         androidx.compose.material3.IconButton(onClick = { prefs.setLibraryTiles(tiles.toMutableList().apply { add(i - 1, removeAt(i)) }) }, enabled = i > 0) {
-                            Icon(PrismIcons.ChevronUp, "Move ${t.label} up")
+                            Icon(PrismIcons.ChevronUp, "Move %s up".localized(t.label.localized()))
                         }
                         androidx.compose.material3.IconButton(onClick = { prefs.setLibraryTiles(tiles.toMutableList().apply { add(i + 1, removeAt(i)) }) }, enabled = i < tiles.lastIndex) {
-                            Icon(PrismIcons.ChevronDown, "Move ${t.label} down")
+                            Icon(PrismIcons.ChevronDown, "Move %s down".localized(t.label.localized()))
                         }
                     }
-                    if (grip != null) com.prism.music.ui.components.DragGrip(grip.padding(horizontal = 4.dp), "Drag ${t.label}")
+                    if (grip != null) com.prism.music.ui.components.DragGrip(grip.padding(horizontal = 4.dp), "Drag %s".localized(t.label.localized()))
                 }
             }
             com.prism.music.ui.components.ReorderList(tiles, { it }, { prefs.setLibraryTiles(it) }) { t, i, held, mod -> TileRow(t, i, mod, Modifier.dragHandle(), held) }
             LibraryTile.entries.filter { it !in tiles }.forEach { t -> TileRow(t, -1, Modifier, null, false) }
-            PrismTextButton({ prefs.setLibraryTiles(LibraryTile.entries) }, Modifier.padding(start = 12.dp, top = 8.dp)) { Text("Show all, in Prism's order") }
+            PrismTextButton({ prefs.setLibraryTiles(LibraryTile.entries) }, Modifier.padding(start = 12.dp, top = 8.dp)) { Text("Show all, in Prism's order".localized()) }
             Text(
-                "Where your playlists go", style = MaterialTheme.typography.titleMedium,
+                "Where your playlists go".localized(), style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 16.dp),
             )
             ChoiceCards(
@@ -698,12 +712,12 @@ private fun DownloadsSummary() {
                 .clickable { nav.go(Routes.DOWNLOADS) }.padding(20.dp),
         ) {
             Column {
-                Text("${com.prism.music.data.model.songCount(done.size)} offline", style = MaterialTheme.typography.titleLarge, color = ink)
+                Text("${com.prism.music.data.model.songCount(done.size)} offline".localized(), style = MaterialTheme.typography.titleLarge, color = ink)
                 Text(
-                    "%.1f MB used".format(done.sumOf { it.bytes } / 1_048_576.0) + if (running > 0) " · $running in progress" else "",
+                    "${"%.1f MB used".format(done.sumOf { it.bytes } / 1_048_576.0)}${if (running > 0) " · $running in progress" else ""}".localized(),
                     style = MaterialTheme.typography.bodyMedium, color = ink.copy(alpha = 0.8f),
                 )
-                Text("Open downloads →", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(top = 8.dp))
+                Text("Open downloads →".localized(), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(top = 8.dp))
             }
         }
         if (active.isNotEmpty()) com.prism.music.ui.screens.DownloadQueueStatus(active)

@@ -1,5 +1,8 @@
 package com.prism.music.ui.player
 
+import com.prism.music.R
+import com.prism.music.ui.i18n.localized
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.ColumnScope
 import android.content.Context
 import android.media.AudioDeviceInfo
@@ -299,7 +302,7 @@ fun PlayerScrubber(positionMs: Long, durationMs: Long, centerLabel: @Composable 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(Modifier.size(7.dp).background(Color(0xFFFF4D4D), androidx.compose.foundation.shape.CircleShape))
                     Spacer(Modifier.width(6.dp))
-                    Text("LIVE", style = MaterialTheme.typography.labelMedium, color = Color.White.copy(alpha = 0.8f))
+                    Text("LIVE".localized(), style = MaterialTheme.typography.labelMedium, color = Color.White.copy(alpha = 0.8f))
                 }
                 centerLabel()
             }
@@ -743,7 +746,7 @@ fun PlayerActionRow(
                 label = "pill",
             ) { modes ->
                 if (modes) Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
-                    if (PlayerButton.LYRICS in chosen) BottomGlyph(PrismIcons.Lyrics, "Lyrics", false, onToggleLyrics)
+                    if (PlayerButton.LYRICS in chosen) BottomGlyph(PrismIcons.Lyrics, stringResource(R.string.player_lyrics), false, onToggleLyrics)
                     Pill {
                         PillSegment(
                             if (smart) PrismIcons.SmartShuffle else PrismIcons.Shuffle, if (smart) "Smart Shuffle" else "Shuffle", shuffle,
@@ -785,23 +788,23 @@ private fun PlayerButtonGlyph(
     val song by pc.currentSong.collectAsState()
     val s = song ?: return
     when (b) {
-        PlayerButton.LYRICS -> BottomGlyph(if (lyricsOpen) PrismIcons.LyricsFilled else PrismIcons.Lyrics, if (lyricsOpen) "Close lyrics" else "Lyrics", lyricsOpen, onToggleLyrics, width)
+        PlayerButton.LYRICS -> BottomGlyph(if (lyricsOpen) PrismIcons.LyricsFilled else PrismIcons.Lyrics, if (lyricsOpen) stringResource(R.string.player_close_lyrics) else stringResource(R.string.player_lyrics), lyricsOpen, onToggleLyrics, width)
         // One Video toggle: on (marked) plays the music video; tapping again goes back to the song.
         PlayerButton.VIDEO -> PillSegment(
             PrismIcons.Video,
             when { videoMode -> "Back to the song"; videoAvailable -> "Music video"; else -> "No music video for this song" },
             videoMode || videoLoading, enabled = videoAvailable || videoMode, loading = videoLoading, width = width,
         ) { onVideoMode(!(videoMode || videoLoading)) }
-        PlayerButton.QUEUE -> BottomGlyph(PrismIcons.Queue, "Up next", false, onToggleQueue, width)
+        PlayerButton.QUEUE -> BottomGlyph(PrismIcons.Queue, stringResource(R.string.player_queue), false, onToggleQueue, width)
         PlayerButton.LIKE -> {
             val liked by c.library.likedIds.collectAsState()
             val on = s.id in liked
-            BottomGlyph(if (on) PrismIcons.HeartFilled else PrismIcons.Heart, if (on) "Remove from liked" else "Like", on, { c.library.toggleLike(s) }, width)
+            BottomGlyph(if (on) PrismIcons.HeartFilled else PrismIcons.Heart, if (on) stringResource(R.string.action_remove_from_library) else stringResource(R.string.action_like), on, { c.library.toggleLike(s) }, width)
         }
         PlayerButton.DISLIKE -> {
             val disliked by c.library.dislikedIds.collectAsState()
             val on = s.id in disliked
-            BottomGlyph(if (on) PrismIcons.ThumbDownFilled else PrismIcons.ThumbDown, "Not for me", on, {
+            BottomGlyph(if (on) PrismIcons.ThumbDownFilled else PrismIcons.ThumbDown, stringResource(R.string.action_dislike), on, {
                 c.library.setDisliked(s, !on)
                 if (!on && pc.hasNext.value) pc.next()
             }, width)
@@ -812,17 +815,17 @@ private fun PlayerButtonGlyph(
             val done = d?.state == androidx.media3.exoplayer.offline.Download.STATE_COMPLETED
             BottomGlyph(
                 if (done) PrismIcons.DownloadDone else PrismIcons.Download,
-                when { done -> "Downloaded"; d != null -> "Downloading"; else -> "Download" }, done || d != null,
+                when { done -> stringResource(R.string.downloads); d != null -> stringResource(R.string.downloads); else -> stringResource(R.string.player_download) }, done || d != null,
                 { if (d != null) c.downloads.remove(s.id) else c.downloads.download(s) }, width, enabled = !s.isLocal && !s.isLive,
             )
         }
-        PlayerButton.RADIO -> BottomGlyph(PrismIcons.Radio, "Start radio", false, { pc.playRadio(s) }, width, enabled = !s.isLocal)
+        PlayerButton.RADIO -> BottomGlyph(PrismIcons.Radio, stringResource(R.string.player_radio), false, { pc.playRadio(s) }, width, enabled = !s.isLocal)
         // Songs a little faster or slower (1.7.4): each tap the next speed; the speed itself shows while it isn't 1×.
         PlayerButton.SPEED -> {
             val speed by pc.musicSpeed.collectAsState()
             val next = MUSIC_SPEEDS[(MUSIC_SPEEDS.indexOf(speed) + 1).mod(MUSIC_SPEEDS.size)]
             val haptics = rememberHaptics()
-            if (speed == 1f) BottomGlyph(PrismIcons.Speed, "Playback speed 1×", false, { pc.setMusicSpeed(next) }, width, enabled = !s.isLive)
+            if (speed == 1f) BottomGlyph(PrismIcons.Speed, stringResource(R.string.player_speed), false, { pc.setMusicSpeed(next) }, width, enabled = !s.isLive)
             else Box(
                 Modifier.size(width = width, height = BOTTOM_ACTION_SIZE).clip(CircleShape).background(Color.White.copy(alpha = 0.16f))
                     .clickable(onClickLabel = "Playback speed ${speedText(speed)}") { haptics.tick(); pc.setMusicSpeed(next) },
@@ -834,21 +837,21 @@ private fun PlayerButtonGlyph(
         }
         PlayerButton.DJ -> {
             val on by c.dj.on.collectAsState()
-            BottomGlyph(if (on) PrismIcons.TurntableFilled else PrismIcons.Turntable, if (on) "DJ mode off" else "DJ mode", on, { c.dj.setOn(!on) }, width)
+            BottomGlyph(if (on) PrismIcons.TurntableFilled else PrismIcons.Turntable, stringResource(R.string.player_dj), on, { c.dj.setOn(!on) }, width)
         }
         PlayerButton.SLEEP -> {
             val at by pc.sleepAt.collectAsState()
             val end by pc.sleepEndOfSong.collectAsState()
-            BottomGlyph(PrismIcons.Moon, "Sleep timer", at > 0 || end, { onButton(b) }, width)
+            BottomGlyph(PrismIcons.Moon, stringResource(R.string.player_sleep), at > 0 || end, { onButton(b) }, width)
         }
         PlayerButton.SING -> {
             val on by c.sing.on.collectAsState()
-            BottomGlyph(PrismIcons.Mic, "Sing", on, { onButton(b) }, width, enabled = !s.isEpisode)
+            BottomGlyph(PrismIcons.Mic, stringResource(R.string.player_sing), on, { onButton(b) }, width, enabled = !s.isEpisode)
         }
-        PlayerButton.OUTPUT -> BottomGlyph(PrismIcons.Cast, "Play on", false, { onButton(b) }, width)
-        PlayerButton.ADD_TO_PLAYLIST -> BottomGlyph(PrismIcons.PlaylistAdd, "Add to playlist", false, { onButton(b) }, width)
-        PlayerButton.SHARE -> BottomGlyph(PrismIcons.Share, "Share", false, { onButton(b) }, width, enabled = !s.isLocal)
-        PlayerButton.EQUALIZER -> BottomGlyph(PrismIcons.Equalizer, "Equalizer", false, { onButton(b) }, width)
+        PlayerButton.OUTPUT -> BottomGlyph(PrismIcons.Cast, stringResource(R.string.player_output), false, { onButton(b) }, width)
+        PlayerButton.ADD_TO_PLAYLIST -> BottomGlyph(PrismIcons.PlaylistAdd, stringResource(R.string.player_add_to_playlist), false, { onButton(b) }, width)
+        PlayerButton.SHARE -> BottomGlyph(PrismIcons.Share, stringResource(R.string.action_share), false, { onButton(b) }, width, enabled = !s.isLocal)
+        PlayerButton.EQUALIZER -> BottomGlyph(PrismIcons.Equalizer, stringResource(R.string.player_equalizer), false, { onButton(b) }, width)
     }
 }
 
@@ -1018,7 +1021,7 @@ fun OutputCaption() {
         // The cast mark says the line opens speakers and TVs (Reddit 1.7: "where's the cast button?").
         if (!away) {
             Spacer(Modifier.width(7.dp))
-            Icon(PrismIcons.Cast, "Play on a speaker or TV", Modifier.size(14.dp), tint = Color.White.copy(alpha = 0.62f))
+            Icon(PrismIcons.Cast, "Play on a speaker or TV".localized(), Modifier.size(14.dp), tint = Color.White.copy(alpha = 0.62f))
         }
     }
     if (picking) OutputPickerSheet(phoneName) { picking = false }
@@ -1039,10 +1042,11 @@ fun SleepBadge(modifier: Modifier = Modifier) {
     LaunchedEffect(sleepAt, lifecycle) { if (sleepAt > 0) lifecycle.tickWhileShown(15_000) { now = System.currentTimeMillis() } }
     val left = if (endOfSong) "Song end" else "${((sleepAt - now) / 60_000).coerceAtLeast(0) + 1} min"
     var open by remember { mutableStateOf(false) }
+    val timerDesc = "Sleep timer: $left. Tap to change it.".localized()
     Row(
         modifier.clip(CircleShape).background(Color.White.copy(alpha = 0.10f)).clickable { open = true }
             .padding(horizontal = 9.dp, vertical = 3.dp)
-            .semantics(mergeDescendants = true) { contentDescription = "Sleep timer: $left. Tap to change it." },
+            .semantics(mergeDescendants = true) { contentDescription = timerDesc },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(PrismIcons.Moon, null, Modifier.size(13.dp), tint = Color.White.copy(alpha = 0.85f))
@@ -1132,30 +1136,30 @@ fun OutputPickerSheet(phoneName: String, onDismiss: () -> Unit) {
     val castingName = (castState as? com.prism.music.connect.CastState.Casting)?.renderer?.name
     com.prism.music.ui.components.ActionSheet(song?.thumbnail, onDismiss) { _ ->
         Column(Modifier.padding(start = 24.dp, end = 24.dp, bottom = 4.dp)) {
-            Text("Play on", style = MaterialTheme.typography.titleLarge)
+            Text("Play on".localized(), style = MaterialTheme.typography.titleLarge)
             Text(
-                castingName?.let { "Playing on $it" } ?: current?.let { "Playing on ${outputLabel(it, phoneName)}" } ?: "Pick where the music plays",
+                castingName?.let { "Playing on $it".localized() } ?: current?.let { "Playing on ${outputLabel(it, phoneName)}" } ?: "Pick where the music plays".localized(),
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
         // No scroll of its own: the sheet already scrolls (a scroller inside a scroller is measured with no height
         // limit, and Compose crashes on it).
         Column(Modifier.padding(bottom = 24.dp)) {
-            OutputGroup("This phone") {
+            OutputGroup("This phone".localized()) {
                 options.forEach { d ->
                     val selected = castingTo == null && current?.id == d.id
                     DeviceRow(
                         outputIcon(d), outputLabel(d, phoneName),
                         when {
-                            d.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER -> "Phone speaker"
-                            isBluetooth(d.type) -> "Bluetooth"
-                            d.type == AudioDeviceInfo.TYPE_USB_DEVICE || d.type == AudioDeviceInfo.TYPE_USB_HEADSET -> "USB"
-                            else -> "Wired"
+                            d.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER -> "Phone speaker".localized()
+                            isBluetooth(d.type) -> "Bluetooth".localized()
+                            d.type == AudioDeviceInfo.TYPE_USB_DEVICE || d.type == AudioDeviceInfo.TYPE_USB_HEADSET -> "USB".localized()
+                            else -> "Wired".localized()
                         },
                         selected = selected,
                     ) { pc.setOutput(d) }
                 }
-                if (android.os.Build.VERSION.SDK_INT >= 34) DeviceRow(PrismIcons.Headphones, "Other Bluetooth devices", "Ones that aren't connected yet") {
+                if (android.os.Build.VERSION.SDK_INT >= 34) DeviceRow(PrismIcons.Headphones, "Other Bluetooth devices".localized(), "Ones that aren't connected yet".localized()) {
                     if (MediaRouter2.getInstance(context).showSystemOutputSwitcher()) onDismiss()
                 }
             }
@@ -1208,7 +1212,7 @@ internal fun DeviceRow(
         Column(Modifier.weight(1f)) {
             Text(title, style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text(
-                subtitle + if (selected) " · Playing" else "",
+                subtitle + if (selected) " · " + "Playing".localized() else "",
                 style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis,
             )
         }
@@ -1227,13 +1231,13 @@ private fun PrismDevices() {
         onDispose { handoff.stopDiscovery() }
     }
     if (devices.isEmpty() && busy == null) return
-    OutputGroup("Prism devices") {
-        busy?.let { label -> DeviceRow(PrismIcons.Handoff, label, "One moment…", busy = true, enabled = false) {} }
+    OutputGroup("Prism devices".localized()) {
+        busy?.let { label -> DeviceRow(PrismIcons.Handoff, label, "One moment…".localized(), busy = true, enabled = false) {} }
         devices.forEach { d ->
             DeviceRow(
-                PrismIcons.Handoff, d.name, "Move the music there" + if (d.paired) "" else " · pairs the first time", enabled = busy == null,
+                PrismIcons.Handoff, d.name, "Move the music there".localized() + if (d.paired) "" else " · " + "pairs the first time".localized(), enabled = busy == null,
                 trailing = {
-                    com.prism.music.ui.components.PrismTextButton(onClick = { handoff.bringFrom(d) }, enabled = busy == null) { Text("Bring here") }
+                    com.prism.music.ui.components.PrismTextButton(onClick = { handoff.bringFrom(d) }, enabled = busy == null) { Text("Bring here".localized()) }
                 },
             ) { handoff.moveTo(d) }
         }
@@ -1258,24 +1262,24 @@ private fun SpeakersAndTvs(castState: com.prism.music.connect.CastState, casting
         val playing = (castState as? com.prism.music.connect.CastState.Casting)?.renderer ?: (castState as? com.prism.music.connect.CastState.Connecting)?.renderer
         if (playing != null && list.none { it.id == playing.id }) listOf(playing) + list else list
     }
-    OutputGroup("Speakers & TVs") {
+    OutputGroup("Speakers & TVs".localized()) {
         shown.forEach { r ->
             val selected = r.id == castingTo
             val connecting = castState is com.prism.music.connect.CastState.Connecting && selected
             val speaker = speakerWords.any { w -> "${r.name} ${r.manufacturer} ${r.model}".lowercase().contains(w) }
             DeviceRow(
                 if (speaker) PrismIcons.Speaker else PrismIcons.Tv, r.name,
-                r.detail + if (connecting) " · Connecting…" else "",
+                r.detail + if (connecting) " · " + "Connecting…".localized() else "",
                 selected = selected && !connecting, busy = connecting,
             ) { if (!selected) cast.connect(r) }
         }
-        if (castingTo != null) DeviceRow(PrismIcons.Close, "Stop casting", "The music pauses; pick this phone to carry on here") {
+        if (castingTo != null) DeviceRow(PrismIcons.Close, "Stop casting".localized(), "The music pauses; pick this phone to carry on here".localized()) {
             cast.disconnect(keepPlaying = false)
         }
         if (shown.isEmpty()) {
-            if (!lookedLong) DeviceRow(PrismIcons.Cast, "Looking on this Wi-Fi…", "Speakers, TVs and receivers", busy = true, enabled = false) {}
+            if (!lookedLong) DeviceRow(PrismIcons.Cast, "Looking on this Wi-Fi…".localized(), "Speakers, TVs and receivers".localized(), busy = true, enabled = false) {}
             else Text(
-                "None found. They show here when they're on this Wi-Fi with Google Cast (Chromecast, Google TV) or DLNA / UPnP (often called media sharing).",
+                "None found. They show here when they're on this Wi-Fi with Google Cast (Chromecast, Google TV) or DLNA / UPnP (often called media sharing).".localized(),
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(16.dp),
             )

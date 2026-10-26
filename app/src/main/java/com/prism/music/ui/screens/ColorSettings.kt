@@ -1,5 +1,7 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.ui.i18n.localized
+
 import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -124,8 +126,8 @@ fun ColorPreviewBar(pinned: Boolean = false) {
     Column(Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(Modifier.padding(start = 4.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
-                Text("Your Prism", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Light)
-                Text("Changes the moment you pick", style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant)
+                Text("Your Prism".localized(), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Light)
+                Text("Changes the moment you pick".localized(), style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant)
             }
             Segmented(listOf(true, false), dark, { if (it) "Dark" else "Light" }, Modifier.width(164.dp)) { previewDark.value = it }
         }
@@ -252,7 +254,7 @@ private fun ColorSettings() {
                     "Album, playlist and artist pages use their picture's color instead (Artist & album pages, below)",
                     Modifier.weight(1f), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface,
                 )
-                PrismTextButton({ prefs.setPageColors(false) }) { Text("Use mine") }
+                PrismTextButton({ prefs.setPageColors(false) }) { Text("Use mine".localized()) }
             }
             val sources = ColorSource.entries.filter { it != ColorSource.DYNAMIC || Build.VERSION.SDK_INT >= 31 }
             ChoiceCards(
@@ -547,7 +549,7 @@ private fun StrengthSlider(s: AppSettings, onSave: (Float) -> Unit) {
     val dark = LocalIsDark.current
     Column(Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Tint strength", Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
+            Text("Tint strength".localized(), Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
             Text(
                 when { v < 0.6f -> "Faint"; v < 1.4f -> "Gentle"; v < 2.2f -> "Strong"; else -> "Very strong" },
                 style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -617,24 +619,25 @@ fun whiteName(dark: Boolean) = if (dark) "White" else "Black"
 private fun StopEditor(stops: List<Int>, onEdit: (Int) -> Unit, onReverse: () -> Unit) {
     val scheme = MaterialTheme.colorScheme
     Column(Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
-        Text("Your own light's colors, left to right", style = MaterialTheme.typography.bodyMedium)
+        Text("Your own light's colors, left to right".localized(), style = MaterialTheme.typography.bodyMedium)
         Spacer(Modifier.height(8.dp))
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             stops.forEachIndexed { i, c ->
+                val colorDesc = "Color ${i + 1}, ${ColorMath.toHex(c)}".localized()
                 Box(
                     Modifier.size(38.dp).clip(CircleShape).background(Color(c)).border(1.dp, scheme.onSurface.copy(alpha = 0.18f), CircleShape)
-                        .semantics { contentDescription = "Color ${i + 1}, ${ColorMath.toHex(c)}" }
+                        .semantics { contentDescription = colorDesc }
                         .clickable { onEdit(i) },
                 )
             }
             if (stops.size < 7) Box(
                 Modifier.size(38.dp).clip(CircleShape).border(1.5.dp, scheme.onSurface.copy(alpha = 0.3f), CircleShape).clickable { onEdit(stops.size) },
                 contentAlignment = Alignment.Center,
-            ) { Icon(PrismIcons.Add, "Add a color", Modifier.size(20.dp)) }
+            ) { Icon(PrismIcons.Add, "Add a color".localized(), Modifier.size(20.dp)) }
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Tap a color to change or remove it, + to add one (2 to 7).", Modifier.weight(1f), style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant)
-            PrismTextButton(onReverse) { Text("Reverse") }
+            Text("Tap a color to change or remove it, + to add one (2 to 7).".localized(), Modifier.weight(1f), style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant)
+            PrismTextButton(onReverse) { Text("Reverse".localized()) }
         }
     }
 }
@@ -644,13 +647,13 @@ private fun ResetColors() {
     val prefs = LocalContainer.current.settings
     var ask by remember { mutableStateOf(false) }
     PrismTextButton(onClick = { ask = true }, Modifier.fillMaxWidth()) {
-        Icon(PrismIcons.Refresh, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Reset colors to defaults")
+        Icon(PrismIcons.Refresh, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Reset colors to defaults".localized())
     }
     if (ask) androidx.compose.material3.AlertDialog(
         onDismissRequest = { ask = false },
-        title = { Text("Reset colors?") },
-        text = { Text("Style, light, accent, background, contrast and page colors go back to how Prism ships. Your saved colors stay.") },
-        confirmButton = { PrismTextButton(onClick = { prefs.resetColors(); ask = false }) { Text("Reset") } },
-        dismissButton = { PrismTextButton(onClick = { ask = false }) { Text("Cancel") } },
+        title = { Text("Reset colors?".localized()) },
+        text = { Text("Style, light, accent, background, contrast and page colors go back to how Prism ships. Your saved colors stay.".localized()) },
+        confirmButton = { PrismTextButton(onClick = { prefs.resetColors(); ask = false }) { Text("Reset".localized()) } },
+        dismissButton = { PrismTextButton(onClick = { ask = false }) { Text("Cancel".localized()) } },
     )
 }

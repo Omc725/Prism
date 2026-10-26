@@ -1,5 +1,7 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.ui.i18n.localized
+
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.border
 import com.prism.music.ui.components.PrismTextButton
@@ -237,7 +239,7 @@ fun PodcastScreen(id: String, bottomPadding: Dp) {
                                         modifier = Modifier.padding(top = 4.dp).then(if (a.id != null) Modifier.clickable { nav.go(Routes.artist(a.id)) } else Modifier),
                                     )
                                 }
-                                Text("Podcast", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 2.dp))
+                                Text("Podcast".localized(), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 2.dp))
                             }
                         }
                         Spacer(Modifier.height(14.dp))
@@ -251,11 +253,11 @@ fun PodcastScreen(id: String, bottomPadding: Dp) {
                             ) {
                                 Icon(PrismIcons.Play, null, tint = MaterialTheme.colorScheme.surface)
                                 Spacer(Modifier.width(6.dp))
-                                Text("Latest episode", color = MaterialTheme.colorScheme.onPrimary, style = MaterialTheme.typography.labelLarge)
+                                Text("Latest episode".localized(), color = MaterialTheme.colorScheme.onPrimary, style = MaterialTheme.typography.labelLarge)
                             }
                             if (s.isLoggedIn && saved != null) {
                                 val on = saved == true
-                                RoundAction(if (on) PrismIcons.BookmarkFilled else PrismIcons.Bookmark, if (on) "Remove from library" else "Save to library") {
+                                RoundAction(if (on) PrismIcons.BookmarkFilled else PrismIcons.Bookmark, (if (on) "Remove from library" else "Save to library").localized()) {
                                     saved = !on
                                     scope.launch {
                                         runCatching { c.ytm.setLibrarySaved(p.playlistId, !on) }.onFailure {
@@ -299,7 +301,7 @@ fun PodcastScreen(id: String, bottomPadding: Dp) {
                                     .onFailure { c.player.reportError("Couldn't load more episodes") }
                                 loadingMore = false
                             }
-                        }) { Text("More episodes") }
+                        }) { Text("More episodes".localized()) }
                     }
                 }
             }
@@ -345,8 +347,8 @@ fun EpisodeRow(
                 color = when { playing -> scheme.primary; dim -> scheme.onSurfaceVariant; else -> scheme.onSurface },
             )
             val length = when {
-                e.played -> "Played"
-                leftMs != null && leftMs > 0 -> "${formatLength(leftMs / 1000)} left"
+                e.played -> "Played".localized()
+                leftMs != null && leftMs > 0 -> "${formatLength(leftMs / 1000)} left".localized()
                 song.durationSec > 0 -> formatLength(song.durationSec.toLong())
                 else -> null
             }
@@ -367,7 +369,7 @@ fun EpisodeRow(
                 )
             }
         }
-        IconButton(onClick = { menu = true }) { Icon(PrismIcons.More, "More", tint = scheme.onSurfaceVariant.copy(alpha = 0.8f)) }
+        IconButton(onClick = { menu = true }) { Icon(PrismIcons.More, "More".localized(), tint = scheme.onSurfaceVariant.copy(alpha = 0.8f)) }
     }
     if (menu) SongActionsSheet(song) { menu = false }
 }

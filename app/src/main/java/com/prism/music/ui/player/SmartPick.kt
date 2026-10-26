@@ -1,5 +1,7 @@
 package com.prism.music.ui.player
 
+import com.prism.music.ui.i18n.localized
+
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -37,27 +39,27 @@ fun SmartPickButton(song: Song) {
     val source by c.queue.source.collectAsState()
     val playlist = source.originId?.takeIf { source.kind == QueueKind.PLAYLIST && c.settings.current.isLoggedIn && it.startsWith("PL") }
     Box {
-        CircleGlyph(PrismIcons.SmartShuffle, "Smart Shuffle pick", active = true) { open = true }
+        CircleGlyph(PrismIcons.SmartShuffle, "Smart Shuffle pick".localized(), active = true) { open = true }
         DropdownMenu(open, { open = false }) {
             Text(
-                "Picked for this queue by Smart Shuffle", style = MaterialTheme.typography.labelMedium,
+                "Picked for this queue by Smart Shuffle".localized(), style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             )
             if (playlist != null) DropdownMenuItem(
-                { Text("Add to ${source.title.ifBlank { "this playlist" }}") },
+                { Text("Add to ${source.title.ifBlank { "this playlist".localized() }}".localized()) },
                 {
                     open = false
                     c.scope.launch(Dispatchers.Main) {
                         val ok = runCatching { withContext(Dispatchers.IO) { c.ytm.addToPlaylist(playlist, song.id) } }.isSuccess
                         // Kept: it's the playlist's own song now, not a pick.
                         if (ok) c.queue.smartPicks.value = c.queue.smartPicks.value - song.id
-                        Toast.makeText(context, if (ok) "Added to ${source.title}" else "Couldn't add it to the playlist", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, (if (ok) "Added to ${source.title}" else "Couldn't add it to the playlist").localized(context), Toast.LENGTH_SHORT).show()
                     }
                 },
                 leadingIcon = { Icon(PrismIcons.PlaylistAdd, null) },
             )
             DropdownMenuItem(
-                { Text("Not for me") },
+                { Text("Not for me".localized()) },
                 { open = false; c.library.setDisliked(song, true); c.player.next() },
                 leadingIcon = { Icon(PrismIcons.ThumbDown, null) },
             )

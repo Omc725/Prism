@@ -1,6 +1,7 @@
 package com.prism.music.ui.screens
 
 import com.prism.music.data.model.quickPicks
+import com.prism.music.ui.i18n.localized
 import com.prism.music.ui.theme.PrismIcons
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -130,7 +131,7 @@ fun CatalogueScreen(bottomPadding: Dp) {
                 ) {
                     Icon(PrismIcons.Add, null, Modifier.size(22.dp), tint = MaterialTheme.colorScheme.primary)
                     Spacer(Modifier.width(14.dp))
-                    Text("Add a section", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Medium)
+                    Text("Add a section".localized(), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Medium)
                 }
             }
         }
@@ -138,7 +139,7 @@ fun CatalogueScreen(bottomPadding: Dp) {
             // Greyed out (still editable) while the Shortcut tiles section is hidden or removed.
             Column(Modifier.alpha(if (tilesOn) 1f else 0.45f)) { Group(HomeSections.TILES_TITLE, info = "Shortcuts appear in the order you pick them.") {
                 // Why they're greyed out: a state, so it stays in view.
-                if (!tilesOn) Note("Show the ${HomeSections.TILES_TITLE} section to see these on Home")
+                if (!tilesOn) Note("Show the %s section to see these on Home".localized(HomeSections.TILES_TITLE.localized()))
                 FlowRow(
                     Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -147,13 +148,13 @@ fun CatalogueScreen(bottomPadding: Dp) {
                         val on = sc in settings.homeShortcuts
                         PrismChip(
                             on, { c.settings.setHomeShortcuts(if (on) settings.homeShortcuts - sc else settings.homeShortcuts + sc) },
-                            if (on) "${settings.homeShortcuts.indexOf(sc) + 1}  ${sc.label}" else sc.label,
+                            if (on) "${settings.homeShortcuts.indexOf(sc) + 1}  ${sc.label.localized()}" else sc.label.localized(),
                         )
                     }
                 }
                 Item(
                     "Pinned playlists",
-                    settings.homePlaylists.takeIf { it.isNotEmpty() }?.joinToString(", ") { it.title } ?: "None",
+                    settings.homePlaylists.takeIf { it.isNotEmpty() }?.joinToString(", ") { it.title } ?: "None".localized(),
                     onClick = { pinning = true },
                 )
                 Item("Recently played albums", null, onClick = { c.settings.setHomeRecentTiles((settings.homeRecentTiles + 1) % 7) }) {
@@ -200,38 +201,38 @@ private fun SectionRow(
     val fg = if (cfg.visible) scheme.onSurface else scheme.onSurfaceVariant.copy(alpha = 0.6f)
     Row(
         // No tap while held, so letting go of a drag doesn't also hide the section.
-        modifier.fillMaxWidth().clickable(enabled = !held, onClickLabel = if (cfg.visible) "Hide" else "Show") { onChange(cfg.copy(visible = !cfg.visible)) }
+        modifier.fillMaxWidth().clickable(enabled = !held, onClickLabel = if (cfg.visible) "Hide".localized() else "Show".localized()) { onChange(cfg.copy(visible = !cfg.visible)) }
             .padding(start = 16.dp, end = 4.dp, top = 6.dp, bottom = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(if (cfg.visible) cfg.style.icon() else PrismIcons.Hidden, null, Modifier.size(22.dp), tint = if (cfg.visible) scheme.primary else fg)
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
-            Text(cfg.title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium, color = fg, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(cfg.title.localized(), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium, color = fg, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text(
-                if (cfg.visible) cfg.style.label else "Hidden",
+                if (cfg.visible) cfg.style.label.localized() else "Hidden".localized(),
                 style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
             )
         }
-        com.prism.music.ui.components.DragGrip(grip, "Drag ${cfg.title}")
+        com.prism.music.ui.components.DragGrip(grip, "Drag %s".localized(cfg.title.localized()))
         IconButton(onClick = { menu = true }) {
-            Icon(PrismIcons.MoreVertical, "Options for ${cfg.title}", tint = scheme.onSurfaceVariant)
+            Icon(PrismIcons.MoreVertical, "Options for %s".localized(cfg.title.localized()), tint = scheme.onSurfaceVariant)
             DropdownMenu(menu, { menu = false }) {
                 SectionStyle.entries.forEach { st ->
                     DropdownMenuItem(
-                        { Text(st.label) }, { onChange(cfg.copy(style = st, visible = true)); menu = false },
+                        { Text(st.label.localized()) }, { onChange(cfg.copy(style = st, visible = true)); menu = false },
                         leadingIcon = { Icon(st.icon(), null) },
                         trailingIcon = { if (st == cfg.style) Icon(PrismIcons.Check, null) },
                     )
                 }
                 HorizontalDivider()
-                if (canUp) DropdownMenuItem({ Text("Move up") }, { onMove(-1); menu = false }, leadingIcon = { Icon(PrismIcons.ChevronUp, null) })
-                if (canDown) DropdownMenuItem({ Text("Move down") }, { onMove(1); menu = false }, leadingIcon = { Icon(PrismIcons.ChevronDown, null) })
+                if (canUp) DropdownMenuItem({ Text("Move up".localized()) }, { onMove(-1); menu = false }, leadingIcon = { Icon(PrismIcons.ChevronUp, null) })
+                if (canDown) DropdownMenuItem({ Text("Move down".localized()) }, { onMove(1); menu = false }, leadingIcon = { Icon(PrismIcons.ChevronDown, null) })
                 DropdownMenuItem(
-                    { Text(if (cfg.visible) "Hide" else "Show") }, { onChange(cfg.copy(visible = !cfg.visible)); menu = false },
+                    { Text(if (cfg.visible) "Hide".localized() else "Show".localized()) }, { onChange(cfg.copy(visible = !cfg.visible)); menu = false },
                     leadingIcon = { Icon(if (cfg.visible) PrismIcons.Hidden else PrismIcons.Visible, null) },
                 )
-                DropdownMenuItem({ Text("Remove") }, { onRemove(); menu = false }, leadingIcon = { Icon(PrismIcons.Delete, null) })
+                DropdownMenuItem({ Text("Remove".localized()) }, { onRemove(); menu = false }, leadingIcon = { Icon(PrismIcons.Delete, null) })
             }
         }
     }
@@ -245,7 +246,7 @@ private fun GreetingField() {
     var text by remember { mutableStateOf(settings.greetingText) }
     val scheme = MaterialTheme.colorScheme
     Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
-        Text("Headline", style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant)
+        Text("Headline".localized(), style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant)
         BasicTextField(
             text, { text = it; c.settings.setGreetingText(it) },
             Modifier.fillMaxWidth().padding(top = 2.dp),
@@ -253,7 +254,7 @@ private fun GreetingField() {
             textStyle = MaterialTheme.typography.bodyLarge.copy(color = scheme.onSurface, fontWeight = FontWeight.Medium),
             cursorBrush = SolidColor(scheme.primary),
             decorationBox = { inner ->
-                if (text.isEmpty()) Text("Good morning / afternoon / evening", style = MaterialTheme.typography.bodyLarge, color = scheme.onSurfaceVariant.copy(alpha = 0.6f))
+                if (text.isEmpty()) Text("Good morning / afternoon / evening".localized(), style = MaterialTheme.typography.bodyLarge, color = scheme.onSurfaceVariant.copy(alpha = 0.6f))
                 inner()
             },
         )
@@ -263,9 +264,9 @@ private fun GreetingField() {
 @Composable
 private fun Stepper(value: Int, range: IntRange, onChange: (Int) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        IconButton(onClick = { onChange(value - 1) }, enabled = value > range.first, modifier = Modifier.size(36.dp)) { Icon(PrismIcons.Remove, "Fewer") }
-        Text(if (value == 0) "Off" else "$value", style = MaterialTheme.typography.titleSmall, modifier = Modifier.width(32.dp), textAlign = androidx.compose.ui.text.style.TextAlign.Center)
-        IconButton(onClick = { onChange(value + 1) }, enabled = value < range.last, modifier = Modifier.size(36.dp)) { Icon(PrismIcons.Add, "More") }
+        IconButton(onClick = { onChange(value - 1) }, enabled = value > range.first, modifier = Modifier.size(36.dp)) { Icon(PrismIcons.Remove, "Fewer".localized()) }
+        Text(if (value == 0) "Off".localized() else "$value", style = MaterialTheme.typography.titleSmall, modifier = Modifier.width(32.dp), textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+        IconButton(onClick = { onChange(value + 1) }, enabled = value < range.last, modifier = Modifier.size(36.dp)) { Icon(PrismIcons.Add, "More".localized()) }
     }
 }
 
@@ -273,20 +274,20 @@ private fun Stepper(value: Int, range: IntRange, onChange: (Int) -> Unit) {
 @Composable
 private fun AddSectionSheet(available: List<HomeSectionConfig>, notLoaded: Boolean, onDismiss: () -> Unit, onAdd: (HomeSectionConfig) -> Unit) {
     ModalBottomSheet(onDismissRequest = onDismiss) {
-        Text("Add a section", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 8.dp))
+        Text("Add a section".localized(), style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 8.dp))
         val (prism, youtube) = available.partition { !it.key.startsWith(HomeSections.YT_PREFIX) }
         LazyColumn(Modifier.padding(bottom = 24.dp)) {
-            if (prism.isNotEmpty()) item { SheetLabel("From Prism") }
-            items(prism, key = { it.key }) { cfg -> SheetRow(cfg.title) { onAdd(cfg); onDismiss() } }
-            item { SheetLabel("From YouTube Music") }
+            if (prism.isNotEmpty()) item { SheetLabel("From Prism".localized()) }
+            items(prism, key = { it.key }) { cfg -> SheetRow(cfg.title.localized()) { onAdd(cfg); onDismiss() } }
+            item { SheetLabel("From YouTube Music".localized()) }
             if (youtube.isEmpty()) item {
                 Text(
-                    if (notLoaded) "Open Home once to load YouTube Music's sections" else "Everything's already on Home",
+                    if (notLoaded) "Open Home once to load YouTube Music's sections".localized() else "Everything's already on Home".localized(),
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
                 )
             }
-            items(youtube, key = { it.key }) { cfg -> SheetRow(cfg.title) { onAdd(cfg); onDismiss() } }
+            items(youtube, key = { it.key }) { cfg -> SheetRow(cfg.title.localized()) { onAdd(cfg); onDismiss() } }
         }
     }
 }
@@ -308,15 +309,15 @@ private fun PinPlaylistsSheet(onDismiss: () -> Unit) {
     val youtubeOptions = playlists.filter { it.id !in pinnedIds && mine.none { m -> m.id == it.id } }.map { it.id to it.title }
     val options = pinned + prismOptions + youtubeOptions
     ModalBottomSheet(onDismissRequest = onDismiss) {
-        Text("Pinned playlists", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(horizontal = 24.dp))
+        Text("Pinned playlists".localized(), style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(horizontal = 24.dp))
         Text(
-            "Shown as tiles after the shortcuts", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+            "Shown as tiles after the shortcuts".localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 8.dp),
         )
         LazyColumn(Modifier.padding(bottom = 24.dp)) {
             if (options.isEmpty()) item {
                 Text(
-                    "Your playlists show up here once your library has loaded", style = MaterialTheme.typography.bodySmall,
+                    "Your playlists show up here once your library has loaded".localized(), style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
                 )
             }
@@ -329,9 +330,9 @@ private fun PinPlaylistsSheet(onDismiss: () -> Unit) {
                     )
                 }
             }
-            if (pinned.isNotEmpty()) { item { SheetLabel("Pinned") }; row(this, pinned) }
-            if (prismOptions.isNotEmpty()) { item { SheetLabel("Prism playlists") }; row(this, prismOptions) }
-            if (youtubeOptions.isNotEmpty()) { item { SheetLabel("YouTube Music playlists") }; row(this, youtubeOptions) }
+            if (pinned.isNotEmpty()) { item { SheetLabel("Pinned".localized()) }; row(this, pinned) }
+            if (prismOptions.isNotEmpty()) { item { SheetLabel("Prism playlists".localized()) }; row(this, prismOptions) }
+            if (youtubeOptions.isNotEmpty()) { item { SheetLabel("YouTube Music playlists".localized()) }; row(this, youtubeOptions) }
         }
     }
 }
@@ -347,8 +348,8 @@ private fun SheetRow(title: String, checked: Boolean? = null, onClick: () -> Uni
     ) {
         Text(title, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
         when (checked) {
-            null -> Icon(PrismIcons.Add, "Add", tint = MaterialTheme.colorScheme.primary)
-            true -> Icon(PrismIcons.Check, "Pinned", tint = MaterialTheme.colorScheme.primary)
+            null -> Icon(PrismIcons.Add, "Add".localized(), tint = MaterialTheme.colorScheme.primary)
+            true -> Icon(PrismIcons.Check, "Pinned".localized(), tint = MaterialTheme.colorScheme.primary)
             false -> {}
         }
     }

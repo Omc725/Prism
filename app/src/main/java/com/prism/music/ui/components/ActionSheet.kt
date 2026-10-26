@@ -1,5 +1,6 @@
 package com.prism.music.ui.components
 
+import com.prism.music.ui.i18n.localized
 import com.prism.music.ui.theme.PrismIcons
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -121,9 +122,9 @@ fun ActionHeader(
         Artwork(art, Modifier.size(56.dp), shape, size = 544, placeholderIcon = placeholderIcon)
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
-            Text(title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            Text(title.localized(), style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
             if (!subtitle.isNullOrBlank()) Text(
-                subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                subtitle.localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1, overflow = TextOverflow.Ellipsis,
             )
         }
@@ -138,9 +139,9 @@ fun SheetIconButton(icon: ImageVector, description: String, active: Boolean = fa
     val scheme = MaterialTheme.colorScheme
     Box(
         Modifier.padding(start = 6.dp).size(42.dp).clip(CircleShape).background(glassFill(1.4f)).border(1.dp, glassEdge(), CircleShape)
-            .clickable(onClickLabel = description, onClick = onClick),
+            .clickable(onClickLabel = description.localized(), onClick = onClick),
         contentAlignment = Alignment.Center,
-    ) { Icon(icon, description, Modifier.size(21.dp), tint = if (active) scheme.onSurface else scheme.onSurfaceVariant) }
+    ) { Icon(icon, description.localized(), Modifier.size(21.dp), tint = if (active) scheme.onSurface else scheme.onSurfaceVariant) }
 }
 
 /**
@@ -155,6 +156,7 @@ fun QuickActions(items: List<ActionItem>, onPick: (ActionItem) -> Unit) {
     Row(Modifier.fillMaxWidth().padding(horizontal = 10.dp)) {
         items.forEachIndexed { i, a ->
             val hue = com.prism.music.ui.theme.PrismTokens.hue(i * step)
+            val displayLabel = (a.value ?: a.label).localized()
             Column(
                 Modifier.weight(1f).clip(LocalUi.current.tile).clickable(onClickLabel = a.label) { onPick(a) }
                     .padding(horizontal = 4.dp, vertical = 10.dp),
@@ -168,7 +170,7 @@ fun QuickActions(items: List<ActionItem>, onPick: (ActionItem) -> Unit) {
                 ) { Icon(a.icon, null, Modifier.size(23.dp), tint = if (com.prism.music.ui.theme.LocalIsDark.current) hue else hue.copy(red = hue.red * 0.75f, green = hue.green * 0.75f, blue = hue.blue * 0.75f)) }
                 Spacer(Modifier.height(7.dp))
                 Text(
-                    a.value ?: a.label, style = MaterialTheme.typography.labelMedium, color = if (a.active) scheme.onSurface else scheme.onSurfaceVariant,
+                    displayLabel, style = MaterialTheme.typography.labelMedium, color = if (a.active) scheme.onSurface else scheme.onSurfaceVariant,
                     maxLines = 1, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center,
                 )
             }
@@ -182,7 +184,7 @@ fun ActionGroup(title: String?, items: List<ActionItem>, onPick: (ActionItem) ->
     if (items.isEmpty()) return
     val ui = LocalUi.current
     Column(Modifier.fillMaxWidth().padding(start = 14.dp, end = 14.dp, top = 14.dp)) {
-        if (title != null) Eyebrow(title, Modifier.padding(start = 8.dp, bottom = 8.dp))
+        if (title != null) Eyebrow(title.localized(), Modifier.padding(start = 8.dp, bottom = 8.dp))
         Column(Modifier.fillMaxWidth().pane(ui.card)) {
             items.forEachIndexed { i, a ->
                 if (i > 0) HorizontalDivider(Modifier.padding(start = 54.dp), color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.07f))
@@ -209,11 +211,11 @@ private fun ActionRow(a: ActionItem, onClick: () -> Unit) {
         )
         Spacer(Modifier.width(16.dp))
         Text(
-            a.label, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge,
+            a.label.localized(), Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge,
             color = ink, maxLines = 1, overflow = TextOverflow.Ellipsis,
         )
         if (a.value != null) Text(
-            a.value, style = MaterialTheme.typography.bodyMedium, maxLines = 1,
+            a.value.localized(), style = MaterialTheme.typography.bodyMedium, maxLines = 1,
             color = if (a.active) scheme.onSurface else scheme.onSurfaceVariant, modifier = Modifier.padding(start = 8.dp),
         ) else if (a.active) Icon(PrismIcons.Check, null, Modifier.size(20.dp), tint = scheme.onSurface)
     }

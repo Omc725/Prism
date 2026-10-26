@@ -2,6 +2,7 @@ package com.prism.music.ui.screens
 
 import com.prism.music.ui.components.PrismSlider
 import com.prism.music.ui.components.PrismSwitch
+import com.prism.music.ui.i18n.localized
 import android.content.Intent
 import android.media.audiofx.AudioEffect
 import android.widget.Toast
@@ -67,14 +68,14 @@ fun EqualizerScreen(bottomPadding: Dp) {
 
     com.prism.music.ui.components.SubPage(
         "Equalizer", bottomPadding,
-        subtitle = if (eq.enabled) "On · ${eq.preset}" else "Off",
+        subtitle = if (eq.enabled) "${"On".localized()} · ${eq.preset.localized()}" else "Off".localized(),
         horizontalPadding = 16.dp, spacing = 22.dp,
         actions = { PrismSwitch(eq.enabled, { update(eq.copy(enabled = it)) }) },
     ) {
             // Correction for the headphones themselves comes first (it's applied first, and it's on its own switch).
             item { HeadphoneCorrection() }
             item {
-                Group("10-band equalizer · ${eq.preset}") {
+                Group("${"10-band equalizer".localized()} · ${eq.preset.localized()}") {
                     EqGraph(eq, Modifier.fillMaxWidth().height(240.dp).padding(horizontal = 8.dp)) { band, db ->
                         update(eq.copy(enabled = true, preset = "Custom", bands = eq.bands.toMutableList().also { it[band] = db }))
                     }
@@ -88,19 +89,19 @@ fun EqualizerScreen(bottomPadding: Dp) {
             }
             item {
                 Group("Tone") {
-                    SliderRow("Preamp", "%+.1f dB".format(eq.preampDb), eq.preampDb, -12f..6f) { update(eq.copy(enabled = true, preampDb = it)) }
-                    SliderRow("Bass boost", "${eq.bassBoost / 10}%", eq.bassBoost.toFloat(), 0f..1000f) { update(eq.copy(enabled = true, bassBoost = it.toInt())) }
-                    SliderRow("Loudness", "+%.1f dB".format(eq.loudnessGainMb / 100f), eq.loudnessGainMb.toFloat(), 0f..1500f) { update(eq.copy(enabled = true, loudnessGainMb = it.toInt())) }
+                    SliderRow("Preamp".localized(), "%+.1f dB".format(eq.preampDb), eq.preampDb, -12f..6f) { update(eq.copy(enabled = true, preampDb = it)) }
+                    SliderRow("Bass boost".localized(), "${eq.bassBoost / 10}%", eq.bassBoost.toFloat(), 0f..1000f) { update(eq.copy(enabled = true, bassBoost = it.toInt())) }
+                    SliderRow("Loudness".localized(), "+%.1f dB".format(eq.loudnessGainMb / 100f), eq.loudnessGainMb.toFloat(), 0f..1500f) { update(eq.copy(enabled = true, loudnessGainMb = it.toInt())) }
                 }
             }
             item {
                 val s = LocalAppSettings.current
                 Group("Prism Spatial") {
                     Row(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-                        Text("Software spatial audio", Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
+                        Text("Software spatial audio".localized(), Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
                         PrismSwitch(s.spatial, { c.settings.setSpatial(it) })
                     }
-                    if (s.spatial) SliderRow("Intensity", "${(s.spatialAmount * 100).toInt()}%", s.spatialAmount, 0.1f..1f) { c.settings.setSpatialAmount(it) }
+                    if (s.spatial) SliderRow("Intensity".localized(), "${(s.spatialAmount * 100).toInt()}%", s.spatialAmount, 0.1f..1f) { c.settings.setSpatialAmount(it) }
                 }
             }
     }
@@ -110,7 +111,7 @@ fun EqualizerScreen(bottomPadding: Dp) {
 private fun SliderRow(title: String, value: String, v: Float, range: ClosedFloatingPointRange<Float>, onChange: (Float) -> Unit) {
     Column(Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
         Row {
-            Text(title, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
+            Text(title.localized(), Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
             Text(value, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
         }
         PrismSlider(v, onChange, valueRange = range)

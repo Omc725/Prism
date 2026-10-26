@@ -2,6 +2,7 @@ package com.prism.music.ui.screens
 
 import com.prism.music.ui.components.PrismSlider
 import com.prism.music.ui.components.PrismTextButton
+import com.prism.music.ui.i18n.localized
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -90,7 +91,7 @@ fun HeadphoneCorrection() {
                     EqProfile.parse(name, text, "Imported")
                 }.getOrNull()
             }
-            if (profile == null) Toast.makeText(context, "That file has no ParametricEQ filters in it", Toast.LENGTH_SHORT).show()
+            if (profile == null) Toast.makeText(context, "That file has no ParametricEQ filters in it".localized(context), Toast.LENGTH_SHORT).show()
             else hq.bind(out, profile)
         }
     }
@@ -102,19 +103,19 @@ fun HeadphoneCorrection() {
         when {
             out == null || !out.headphones -> Note("Plug in or connect your headphones to pick their correction.")
             binding == null -> {
-                Item("${out.name}: not corrected", "Pick these headphones from thousands measured by AutoEq, to make them sound neutral (the Harman target)", onClick = { picking = true }) {
+                Item("${out.name}: ${"not corrected".localized()}", "Pick these headphones from thousands measured by AutoEq, to make them sound neutral (the Harman target)", onClick = { picking = true }) {
                     Icon(PrismIcons.Search, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
             else -> {
                 Item(binding.profile.name, "${out.name} · ${binding.profile.source.ifBlank { "AutoEq" }}", onClick = { picking = true }) {
-                    PrismTextButton(onClick = { hq.unbind(out.key) }) { Text("Remove") }
+                    PrismTextButton(onClick = { hq.unbind(out.key) }) { Text("Remove".localized()) }
                 }
                 CorrectionCurve(binding.profile, binding.strength, Modifier.fillMaxWidth().height(150.dp).padding(horizontal = 16.dp, vertical = 6.dp))
                 var strength by remember(out.key) { mutableFloatStateOf(binding.strength) }
                 Column(Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
                     Row {
-                        Text("Strength", Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
+                        Text("Strength".localized(), Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
                         Text("${(strength * 100).toInt()}%", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                     }
                     PrismSlider(strength, { strength = it }, valueRange = 0f..1f, onValueChangeFinished = { hq.setStrength(out.key, strength) })
@@ -126,7 +127,7 @@ fun HeadphoneCorrection() {
         })
         // Corrections picked for other headphones, so they can be removed while those aren't connected.
         bindings.filterKeys { it != out?.key }.forEach { (key, b) ->
-            Item(b.deviceName, b.profile.name, onClick = {}) { PrismTextButton(onClick = { hq.unbind(key) }) { Text("Remove") } }
+            Item(b.deviceName, b.profile.name, onClick = {}) { PrismTextButton(onClick = { hq.unbind(key) }) { Text("Remove".localized()) } }
         }
     }
 
@@ -134,7 +135,7 @@ fun HeadphoneCorrection() {
         scope.launch {
             runCatching { hq.profile(entry) }
                 .onSuccess { hq.bind(out, it); picking = false }
-                .onFailure { Toast.makeText(context, "Couldn't get that correction: ${it.friendlyMessage()}", Toast.LENGTH_SHORT).show() }
+                .onFailure { Toast.makeText(context, "Couldn't get that correction: %s".localized(context, it.friendlyMessage()), Toast.LENGTH_SHORT).show() }
         }
     }
 }
@@ -152,6 +153,7 @@ internal fun modelOf(deviceName: String): String {
 @Composable
 private fun HeadphonePicker(initial: String, onDismiss: () -> Unit, onPick: (HeadphoneEq.Entry) -> Unit) {
     val c = LocalContainer.current
+    val context = LocalContext.current
     var query by remember { mutableStateOf(initial) }
     var results by remember { mutableStateOf<List<HeadphoneEq.Entry>>(emptyList()) }
     var loading by remember { mutableStateOf(false) }
@@ -163,18 +165,18 @@ private fun HeadphonePicker(initial: String, onDismiss: () -> Unit, onPick: (Hea
         loading = true
         runCatching { c.headphoneEq.search(query) }
             .onSuccess { results = it; error = null }
-            .onFailure { error = "Couldn't load AutoEq's list: ${it.friendlyMessage()}" }
+            .onFailure { error = "Couldn't load AutoEq's list: %s".localized(context, it.friendlyMessage()) }
         loading = false
     }
     PrismSheet(onDismiss) { _ ->
         Column(Modifier.padding(horizontal = 16.dp).padding(bottom = 24.dp)) {
-            Text("Your headphones", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium, modifier = Modifier.padding(bottom = 10.dp))
-            SearchField(query, "Search headphones (e.g. Sony WH-1000XM5)", { query = it })
+            Text("Your headphones".localized(), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium, modifier = Modifier.padding(bottom = 10.dp))
+            SearchField(query, "Search headphones (e.g. Sony WH-1000XM5)".localized(), { query = it })
             Spacer(Modifier.height(8.dp))
             when {
                 loading -> Box(Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) { com.prism.music.ui.components.PrismSpinner(Modifier.size(30.dp)) }
                 error != null -> Note(error!!)
-                query.isNotBlank() && results.isEmpty() -> Note("No headphones match \"${query.trim()}\". AutoEq only has headphones someone has measured; you can also import a ParametricEQ file.")
+                query.isNotBlank() && results.isEmpty() -> Note("No headphones match \"%s\". AutoEq only has headphones someone has measured; you can also import a ParametricEQ file.".localized(query.trim()))
             }
             LazyColumn(Modifier.heightIn(max = 460.dp)) {
                 items(results, key = { it.path.joinToString("/") + it.name }) { e ->
@@ -187,7 +189,7 @@ private fun HeadphonePicker(initial: String, onDismiss: () -> Unit, onPick: (Hea
                         Spacer(Modifier.width(14.dp))
                         Column(Modifier.weight(1f)) {
                             Text(e.name, style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                            Text("Measured by ${e.by}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
+                            Text("Measured by %s".localized(e.by), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
                         }
                         if (fetching == e) com.prism.music.ui.components.PrismSpinner(Modifier.size(20.dp), stroke = 2.dp)
                     }

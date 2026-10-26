@@ -3,6 +3,7 @@ package com.prism.music.ui.screens
 import com.prism.music.ui.components.PrismButton
 import com.prism.music.ui.components.PrismOutlinedButton
 import com.prism.music.ui.components.PrismTextButton
+import com.prism.music.ui.i18n.localized
 import com.prism.music.ui.theme.PrismIcons
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -72,8 +73,8 @@ fun ImportScreen(bottomPadding: Dp) {
         if (!settings.isLoggedIn) {
             item {
                 Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                    EmptyState(PrismIcons.PlaylistAdd, "Sign in to import playlists", "Imported playlists go to your YouTube Music account, then show up in Prism.")
-                    PrismButton(onClick = { nav.go(Routes.LOGIN) }) { Icon(PrismIcons.Login, null); Spacer(Modifier.width(8.dp)); Text("Sign in") }
+                    EmptyState(PrismIcons.PlaylistAdd, "Sign in to import playlists".localized(), "Imported playlists go to your YouTube Music account, then show up in Prism.".localized())
+                    PrismButton(onClick = { nav.go(Routes.LOGIN) }) { Icon(PrismIcons.Login, null); Spacer(Modifier.width(8.dp)); Text("Sign in".localized()) }
                 }
             }
             return@SubPage
@@ -81,33 +82,32 @@ fun ImportScreen(bottomPadding: Dp) {
         item {
             Column(Modifier.padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
-                    "TuneMyMusic copies your playlists, Liked Songs included, into your YouTube Music account. " +
-                        "It's the same service YouTube Music's own app uses for transfers.",
+                    "TuneMyMusic copies your playlists, Liked Songs included, into your YouTube Music account. It's the same service YouTube Music's own app uses for transfers.".localized(),
                     style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant,
                 )
-                PrismButton(onClick = { open("/spotify-to-youtube-music") }, Modifier.fillMaxWidth()) { Text("From Spotify") }
-                PrismButton(onClick = { open("/apple-music-to-youtube-music") }, Modifier.fillMaxWidth()) { Text("From Apple Music") }
+                PrismButton(onClick = { open("/spotify-to-youtube-music") }, Modifier.fillMaxWidth()) { Text("From Spotify".localized()) }
+                PrismButton(onClick = { open("/apple-music-to-youtube-music") }, Modifier.fillMaxWidth()) { Text("From Apple Music".localized()) }
                 PrismOutlinedButton(onClick = { open("") }, Modifier.fillMaxWidth()) {
-                    Text("From another service or a file"); Spacer(Modifier.width(8.dp)); Icon(PrismIcons.OpenInNew, null, Modifier.size(18.dp))
+                    Text("From another service or a file".localized()); Spacer(Modifier.width(8.dp)); Icon(PrismIcons.OpenInNew, null, Modifier.size(18.dp))
                 }
                 Spacer(Modifier.size(4.dp))
-                Text("How it works", style = MaterialTheme.typography.titleSmall)
+                Text("How it works".localized(), style = MaterialTheme.typography.titleSmall)
+                val emailPart = settings.accountEmail.takeIf { it.isNotBlank() }?.let { " ($it)" }.orEmpty()
+                val step1 = "1. Sign in to Spotify or Apple Music on TuneMyMusic and pick the playlists.".localized()
+                val step2 = "2. Choose YouTube Music as the destination and sign in with the Google account you use in Prism%s.".localized(emailPart)
+                val step3 = "3. When the transfer finishes, come back here. Prism syncs your library and the playlists appear under Library → Playlists.".localized()
                 Text(
-                    "1. Sign in to Spotify or Apple Music on TuneMyMusic and pick the playlists.\n" +
-                        "2. Choose YouTube Music as the destination and sign in with the Google account you use in Prism" +
-                        settings.accountEmail.takeIf { it.isNotBlank() }?.let { " ($it)" }.orEmpty() + ".\n" +
-                        "3. When the transfer finishes, come back here. Prism syncs your library and the playlists appear under Library → Playlists.",
+                    "$step1\n$step2\n$step3",
                     style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant,
                 )
                 PrismTextButton(onClick = { scope.launch { c.library.sync() } }, enabled = sync != SyncState.SYNCING) {
                     if (sync == SyncState.SYNCING) com.prism.music.ui.components.PrismSpinner(Modifier.size(16.dp), stroke = 2.dp)
                     else Icon(PrismIcons.Sync, null, Modifier.size(18.dp))
                     Spacer(Modifier.width(8.dp))
-                    Text(if (sync == SyncState.SYNCING) "Syncing…" else "Sync library now")
+                    Text(if (sync == SyncState.SYNCING) "Syncing…".localized() else "Sync library now".localized())
                 }
                 Text(
-                    "TuneMyMusic is a separate service, not part of Prism. It asks for access to the accounts you connect and sees the " +
-                        "playlists you move; its free plan has limits. Prism doesn't share anything with it.",
+                    "TuneMyMusic is a separate service, not part of Prism. It asks for access to the accounts you connect and sees the playlists you move; its free plan has limits. Prism doesn't share anything with it.".localized(),
                     style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
                 )
             }

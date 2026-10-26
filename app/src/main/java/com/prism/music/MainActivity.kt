@@ -295,13 +295,13 @@ open class MainActivity : ComponentActivity() {
 
 private data class Tab(val route: String, val label: String, val icon: ImageVector, val selectedIcon: ImageVector)
 
-private fun NavTab.tab(): Tab = when (this) {
-    NavTab.HOME -> Tab(Routes.HOME, label, PrismIcons.Home, PrismIcons.HomeFilled)
-    NavTab.SEARCH -> Tab(Routes.SEARCH, label, PrismIcons.Search, PrismIcons.SearchBold)
-    NavTab.LIBRARY -> Tab(Routes.LIBRARY, label, PrismIcons.Library, PrismIcons.LibraryFilled)
-    NavTab.REPLAY -> Tab(Routes.REPLAY, label, PrismIcons.Replay, PrismIcons.ReplayFilled)
-    NavTab.SETTINGS -> Tab(Routes.SETTINGS, label, PrismIcons.Settings, PrismIcons.SettingsFilled)
-    NavTab.LOCAL -> Tab(Routes.LOCAL, label, PrismIcons.Phone, PrismIcons.Phone)
+private fun NavTab.tab(context: android.content.Context): Tab = when (this) {
+    NavTab.HOME -> Tab(Routes.HOME, label(context), PrismIcons.Home, PrismIcons.HomeFilled)
+    NavTab.SEARCH -> Tab(Routes.SEARCH, label(context), PrismIcons.Search, PrismIcons.SearchBold)
+    NavTab.LIBRARY -> Tab(Routes.LIBRARY, label(context), PrismIcons.Library, PrismIcons.LibraryFilled)
+    NavTab.REPLAY -> Tab(Routes.REPLAY, label(context), PrismIcons.Replay, PrismIcons.ReplayFilled)
+    NavTab.SETTINGS -> Tab(Routes.SETTINGS, label(context), PrismIcons.Settings, PrismIcons.SettingsFilled)
+    NavTab.LOCAL -> Tab(Routes.LOCAL, label(context), PrismIcons.Phone, PrismIcons.Phone)
 }
 
 /** Heights of the floating chrome, so pages can leave room for it. */
@@ -344,9 +344,45 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
     val settings by c.settings.flow.collectAsState()
     val song by c.player.currentSong.collectAsState()
     val artColor = rememberArtworkColor(song, settings)
-    val context = LocalContext.current
+    val baseContext = LocalContext.current
+    val appLocale = remember(settings.appLanguage) {
+        if (settings.appLanguage.isBlank()) null else java.util.Locale.forLanguageTag(settings.appLanguage)
+    }
+    val context = remember(baseContext, appLocale) {
+        if (appLocale == null) baseContext
+        else {
+            val config = android.content.res.Configuration(baseContext.resources.configuration)
+            config.setLocale(appLocale)
+            config.setLayoutDirection(appLocale)
+            baseContext.createConfigurationContext(config)
+        }
+    }
+    val config = remember(context, appLocale) {
+        context.resources.configuration
+    }
 
-    PrismTheme(settings, artColor) {
+    if (Build.VERSION.SDK_INT >= 33) {
+        LaunchedEffect(settings.appLanguage) {
+            runCatching {
+                val lm = baseContext.getSystemService(android.app.LocaleManager::class.java)
+                val target = if (settings.appLanguage.isBlank()) android.os.LocaleList.getEmptyLocaleList() else android.os.LocaleList.forLanguageTags(settings.appLanguage)
+                if (lm != null && lm.applicationLocales != target) {
+                    lm.applicationLocales = target
+                }
+            }
+        }
+    }
+
+    val registryOwner = androidx.activity.compose.LocalActivityResultRegistryOwner.current
+
+    CompositionLocalProvider(
+        LocalContext provides context,
+        androidx.compose.ui.platform.LocalConfiguration provides config,
+        *listOfNotNull(
+            registryOwner?.let { androidx.activity.compose.LocalActivityResultRegistryOwner provides it }
+        ).toTypedArray()
+    ) {
+        PrismTheme(settings, artColor) {
         // System bar icons follow Prism's theme, not the phone's (they differ when Appearance isn't "System").
         val dark = com.prism.music.ui.theme.LocalIsDark.current
         val rootView = androidx.compose.ui.platform.LocalView.current
@@ -400,7 +436,7 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
         val onboardingPicker = (route?.startsWith(Routes.PICK_ARTISTS) == true || route?.startsWith(Routes.ACCOUNT) == true) &&
             backStack?.arguments?.getBoolean("onboarding") == true
         val showChrome = route != Routes.LOGIN && route != Routes.LOGIN_ADD && route != Routes.DISCORD_LOGIN && route != Routes.WELCOME && !onboardingPicker
-        val tabs = settings.navTabs.map { it.tab() }
+        val tabs = settings.navTabs.map { it.tab(context) }
 
         val together by c.together.state.collectAsState()
         val inSession = together is com.prism.music.playback.together.TogetherState.Hosting || together is com.prism.music.playback.together.TogetherState.Guest
@@ -419,7 +455,7 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
 
         // Decided once: the tab Prism opens on is the root every other tab sits on, and the welcome
         // screen is a real destination, so signing in from it navigates inside a graph that already exists.
-        val root = remember { (settings.startTab.takeIf { it in settings.navTabs } ?: settings.navTabs.first()).tab().route }
+        val root = remember { (settings.startTab.takeIf { it in settings.navTabs } ?: settings.navTabs.first()).tab(context).route }
         val start = remember { if (!settings.onboarded && !settings.isLoggedIn) Routes.WELCOME else root }
         val goRoot: () -> Unit = {
             navController.navigate(root) {
@@ -744,6 +780,7 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
             }
         }
     }
+}
 }
 
 /** Above the mini player while a Listen Together session is on: who with, and a way back to it. */

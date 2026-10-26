@@ -1,5 +1,7 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.ui.i18n.localized
+
 import com.prism.music.data.db.mergeUploads
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -100,7 +102,7 @@ fun ReplayCard(style: ReplayCardStyle, d: ReplayCardData, art: Painter?, modifie
                 Eyebrow("Replay ${d.year}")
                 Spacer(Modifier.height(4.dp))
                 Text(d.total, style = big, color = scheme.onSurface, maxLines = 1)
-                Text("Your top songs, artists and genres", style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text("Your top songs, artists and genres".localized(), style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
             Icon(PrismIcons.ChevronRight, null, Modifier.align(Alignment.TopEnd), tint = scheme.onSurfaceVariant)
         }
@@ -138,7 +140,7 @@ fun ReplayCard(style: ReplayCardStyle, d: ReplayCardData, art: Painter?, modifie
                 Eyebrow("Replay ${d.year}")
                 Box(Modifier.padding(top = 6.dp, bottom = 8.dp).size(28.dp, 2.dp).clip(CircleShape).background(PrismTokens.spectrum(dark)))
                 Text(d.total, style = big, color = scheme.onSurface, maxLines = 1)
-                Text("Your top songs, artists and genres", color = scheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium, maxLines = 1)
+                Text("Your top songs, artists and genres".localized(), color = scheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium, maxLines = 1)
             }
             MonthBars(d.months, hues, Modifier.align(Alignment.BottomEnd).size(width = (d.months.size * 7).dp, height = 54.dp), slim = true)
         }
@@ -149,7 +151,7 @@ fun ReplayCard(style: ReplayCardStyle, d: ReplayCardData, art: Painter?, modifie
             Column(Modifier.align(Alignment.BottomStart)) {
                 Eyebrow("Replay ${d.year}")
                 Text(d.total, style = big.copy(brush = PrismTokens.spectrum(dark)), maxLines = 1)
-                Text("Your top songs, artists and genres", color = scheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium, maxLines = 2)
+                Text("Your top songs, artists and genres".localized(), color = scheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium, maxLines = 2)
             }
             Icon(PrismIcons.ReplayFilled, null, Modifier.align(Alignment.TopEnd), tint = scheme.onSurface)
         }
@@ -179,7 +181,7 @@ fun ReplayCard(style: ReplayCardStyle, d: ReplayCardData, art: Painter?, modifie
                 Eyebrow("Replay ${d.year}")
                 Spacer(Modifier.height(4.dp))
                 Text(d.total, style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraLight), color = scheme.onSurface, maxLines = 1)
-                Text("Your top songs, artists and genres", style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                Text("Your top songs, artists and genres".localized(), style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
             }
         }
         // The top song's cover sets the color: blown up behind a scrim, and sharp beside the words.
@@ -221,7 +223,7 @@ fun ReplayCard(style: ReplayCardStyle, d: ReplayCardData, art: Painter?, modifie
                 Eyebrow("Replay ${d.year}")
                 Spacer(Modifier.height(4.dp))
                 Text(d.total, style = big, color = scheme.onSurface, maxLines = 1)
-                Text("Your top songs, artists and genres", style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                Text("Your top songs, artists and genres".localized(), style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
             }
         }
         // The months as big bars along the card, red to violet (the months still to come as faint stubs), under the time.
@@ -250,7 +252,7 @@ fun ReplayCard(style: ReplayCardStyle, d: ReplayCardData, art: Painter?, modifie
             Column(Modifier.align(Alignment.BottomStart)) {
                 Eyebrow("Replay ${d.year}", color = Color.White.copy(alpha = 0.85f))
                 Text(d.total, style = big, color = Color.White, maxLines = 1)
-                Text("Your top songs, artists and genres", style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = 0.85f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text("Your top songs, artists and genres".localized(), style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = 0.85f), maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
             Icon(PrismIcons.ChevronRight, null, Modifier.align(Alignment.TopEnd), tint = Color.White)
         }

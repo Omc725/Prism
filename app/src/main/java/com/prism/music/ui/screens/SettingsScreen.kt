@@ -1,5 +1,6 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.ui.i18n.localized
 import com.prism.music.ui.components.PrismOutlinedButton
 import com.prism.music.ui.components.PrismSlider
 import com.prism.music.ui.components.PrismTextButton
@@ -182,6 +183,22 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
     companion object { fun of(key: String?) = entries.firstOrNull { it.key == key } }
 }
 
+@Composable
+fun SettingsSection.localizedTitle(): String = when (this) {
+    SettingsSection.APPEARANCE -> androidx.compose.ui.res.stringResource(com.prism.music.R.string.settings_appearance)
+    SettingsSection.INTERFACE -> androidx.compose.ui.res.stringResource(com.prism.music.R.string.settings_interface)
+    SettingsSection.PLAYER -> androidx.compose.ui.res.stringResource(com.prism.music.R.string.settings_player)
+    SettingsSection.SOUND -> androidx.compose.ui.res.stringResource(com.prism.music.R.string.settings_sound)
+    SettingsSection.LYRICS -> androidx.compose.ui.res.stringResource(com.prism.music.R.string.settings_lyrics)
+    SettingsSection.DOWNLOADS -> androidx.compose.ui.res.stringResource(com.prism.music.R.string.settings_downloads)
+    SettingsSection.CONNECT -> androidx.compose.ui.res.stringResource(com.prism.music.R.string.settings_connect)
+    SettingsSection.HOME -> androidx.compose.ui.res.stringResource(com.prism.music.R.string.settings_home)
+    SettingsSection.LIBRARY -> androidx.compose.ui.res.stringResource(com.prism.music.R.string.settings_library)
+    SettingsSection.DISCORD -> androidx.compose.ui.res.stringResource(com.prism.music.R.string.settings_discord)
+    SettingsSection.ABOUT -> androidx.compose.ui.res.stringResource(com.prism.music.R.string.settings_about)
+    else -> title
+}
+
 private val hubGroups = listOf(
     "Look & feel" to listOf(SettingsSection.APPEARANCE, SettingsSection.INTERFACE, SettingsSection.PLAYER),
     "Listening" to listOf(SettingsSection.SOUND, SettingsSection.LYRICS, SettingsSection.DOWNLOADS, SettingsSection.CONNECT),
@@ -239,7 +256,7 @@ private fun SettingsPage(
 
     androidx.compose.runtime.CompositionLocalProvider(LocalSettingsFind provides (find ?: foundHere)) {
     SubPage(
-        title = section?.title ?: "Settings",
+        title = section?.localizedTitle() ?: androidx.compose.ui.res.stringResource(com.prism.music.R.string.settings_title),
         bottomPadding = bottomPadding,
         horizontalPadding = 16.dp,
         spacing = 22.dp,
@@ -297,7 +314,7 @@ private fun SettingsPage(
                         Group(title) {
                             sections.forEachIndexed { i, sec ->
                                 val hue = com.prism.music.ui.theme.PrismTokens.spectrumAt((first + i) / (hubCount - 1).coerceAtLeast(1).toFloat())
-                                NavRow(sec.icon, sec.title, sec.summary(s, com.prism.music.ui.theme.LocalIsDark.current), selected = sec == selected, hue = hue) {
+                                NavRow(sec.icon, sec.localizedTitle(), sec.summary(s, com.prism.music.ui.theme.LocalIsDark.current), selected = sec == selected, hue = hue) {
                                     if (onOpen != null) onOpen(sec, null) else nav.go(Routes.settings(sec.key))
                                 }
                             }
@@ -346,7 +363,7 @@ private fun SettingsPage(
                         ) { c.settings.setReleaseNotifications(it) }
                         Item("Make my mixes again", "Fresh Daily Mixes now", onClick = {
                             c.scope.launch { c.forYou.refresh(force = true) }
-                            android.widget.Toast.makeText(context, "Making your mixes…", android.widget.Toast.LENGTH_SHORT).show()
+                            android.widget.Toast.makeText(context, "Making your mixes…".localized(context), android.widget.Toast.LENGTH_SHORT).show()
                         })
                     }
                     ContentCountrySetting()
@@ -360,7 +377,7 @@ private fun SettingsPage(
                 Group("About") {
                     val uri = androidx.compose.ui.platform.LocalUriHandler.current
                     Item("Prism ${com.prism.music.BuildConfig.VERSION_NAME}", "Unofficial · not affiliated with Google or YouTube", onClick = { runCatching { uri.openUri(SOURCE_URL) } }) {
-                        Icon(PrismIcons.OpenInNew, "Open on GitHub", tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Icon(PrismIcons.OpenInNew, "Open on GitHub".localized(), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     Item("Your data stays here", "Prism has no server", info = "Your history, Replay and settings live only on this phone.", onClick = {})
                     CheckForUpdates()
@@ -408,18 +425,18 @@ private fun ContentCountrySetting() {
         val pick: (String) -> Unit = { code -> c.settings.setContentCountry(code); picking = false }
         androidx.compose.material3.AlertDialog(
             onDismissRequest = { picking = false },
-            title = { Text("Content country") },
+            title = { Text("Content country".localized()) },
             text = {
                 androidx.compose.foundation.lazy.LazyColumn(Modifier.height(420.dp)) {
-                    item { CountryRow("Automatic (follow the phone)", s.contentCountry.isBlank()) { pick("") } }
-                    item { CountryRow("United States", s.contentCountry == "US") { pick("US") } }
+                    item { CountryRow("Automatic (follow the phone)".localized(), s.contentCountry.isBlank()) { pick("") } }
+                    item { CountryRow("United States".localized(), s.contentCountry == "US") { pick("US") } }
                     items(countries.size) { i ->
                         val (code, name) = countries[i]
                         CountryRow(name, s.contentCountry == code) { pick(code) }
                     }
                 }
             },
-            confirmButton = { PrismTextButton(onClick = { picking = false }) { Text("Cancel") } },
+            confirmButton = { PrismTextButton(onClick = { picking = false }) { Text("Cancel".localized()) } },
         )
     }
 }
@@ -473,7 +490,7 @@ private fun DiagnosticsGroup() {
             Item("Share diagnostics", "The log and audio settings, as text", onClick = { share() })
             Item("Clear diagnostics", "Starts the log again", onClick = {
                 scope.launch(Dispatchers.IO) { com.prism.music.playback.AudioDiagnostics.clear { com.prism.music.playback.AudioDiagnostics.about(c) } }
-                android.widget.Toast.makeText(context, "Diagnostics cleared", android.widget.Toast.LENGTH_SHORT).show()
+                android.widget.Toast.makeText(context, "Diagnostics cleared".localized(context), android.widget.Toast.LENGTH_SHORT).show()
             })
         }
     }
@@ -537,8 +554,8 @@ private fun AccountCard() {
     // With a Prism Account, signing out can keep the YouTube Music library in Prism first.
     if (confirmSignOut) androidx.compose.material3.AlertDialog(
         onDismissRequest = { confirmSignOut = false },
-        title = { Text("Sign out of YouTube Music?") },
-        text = { Text("Keep a copy of its playlists, saved albums and artists in your Prism Account first? Liked songs, downloads and Replay stay either way.") },
+        title = { Text("Sign out of YouTube Music?".localized()) },
+        text = { Text("Keep a copy of its playlists, saved albums and artists in your Prism Account first? Liked songs, downloads and Replay stay either way.".localized()) },
         confirmButton = {
             PrismTextButton({
                 confirmSignOut = false
@@ -546,12 +563,12 @@ private fun AccountCard() {
                     val r = runCatching { c.account.bringOver() }.getOrNull()
                     kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
                         signOut()
-                        android.widget.Toast.makeText(context, if (r != null) "Signed out. ${r.playlists} playlists and ${r.albums} albums kept in Prism" else "Signed out", android.widget.Toast.LENGTH_LONG).show()
+                        android.widget.Toast.makeText(context, (if (r != null) "Signed out. ${r.playlists} playlists and ${r.albums} albums kept in Prism" else "Signed out").localized(context), android.widget.Toast.LENGTH_LONG).show()
                     }
                 }
-            }) { Text("Keep a copy") }
+            }) { Text("Keep a copy".localized()) }
         },
-        dismissButton = { PrismTextButton({ confirmSignOut = false; signOut() }) { Text("Just sign out") } },
+        dismissButton = { PrismTextButton({ confirmSignOut = false; signOut() }) { Text("Just sign out".localized()) } },
     )
     Column(Modifier.fillMaxWidth().featurePane(ui.card)) {
     // The Prism Account: who the listener is in Prism, on this phone.
@@ -566,12 +583,12 @@ private fun AccountCard() {
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
             Text(
-                profile?.name ?: "Make a Prism Account",
+                profile?.name ?: "Make a Prism Account".localized(),
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium), color = ink,
                 maxLines = 1, overflow = TextOverflow.Ellipsis,
             )
             Text(
-                if (profile != null) "Prism Account · on this phone" else "Your name and picture, kept on this phone. Nothing you have changes",
+                if (profile != null) "Prism Account · on this phone".localized() else "Your name and picture, kept on this phone. Nothing you have changes".localized(),
                 style = MaterialTheme.typography.bodySmall, color = ink.copy(alpha = 0.75f),
                 maxLines = 2, overflow = TextOverflow.Ellipsis,
             )
@@ -592,26 +609,26 @@ private fun AccountCard() {
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f)) {
             Text(
-                if (s.isLoggedIn) "YouTube Music · " + s.accountName.ifBlank { "signed in" } else "Sign in to YouTube Music",
+                if (s.isLoggedIn) "YouTube Music · " + s.accountName.ifBlank { "signed in".localized() } else "Sign in to YouTube Music".localized(),
                 style = MaterialTheme.typography.bodyMedium, color = ink, maxLines = 1, overflow = TextOverflow.Ellipsis,
             )
             Text(
-                if (s.isLoggedIn) s.accountEmail.ifBlank { "Signed in" } else "Optional: your library, history and recommendations",
+                if (s.isLoggedIn) s.accountEmail.ifBlank { "Signed in".localized() } else "Optional: your library, history and recommendations".localized(),
                 style = MaterialTheme.typography.bodySmall, color = ink.copy(alpha = 0.75f), maxLines = 1, overflow = TextOverflow.Ellipsis,
             )
         }
         if (s.isLoggedIn) PrismOutlinedButton(onClick = { if (profile != null) confirmSignOut = true else signOut() }) {
-            Icon(PrismIcons.Logout, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text("Sign out")
+            Icon(PrismIcons.Logout, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text("Sign out".localized())
         }
         else Icon(PrismIcons.ChevronRight, null, tint = ink)
     }
     // Another channel of the same Google account (brand accounts), or another Google account altogether.
     if (s.isLoggedIn) Row(Modifier.fillMaxWidth().padding(start = 10.dp, end = 10.dp, bottom = 8.dp)) {
         PrismTextButton(onClick = { switching = true }) {
-            Icon(PrismIcons.Person, null, Modifier.size(18.dp), tint = ink); Spacer(Modifier.width(6.dp)); Text("Switch account", color = ink)
+            Icon(PrismIcons.Person, null, Modifier.size(18.dp), tint = ink); Spacer(Modifier.width(6.dp)); Text("Switch account".localized(), color = ink)
         }
         PrismTextButton(onClick = { nav.go(Routes.LOGIN_ADD) }) {
-            Icon(PrismIcons.Add, null, Modifier.size(18.dp), tint = ink); Spacer(Modifier.width(6.dp)); Text("Add a Google account", color = ink)
+            Icon(PrismIcons.Add, null, Modifier.size(18.dp), tint = ink); Spacer(Modifier.width(6.dp)); Text("Add a Google account".localized(), color = ink)
         }
     }
     }
@@ -691,7 +708,7 @@ private fun AccountSwitcher(onDismiss: () -> Unit) {
                                 c.scope.launch {
                                     c.library.switchAccount(a)
                                     kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
-                                        android.widget.Toast.makeText(context, "Switched to ${a.name}", android.widget.Toast.LENGTH_SHORT).show()
+                                        android.widget.Toast.makeText(context, "Switched to ${a.name}".localized(context), android.widget.Toast.LENGTH_SHORT).show()
                                     }
                                 }
                             }
@@ -706,7 +723,7 @@ private fun AccountSwitcher(onDismiss: () -> Unit) {
                             Text(a.name, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
                             a.byline?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1) }
                         }
-                        if (current) Icon(PrismIcons.Check, "In use", tint = MaterialTheme.colorScheme.primary)
+                        if (current) Icon(PrismIcons.Check, "In use".localized(), tint = MaterialTheme.colorScheme.primary)
                     }
                 }
             }
@@ -737,11 +754,11 @@ private fun androidx.compose.foundation.lazy.LazyListScope.appearance() {
                 val nav = LocalNavigator.current
                 Group("Look") {
                     listOf(SettingsSection.LOOKS, SettingsSection.COLOR, SettingsSection.TEXT, SettingsSection.ICONS, SettingsSection.GLASS).forEach { sec ->
-                        NavRow(sec.icon, sec.title, sec.summary(s, com.prism.music.ui.theme.LocalIsDark.current)) { nav.go(Routes.settings(sec.key)) }
+                        NavRow(sec.icon, sec.localizedTitle(), sec.summary(s, com.prism.music.ui.theme.LocalIsDark.current)) { nav.go(Routes.settings(sec.key)) }
                     }
                     // The rest of the look lives with what it's the look of.
                     listOf(SettingsSection.INTERFACE, SettingsSection.PLAYER, SettingsSection.LYRICS).forEach { sec ->
-                        NavRow(sec.icon, sec.title, sec.summary(s, com.prism.music.ui.theme.LocalIsDark.current)) { nav.go(Routes.settings(sec.key)) }
+                        NavRow(sec.icon, sec.localizedTitle(), sec.summary(s, com.prism.music.ui.theme.LocalIsDark.current)) { nav.go(Routes.settings(sec.key)) }
                     }
                 }
             }
@@ -1013,15 +1030,50 @@ private fun ResetLook() {
     val prefs = LocalContainer.current.settings
     var ask by remember { mutableStateOf(false) }
     PrismTextButton(onClick = { ask = true }, Modifier.fillMaxWidth()) {
-        Icon(PrismIcons.Refresh, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Reset look & layout to defaults")
+        Icon(PrismIcons.Refresh, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Reset look & layout to defaults".localized())
     }
     if (ask) androidx.compose.material3.AlertDialog(
         onDismissRequest = { ask = false },
-        title = { Text("Reset look & layout?") },
-        text = { Text("Font, text size, corners, spacing, navigation bar, tabs, mini player and player style go back to how Prism ships. Your colors, backgrounds and everything else stay as they are.") },
-        confirmButton = { PrismTextButton(onClick = { prefs.resetLook(); ask = false }) { Text("Reset") } },
-        dismissButton = { PrismTextButton(onClick = { ask = false }) { Text("Cancel") } },
+        title = { Text("Reset look & layout?".localized()) },
+        text = { Text("Font, text size, corners, spacing, navigation bar, tabs, mini player and player style go back to how Prism ships. Your colors, backgrounds and everything else stay as they are.".localized()) },
+        confirmButton = { PrismTextButton(onClick = { prefs.resetLook(); ask = false }) { Text("Reset".localized()) } },
+        dismissButton = { PrismTextButton(onClick = { ask = false }) { Text("Cancel".localized()) } },
     )
+}
+
+@Composable
+private fun LanguageGroup() {
+    val s = LocalAppSettings.current
+    val prefs = LocalContainer.current.settings
+    val context = LocalContext.current
+    Group("Language") {
+        Label("App language", info = "Choose the display language for Prism")
+        Chips(
+            listOf("", "en", "tr", "az"),
+            s.appLanguage,
+            { code ->
+                when (code) {
+                    "" -> context.getString(com.prism.music.R.string.language_system_default)
+                    "en" -> "English"
+                    "tr" -> "Türkçe"
+                    "az" -> "Azərbaycanca"
+                    else -> code
+                }
+            }
+        ) { code ->
+            prefs.setAppLanguage(code)
+            if (Build.VERSION.SDK_INT >= 33) {
+                runCatching {
+                    val lm = context.getSystemService(android.app.LocaleManager::class.java)
+                    lm?.applicationLocales = if (code.isBlank()) {
+                        android.os.LocaleList.getEmptyLocaleList()
+                    } else {
+                        android.os.LocaleList.forLanguageTags(code)
+                    }
+                }
+            }
+        }
+    }
 }
 
 // ---------------------------------------------------------------------------- Layout & navigation
@@ -1029,6 +1081,7 @@ private fun ResetLook() {
 private fun androidx.compose.foundation.lazy.LazyListScope.layoutAndNavigation() {
     item(key = "layout") {
         Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
+            LanguageGroup()
             NavBarGroup()
             TabsEditor()
             MiniPlayerGroup()
@@ -1106,12 +1159,12 @@ private fun ResetPage(section: SettingsSection) {
     val context = androidx.compose.ui.platform.LocalContext.current
     var ask by remember { mutableStateOf(false) }
     PrismTextButton(onClick = { ask = true }, Modifier.fillMaxWidth()) {
-        Icon(PrismIcons.Refresh, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Reset this page")
+        Icon(PrismIcons.Refresh, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Reset this page".localized())
     }
     if (ask) androidx.compose.material3.AlertDialog(
         onDismissRequest = { ask = false },
-        title = { Text("Reset ${section.title}?") },
-        text = { Text("This page's look goes back to how Prism comes. Everything else stays, and Undo brings it back.") },
+        title = { Text("Reset ${section.title.localized()}?".localized()) },
+        text = { Text("This page's look goes back to how Prism comes. Everything else stays, and Undo brings it back.".localized()) },
         confirmButton = {
             PrismTextButton(onClick = {
                 ask = false
@@ -1123,9 +1176,9 @@ private fun ResetPage(section: SettingsSection) {
                     com.prism.music.ui.theme.IconStyle.saveLikeStar(context, false)
                     c.looks.iconsChanged()
                 }
-            }) { Text("Reset") }
+            }) { Text("Reset".localized()) }
         },
-        dismissButton = { PrismTextButton(onClick = { ask = false }) { Text("Cancel") } },
+        dismissButton = { PrismTextButton(onClick = { ask = false }) { Text("Cancel".localized()) } },
     )
 }
 
@@ -1175,11 +1228,11 @@ fun CustomizeSheet(target: com.prism.music.ui.components.CustomizeTarget, key: S
             steps.firstOrNull()?.takeIf { it.at >= openedAt }?.let { step ->
                 PrismTextButton({ c.looks.undo() }, Modifier.fillMaxWidth()) {
                     Icon(PrismIcons.Undo, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp))
-                    Text("Undo: ${step.label}", maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text("Undo: ${step.label}".localized(), maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
             }
             PrismTextButton({ close { onLeave(); nav.go(Routes.settings(page.key)) } }, Modifier.fillMaxWidth()) {
-                Text("All ${page.title} settings"); Spacer(Modifier.width(6.dp)); Chevron()
+                Text("All ${page.title.localized()} settings".localized()); Spacer(Modifier.width(6.dp)); Chevron()
             }
         }
     }
@@ -1194,29 +1247,31 @@ private fun TabsEditor() {
     Group("Tabs", info = "Tick your tabs and hold one to move it. Keep Home, Library or Settings, so Settings can always be reached.") {
         // Settings opens from Home and Library, or is a tab itself: one of them always stays.
         fun allowed(next: List<NavTab>) = next.size >= 2 && next.any { it == NavTab.HOME || it == NavTab.LIBRARY || it == NavTab.SETTINGS }
+        val context = LocalContext.current
         @Composable
         fun TabRow(t: NavTab, i: Int, modifier: Modifier, grip: Modifier?, held: Boolean) {
             val on = t in tabs
+            val tabName = t.label(context)
             Row(modifier.fillMaxWidth().padding(start = 4.dp, end = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                PrismCheck(on, enabled = !on || allowed(tabs - t), label = t.label) { v ->
+                PrismCheck(on, enabled = !on || allowed(tabs - t), label = tabName) { v ->
                     val next = if (v) tabs + t else tabs - t
                     if (allowed(next)) {
                         prefs.setNavTabs(next)
                         if (!v && s.startTab == t) prefs.setStartTab(next.first())
                     }
                 }
-                Text(t.label, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium, color = if (on) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(tabName, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium, color = if (on) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant)
                 if (on && !held) {
-                    IconButton(onClick = { prefs.setNavTabs(tabs.toMutableList().apply { add(i - 1, removeAt(i)) }) }, enabled = i > 0) { Icon(PrismIcons.ChevronUp, "Move ${t.label} up") }
-                    IconButton(onClick = { prefs.setNavTabs(tabs.toMutableList().apply { add(i + 1, removeAt(i)) }) }, enabled = i < tabs.lastIndex) { Icon(PrismIcons.ChevronDown, "Move ${t.label} down") }
+                    IconButton(onClick = { prefs.setNavTabs(tabs.toMutableList().apply { add(i - 1, removeAt(i)) }) }, enabled = i > 0) { Icon(PrismIcons.ChevronUp, "Move %s up".localized(tabName)) }
+                    IconButton(onClick = { prefs.setNavTabs(tabs.toMutableList().apply { add(i + 1, removeAt(i)) }) }, enabled = i < tabs.lastIndex) { Icon(PrismIcons.ChevronDown, "Move %s down".localized(tabName)) }
                 }
-                if (grip != null) com.prism.music.ui.components.DragGrip(grip.padding(horizontal = 4.dp), "Drag ${t.label}")
+                if (grip != null) com.prism.music.ui.components.DragGrip(grip.padding(horizontal = 4.dp), "Drag %s".localized(tabName))
             }
         }
         com.prism.music.ui.components.ReorderList(tabs, { it }, { prefs.setNavTabs(it) }) { t, i, held, mod -> TabRow(t, i, mod, Modifier.dragHandle(), held) }
         NavTab.entries.filter { it !in tabs }.forEach { t -> TabRow(t, -1, Modifier, null, false) }
         Label("Open Prism on", info = "From Prism's next start.")
-        Chips(tabs, if (s.startTab in tabs) s.startTab else tabs.first(), { it.label }) { prefs.setStartTab(it) }
+        Chips(tabs, if (s.startTab in tabs) s.startTab else tabs.first(), { it.label(context) }) { prefs.setStartTab(it) }
         Spacer(Modifier.height(4.dp))
     }
 }
@@ -1684,13 +1739,13 @@ private fun LyricsSettings() {
                     )
                     if (!held) {
                         IconButton(onClick = { prefs.setLyricsOrder(s.lyricsOrder.toMutableList().apply { add(i - 1, removeAt(i)) }) }, enabled = i > 0) {
-                            Icon(PrismIcons.ChevronUp, "Move ${src.label} up")
+                            Icon(PrismIcons.ChevronUp, "Move %s up".localized(src.label.localized()))
                         }
                         IconButton(onClick = { prefs.setLyricsOrder(s.lyricsOrder.toMutableList().apply { add(i + 1, removeAt(i)) }) }, enabled = i < s.lyricsOrder.lastIndex) {
-                            Icon(PrismIcons.ChevronDown, "Move ${src.label} down")
+                            Icon(PrismIcons.ChevronDown, "Move %s down".localized(src.label.localized()))
                         }
                     } else Spacer(Modifier.width(96.dp))
-                    com.prism.music.ui.components.DragGrip(Modifier.dragHandle().padding(start = 2.dp), "Drag ${src.label}")
+                    com.prism.music.ui.components.DragGrip(Modifier.dragHandle().padding(start = 2.dp), "Drag %s".localized(src.label.localized()))
                 }
             }
         }
@@ -1870,13 +1925,13 @@ private fun CarLyricsPreview(style: CarLyricsStyle) {
         else com.prism.music.ui.components.Artwork(song?.thumbnail, Modifier.size(132.dp), shape, size = 300)
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
-            Text("PREVIEW", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+            Text("PREVIEW".localized(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
             val s = song
             when {
-                s == null -> Text("Play a song to see how its lyrics look in the car.", style = MaterialTheme.typography.bodyMedium)
+                s == null -> Text("Play a song to see how its lyrics look in the car.".localized(), style = MaterialTheme.typography.bodyMedium)
                 loaded && lyrics == null -> {
                     Text(s.title, style = MaterialTheme.typography.titleMedium, maxLines = 2)
-                    Text("No synced lyrics for this song, so the car shows it as usual.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text("No synced lyrics for this song, so the car shows it as usual.".localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 else -> {
                     Text(line ?: s.title, style = MaterialTheme.typography.titleMedium, maxLines = 3)

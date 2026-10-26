@@ -49,6 +49,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:label="${appLabel}"
         android:supportsRtl="true"
+        android:localeConfig="@xml/locales_config"
         android:theme="@style/Theme.Prism"
         tools:targetApi="36">
 

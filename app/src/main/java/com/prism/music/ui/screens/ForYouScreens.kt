@@ -1,5 +1,6 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.ui.i18n.localized
 import com.prism.music.ui.components.pane
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
@@ -161,14 +162,14 @@ fun MadeForYouSection(cfg: HomeSectionConfig, offline: Boolean = false, yours: L
                 Icon(PrismIcons.StarFilled, null, tint = MaterialTheme.colorScheme.onSurface)
                 Spacer(Modifier.width(14.dp))
                 Column(Modifier.weight(1f)) {
-                    Text("Pick a few artists you like", style = MaterialTheme.typography.titleMedium)
-                    Text("Your mixes and new releases start from them", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text("Pick a few artists you like".localized(), style = MaterialTheme.typography.titleMedium)
+                    Text("Your mixes and new releases start from them".localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         }
         return
     }
-    SectionHeader(cfg.title, strapline = "Made on your phone from what you play")
+    SectionHeader(cfg.title, strapline = "Made on your phone from what you play".localized())
     // Carousel (the default) is the row of covers below; the other styles show the same mixes their way.
     if (cfg.style != com.prism.music.data.prefs.SectionStyle.CAROUSEL) {
         val playMix: (Mix) -> Unit = { mix ->
@@ -263,7 +264,7 @@ fun NewReleasesScreen(bottomPadding: Dp) {
             Row(Modifier.padding(horizontal = 20.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                 com.prism.music.ui.components.PrismSpinner(Modifier.size(18.dp), stroke = 2.dp)
                 Spacer(Modifier.width(12.dp))
-                Text("Looking round your artists…", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Looking round your artists…".localized(), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
         val all = releases ?: return@SubPage
@@ -336,7 +337,7 @@ private fun ReleaseFilters(
             com.prism.music.ui.components.PrismChip(hideSaved, { onHideSaved(!hideSaved) }, "Not in my library", icon = if (hideSaved) PrismIcons.Check else null)
         }
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Sort by", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text("Sort by".localized(), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
             ReleaseOrder.entries.forEach { o -> com.prism.music.ui.components.PrismChip(o == order, { onOrder(o) }, o.label) }
         }
     }
@@ -455,18 +456,18 @@ fun PickArtistsScreen(onboarding: Boolean, bottomPadding: Dp, onDone: () -> Unit
         Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
             if (!onboarding) RoundAction(PrismIcons.ArrowBack, "Back", glass = true) { nav.back() }
             Spacer(Modifier.weight(1f))
-            if (onboarding) PrismTextButton({ finish() }) { Text("Skip") }
+            if (onboarding) PrismTextButton({ finish() }) { Text("Skip".localized()) }
         }
         Column(Modifier.padding(horizontal = 20.dp)) {
-            Text("Pick artists you like", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Medium)
+            Text("Pick artists you like".localized(), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Medium)
             Text(
-                "They shape your Daily Mixes and Release Radar. They're starred on this phone; nothing is followed on YouTube.",
+                "They shape your Daily Mixes and Release Radar. They're starred on this phone; nothing is followed on YouTube.".localized(),
                 style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Spacer(Modifier.height(12.dp))
             com.prism.music.ui.components.PrismTextField(
                 query, { query = it; if (it.isBlank()) searched = null }, Modifier.fillMaxWidth(), singleLine = true,
-                placeholder = { Text("Search for an artist") }, leadingIcon = { Icon(PrismIcons.Search, null) },
+                placeholder = { Text("Search for an artist".localized()) }, leadingIcon = { Icon(PrismIcons.Search, null) },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search), keyboardActions = KeyboardActions(onSearch = { searched = query.trim() }),
             )
         }
@@ -499,7 +500,7 @@ fun PickArtistsScreen(onboarding: Boolean, bottomPadding: Dp, onDone: () -> Unit
                         if (on) Box(
                             Modifier.size(92.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.45f)).border(3.dp, com.prism.music.ui.theme.PrismTokens.spectrumRing(), CircleShape),
                             contentAlignment = Alignment.Center,
-                        ) { Icon(PrismIcons.Check, "Picked", tint = Color.White, modifier = Modifier.size(36.dp)) }
+                        ) { Icon(PrismIcons.Check, "Picked".localized(), tint = Color.White, modifier = Modifier.size(36.dp)) }
                     }
                     Spacer(Modifier.height(6.dp))
                     Text(a.name, style = MaterialTheme.typography.labelLarge, maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
@@ -508,7 +509,7 @@ fun PickArtistsScreen(onboarding: Boolean, bottomPadding: Dp, onDone: () -> Unit
         }
         val count = favorites.size
         PrismButton({ finish() }, Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 12.dp)) {
-            Text(if (count == 0) "Done" else "Done · $count ${if (count == 1) "artist" else "artists"}")
+            Text((if (count == 0) "Done" else "Done · $count ${if (count == 1) "artist" else "artists"}").localized())
         }
     }
 }
@@ -559,19 +560,19 @@ fun ExclusionsScreen(bottomPadding: Dp) {
         fun section(title: String, note: String, list: List<Excluded>, bring: (Excluded) -> Unit) {
             item("h:$title") {
                 Column(Modifier.padding(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 6.dp)) {
-                    Text(title, style = MaterialTheme.typography.titleMedium)
-                    Text(note, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(title.localized(), style = MaterialTheme.typography.titleMedium)
+                    Text(note.localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
             if (list.isEmpty()) item("e:$title") {
-                Text("None", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp))
+                Text("None".localized(), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp))
             }
             items(list, key = { "$title:${it.id}" }) { e ->
                 Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
                     Artwork(e.thumbnail, Modifier.size(44.dp), if (title.startsWith("Artists")) CircleShape else LocalUi.current.art, placeholderIcon = PrismIcons.Song)
                     Spacer(Modifier.width(12.dp))
                     Text(e.name, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    PrismTextButton({ bring(e) }) { Text("Bring back") }
+                    PrismTextButton({ bring(e) }) { Text("Bring back".localized()) }
                 }
             }
         }

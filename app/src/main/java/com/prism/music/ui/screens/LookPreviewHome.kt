@@ -1,5 +1,7 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.ui.i18n.localized
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -52,17 +54,17 @@ fun MiniHome(c: ThemeColors, song: Song?) {
     Box(Modifier.fillMaxSize()) {
         PageGround(c, Modifier.fillMaxSize())
         Column(Modifier.fillMaxSize().padding(start = 18.dp, end = 18.dp, top = 44.dp), verticalArrangement = Arrangement.spacedBy(ui.gap(14.dp))) {
-            Text("Good evening", style = pageTitleStyle(), color = scheme.onBackground, maxLines = 1)
+            Text("Good evening".localized(), style = pageTitleStyle(), color = scheme.onBackground, maxLines = 1)
             // Replay's card, quietly.
             Box(Modifier.fillMaxWidth().height(96.dp).clip(ui.card).background(frostFill(1.4f)).border(1.dp, c.line, ui.card).padding(16.dp)) {
                 Column {
                     Box(Modifier.width(28.dp).height(3.dp).clip(CircleShape).background(light))
                     Spacer(Modifier.height(10.dp))
                     Text("42h 10m", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.ExtraLight, color = scheme.onBackground)
-                    Text("Your year so far", style = MaterialTheme.typography.bodySmall, color = c.ink2)
+                    Text("Your year so far".localized(), style = MaterialTheme.typography.bodySmall, color = c.ink2)
                 }
             }
-            Text("Quick picks", style = MaterialTheme.typography.titleMedium, color = scheme.onBackground)
+            Text("Quick picks".localized(), style = MaterialTheme.typography.titleMedium, color = scheme.onBackground)
             Column(verticalArrangement = Arrangement.spacedBy(ui.gap(10.dp))) {
                 listOf("Northern Lights", "Paper Planes", "Slow Tide").forEachIndexed { i, title ->
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -75,12 +77,12 @@ fun MiniHome(c: ThemeColors, song: Song?) {
                                 style = if (i == 0) MaterialTheme.typography.bodyLarge.copy(brush = light) else MaterialTheme.typography.bodyLarge,
                                 color = if (i == 0) Color.Unspecified else scheme.onBackground,
                             )
-                            Text("Prism Sample", style = MaterialTheme.typography.bodySmall, color = c.ink2, maxLines = 1)
+                            Text("Prism Sample".localized(), style = MaterialTheme.typography.bodySmall, color = c.ink2, maxLines = 1)
                         }
                     }
                 }
             }
-            Text("Made for you", style = MaterialTheme.typography.titleMedium, color = scheme.onBackground)
+            Text("Made for you".localized(), style = MaterialTheme.typography.titleMedium, color = scheme.onBackground)
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 (1..3).forEach { i ->
                     Box(Modifier.size(ui.cardWidth).clip(ui.art).background(Brush.linearGradient(standIns[i + 1])))
@@ -154,7 +156,7 @@ private fun TabBarPreview(c: ThemeColors) {
                 if (docked) Spacer(Modifier.height(6.dp))
                 Icon(tab.icon(), null, Modifier.size(22.dp), tint = if (on) scheme.onBackground else c.ink3)
                 val showLabel = !minimal && (s.navLabels == NavLabels.ALWAYS || (s.navLabels == NavLabels.SELECTED && on))
-                if (showLabel) Text(tab.label, style = MaterialTheme.typography.labelSmall, color = if (on) scheme.onBackground else c.ink3, maxLines = 1)
+                if (showLabel) Text(tab.label.localized(), style = MaterialTheme.typography.labelSmall, color = if (on) scheme.onBackground else c.ink3, maxLines = 1)
                 if (!docked && on) Box(Modifier.padding(top = 3.dp).width(14.dp).height(2.dp).clip(CircleShape).background(light))
             }
         }

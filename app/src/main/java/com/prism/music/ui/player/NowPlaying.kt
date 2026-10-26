@@ -1,5 +1,7 @@
 package com.prism.music.ui.player
 
+import com.prism.music.ui.i18n.localized
+
 import com.prism.music.ui.theme.PrismIcons
 import android.app.Activity
 import android.content.pm.ActivityInfo
@@ -1119,12 +1121,12 @@ private fun FullscreenVideo(song: Song, forceLandscape: Boolean, pip: Boolean = 
                 Box(
                     Modifier.align(Alignment.TopEnd).padding(16.dp).size(44.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.4f)).clickable(onClick = onExit),
                     contentAlignment = Alignment.Center,
-                ) { Icon(PrismIcons.FullscreenExit, "Exit full screen", tint = Color.White) }
+                ) { Icon(PrismIcons.FullscreenExit, "Exit full screen".localized(), tint = Color.White) }
                 Box(
                     Modifier.align(Alignment.Center).size(72.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.4f))
                         .clickable(remember { MutableInteractionSource() }, indication = null) { pc.togglePlay() },
                     contentAlignment = Alignment.Center,
-                ) { Icon(if (isPlaying) PrismIcons.Pause else PrismIcons.Play, "Play/pause", tint = Color.White, modifier = Modifier.size(44.dp)) }
+                ) { Icon(if (isPlaying) PrismIcons.Pause else PrismIcons.Play, (if (isPlaying) "Pause" else "Play").localized(), tint = Color.White, modifier = Modifier.size(44.dp)) }
                 Box(Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(horizontal = 32.dp, vertical = 16.dp)) {
                     PlayheadScrubber(position, pc.duration)
                 }

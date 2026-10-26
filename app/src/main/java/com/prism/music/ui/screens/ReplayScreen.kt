@@ -1,5 +1,7 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.ui.i18n.localized
+
 import com.prism.music.data.db.mergeUploads
 import com.prism.music.ui.theme.lit
 import androidx.compose.foundation.border
@@ -211,10 +213,10 @@ fun ReplayScreen(bottomPadding: Dp) {
                 val songs = remember(d) { d.top250.map { it.toSong() } }
                 val replaySource = QueueSource(QueueKind.REPLAY, "Replay · ${period.label}")
                 PrismButton(onClick = { c.player.playQueue(songs, 0, replaySource) }, Modifier.weight(1f).height(48.dp)) {
-                    Icon(PrismIcons.Play, null); Spacer(Modifier.width(6.dp)); Text("Play")
+                    Icon(PrismIcons.Play, null); Spacer(Modifier.width(6.dp)); Text("Play".localized())
                 }
                 PrismFilledTonalButton(onClick = { c.player.playQueue(songs, 0, replaySource, shuffle = true) }, Modifier.weight(1f).height(48.dp)) {
-                    Icon(PrismIcons.Shuffle, null); Spacer(Modifier.width(6.dp)); Text("Shuffle")
+                    Icon(PrismIcons.Shuffle, null); Spacer(Modifier.width(6.dp)); Text("Shuffle".localized())
                 }
                 if (c.settings.current.isLoggedIn) androidx.compose.material3.FilledTonalIconButton(
                     onClick = {
@@ -226,7 +228,7 @@ fun ReplayScreen(bottomPadding: Dp) {
                         }
                     },
                     modifier = Modifier.size(48.dp),
-                ) { Icon(PrismIcons.PlaylistAdd, "Save as a playlist") }
+                ) { Icon(PrismIcons.PlaylistAdd, "Save as a playlist".localized()) }
             }
         }
         if (d.months.size > 1) item {
@@ -357,7 +359,7 @@ private fun HeroCard(d: ReplayData, period: Period, notYet: Boolean, loading: Bo
                     Artwork(top.thumbnail, Modifier.size(52.dp), RoundedCornerShape(10.dp), size = 226)
                     Spacer(Modifier.width(12.dp))
                     Column {
-                        Text("Your #1 song", color = Color.White.copy(alpha = 0.75f), style = MaterialTheme.typography.labelMedium)
+                        Text("Your #1 song".localized(), color = Color.White.copy(alpha = 0.75f), style = MaterialTheme.typography.labelMedium)
                         Text(top.title, color = Color.White, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
                         Text("${minutes(top.ms)} · ${top.artistName}", color = Color.White.copy(alpha = 0.75f), style = MaterialTheme.typography.bodySmall, maxLines = 1)
                     }

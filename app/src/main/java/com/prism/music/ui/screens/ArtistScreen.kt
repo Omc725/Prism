@@ -1,5 +1,7 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.ui.i18n.localized
+
 import com.prism.music.ui.theme.PrismIcons
 import android.app.Activity
 import androidx.compose.animation.animateContentSize
@@ -425,7 +427,7 @@ private fun PlayCapsule(onClick: () -> Unit) {
     ) {
         Icon(PrismIcons.Play, null, Modifier.size(26.dp), tint = fg)
         Spacer(Modifier.width(4.dp))
-        Text("Play", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium, color = fg)
+        Text("Play".localized(), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium, color = fg)
     }
 }
 
@@ -461,13 +463,13 @@ private fun TopBar(
                 Box {
                     com.prism.music.ui.components.RoundAction(PrismIcons.More, "More", glass = true) { menu = true }
                     DropdownMenu(menu, { menu = false }) {
-                        DropdownMenuItem({ Text("Share artist") }, { menu = false; onShare() }, leadingIcon = { Icon(PrismIcons.Share, null) })
+                        DropdownMenuItem({ Text("Share artist".localized()) }, { menu = false; onShare() }, leadingIcon = { Icon(PrismIcons.Share, null) })
                         DropdownMenuItem(
                             { Text(if (favorite) "Remove from favourites" else "Add to favourites") }, { menu = false; onFavorite() },
                             leadingIcon = { Icon(if (favorite) PrismIcons.StarFilled else PrismIcons.Star, null) },
                         )
-                        DropdownMenuItem({ Text("Signature style") }, { menu = false; onSignature() }, leadingIcon = { Icon(PrismIcons.Signature, null) })
-                        DropdownMenuItem({ Text("Page color") }, { menu = false; onColor() }, leadingIcon = { Icon(PrismIcons.Palette, null) })
+                        DropdownMenuItem({ Text("Signature style".localized()) }, { menu = false; onSignature() }, leadingIcon = { Icon(PrismIcons.Signature, null) })
+                        DropdownMenuItem({ Text("Page color".localized()) }, { menu = false; onColor() }, leadingIcon = { Icon(PrismIcons.Palette, null) })
                         // Never in radios, autoplay, Smart Shuffle, mixes or Smart Downloads (Settings → Library & Replay → Exclusions).
                         val c = com.prism.music.ui.theme.LocalContainer.current
                         val excluded by c.exclusions.artists.collectAsState()
@@ -528,7 +530,7 @@ private fun Spotlight(item: AlbumItem, onOpen: () -> Unit) {
                         }
                     },
                 contentAlignment = Alignment.Center,
-            ) { Icon(PrismIcons.Play, "Play", tint = MaterialTheme.colorScheme.surface) }
+            ) { Icon(PrismIcons.Play, "Play".localized(), tint = MaterialTheme.colorScheme.surface) }
         }
     }
 }
@@ -577,7 +579,7 @@ private fun TopSongsGrid(songs: List<Song>, title: String) {
                             )
                         }
                         IconButton(onClick = { menuFor = s }, Modifier.size(36.dp)) {
-                            Icon(PrismIcons.More, "More", tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Icon(PrismIcons.More, "More".localized(), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
                     if (i < columns[col].lastIndex) HorizontalDivider(Modifier.padding(start = 60.dp), color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f))
@@ -640,18 +642,18 @@ private fun AboutCard(page: ArtistPage, genre: String?, onOpen: () -> Unit) {
     val facts = facts(page, genre)
     if (bio == null && facts.isEmpty()) return
     Text(
-        "About ${page.name}", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium,
+        "About ${page.name}".localized(), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium,
         modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 28.dp, bottom = 10.dp),
     )
     FrostedPanel(Modifier.padding(horizontal = 16.dp).fillMaxWidth(), onClick = onOpen) {
         Column(Modifier.padding(16.dp).animateContentSize()) {
             if (bio != null) {
                 Text(bio, style = MaterialTheme.typography.bodyMedium, maxLines = 4, overflow = TextOverflow.Ellipsis)
-                Text("MORE", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(top = 4.dp))
+                Text("MORE".localized(), style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(top = 4.dp))
             }
             facts.forEachIndexed { i, (k, v) ->
                 if (bio != null || i > 0) HorizontalDivider(Modifier.padding(vertical = 10.dp), color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f))
-                Text(k.uppercase(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Medium)
+                Text(k.localized().uppercase(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Medium)
                 Text(v, style = MaterialTheme.typography.bodyLarge)
             }
         }
@@ -673,7 +675,7 @@ private fun InfoSheet(page: ArtistPage, genre: String?, favorite: Boolean, onFav
                 IconButton(onClick = onFavorite) {
                     Icon(if (favorite) PrismIcons.StarFilled else PrismIcons.Star, if (favorite) "Remove from favourites" else "Add to favourites", tint = MaterialTheme.colorScheme.primary)
                 }
-                IconButton(onClick = onShare) { Icon(PrismIcons.Share, "Share artist") }
+                IconButton(onClick = onShare) { Icon(PrismIcons.Share, "Share artist".localized()) }
             }
             facts(page, genre).forEach { (k, v) ->
                 HorizontalDivider(Modifier.padding(vertical = 10.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
@@ -697,7 +699,7 @@ private fun SignatureSheet(page: ArtistPage, genre: String?, onDismiss: () -> Un
     val auto = remember(page.id, genre) { ArtistTypography.forArtist(page.id, genre, ArtistTypography.parseAudience(page.subscribers)) }
     PrismSheet(onDismiss = onDismiss) {
         Column(Modifier.padding(horizontal = 22.dp)) {
-            Text("Signature", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium)
+            Text("Signature".localized(), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium)
             Text(
                 "How ${page.name}'s name is set on their page. Tip: long-press the name to come back here.",
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -725,7 +727,7 @@ private fun SignatureOption(name: String, label: String, type: com.prism.music.u
             Eyebrow(label)
             SignatureSample(name, type, Modifier.padding(top = 2.dp))
         }
-        if (selected) Icon(PrismIcons.Check, "Chosen", tint = MaterialTheme.colorScheme.primary)
+        if (selected) Icon(PrismIcons.Check, "Chosen".localized(), tint = MaterialTheme.colorScheme.primary)
     }
 }
 

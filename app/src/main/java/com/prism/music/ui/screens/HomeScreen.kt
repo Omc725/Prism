@@ -1,5 +1,7 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.ui.i18n.localized
+import androidx.compose.ui.platform.LocalContext
 import com.prism.music.data.db.mergeUploads
 import com.prism.music.ui.theme.lit
 import androidx.compose.foundation.border
@@ -292,7 +294,7 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
                     ) {
                         Icon(PrismIcons.Customize, null, Modifier.size(18.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                         Spacer(Modifier.width(8.dp))
-                        Text("Customize Home", style = MaterialTheme.typography.labelLarge)
+                        Text(androidx.compose.ui.res.stringResource(com.prism.music.R.string.home_customize), style = MaterialTheme.typography.labelLarge)
                     }
                 }
             }
@@ -313,8 +315,8 @@ private fun OfflineNote() {
         Icon(PrismIcons.CloudOff, null, tint = MaterialTheme.colorScheme.onSurface)
         Spacer(Modifier.width(14.dp))
         Column {
-            Text("You're offline", style = MaterialTheme.typography.titleSmall)
-            Text("Home shows the music on this phone: downloads, songs kept whole and your files", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(androidx.compose.ui.res.stringResource(com.prism.music.R.string.offline_title), style = MaterialTheme.typography.titleSmall)
+            Text(androidx.compose.ui.res.stringResource(com.prism.music.R.string.offline_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }
@@ -323,13 +325,17 @@ private fun OfflineNote() {
 private fun HomeTopBar() {
     val nav = LocalNavigator.current
     val settings = LocalAppSettings.current
-    val hour = remember { Calendar.getInstance().get(Calendar.HOUR_OF_DAY) }
+    val morningStr = androidx.compose.ui.res.stringResource(com.prism.music.R.string.greeting_morning)
+    val afternoonStr = androidx.compose.ui.res.stringResource(com.prism.music.R.string.greeting_afternoon)
+    val eveningStr = androidx.compose.ui.res.stringResource(com.prism.music.R.string.greeting_evening)
+    val hour = remember { java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY) }
     val greeting = settings.greetingText.trim().ifBlank {
-        when (hour) { in 5..11 -> "Good morning"; in 12..17 -> "Good afternoon"; else -> "Good evening" }
+        when (hour) { in 5..11 -> morningStr; in 12..17 -> afternoonStr; else -> eveningStr }
     }
     // In the language's own order ("Thursday 15 October", "10월 15일 목요일"), not English's with translated words.
-    val today = remember {
-        val locale = java.util.Locale.getDefault()
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val today = remember(context) {
+        val locale = context.resources.configuration.locales[0] ?: java.util.Locale.getDefault()
         java.text.SimpleDateFormat(android.text.format.DateFormat.getBestDateTimePattern(locale, "EEEEdMMMM"), locale).format(java.util.Date())
     }
     val ui = com.prism.music.ui.theme.LocalUi.current
@@ -358,7 +364,7 @@ private fun HomeTopBar() {
         }
         Spacer(Modifier.width(8.dp))
         com.prism.music.ui.screens.ProfilePicture(
-            Modifier.size(42.dp).clickable(onClickLabel = "Settings") { nav.go(Routes.SETTINGS) }, description = "Settings",
+            Modifier.size(42.dp).clickable(onClickLabel = "Settings".localized()) { nav.go(Routes.SETTINGS) }, description = "Settings".localized(),
         )
     }
 }
@@ -451,7 +457,7 @@ private fun UpdateBanner() {
                 Text(title, style = MaterialTheme.typography.titleSmall, color = ink)
                 Text(detail, style = MaterialTheme.typography.bodySmall, color = ink.copy(alpha = 0.8f))
             }
-            if (!busy) IconButton(onClick = { c.updates.dismiss() }) { Icon(PrismIcons.Close, "Dismiss", tint = ink) }
+            if (!busy) IconButton(onClick = { c.updates.dismiss() }) { Icon(PrismIcons.Close, "Dismiss".localized(), tint = ink) }
         }
         (progress as? com.prism.music.data.UpdateProgress.Downloading)?.let { p ->
             com.prism.music.ui.components.PrismProgressBar(p.fraction?.let { f -> { f } }, Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp))
@@ -464,6 +470,7 @@ private fun GreetingSection(cfg: HomeSectionConfig, recent: List<Song>) {
     val nav = LocalNavigator.current
     val c = LocalContainer.current
     val settings = LocalAppSettings.current
+    val context = LocalContext.current
     /** [playable]: what holding the tile offers to play (null for pages like Replay or Search). */
     data class Tile(val title: String, val icon: ImageVector?, val image: String?, val playable: Playable?, val onClick: () -> Unit)
     val prismLists by c.prismLibrary.lists.collectAsState()
@@ -484,7 +491,7 @@ private fun GreetingSection(cfg: HomeSectionConfig, recent: List<Song>) {
                 HomeShortcut.DOWNLOADS -> Playable.Downloads
                 else -> null
             }
-            add(Tile(sc.label, icon, null, playable) { nav.go(route) })
+            add(Tile(sc.label(context), icon, null, playable) { nav.go(route) })
         }
         settings.homePlaylists.forEach { pin ->
             val prism = pin.id.startsWith(com.prism.music.data.PrismLibrary.PREFIX)
@@ -858,10 +865,10 @@ private fun ReplayTeaser(cfg: HomeSectionConfig) {
             com.prism.music.ui.components.Eyebrow(if (rewind) "Rewind $year" else "Replay $year")
             Box(Modifier.padding(top = 6.dp, bottom = 8.dp).size(28.dp, 2.dp).clip(CircleShape).background(com.prism.music.ui.theme.PrismTokens.spectrum(dark)))
             val big = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.ExtraLight)
-            if (rewind) Text("Your year in music", style = big, color = scheme.onSurface, maxLines = 1)
+            if (rewind) Text("Your year in music".localized(), style = big, color = scheme.onSurface, maxLines = 1)
             else Text(total.full, Modifier.toggleListenUnit(), style = big, color = scheme.onSurface, maxLines = 1)
             Text(
-                if (rewind) "${total.full}. Your top songs and artists, your year in Prism, and more" else "Your top songs, artists and genres",
+                (if (rewind) "${total.full}. Your top songs and artists, your year in Prism, and more" else "Your top songs, artists and genres").localized(),
                 color = scheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium, maxLines = 2,
             )
         }

@@ -4,6 +4,7 @@ import com.prism.music.ui.components.PrismButton
 import com.prism.music.ui.components.PrismOutlinedButton
 import com.prism.music.ui.components.PrismSwitch
 import com.prism.music.ui.components.PrismTextButton
+import com.prism.music.ui.i18n.localized
 import com.prism.music.ui.theme.PrismIcons
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -75,15 +76,15 @@ fun rememberBackupFlow(onDone: (Boolean) -> Unit = {}): () -> Unit {
         LaunchedEffect(Unit) { small = c.backup.estimate(false); full = c.backup.estimate(true) }
         AlertDialog(
             onDismissRequest = { asking = false },
-            title = { Text("Back up Prism") },
+            title = { Text("Back up Prism".localized()) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text("Your library, Replay history, settings, sign-in, covers and backgrounds go into one file. Keep it private: it can sign in as you.")
+                    Text("Your library, Replay history, settings, sign-in, covers and backgrounds go into one file. Keep it private: it can sign in as you.".localized())
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) {
-                            Text("Include downloaded songs", style = MaterialTheme.typography.bodyLarge)
+                            Text("Include downloaded songs".localized(), style = MaterialTheme.typography.bodyLarge)
                             Text(
-                                if (withDownloads) "About ${sizeText(full)}" else "About ${sizeText(small)}; downloads are fetched again after restoring",
+                                if (withDownloads) "About %s".localized(sizeText(full)) else "About %s; downloads are fetched again after restoring".localized(sizeText(small)),
                                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
@@ -91,11 +92,11 @@ fun rememberBackupFlow(onDone: (Boolean) -> Unit = {}): () -> Unit {
                     }
                 }
             },
-            confirmButton = { PrismTextButton(onClick = { asking = false; save.launch(backupName()) }) { Text("Choose where") } },
-            dismissButton = { PrismTextButton(onClick = { asking = false }) { Text("Cancel") } },
+            confirmButton = { PrismTextButton(onClick = { asking = false; save.launch(backupName()) }) { Text("Choose where".localized()) } },
+            dismissButton = { PrismTextButton(onClick = { asking = false }) { Text("Cancel".localized()) } },
         )
     }
-    if (busy) WorkingDialog("Backing up…")
+    if (busy) WorkingDialog("Backing up…".localized())
     return { asking = true }
 }
 
@@ -111,8 +112,8 @@ fun rememberRestoreFlow(): () -> Unit {
     picked?.let { uri ->
         AlertDialog(
             onDismissRequest = { picked = null },
-            title = { Text("Restore this backup?") },
-            text = { Text("Prism's library, history and settings on this phone are replaced with the backup's, then Prism restarts.") },
+            title = { Text("Restore this backup?".localized()) },
+            text = { Text("Prism's library, history and settings on this phone are replaced with the backup's, then Prism restarts.".localized()) },
             confirmButton = {
                 PrismTextButton(onClick = {
                     picked = null
@@ -121,15 +122,15 @@ fun rememberRestoreFlow(): () -> Unit {
                         // Only comes back if it failed; on success Prism restarts.
                         runCatching { c.backup.restore(uri) }.onFailure {
                             busy = false
-                            Toast.makeText(context, "Couldn't restore: ${it.message}", Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, "Couldn't restore: %s".localized(context, it.message ?: ""), Toast.LENGTH_LONG).show()
                         }
                     }
-                }) { Text("Restore") }
+                }) { Text("Restore".localized()) }
             },
-            dismissButton = { PrismTextButton(onClick = { picked = null }) { Text("Cancel") } },
+            dismissButton = { PrismTextButton(onClick = { picked = null }) { Text("Cancel".localized()) } },
         )
     }
-    if (busy) WorkingDialog("Restoring…")
+    if (busy) WorkingDialog("Restoring…".localized())
     return { open.launch(arrayOf("application/zip", "application/octet-stream", "*/*")) }
 }
 
@@ -142,7 +143,7 @@ private fun WorkingDialog(text: String) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 com.prism.music.ui.components.PrismSpinner(Modifier.size(24.dp), stroke = 2.5.dp)
                 Spacer(Modifier.width(16.dp))
-                Text(text)
+                Text(text.localized())
             }
         },
     )
@@ -163,7 +164,7 @@ fun BackupGroup() {
 @Composable
 fun WelcomeRestoreButton() {
     val restore = rememberRestoreFlow()
-    PrismTextButton(onClick = restore, Modifier.fillMaxWidth()) { Text("Restore from a backup", color = Color.White.copy(alpha = 0.8f)) }
+    PrismTextButton(onClick = restore, Modifier.fillMaxWidth()) { Text("Restore from a backup".localized(), color = Color.White.copy(alpha = 0.8f)) }
 }
 
 /**
@@ -183,26 +184,25 @@ fun NewSignatureSheet(version: String, apk: File, onDismiss: () -> Unit) {
         if (uri != null) scope.launch {
             runCatching { c.updates.saveApk(apk, uri) }
                 .onSuccess { saved = true }
-                .onFailure { Toast.makeText(context, "Couldn't save it: ${it.message}", Toast.LENGTH_LONG).show() }
+                .onFailure { Toast.makeText(context, "Couldn't save it: %s".localized(context, it.message ?: ""), Toast.LENGTH_LONG).show() }
         }
     }
     ModalBottomSheet(onDismissRequest = onDismiss) {
         Column(Modifier.padding(start = 24.dp, end = 24.dp, bottom = 32.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-            Text("Moving to Prism $version", style = MaterialTheme.typography.titleLarge)
+            Text("Moving to Prism %s".localized(version), style = MaterialTheme.typography.titleLarge)
             Text(
-                "From $version, Prism is signed with its own key instead of a shared test key, so Android stops flagging it. " +
-                    "Android can't update across that change, so this once Prism is reinstalled. Your things come with you:",
+                "From %s, Prism is signed with its own key instead of a shared test key, so Android stops flagging it. Android can't update across that change, so this once Prism is reinstalled. Your things come with you:".localized(version),
                 style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            Step(1, "Back up", "Save a backup (Downloads is a good place)", backedUp) { backup() }
-            Step(2, "Save the new Prism", "Keep Prism-$version.apk next to it", saved) { saveApk.launch("Prism-$version.apk") }
-            Step(3, "Uninstall this Prism", "Then open Prism-$version.apk from your files", false, enabled = backedUp && saved) {
+            Step(1, "Back up".localized(), "Save a backup (Downloads is a good place)".localized(), backedUp) { backup() }
+            Step(2, "Save the new Prism".localized(), "Keep Prism-%s.apk next to it".localized(version), saved) { saveApk.launch("Prism-$version.apk") }
+            Step(3, "Uninstall this Prism".localized(), "Then open Prism-%s.apk from your files".localized(version), false, enabled = backedUp && saved) {
                 runCatching { context.startActivity(c.updates.uninstallIntent()) }.onFailure {
                     context.startActivity(android.content.Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, android.net.Uri.parse("package:${context.packageName}")))
                 }
             }
             Text(
-                "When the new Prism opens, tap \"Restore from a backup\" and pick the backup.",
+                "When the new Prism opens, tap \"Restore from a backup\" and pick the backup.".localized(),
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
@@ -213,12 +213,12 @@ fun NewSignatureSheet(version: String, apk: File, onDismiss: () -> Unit) {
 private fun Step(n: Int, title: String, detail: String, done: Boolean, enabled: Boolean = true, onClick: () -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.weight(1f)) {
-            Text("$n. $title", style = MaterialTheme.typography.titleSmall)
-            Text(detail, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text("$n. ${title.localized()}", style = MaterialTheme.typography.titleSmall)
+            Text(detail.localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         Spacer(Modifier.width(12.dp))
-        if (done) Icon(PrismIcons.Check, "Done", tint = MaterialTheme.colorScheme.primary)
-        else if (n == 3) PrismButton(onClick = onClick, enabled = enabled) { Text("Uninstall") }
-        else PrismOutlinedButton(onClick = onClick, enabled = enabled) { Text(if (n == 1) "Back up" else "Save") }
+        if (done) Icon(PrismIcons.Check, "Done".localized(), tint = MaterialTheme.colorScheme.primary)
+        else if (n == 3) PrismButton(onClick = onClick, enabled = enabled) { Text("Uninstall".localized()) }
+        else PrismOutlinedButton(onClick = onClick, enabled = enabled) { Text(if (n == 1) "Back up".localized() else "Save".localized()) }
     }
 }

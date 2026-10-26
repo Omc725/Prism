@@ -1,5 +1,7 @@
 package com.prism.music.ui.player
 
+import com.prism.music.ui.i18n.localized
+
 import com.prism.music.ui.theme.PrismIcons
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
@@ -222,20 +224,20 @@ fun MiniPlayer(modifier: Modifier = Modifier, onOpen: () -> Unit) {
                 }
             }
             if (settings.miniPrevButton) {
-                IconButton(onClick = { haptics.click(); pc.previous() }, modifier = Modifier.size(40.dp)) { Icon(PrismIcons.Previous, "Previous") }
+                IconButton(onClick = { haptics.click(); pc.previous() }, modifier = Modifier.size(40.dp)) { Icon(PrismIcons.Previous, "Previous".localized()) }
             }
             if (style == MiniPlayerStyle.PILL) {
                 Box(
                     Modifier.size(40.dp).clip(CircleShape).background(scheme.onSurface).clickable { haptics.click(); pc.togglePlay() },
                     contentAlignment = Alignment.Center,
-                ) { Icon(if (playing) PrismIcons.Pause else PrismIcons.Play, "Play/pause", Modifier.size(24.dp), tint = scheme.surface) }
+                ) { Icon(if (playing) PrismIcons.Pause else PrismIcons.Play, (if (playing) "Pause" else "Play").localized(), Modifier.size(24.dp), tint = scheme.surface) }
             } else {
                 IconButton(onClick = { haptics.click(); pc.togglePlay() }, modifier = Modifier.size(44.dp)) {
-                    Icon(if (playing) PrismIcons.Pause else PrismIcons.Play, "Play/pause", Modifier.size(if (style == MiniPlayerStyle.SLIM) 26.dp else 28.dp))
+                    Icon(if (playing) PrismIcons.Pause else PrismIcons.Play, (if (playing) "Pause" else "Play").localized(), Modifier.size(if (style == MiniPlayerStyle.SLIM) 26.dp else 28.dp))
                 }
             }
             if (settings.miniSkipButtons) {
-                IconButton(onClick = { haptics.click(); pc.next() }, modifier = Modifier.size(40.dp)) { Icon(PrismIcons.Next, "Next") }
+                IconButton(onClick = { haptics.click(); pc.next() }, modifier = Modifier.size(40.dp)) { Icon(PrismIcons.Next, "Next".localized()) }
             }
         }
         if (settings.miniProgress == MiniProgress.LINE && !(bar && !glass)) {

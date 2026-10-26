@@ -1,5 +1,7 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.ui.i18n.localized
+
 import com.prism.music.ui.components.PrismButton
 import com.prism.music.ui.components.PrismOutlinedButton
 import com.prism.music.ui.components.PrismTextButton
@@ -122,7 +124,7 @@ private fun RecognizeCard(denied: Boolean, onListen: () -> Unit, onOpen: (String
                         Artwork(r.cover ?: song?.thumbnail, Modifier.size(88.dp), LocalUi.current.art, placeholderIcon = PrismIcons.Song)
                         Spacer(Modifier.width(16.dp))
                         Column(Modifier.weight(1f)) {
-                            Text("Found it", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                            Text("Found it".localized(), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                             Text(r.title ?: "", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium, maxLines = 2, overflow = TextOverflow.Ellipsis)
                             Text(r.artist ?: "", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
                         }
@@ -130,7 +132,7 @@ private fun RecognizeCard(denied: Boolean, onListen: () -> Unit, onOpen: (String
                     Spacer(Modifier.height(20.dp))
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         if (song != null) PrismButton({ close { c.player.playSingle(song) } }, Modifier.weight(1f)) {
-                            Icon(PrismIcons.Play, null); Spacer(Modifier.width(6.dp)); Text("Play")
+                            Icon(PrismIcons.Play, null); Spacer(Modifier.width(6.dp)); Text("Play".localized())
                         }
                         // With a song: it plays and Prism opens on the player; without one, on the Recognized list.
                         PrismOutlinedButton({
@@ -139,18 +141,18 @@ private fun RecognizeCard(denied: Boolean, onListen: () -> Unit, onOpen: (String
                                 onOpen(if (song != null) "prism://player" else "prism://recognized")
                             }
                         }, Modifier.weight(1f)) {
-                            Text(if (song != null) "Open in Prism" else "See in Prism")
+                            Text((if (song != null) "Open in Prism" else "See in Prism").localized())
                         }
                     }
                     if (song == null) Text(
-                        "Not found in Prism Music", Modifier.padding(top = 8.dp),
+                        "Not found in Prism Music".localized(), Modifier.padding(top = 8.dp),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
-                    PrismTextButton({ c.recognizer.reset(); onListen() }) { Text("Listen again") }
+                    PrismTextButton({ c.recognizer.reset(); onListen() }) { Text("Listen again".localized()) }
                 }
                 else -> {
                     val listening = s as? Recognizer.State.Listening
-                    Text("Recognize", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium)
+                    Text("Recognize".localized(), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium)
                     ListenButton(listening != null, listening?.level ?: 0f, size = 190.dp) {
                         if (listening != null) c.recognizer.cancel() else onListen()
                     }

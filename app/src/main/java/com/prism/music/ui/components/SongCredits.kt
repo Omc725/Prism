@@ -1,5 +1,7 @@
 package com.prism.music.ui.components
 
+import com.prism.music.ui.i18n.localized
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -49,16 +51,15 @@ fun SongCreditsSheet(song: Song, onDismiss: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Column {
-                Text("Song credits", style = MaterialTheme.typography.titleLarge)
+                Text("Song credits".localized(), style = MaterialTheme.typography.titleLarge)
                 Text(listOf(song.title, song.artistText).filter { it.isNotBlank() }.joinToString(" · "), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             val r = credits
             when {
                 r == null -> PrismSpinner(Modifier.size(22.dp), stroke = 2.dp)
-                r.isFailure -> Text("Couldn't load the credits. Check your connection and try again.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                r.isFailure -> Text("Couldn't load the credits. Check your connection and try again.".localized(), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 r.getOrThrow().isEmpty() -> Text(
-                    if (song.isVideo) "Music videos don't come with credits. The song's own version usually has them."
-                    else "YouTube Music has no credits for this one.",
+                    (if (song.isVideo) "Music videos don't come with credits. The song's own version usually has them." else "YouTube Music has no credits for this one.").localized(),
                     style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 else -> r.getOrThrow().forEach { (title, names) ->

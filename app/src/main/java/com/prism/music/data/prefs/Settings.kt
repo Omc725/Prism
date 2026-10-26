@@ -65,7 +65,18 @@ enum class LyricsSource(val label: String, val detail: String) {
 /** Tiles in Home's greeting section. */
 enum class HomeShortcut(val label: String) {
     LIKED("Liked songs"), DOWNLOADS("Downloads"), REPLAY("Replay"), LIBRARY("Library"),
-    MOODS("Moods & genres"), SEARCH("Search"), EQUALIZER("Equalizer"), TOGETHER("Listen together"),
+    MOODS("Moods & genres"), SEARCH("Search"), EQUALIZER("Equalizer"), TOGETHER("Listen together");
+
+    fun label(context: android.content.Context): String = when (this) {
+        LIKED -> context.getString(com.prism.music.R.string.shortcut_liked)
+        DOWNLOADS -> context.getString(com.prism.music.R.string.shortcut_downloads)
+        REPLAY -> context.getString(com.prism.music.R.string.tab_replay)
+        LIBRARY -> context.getString(com.prism.music.R.string.tab_library)
+        SEARCH -> context.getString(com.prism.music.R.string.tab_search)
+        EQUALIZER -> context.getString(com.prism.music.R.string.shortcut_eq)
+        TOGETHER -> context.getString(com.prism.music.R.string.shortcut_together)
+        else -> label
+    }
 }
 
 /** A playlist pinned to Home's greeting tiles. */
@@ -124,7 +135,16 @@ enum class LocalSection(val label: String) {
     ADDED_SONGS("Recently added"), ADDED_ALBUMS("Added albums"), DOWNLOADS("Downloads"),
 }
 
-enum class NavTab(val label: String) { HOME("Home"), SEARCH("Search"), LIBRARY("Library"), REPLAY("Replay"), SETTINGS("Settings"), LOCAL("Local files") }
+enum class NavTab(val label: String, val titleRes: Int) {
+    HOME("Home", com.prism.music.R.string.tab_home),
+    SEARCH("Search", com.prism.music.R.string.tab_search),
+    LIBRARY("Library", com.prism.music.R.string.tab_library),
+    REPLAY("Replay", com.prism.music.R.string.tab_replay),
+    SETTINGS("Settings", com.prism.music.R.string.tab_settings),
+    LOCAL("Local files", com.prism.music.R.string.tab_local);
+
+    fun label(context: android.content.Context): String = context.getString(titleRes)
+}
 
 enum class MiniPlayerStyle(val label: String) { CARD("Card"), SLIM("Slim"), PILL("Pill") }
 enum class MiniProgress(val label: String) { LINE("Line"), FILL("Fill"), NONE("None") }
@@ -182,6 +202,24 @@ enum class PlayerButton(val label: String) {
     LYRICS("Lyrics"), VIDEO("Video"), QUEUE("Up next"), OUTPUT("Play on"), SLEEP("Sleep timer"), LIKE("Like"),
     DISLIKE("Not for me"), ADD_TO_PLAYLIST("Add to playlist"), SHARE("Share"), SING("Sing"), DJ("DJ mode"),
     EQUALIZER("Equalizer"), DOWNLOAD("Download"), RADIO("Start radio"), SPEED("Speed");
+
+    fun label(context: Context): String = when (this) {
+        LYRICS -> context.getString(com.prism.music.R.string.player_lyrics)
+        VIDEO -> context.getString(com.prism.music.R.string.player_video)
+        QUEUE -> context.getString(com.prism.music.R.string.player_queue)
+        OUTPUT -> context.getString(com.prism.music.R.string.player_output)
+        SLEEP -> context.getString(com.prism.music.R.string.player_sleep)
+        LIKE -> context.getString(com.prism.music.R.string.action_like)
+        DISLIKE -> context.getString(com.prism.music.R.string.action_dislike)
+        ADD_TO_PLAYLIST -> context.getString(com.prism.music.R.string.player_add_to_playlist)
+        SHARE -> context.getString(com.prism.music.R.string.action_share)
+        SING -> context.getString(com.prism.music.R.string.player_sing)
+        DJ -> context.getString(com.prism.music.R.string.player_dj)
+        EQUALIZER -> context.getString(com.prism.music.R.string.player_equalizer)
+        DOWNLOAD -> context.getString(com.prism.music.R.string.player_download)
+        RADIO -> context.getString(com.prism.music.R.string.player_radio)
+        SPEED -> context.getString(com.prism.music.R.string.player_speed)
+    }
 
     companion object {
         /** As 1.7 had it: lyrics, the music video and the queue. */
@@ -420,6 +458,8 @@ data class AppSettings(
     val accountName: String = "",
     val accountEmail: String = "",
     val accountAvatar: String = "",
+    /** App language code ("", "en", "tr", "az"); blank means system default. */
+    val appLanguage: String = "",
     // Appearance
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
     val pureBlack: Boolean = false,
@@ -1009,6 +1049,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val hideStatusBar = booleanPreferencesKey("hide_status_bar")
         val volumeControl = stringPreferencesKey("volume_control")
         val appVolume = floatPreferencesKey("app_volume")
+        val appLanguage = stringPreferencesKey("app_language")
 
         /** Lyrics, your way (1.7.5): in Reset look, a Look, and the Lyrics page's own reset. */
         val lyricsLook: List<Pair<Preferences.Key<*>, Char>> by lazy {
@@ -1080,7 +1121,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         /** Settings that aren't part of a Look: what you listen to and how, your account, Home's contents. */
         val notLook: Set<String> by lazy {
             setOf(
-                "merge_liked_videos", "volume_control", "app_volume",
+                "merge_liked_videos", "volume_control", "app_volume", "app_language",
                 "onboarded", "cookie", "visitor_data", "data_sync_id", "auth_user", "discord_presence", "account_name", "account_email",
                 "account_avatar", "haptics", "immersive_player", "preload", "preload_cellular", "canvas_enabled", "canvas_on_cellular",
                 "soft_spatial", "soft_spatial_amount", "lyrics_on_player", "lyrics_order", "lyrics_off", "prefer_synced", "skip_censored",
@@ -1156,6 +1197,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
             accountName = p[K.accountName] ?: "",
             accountEmail = p[K.accountEmail] ?: "",
             accountAvatar = p[K.accountAvatar] ?: "",
+            appLanguage = p[K.appLanguage] ?: d.appLanguage,
             themeMode = p.enum(K.themeMode, d.themeMode),
             pureBlack = p[K.pureBlack] ?: d.pureBlack,
             colorSource = p.enum(K.colorSource, d.colorSource),
@@ -1634,6 +1676,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setReduceMotion(v: Boolean) = edit { it[K.reduceMotion] = v }
     fun setNavStyle(v: NavBarStyle) = edit { it[K.navStyle] = v.name }
     fun setNavLabels(v: NavLabels) = edit { it[K.navLabels] = v.name }
+    fun setAppLanguage(v: String) = edit { it[K.appLanguage] = v }
     fun setNavHideOnScroll(v: Boolean) = edit { it[K.navHideOnScroll] = v }
     fun setNavTabs(v: List<NavTab>) = edit { it[K.navTabs] = v.joinToString(",") { t -> t.name } }
     fun setLocalSections(v: List<LocalSection>) = edit { it[K.localSections] = v.joinToString(",") { t -> t.name } }

@@ -1,5 +1,7 @@
 package com.prism.music.ui.components
 
+import com.prism.music.ui.i18n.localized
+
 import com.prism.music.ui.theme.PrismIcons
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -174,11 +176,11 @@ private fun PrivateNotice(changing: Boolean, onMakeShareable: () -> Unit) {
         Icon(PrismIcons.Lock, null, Modifier.size(20.dp), tint = scheme.onSurfaceVariant)
         Spacer(Modifier.width(12.dp))
         Text(
-            "This playlist is private, so its link only works for you.",
+            "This playlist is private, so its link only works for you.".localized(),
             Modifier.weight(1f), style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
         )
         if (changing) com.prism.music.ui.components.PrismSpinner(Modifier.padding(horizontal = 14.dp).size(18.dp), stroke = 2.dp)
-        else PrismTextButton(onClick = onMakeShareable) { Text("Make unlisted") }
+        else PrismTextButton(onClick = onMakeShareable) { Text("Make unlisted".localized()) }
     }
 }
 
@@ -192,7 +194,7 @@ private fun ShareAction(icon: ImageVector, label: String, onClick: () -> Unit) {
             Icon(icon, null, Modifier.size(24.dp))
         }
         Spacer(Modifier.height(6.dp))
-        Text(label, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        Text(label.localized(), style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 }
 

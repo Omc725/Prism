@@ -1,5 +1,7 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.ui.i18n.localized
+
 import com.prism.music.ui.components.PrismSlider
 import com.prism.music.ui.components.PrismSwitch
 import com.prism.music.ui.components.PrismTextButton
@@ -127,8 +129,8 @@ fun BackgroundsScreen(bottomPadding: Dp, forPlayer: Boolean = false) {
                         c.settings.setBackdrops(map)
                     }.padding(horizontal = 16.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) {
-                            Text("Same as Home", style = MaterialTheme.typography.bodyLarge)
-                            Text("The player follows Home's background", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("Same as Home".localized(), style = MaterialTheme.typography.bodyLarge)
+                            Text("The player follows Home's background".localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                         PrismSwitch(own == null, null)
                     }
@@ -138,8 +140,8 @@ fun BackgroundsScreen(bottomPadding: Dp, forPlayer: Boolean = false) {
                 Column(Modifier.pane(ui.card, MaterialTheme.colorScheme.surfaceContainer).padding(vertical = 8.dp)) {
                     Row(Modifier.fillMaxWidth().clickable { everywhere = !everywhere }.padding(horizontal = 16.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) {
-                            Text("Same on every screen", style = MaterialTheme.typography.bodyLarge)
-                            Text("Home, Search, Library, Replay and Settings", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("Same on every screen".localized(), style = MaterialTheme.typography.bodyLarge)
+                            Text("Home, Search, Library, Replay and Settings".localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                         PrismSwitch(everywhere, { everywhere = it })
                     }
@@ -216,17 +218,17 @@ fun BackgroundsScreen(bottomPadding: Dp, forPlayer: Boolean = false) {
             }
             if (!forPlayer) item {
                 Column(Modifier.padding(top = 8.dp).pane(ui.card, MaterialTheme.colorScheme.surfaceContainer).padding(16.dp)) {
-                    Text("Softness", style = MaterialTheme.typography.bodyLarge)
-                    Text("How much the theme color washes over the background, for easier reading", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text("Softness".localized(), style = MaterialTheme.typography.bodyLarge)
+                    Text("How much the theme color washes over the background, for easier reading".localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     PrismSlider(dim, { dim = it }, valueRange = 0f..0.8f, onValueChangeFinished = { c.settings.setBackdropDim(dim) })
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) {
-                            Text("Gentle motion", style = MaterialTheme.typography.bodyLarge)
-                            Text("Color fields drift, waves roll and ripples spread, slowly", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("Gentle motion".localized(), style = MaterialTheme.typography.bodyLarge)
+                            Text("Color fields drift, waves roll and ripples spread, slowly".localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                         PrismSwitch(s.backdropMotion, { c.settings.setBackdropMotion(it) })
                     }
-                    if (s.backdrops.isNotEmpty()) PrismTextButton(onClick = { c.settings.setBackdrops(emptyMap()) }, Modifier.align(Alignment.End)) { Text("Reset all to Ambient") }
+                    if (s.backdrops.isNotEmpty()) PrismTextButton(onClick = { c.settings.setBackdrops(emptyMap()) }, Modifier.align(Alignment.End)) { Text("Reset all to Ambient".localized()) }
                 }
             }
     }

@@ -1,5 +1,7 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.ui.i18n.localized
+
 import com.prism.music.ui.components.PrismButton
 import com.prism.music.ui.components.PrismOutlinedButton
 import com.prism.music.ui.components.PrismTextButton
@@ -208,8 +210,8 @@ fun BlendsScreen(bottomPadding: Dp) {
                     },
                 )
             },
-            confirmButton = { if (friend != null) PrismTextButton({ c.blends.pending.value = null; take(p) }) { Text("Make the Blend") } },
-            dismissButton = { PrismTextButton({ c.blends.pending.value = null }) { Text("Not now") } },
+            confirmButton = { if (friend != null) PrismTextButton({ c.blends.pending.value = null; take(p) }) { Text("Make the Blend".localized()) } },
+            dismissButton = { PrismTextButton({ c.blends.pending.value = null }) { Text("Not now".localized()) } },
         )
     }
 
@@ -229,17 +231,17 @@ fun BlendsScreen(bottomPadding: Dp) {
                 Spacer(Modifier.height(12.dp))
                 com.prism.music.ui.components.PrismTextField(
                     name, { name = it.take(30) }, Modifier.fillMaxWidth(), singleLine = true,
-                    label = { Text("Your name in Blends") },
-                    trailingIcon = { if (name != c.blends.myName) PrismTextButton({ c.blends.myName = name; nameVersion++ }) { Text("Save") } },
+                    label = { Text("Your name in Blends".localized()) },
+                    trailingIcon = { if (name != c.blends.myName) PrismTextButton({ c.blends.myName = name; nameVersion++ }) { Text("Save".localized()) } },
                 )
                 Spacer(Modifier.height(12.dp))
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    PrismButton({ nav.go(Routes.BLEND_SCAN) }) { Icon(PrismIcons.Camera, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Scan a code") }
-                    PrismOutlinedButton({ code?.let { shareCodeText(context, it, name) } }, enabled = code != null) { Icon(PrismIcons.Share, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Send my code") }
+                    PrismButton({ nav.go(Routes.BLEND_SCAN) }) { Icon(PrismIcons.Camera, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Scan a code".localized()) }
+                    PrismOutlinedButton({ code?.let { shareCodeText(context, it, name) } }, enabled = code != null) { Icon(PrismIcons.Share, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Send my code".localized()) }
                     PrismOutlinedButton({
                         val t = clipboard.getText()?.text
-                        if (t.isNullOrBlank()) Toast.makeText(context, "Copy a friend's code first", Toast.LENGTH_SHORT).show() else take(t)
-                    }) { Text("Paste a code") }
+                        if (t.isNullOrBlank()) Toast.makeText(context, "Copy a friend's code first".localized(context), Toast.LENGTH_SHORT).show() else take(t)
+                    }) { Text("Paste a code".localized()) }
                 }
                 Spacer(Modifier.height(10.dp))
                 Text(
@@ -260,7 +262,7 @@ fun BlendsScreen(bottomPadding: Dp) {
                 }
             }
         }
-        if (blends.isNotEmpty()) item("h") { Text("Your Blends", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(start = 20.dp, top = 24.dp, bottom = 6.dp)) }
+        if (blends.isNotEmpty()) item("h") { Text("Your Blends".localized(), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(start = 20.dp, top = 24.dp, bottom = 6.dp)) }
         items(blends.size) { i ->
             val e = blends[i]
             val b = remember(e) { c.blends.blendOf(e) }
@@ -272,7 +274,7 @@ fun BlendsScreen(bottomPadding: Dp) {
                 Spacer(Modifier.width(14.dp))
                 Column(Modifier.weight(1f)) {
                     Text("${c.blends.myName.ifBlank { "You" }} + ${e.friendName}", style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    Text("${b?.match ?: 0}% taste match · ${b?.songs?.size ?: 0} songs", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text("${b?.match ?: 0}% ${"taste match".localized()} · ${b?.songs?.size ?: 0} ${"songs".localized()}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         }
@@ -400,14 +402,14 @@ fun BlendScreen(who: String, bottomPadding: Dp) {
             Box {
                 RoundAction(PrismIcons.More, "More", glass = true) { menu = true }
                 DropdownMenu(menu, { menu = false }) {
-                    DropdownMenuItem({ Text("Share as a picture") }, { menu = false; card = true }, leadingIcon = { Icon(PrismIcons.Share, null) })
-                    DropdownMenuItem({ Text(if (hasOwnCover) "Change the cover" else "Pick a cover") }, {
+                    DropdownMenuItem({ Text("Share as a picture".localized()) }, { menu = false; card = true }, leadingIcon = { Icon(PrismIcons.Share, null) })
+                    DropdownMenuItem({ Text((if (hasOwnCover) "Change the cover" else "Pick a cover").localized()) }, {
                         menu = false
                         pickCover.launch(androidx.activity.result.PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                     }, leadingIcon = { Icon(PrismIcons.Photo, null) })
-                    if (hasOwnCover) DropdownMenuItem({ Text("Use Prism's cover") }, { menu = false; c.blends.clearCover(who) }, leadingIcon = { Icon(PrismIcons.Blend, null) })
-                    DropdownMenuItem({ Text("Send my code back") }, { menu = false; shareCodeText(context, e.myCode, me.name) }, leadingIcon = { Icon(PrismIcons.Groups, null) })
-                    if (c.settings.current.isLoggedIn) DropdownMenuItem({ Text("Save to YouTube Music") }, {
+                    if (hasOwnCover) DropdownMenuItem({ Text("Use Prism's cover".localized()) }, { menu = false; c.blends.clearCover(who) }, leadingIcon = { Icon(PrismIcons.Blend, null) })
+                    DropdownMenuItem({ Text("Send my code back".localized()) }, { menu = false; shareCodeText(context, e.myCode, me.name) }, leadingIcon = { Icon(PrismIcons.Groups, null) })
+                    if (c.settings.current.isLoggedIn) DropdownMenuItem({ Text("Save to YouTube Music".localized()) }, {
                         menu = false
                         scope.launch {
                             val id = runCatching { withContext(Dispatchers.IO) { c.ytm.createPlaylist("Blend · $title", songs.map { it.id }, privacy = "PRIVATE") } }.getOrNull()
@@ -415,7 +417,7 @@ fun BlendScreen(who: String, bottomPadding: Dp) {
                             if (id != null) c.library.refreshCollections()
                         }
                     }, leadingIcon = { Icon(PrismIcons.PlaylistAdd, null) })
-                    DropdownMenuItem({ Text("Remove this Blend") }, {
+                    DropdownMenuItem({ Text("Remove this Blend".localized()) }, {
                         menu = false
                         scope.launch { c.blends.remove(who); nav.back() }
                     }, leadingIcon = { Icon(PrismIcons.Delete, null) })
@@ -436,18 +438,18 @@ fun BlendScreen(who: String, bottomPadding: Dp) {
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 if (blend.sharedGenres.isNotEmpty()) Text(
-                    "Shared genres: ${blend.sharedGenres.take(4).joinToString(", ")}", style = MaterialTheme.typography.bodySmall,
+                    "Shared genres: ${blend.sharedGenres.take(4).joinToString(", ")}".localized(), style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(
-                    if (c.blends.onBothPhones(who)) "On both phones: you and ${friend.name} have the same Blend."
-                    else "Send your code back so ${friend.name}'s Blend is the same as yours.", style = MaterialTheme.typography.bodySmall,
+                    (if (c.blends.onBothPhones(who)) "On both phones: you and ${friend.name} have the same Blend."
+                    else "Send your code back so ${friend.name}'s Blend is the same as yours.").localized(), style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp),
                 )
                 Spacer(Modifier.height(12.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    PrismButton({ c.player.playQueue(songs, 0, source) }, Modifier.weight(1f)) { Icon(PrismIcons.Play, null); Spacer(Modifier.width(6.dp)); Text("Play") }
-                    PrismOutlinedButton({ c.player.playQueue(songs, 0, source, shuffle = true) }, Modifier.weight(1f)) { Icon(PrismIcons.Shuffle, null); Spacer(Modifier.width(6.dp)); Text("Shuffle") }
+                    PrismButton({ c.player.playQueue(songs, 0, source) }, Modifier.weight(1f)) { Icon(PrismIcons.Play, null); Spacer(Modifier.width(6.dp)); Text("Play".localized()) }
+                    PrismOutlinedButton({ c.player.playQueue(songs, 0, source, shuffle = true) }, Modifier.weight(1f)) { Icon(PrismIcons.Shuffle, null); Spacer(Modifier.width(6.dp)); Text("Shuffle".localized()) }
                 }
             }
         }
@@ -469,7 +471,7 @@ fun BlendScreen(who: String, bottomPadding: Dp) {
                     Text(s.song.artist, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
                 Text(
-                    whose, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary,
+                    whose.localized(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.clip(RoundedCornerShape(6.dp)).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)).padding(horizontal = 7.dp, vertical = 3.dp),
                 )
             }
@@ -497,12 +499,12 @@ private fun BlendCardDialog(blend: Blend, me: TasteCode, friend: TasteCode, onDi
             PrismTextButton({
                 scope.launch {
                     val ok = shareLayer(context, layer, "prism-blend.png", "Our Blend on Prism: ${blend.match}% taste match", "Share your Blend")
-                    if (!ok) Toast.makeText(context, "Couldn't make the picture", Toast.LENGTH_SHORT).show()
+                    if (!ok) Toast.makeText(context, "Couldn't make the picture".localized(context), Toast.LENGTH_SHORT).show()
                     onDismiss()
                 }
-            }) { Text("Share") }
+            }) { Text("Share".localized()) }
         },
-        dismissButton = { PrismTextButton(onDismiss) { Text("Cancel") } },
+        dismissButton = { PrismTextButton(onDismiss) { Text("Cancel".localized()) } },
         text = {
             Column(
                 Modifier.fillMaxWidth().aspectRatio(9f / 16f).recordInto(layer).clip(RoundedCornerShape(16.dp))
@@ -510,24 +512,24 @@ private fun BlendCardDialog(blend: Blend, me: TasteCode, friend: TasteCode, onDi
                     .padding(20.dp),
                 verticalArrangement = Arrangement.SpaceBetween,
             ) {
-                Text("BLEND", color = Color.White.copy(alpha = 0.8f), style = MaterialTheme.typography.labelLarge, letterSpacing = 4.sp)
+                Text("BLEND".localized(), color = Color.White.copy(alpha = 0.8f), style = MaterialTheme.typography.labelLarge, letterSpacing = 4.sp)
                 Column {
                     Text(me.name, color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Text("+ ${friend.name}", color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Spacer(Modifier.height(16.dp))
                     Text("${blend.match}%", color = Color.White, fontSize = 64.sp, fontWeight = FontWeight.ExtraLight)
-                    Text("taste match", color = Color.White.copy(alpha = 0.85f), style = MaterialTheme.typography.titleMedium)
+                    Text("taste match".localized(), color = Color.White.copy(alpha = 0.85f), style = MaterialTheme.typography.titleMedium)
                 }
                 Column {
                     if (blend.sharedArtists.isNotEmpty()) {
-                        Text("You both play", color = Color.White.copy(alpha = 0.75f), style = MaterialTheme.typography.labelLarge)
+                        Text("You both play".localized(), color = Color.White.copy(alpha = 0.75f), style = MaterialTheme.typography.labelLarge)
                         blend.sharedArtists.take(3).forEach { Text(it, color = Color.White, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis) }
                         Spacer(Modifier.height(10.dp))
                     }
-                    Text("Top of the Blend", color = Color.White.copy(alpha = 0.75f), style = MaterialTheme.typography.labelLarge)
+                    Text("Top of the Blend".localized(), color = Color.White.copy(alpha = 0.75f), style = MaterialTheme.typography.labelLarge)
                     blend.songs.take(4).forEach { Text("${it.song.title} · ${it.song.artist}", color = Color.White, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis) }
                 }
-                Text("Made with Prism", color = Color.White.copy(alpha = 0.7f), style = MaterialTheme.typography.labelMedium, modifier = Modifier.align(Alignment.End))
+                Text("Made with Prism".localized(), color = Color.White.copy(alpha = 0.7f), style = MaterialTheme.typography.labelMedium, modifier = Modifier.align(Alignment.End))
             }
         },
     )
@@ -553,13 +555,13 @@ fun BlendScanScreen(
     LaunchedEffect(Unit) { if (!granted) ask.launch(Manifest.permission.CAMERA) }
     Box(Modifier.fillMaxSize().background(Color.Black)) {
         if (granted) CameraScanner(find, onCode) else Column(Modifier.align(Alignment.Center).padding(32.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("Prism needs the camera to scan a code", color = Color.White, textAlign = TextAlign.Center, style = MaterialTheme.typography.titleMedium)
+            Text("Prism needs the camera to scan a code".localized(), color = Color.White, textAlign = TextAlign.Center, style = MaterialTheme.typography.titleMedium)
             Spacer(Modifier.height(12.dp))
-            PrismButton({ ask.launch(Manifest.permission.CAMERA) }) { Text("Allow the camera") }
+            PrismButton({ ask.launch(Manifest.permission.CAMERA) }) { Text("Allow the camera".localized()) }
         }
         Row(Modifier.statusBarsPadding().padding(12.dp)) { RoundAction(PrismIcons.ArrowBack, "Back", glass = true) { nav.back() } }
         Text(
-            prompt, color = Color.White, style = MaterialTheme.typography.titleMedium,
+            prompt.localized(), color = Color.White, style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 64.dp).clip(RoundedCornerShape(50)).background(Color.Black.copy(alpha = 0.5f)).padding(horizontal = 18.dp, vertical = 10.dp),
         )
         Box(Modifier.align(Alignment.Center).size(260.dp).border(3.dp, Color.White.copy(alpha = 0.8f), RoundedCornerShape(24.dp)))

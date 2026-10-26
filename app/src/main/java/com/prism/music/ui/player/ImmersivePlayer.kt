@@ -1,5 +1,7 @@
 package com.prism.music.ui.player
 
+import com.prism.music.ui.i18n.localized
+
 import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.CircleShape
@@ -198,6 +200,12 @@ fun ImmersivePlayer(
     // Sideways, the cover follows the finger a little; past the mark, letting go changes the song.
     var swipe by remember { mutableFloatStateOf(0f) }
     val blurred = rememberFullArtworkBlur(song.thumbnail)
+    val playerDesc = "Immersive player, ${song.title} by ${song.artistText}".localized()
+    val openSettingsLabel = "Open immersive mode settings".localized()
+    val nextLabel = "Next song".localized()
+    val prevLabel = "Previous song".localized()
+    val leaveLabel = "Leave immersive mode".localized()
+    val closeLabel = "Close the player".localized()
     Box(
         Modifier
             .fillMaxSize()
@@ -206,13 +214,13 @@ fun ImmersivePlayer(
             // For TalkBack the gestures are actions: a double tap opens the settings (the button only shows for a few
             // seconds), and the swipes and the hold have their own entries in its actions menu.
             .semantics {
-                contentDescription = "Immersive player, ${song.title} by ${song.artistText}"
-                onClick("Open immersive mode settings") { menu = true; true }
+                contentDescription = playerDesc
+                onClick(openSettingsLabel) { menu = true; true }
                 customActions = listOf(
-                    CustomAccessibilityAction("Next song") { c.player.next(); true },
-                    CustomAccessibilityAction("Previous song") { c.player.previous(); true },
-                    CustomAccessibilityAction("Leave immersive mode") { onExit(); true },
-                    CustomAccessibilityAction("Close the player") { onCollapse(); true },
+                    CustomAccessibilityAction(nextLabel) { c.player.next(); true },
+                    CustomAccessibilityAction(prevLabel) { c.player.previous(); true },
+                    CustomAccessibilityAction(leaveLabel) { onExit(); true },
+                    CustomAccessibilityAction(closeLabel) { onCollapse(); true },
                 )
             }
             .pointerInput(Unit) { detectTapGestures(onTap = { button = !button }) }
@@ -362,14 +370,14 @@ fun ImmersivePlayer(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
             ) {
-                ImmersiveGlyph(PrismIcons.Previous, "Previous") { haptics.tick(); poke++; c.player.previous() }
+                ImmersiveGlyph(PrismIcons.Previous, "Previous".localized()) { haptics.tick(); poke++; c.player.previous() }
                 Box(
                     Modifier.size(56.dp).clip(CircleShape).background(Color.White)
                         .border(2.dp, com.prism.music.ui.theme.PrismTokens.spectrumRing(), CircleShape)
-                        .clickable(onClickLabel = if (isPlaying) "Pause" else "Play") { haptics.click(); poke++; c.player.togglePlay() },
+                        .clickable(onClickLabel = if (isPlaying) "Pause".localized() else "Play".localized()) { haptics.click(); poke++; c.player.togglePlay() },
                     contentAlignment = Alignment.Center,
-                ) { Icon(if (isPlaying) PrismIcons.Pause else PrismIcons.Play, if (isPlaying) "Pause" else "Play", Modifier.size(26.dp), tint = Color.Black) }
-                ImmersiveGlyph(PrismIcons.Next, "Next") { haptics.tick(); poke++; c.player.next() }
+                ) { Icon(if (isPlaying) PrismIcons.Pause else PrismIcons.Play, if (isPlaying) "Pause".localized() else "Play".localized(), Modifier.size(26.dp), tint = Color.Black) }
+                ImmersiveGlyph(PrismIcons.Next, "Next".localized()) { haptics.tick(); poke++; c.player.next() }
                 HoldToLeaveButton(
                     onTap = { menu = true },
                     onPressing = { pressing = it },
@@ -514,10 +522,12 @@ private fun HoldToLeaveButton(onTap: () -> Unit, onPressing: (Boolean) -> Unit, 
     val scope = rememberCoroutineScope()
     val progress = remember { androidx.compose.animation.core.Animatable(0f) }
     var held by remember { mutableStateOf(false) }
+    val modeSettingsDesc = "Immersive mode settings".localized()
+    val leaveActionLabel = "Leave immersive mode".localized()
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         AnimatedVisibility(held, enter = fadeIn(tween(200)), exit = fadeOut(tween(200))) {
             Text(
-                "Keep holding to leave immersive mode (or press Back)", color = Color.White,
+                "Keep holding to leave immersive mode (or press Back)".localized(), color = Color.White,
                 style = MaterialTheme.typography.labelLarge.copy(shadow = lineShadow),
                 modifier = Modifier.padding(bottom = 10.dp),
             )
@@ -528,9 +538,9 @@ private fun HoldToLeaveButton(onTap: () -> Unit, onPressing: (Boolean) -> Unit, 
                 // The hold can't be done with TalkBack, so it's an action of the button's own.
                 .clearAndSetSemantics {
                     role = Role.Button
-                    contentDescription = "Immersive mode settings"
+                    contentDescription = modeSettingsDesc
                     onClick { onTap(); true }
-                    customActions = listOf(CustomAccessibilityAction("Leave immersive mode") { onHeld(); true })
+                    customActions = listOf(CustomAccessibilityAction(leaveActionLabel) { onHeld(); true })
                 }
                 .pointerInput(Unit) {
                     awaitEachGesture {
@@ -564,7 +574,7 @@ private fun HoldToLeaveButton(onTap: () -> Unit, onPressing: (Boolean) -> Unit, 
                 },
             contentAlignment = Alignment.Center,
         ) {
-            FloatingDisc { ink -> Icon(PrismIcons.SettingsFilled, "Immersive mode settings (hold to leave)", Modifier.size(22.dp), tint = ink) }
+            FloatingDisc { ink -> Icon(PrismIcons.SettingsFilled, "Immersive mode settings (hold to leave)".localized(), Modifier.size(22.dp), tint = ink) }
         }
     }
 }

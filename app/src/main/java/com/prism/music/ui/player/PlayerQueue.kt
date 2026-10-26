@@ -1,5 +1,6 @@
 package com.prism.music.ui.player
 
+import com.prism.music.ui.i18n.localized
 import androidx.compose.foundation.border
 import com.prism.music.ui.theme.PrismIcons
 import androidx.compose.foundation.background
@@ -113,22 +114,22 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
 
     Column(modifier.fillMaxWidth()) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Queue", style = MaterialTheme.typography.titleLarge, color = Color.White, modifier = Modifier.weight(1f))
+            Text("Queue".localized(), style = MaterialTheme.typography.titleLarge, color = Color.White, modifier = Modifier.weight(1f))
             if (order.size > 1) {
                 QueueChip("DJ", selected = dj) { pc.setDjMode(!dj) }
                 Spacer(Modifier.width(8.dp))
             }
-            if (settings.isLoggedIn && queue.size > 1) QueueChip("Save") { saving = true }
+            if (settings.isLoggedIn && queue.size > 1) QueueChip("Save".localized()) { saving = true }
             if (order.isNotEmpty()) {
                 Spacer(Modifier.width(8.dp))
-                QueueChip("Clear") { pc.clearUpcoming() }
+                QueueChip("Clear".localized()) { pc.clearUpcoming() }
             }
         }
         if (dj) {
             Spacer(Modifier.height(10.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 for (flow in com.prism.music.playback.DjFlow.entries) {
-                    QueueChip(flow.label, selected = settings.djFlow == flow) { c.settings.setDjFlow(flow) }
+                    QueueChip(flow.label.localized(), selected = settings.djFlow == flow) { c.settings.setDjFlow(flow) }
                     Spacer(Modifier.width(8.dp))
                 }
             }
@@ -136,11 +137,11 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
             // Only an order it has: how far the scans are, songs waiting for Wi-Fi (with mobile data offered), or how many are in order.
             val (status, offerData) = com.prism.music.playback.DjStatus.of(djProgress)
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(status, style = MaterialTheme.typography.bodySmall, color = Color.White.copy(alpha = 0.6f), modifier = Modifier.weight(1f, fill = false))
+                Text(status.localized(), style = MaterialTheme.typography.bodySmall, color = Color.White.copy(alpha = 0.6f), modifier = Modifier.weight(1f, fill = false))
                 if (offerData) {
                     Spacer(Modifier.width(8.dp))
                     // For this DJ set only (until Prism closes): "Measure songs on mobile data" stays as the listener set it.
-                    QueueChip("Use mobile data") { c.dj.rescan(allowData = true) }
+                    QueueChip("Use mobile data".localized()) { c.dj.rescan(allowData = true) }
                 }
             }
         }
@@ -164,7 +165,8 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
                 queueSection(queued, reorder = !shuffled, badge = badge) { from, to -> pc.move(from, to) }
             }
             if (upcoming.isNotEmpty()) {
-                item(key = "h-next") { Heading("Next from: ${source.title.ifBlank { now?.song?.album?.title ?: "Queue" }}", Modifier.padding(top = 16.dp, bottom = 6.dp)) }
+                val origin = source.title.ifBlank { now?.song?.album?.title ?: "Queue" }
+                item(key = "h-next") { Heading("Next from: $origin", Modifier.padding(top = 16.dp, bottom = 6.dp)) }
                 queueSection(upcoming, reorder = !shuffled, badge = badge) { from, to -> pc.move(from, to) }
             }
             if (settings.autoplay || autoplay.isNotEmpty()) {
@@ -227,7 +229,7 @@ private fun djBadge(key: com.prism.music.playback.MusicKey?, bpmValue: Double?):
 
 @Composable
 private fun Heading(title: String, modifier: Modifier = Modifier) {
-    Text(title, style = MaterialTheme.typography.titleMedium, color = Color.White.copy(alpha = 0.75f), maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = modifier.fillMaxWidth())
+    Text(title.localized(), style = MaterialTheme.typography.titleMedium, color = Color.White.copy(alpha = 0.75f), maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = modifier.fillMaxWidth())
 }
 
 @Composable
@@ -236,9 +238,9 @@ private fun AutoplayHeading(hasTracks: Boolean) {
         Icon(PrismIcons.Autoplay, null, tint = Color.White.copy(alpha = 0.75f), modifier = Modifier.size(18.dp))
         Spacer(Modifier.width(8.dp))
         Column {
-            Text("Autoplay", style = MaterialTheme.typography.titleMedium, color = Color.White)
+            Text("Autoplay".localized(), style = MaterialTheme.typography.titleMedium, color = Color.White)
             Text(
-                if (hasTracks) "Similar music plays next" else "Similar music will play after your queue",
+                (if (hasTracks) "Similar music plays next" else "Similar music will play after your queue").localized(),
                 style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = 0.55f),
             )
         }
@@ -260,7 +262,7 @@ private fun QueueRow(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (dragHandle != null) {
-            Icon(PrismIcons.DragHandle, "Drag to reorder", tint = Color.White.copy(alpha = 0.4f), modifier = Modifier.size(20.dp).offset(x = (-4).dp).then(dragHandle))
+            Icon(PrismIcons.DragHandle, "Drag to reorder".localized(), tint = Color.White.copy(alpha = 0.4f), modifier = Modifier.size(20.dp).offset(x = (-4).dp).then(dragHandle))
             Spacer(Modifier.width(4.dp))
         }
         AsyncImage(hiRes(song.thumbnail, 226), null, modifier = Modifier.size(44.dp).clip(RoundedCornerShape(10.dp)).background(Color.White.copy(alpha = 0.08f)))
@@ -277,11 +279,11 @@ private fun QueueRow(
             Spacer(Modifier.width(8.dp))
         }
         if (isCurrent) {
-            Icon(PrismIcons.Equalizer, "Now playing", tint = Color.White, modifier = Modifier.size(18.dp))
+            Icon(PrismIcons.Equalizer, "Now playing".localized(), tint = Color.White, modifier = Modifier.size(18.dp))
             Spacer(Modifier.width(10.dp))
         }
         if (onRemove != null) Box(Modifier.size(32.dp).clip(CircleShape).clickable(onClick = onRemove), contentAlignment = Alignment.Center) {
-            Icon(PrismIcons.Close, "Remove", tint = Color.White.copy(alpha = 0.55f), modifier = Modifier.size(18.dp))
+            Icon(PrismIcons.Close, "Remove".localized(), tint = Color.White.copy(alpha = 0.55f), modifier = Modifier.size(18.dp))
         }
     }
 }

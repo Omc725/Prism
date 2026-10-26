@@ -2,6 +2,7 @@ package com.prism.music.ui.tour
 
 import android.content.Context
 import com.prism.music.ui.components.tickWhileShown
+import com.prism.music.ui.i18n.localized
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
@@ -109,10 +110,10 @@ fun TourOverlay(plan: TourPlan, onOpen: (String) -> Unit, onDone: () -> Unit) {
         Column(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()) {
             Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    if (pager.currentPage == 0) "" else "${pager.currentPage} of ${pages - 1}",
+                    if (pager.currentPage == 0) "" else "${pager.currentPage} / ${pages - 1}",
                     color = Color.White.copy(alpha = 0.6f), style = MaterialTheme.typography.labelLarge, modifier = Modifier.weight(1f).padding(start = 12.dp),
                 )
-                PrismTextButton(onClick = ::finish) { Text("Skip tour", color = Color.White.copy(alpha = 0.8f)) }
+                PrismTextButton(onClick = ::finish) { Text("Skip tour".localized(), color = Color.White.copy(alpha = 0.8f)) }
             }
             HorizontalPager(pager, Modifier.weight(1f).fillMaxWidth()) { page ->
                 val offset = ((pager.currentPage - page) + pager.currentPageOffsetFraction).absoluteValue.coerceIn(0f, 1f)
@@ -127,14 +128,14 @@ fun TourOverlay(plan: TourPlan, onOpen: (String) -> Unit, onDone: () -> Unit) {
             Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
                 Box(Modifier.weight(1f)) {
                     if (pager.currentPage > 0) PrismTextButton(onClick = { scope.launch { pager.animateScrollToPage(pager.currentPage - 1) } }) {
-                        Text("Back", color = Color.White.copy(alpha = 0.8f))
+                        Text("Back".localized(), color = Color.White.copy(alpha = 0.8f))
                     }
                 }
                 Dots(pages, pager.currentPage)
                 Box(Modifier.weight(1f), contentAlignment = Alignment.CenterEnd) {
                     val last = pager.currentPage == pages - 1
                     PrismButton(onClick = { if (last) finish() else scope.launch { pager.animateScrollToPage(pager.currentPage + 1) } }) {
-                        Text(if (last) "Done" else if (pager.currentPage == 0) "Start" else "Next")
+                        Text((if (last) "Done" else if (pager.currentPage == 0) "Start" else "Next").localized())
                     }
                 }
             }
@@ -145,10 +146,10 @@ fun TourOverlay(plan: TourPlan, onOpen: (String) -> Unit, onDone: () -> Unit) {
 @Composable
 private fun Opening(plan: TourPlan) {
     val (title, body) = when {
-        !plan.full -> "What's new in Prism ${BuildConfig.VERSION_NAME}" to
-            "${plan.steps.size} ${if (plan.steps.size == 1) "thing" else "things"} to know since you last looked, in about a minute."
-        plan.freshInstall -> "Welcome to Prism" to "Your music, refracted. Here's a minute's tour of what it can do: swipe, or tap Start."
-        else -> "Welcome to the new Prism" to "Prism ${BuildConfig.VERSION_NAME} is redrawn from the ground up and does more than ever. Here's a minute's tour: swipe, or tap Start."
+        !plan.full -> "What's new in Prism %s".localized(BuildConfig.VERSION_NAME) to
+            "${plan.steps.size} ${if (plan.steps.size == 1) "thing" else "things"} to know since you last looked, in about a minute.".localized()
+        plan.freshInstall -> "Welcome to Prism".localized() to "Your music, refracted. Here's a minute's tour of what it can do: swipe, or tap Start.".localized()
+        else -> "Welcome to the new Prism".localized() to "Prism %s is redrawn from the ground up and does more than ever. Here's a minute's tour: swipe, or tap Start.".localized(BuildConfig.VERSION_NAME)
     }
     PageColumn {
         Halo(PrismIcons.Spatial, big = true)
@@ -157,7 +158,7 @@ private fun Opening(plan: TourPlan) {
         Spacer(Modifier.height(12.dp))
         Text(body, color = Color.White.copy(alpha = 0.78f), style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
         Spacer(Modifier.height(18.dp))
-        Text("You can take it again from Settings → About.", color = Color.White.copy(alpha = 0.5f), style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center)
+        Text("You can take it again from Settings → About.".localized(), color = Color.White.copy(alpha = 0.5f), style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center)
     }
 }
 
@@ -173,9 +174,9 @@ private fun StepPage(step: TourStep, onShowMe: (String) -> Unit) {
             }
         }
         Spacer(Modifier.height(26.dp))
-        Text(step.title, color = Color.White, style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center, modifier = Modifier.semantics { heading() })
+        Text(step.title.localized(), color = Color.White, style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center, modifier = Modifier.semantics { heading() })
         Spacer(Modifier.height(10.dp))
-        Text(step.body, color = Color.White.copy(alpha = 0.78f), style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
+        Text(step.body.localized(), color = Color.White.copy(alpha = 0.78f), style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
         if (step.points.isNotEmpty()) {
             Spacer(Modifier.height(20.dp))
             Column(
@@ -187,7 +188,7 @@ private fun StepPage(step: TourStep, onShowMe: (String) -> Unit) {
                     Row(verticalAlignment = Alignment.Top) {
                         Box(Modifier.padding(top = 7.dp).size(7.dp).clip(CircleShape).background(PrismTokens.hue(i % 7)))
                         Spacer(Modifier.width(12.dp))
-                        Text(p, color = Color.White.copy(alpha = 0.9f), style = MaterialTheme.typography.bodyMedium)
+                        Text(p.localized(), color = Color.White.copy(alpha = 0.9f), style = MaterialTheme.typography.bodyMedium)
                     }
                 }
             }
@@ -198,16 +199,16 @@ private fun StepPage(step: TourStep, onShowMe: (String) -> Unit) {
             // After Android's prompt answers, look again (it shows over the app, and Prism resumes under it).
             val lifecycle = androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle
             LaunchedEffect(lifecycle) { lifecycle.tickWhileShown(700) { allowed = Notifications.allowed(context) } }
-            if (allowed) Text("Notifications are on.", color = Color.White.copy(alpha = 0.7f), style = MaterialTheme.typography.bodyMedium)
+            if (allowed) Text("Notifications are on.".localized(), color = Color.White.copy(alpha = 0.7f), style = MaterialTheme.typography.bodyMedium)
             else if (Build.VERSION.SDK_INT >= 33) PrismOutlinedButton(onClick = {
                 context.getSharedPreferences("prompts", Context.MODE_PRIVATE).edit().putBoolean("notifications_asked", true).apply()
                 c.notificationPrompt?.invoke()
-            }) { Text("Allow notifications", color = Color.White) }
-            else Text("Turn them on in Android's settings for Prism.", color = Color.White.copy(alpha = 0.7f), style = MaterialTheme.typography.bodyMedium)
+            }) { Text("Allow notifications".localized(), color = Color.White) }
+            else Text("Turn them on in Android's settings for Prism.".localized(), color = Color.White.copy(alpha = 0.7f), style = MaterialTheme.typography.bodyMedium)
         }
         step.showMe?.let { route ->
             Spacer(Modifier.height(18.dp))
-            PrismOutlinedButton(onClick = { onShowMe(route) }) { Text("Show me", color = Color.White) }
+            PrismOutlinedButton(onClick = { onShowMe(route) }) { Text("Show me".localized(), color = Color.White) }
         }
     }
 }

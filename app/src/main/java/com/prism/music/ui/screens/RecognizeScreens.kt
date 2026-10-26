@@ -1,6 +1,7 @@
 package com.prism.music.ui.screens
 
 import androidx.compose.foundation.border
+import com.prism.music.ui.i18n.localized
 import com.prism.music.ui.components.PrismButton
 import com.prism.music.ui.components.PrismOutlinedButton
 import com.prism.music.ui.components.PrismSwitch
@@ -109,9 +110,9 @@ fun RecognizeScreen(autoStart: Boolean, bottomPadding: Dp) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Row(Modifier.fillMaxWidth().padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                RoundAction(PrismIcons.ArrowBack, "Back", glass = true) { nav.back() }
+                RoundAction(PrismIcons.ArrowBack, "Back".localized(), glass = true) { nav.back() }
                 Spacer(Modifier.weight(1f))
-                PrismTextButton({ nav.go(Routes.RECOGNIZED) }) { Text("Recognized songs") }
+                PrismTextButton({ nav.go(Routes.RECOGNIZED) }) { Text("Recognized songs".localized()) }
             }
             Spacer(Modifier.weight(0.6f))
             when (val s = state) {
@@ -123,22 +124,22 @@ fun RecognizeScreen(autoStart: Boolean, bottomPadding: Dp) {
                     Text(
                         when (s) {
                             is Recognizer.State.Listening -> "Listening… ${s.heardMs / 1000} s"
-                            Recognizer.State.NotFound -> "Couldn't recognize that one"
-                            Recognizer.State.Saved -> "You're offline, so Prism kept what it heard"
-                            Recognizer.State.RateLimited -> "Shazam asks to wait a little"
+                            Recognizer.State.NotFound -> "Couldn't recognize that one".localized()
+                            Recognizer.State.Saved -> "You're offline, so Prism kept what it heard".localized()
+                            Recognizer.State.RateLimited -> "Shazam asks to wait a little".localized()
                             is Recognizer.State.Failed -> s.message
-                            else -> "Tap to find out what's playing"
+                            else -> "Tap to find out what's playing".localized()
                         },
                         style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Medium, textAlign = TextAlign.Center,
                     )
                     Spacer(Modifier.height(8.dp))
                     Text(
                         when (s) {
-                            is Recognizer.State.Listening -> "Hold your phone near the music"
-                            Recognizer.State.NotFound -> "Try again closer to the music, or where it's louder."
-                            Recognizer.State.Saved -> "It'll be looked up when you're back online, with a notification when it's found."
-                            Recognizer.State.RateLimited -> "Try again in a minute."
-                            else -> "Prism listens for up to 12 seconds. The sound stays on your phone: only a fingerprint of it goes to Shazam to find the song."
+                            is Recognizer.State.Listening -> "Hold your phone near the music".localized()
+                            Recognizer.State.NotFound -> "Try again closer to the music, or where it's louder.".localized()
+                            Recognizer.State.Saved -> "It'll be looked up when you're back online, with a notification when it's found.".localized()
+                            Recognizer.State.RateLimited -> "Try again in a minute.".localized()
+                            else -> "Prism listens for up to 12 seconds. The sound stays on your phone: only a fingerprint of it goes to Shazam to find the song.".localized()
                         },
                         style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center,
                     )
@@ -146,8 +147,8 @@ fun RecognizeScreen(autoStart: Boolean, bottomPadding: Dp) {
                         Spacer(Modifier.height(20.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Column(Modifier.weight(1f)) {
-                                Text("Pause Prism while listening", style = MaterialTheme.typography.bodyLarge)
-                                Text("Off, it can recognize what Prism itself is playing", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text("Pause Prism while listening".localized(), style = MaterialTheme.typography.bodyLarge)
+                                Text("Off, it can recognize what Prism itself is playing".localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                             PrismSwitch(pausePrism, { pausePrism = it })
                         }
@@ -196,22 +197,22 @@ private fun FoundCard(r: RecognitionEntity, song: Song?) {
         Spacer(Modifier.height(20.dp))
         if (song != null) {
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                PrismButton({ c.player.playSingle(song); nav.openPlayer() }) { Icon(PrismIcons.Play, null); Spacer(Modifier.width(6.dp)); Text("Play") }
+                PrismButton({ c.player.playSingle(song); nav.openPlayer() }) { Icon(PrismIcons.Play, null); Spacer(Modifier.width(6.dp)); Text("Play".localized()) }
                 val isLiked = song.id in liked
                 PrismOutlinedButton({ c.library.toggleLike(song) }) {
-                    Icon(if (isLiked) PrismIcons.HeartFilled else PrismIcons.Heart, null); Spacer(Modifier.width(6.dp)); Text(if (isLiked) "Liked" else "Like")
+                    Icon(if (isLiked) PrismIcons.HeartFilled else PrismIcons.Heart, null); Spacer(Modifier.width(6.dp)); Text(if (isLiked) "Liked".localized() else "Like".localized())
                 }
             }
             Spacer(Modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                song.album?.id?.let { album -> PrismTextButton({ nav.go(Routes.album(album)) }) { Text("Album") } }
-                PrismTextButton({ c.player.playSingle(song); nav.openPlayer() }) { Text("Lyrics") }
-                PrismTextButton({ c.recognizer.reset() }) { Text("Again") }
+                song.album?.id?.let { album -> PrismTextButton({ nav.go(Routes.album(album)) }) { Text("Album".localized()) } }
+                PrismTextButton({ c.player.playSingle(song); nav.openPlayer() }) { Text("Lyrics".localized()) }
+                PrismTextButton({ c.recognizer.reset() }) { Text("Again".localized()) }
             }
         } else {
-            Text("Not found in Prism Music", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            PrismTextButton({ nav.go(Routes.SEARCH) }) { Text("Search for it") }
-            PrismTextButton({ c.recognizer.reset() }) { Text("Again") }
+            Text("Not found in Prism Music".localized(), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            PrismTextButton({ nav.go(Routes.SEARCH) }) { Text("Search for it".localized()) }
+            PrismTextButton({ c.recognizer.reset() }) { Text("Again".localized()) }
         }
     }
 }
@@ -230,7 +231,7 @@ fun RecognizedScreen(bottomPadding: Dp) {
     var placed by remember { mutableStateOf(widgets?.getAppWidgetIds(provider)?.isNotEmpty() == true) }
     SubPage(
         "Recognized", bottomPadding, subtitle = "Songs Prism found by listening",
-        actions = { RoundAction(PrismIcons.Recognize, "Recognize a song", glass = true) { nav.go(Routes.RECOGNIZE) } },
+        actions = { RoundAction(PrismIcons.Recognize, "Recognize a song".localized(), glass = true) { nav.go(Routes.RECOGNIZE) } },
     ) {
         if (widgets?.isRequestPinAppWidgetSupported == true && !placed) item("widget") {
             Row(
@@ -244,9 +245,9 @@ fun RecognizedScreen(bottomPadding: Dp) {
                 }
                 Spacer(Modifier.width(14.dp))
                 Column(Modifier.weight(1f)) {
-                    Text("Add the widget", style = MaterialTheme.typography.titleMedium)
+                    Text("Add the widget".localized(), style = MaterialTheme.typography.titleMedium)
                     Text(
-                        "Recognize songs from your home screen", style = MaterialTheme.typography.bodySmall,
+                        "Recognize songs from your home screen".localized(), style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
@@ -255,11 +256,11 @@ fun RecognizedScreen(bottomPadding: Dp) {
         if (history.isEmpty()) item("empty") {
             Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
                 com.prism.music.ui.components.EmptyState(
-                    PrismIcons.Recognize, "Nothing recognized yet",
-                    "Hear a song you like? Let Prism listen for a few seconds: what it finds is kept here.",
+                    PrismIcons.Recognize, "Nothing recognized yet".localized(),
+                    "Hear a song you like? Let Prism listen for a few seconds: what it finds is kept here.".localized(),
                 )
                 PrismButton({ nav.go(Routes.RECOGNIZE + "?start=true") }) {
-                    Icon(PrismIcons.Recognize, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Recognize a song")
+                    Icon(PrismIcons.Recognize, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Recognize a song".localized())
                 }
             }
         }
@@ -273,7 +274,7 @@ fun RecognizedScreen(bottomPadding: Dp) {
                     Artwork(r.cover, Modifier.size(52.dp), LocalUi.current.art, placeholderIcon = if (r.status == "pending") PrismIcons.Recognize else PrismIcons.Song)
                     Spacer(Modifier.width(14.dp))
                     Column(Modifier.weight(1f)) {
-                        Text(if (r.status == "pending") "Waiting for a network" else r.title ?: "", style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        Text(if (r.status == "pending") "Waiting for a network".localized() else r.title ?: "", style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
                         Text(
                             listOfNotNull(r.artist?.takeIf { r.status != "pending" }, DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(Date(r.at))).joinToString(" · "),
                             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis,
@@ -285,7 +286,7 @@ fun RecognizedScreen(bottomPadding: Dp) {
                             com.prism.music.widget.RecognizeWidgets.refresh(c.app)
                         }
                     }) {
-                        Icon(PrismIcons.Close, "Remove", tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Icon(PrismIcons.Close, "Remove".localized(), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }

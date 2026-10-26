@@ -1,5 +1,7 @@
 package com.prism.music.ui.components
 
+import com.prism.music.ui.i18n.localized
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -36,10 +38,10 @@ fun HandoffDialogs() {
         var code by remember(them) { mutableStateOf("") }
         AlertDialog(
             onDismissRequest = { handoff.submitCode(null) },
-            title = { Text("Pair with $them") },
+            title = { Text("Pair with $them".localized()) },
             text = {
                 Column {
-                    Text("$them is showing a six-digit code. Type it here (only needed the first time).", style = MaterialTheme.typography.bodyMedium)
+                    Text("$them is showing a six-digit code. Type it here (only needed the first time).".localized(), style = MaterialTheme.typography.bodyMedium)
                     com.prism.music.ui.components.PrismTextField(
                         value = code,
                         onValueChange = { v -> code = v.filter { it.isDigit() }.take(6) },
@@ -51,27 +53,27 @@ fun HandoffDialogs() {
                     )
                 }
             },
-            confirmButton = { PrismTextButton(onClick = { handoff.submitCode(code) }, enabled = code.length == 6) { Text("Pair") } },
-            dismissButton = { PrismTextButton(onClick = { handoff.submitCode(null) }) { Text("Cancel") } },
+            confirmButton = { PrismTextButton(onClick = { handoff.submitCode(code) }, enabled = code.length == 6) { Text("Pair".localized()) } },
+            dismissButton = { PrismTextButton(onClick = { handoff.submitCode(null) }) { Text("Cancel".localized()) } },
         )
     }
     shown?.let { s ->
         AlertDialog(
             onDismissRequest = {},
-            title = { Text("Pair with ${s.from}?") },
+            title = { Text("Pair with ${s.from}?".localized()) },
             text = {
                 Column {
-                    Text("${s.from} wants to play music here. To let it, type this code on ${s.from}:", style = MaterialTheme.typography.bodyMedium)
+                    Text("${s.from} wants to play music here. To let it, type this code on ${s.from}:".localized(), style = MaterialTheme.typography.bodyMedium)
                     Text(
                         "${s.code.take(3)} ${s.code.drop(3)}",
                         style = TextStyle(fontSize = 40.sp, fontWeight = FontWeight.Medium, letterSpacing = 4.sp, textAlign = TextAlign.Center),
                         modifier = Modifier.fillMaxWidth().padding(top = 18.dp),
                     )
-                    Text("It goes away once they're paired, or after three minutes.", style = MaterialTheme.typography.bodySmall,
+                    Text("It goes away once they're paired, or after three minutes.".localized(), style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 14.dp))
                 }
             },
-            confirmButton = { PrismTextButton(onClick = { handoff.hideCode() }) { Text("Not now") } },
+            confirmButton = { PrismTextButton(onClick = { handoff.hideCode() }) { Text("Not now".localized()) } },
         )
     }
 }

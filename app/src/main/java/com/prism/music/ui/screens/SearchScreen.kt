@@ -1,5 +1,8 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.R
+import com.prism.music.ui.i18n.localized
+import androidx.compose.ui.res.stringResource
 import com.prism.music.ui.theme.PrismIcons
 import com.prism.music.data.friendlyMessage
 import android.content.Context
@@ -97,6 +100,16 @@ import kotlinx.coroutines.launch
 
 private fun history(context: Context) = context.getSharedPreferences("search", Context.MODE_PRIVATE)
 
+private fun SearchFilter.localizedLabel(context: Context): String = when (this) {
+    SearchFilter.TOP -> context.getString(R.string.filter_top)
+    SearchFilter.SONGS -> context.getString(R.string.filter_songs)
+    SearchFilter.VIDEOS -> context.getString(R.string.filter_videos)
+    SearchFilter.ALBUMS -> context.getString(R.string.filter_albums)
+    SearchFilter.ARTISTS -> context.getString(R.string.filter_artists)
+    SearchFilter.PLAYLISTS -> context.getString(R.string.filter_playlists)
+    else -> label
+}
+
 @Composable
 fun SearchScreen(bottomPadding: Dp) {
     val c = LocalContainer.current
@@ -190,7 +203,7 @@ fun SearchScreen(bottomPadding: Dp) {
     Column(Modifier.fillMaxSize()) {
         // The title steps aside while you type, leaving the results more room.
         androidx.compose.animation.AnimatedVisibility(!focused && query.isBlank()) {
-            com.prism.music.ui.components.ScreenHeader("Search", Modifier.padding(bottom = 2.dp))
+            com.prism.music.ui.components.ScreenHeader(stringResource(R.string.search_title), Modifier.padding(bottom = 2.dp))
         }
         if (focused || query.isNotBlank()) Spacer(Modifier.statusBarsPadding())
         GlassSurface(Modifier.padding(horizontal = 16.dp, vertical = 10.dp).fillMaxWidth().height(54.dp), shape = ui.shape(27.dp), elevation = 6.dp, inPage = true) {
@@ -198,7 +211,7 @@ fun SearchScreen(bottomPadding: Dp) {
                 Icon(PrismIcons.Search, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 Spacer(Modifier.width(12.dp))
                 Box(Modifier.weight(1f)) {
-                    if (query.isEmpty()) Text("Songs, albums, artists, lyrics…", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    if (query.isEmpty()) Text(stringResource(R.string.search_placeholder), color = MaterialTheme.colorScheme.onSurfaceVariant)
                     BasicTextField(
                         value = query,
                         onValueChange = { query = it },
@@ -218,10 +231,10 @@ fun SearchScreen(bottomPadding: Dp) {
                     )
                 }
                 if (query.isNotEmpty()) IconButton(onClick = { query = ""; live = ""; top = null; list = null; focusRequester.requestFocus() }) {
-                    Icon(PrismIcons.Close, "Clear")
+                    Icon(PrismIcons.Close, stringResource(R.string.search_clear))
                 } else IconButton(onClick = { nav.go(com.prism.music.ui.Routes.RECOGNIZE) }) {
                     // What's playing around you (song recognition).
-                    Icon(PrismIcons.Recognize, "Recognize a song", tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Icon(PrismIcons.Recognize, stringResource(R.string.widget_recognize_empty), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         }
@@ -234,11 +247,11 @@ fun SearchScreen(bottomPadding: Dp) {
         }
 
         Row(Modifier.padding(start = 16.dp, end = 16.dp, bottom = 6.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            com.prism.music.ui.components.PrismChip(!onPhone, { onPhone = false }, "Prism Music", icon = PrismIcons.Globe)
-            com.prism.music.ui.components.PrismChip(onPhone, { onPhone = true }, "On this phone", icon = PrismIcons.Phone)
+            com.prism.music.ui.components.PrismChip(!onPhone, { onPhone = false }, stringResource(R.string.search_music), icon = PrismIcons.Globe)
+            com.prism.music.ui.components.PrismChip(onPhone, { onPhone = true }, stringResource(R.string.search_on_phone), icon = PrismIcons.Phone)
         }
         if (!onPhone) com.prism.music.ui.components.ChipRow(
-            SearchFilter.entries, { it == filter }, { it.label },
+            SearchFilter.entries, { it == filter }, { it.localizedLabel(context) },
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 6.dp),
         ) { filter = it }
         Box(Modifier.fillMaxWidth().height(3.dp).padding(horizontal = 16.dp)) {
@@ -386,7 +399,7 @@ private fun Browse(
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         if (recents.isNotEmpty()) {
-            item(span = { GridItemSpan(maxLineSpan) }) { Text("Recent searches", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(top = 6.dp, bottom = 2.dp)) }
+            item(span = { GridItemSpan(maxLineSpan) }) { Text("Recent searches".localized(), style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(top = 6.dp, bottom = 2.dp)) }
             items(recents.take(6), span = { GridItemSpan(maxLineSpan) }) { r ->
                 SuggestionRow(PrismIcons.History, r, onFill = onFill, onRemove = { onRemove(r) }) { onPick(r) }
             }
@@ -409,8 +422,8 @@ private fun Browse(
                         Modifier.fillMaxWidth().clickable { nav.go(com.prism.music.ui.Routes.MOODS) }.padding(top = 14.dp, bottom = 2.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(title, style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f))
-                        Icon(PrismIcons.ArrowForward, "See all", Modifier.padding(end = 4.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(title.localized(), style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f))
+                        Icon(PrismIcons.ArrowForward, "See all".localized(), Modifier.padding(end = 4.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
                 items(m, key = { title + it.id + it.params }) { mood -> MoodTile(mood, Modifier.fillMaxWidth().height(84.dp)) { onMood(mood) } }
@@ -425,11 +438,12 @@ private fun TopResults(
     r: TopSearch, bottomPadding: Dp, onSeeAll: (SearchFilter) -> Unit, open: (BrowseItem) -> Unit,
     onSongs: (List<com.prism.music.data.model.Song>, Int) -> Unit, onPlay: (BrowseItem) -> Unit,
 ) {
-    if (r.isEmpty) { ErrorState("No results"); return }
+    if (r.isEmpty) { ErrorState("No results".localized()); return }
+    val context = LocalContext.current
     LazyColumn(contentPadding = PaddingValues(top = 4.dp, bottom = bottomPadding + 16.dp)) {
         r.top?.let { t -> item("top") { TopCard(t, { open(t) }, { onPlay(t) }) } }
         r.sections.forEach { (f, items) ->
-            item("h:${f.name}") { SectionHeader(f.label, onMore = { onSeeAll(f) }) }
+            item("h:${f.name}") { SectionHeader(f.localizedLabel(context), onMore = { onSeeAll(f) }) }
             when (f) {
                 SearchFilter.SONGS -> {
                     val songs = items.filterIsInstance<SongItem>().map { it.song }
@@ -449,10 +463,10 @@ private fun TopResults(
 private fun TopCard(item: BrowseItem, onClick: () -> Unit, onPlay: () -> Unit) {
     val scheme = MaterialTheme.colorScheme
     val kind = when (item) {
-        is ArtistItem -> "Artist"
-        is AlbumItem -> item.subtitle.substringBefore(" • ").takeIf { it in setOf("Album", "Single", "EP") } ?: "Album"
-        is PlaylistItem -> "Playlist"
-        is SongItem -> if (item.song.isLive) "● Live" else if (item.song.isVideo) "Video" else "Song"
+        is ArtistItem -> "Artist".localized()
+        is AlbumItem -> (item.subtitle.substringBefore(" • ").takeIf { it in setOf("Album", "Single", "EP") } ?: "Album").localized()
+        is PlaylistItem -> "Playlist".localized()
+        is SongItem -> if (item.song.isLive) "● Live" else if (item.song.isVideo) "Video".localized() else "Song".localized()
         else -> ""
     }
     val detail = when (item) {
@@ -478,7 +492,7 @@ private fun TopCard(item: BrowseItem, onClick: () -> Unit, onPlay: () -> Unit) {
         )
         Spacer(Modifier.width(16.dp))
         Column(Modifier.weight(1f)) {
-            Text("TOP RESULT", style = MaterialTheme.typography.labelSmall.copy(brush = com.prism.music.ui.theme.PrismTokens.spectrum(com.prism.music.ui.theme.LocalIsDark.current), letterSpacing = 0.1.em), fontWeight = FontWeight.Medium)
+            Text("TOP RESULT".localized(), style = MaterialTheme.typography.labelSmall.copy(brush = com.prism.music.ui.theme.PrismTokens.spectrum(com.prism.music.ui.theme.LocalIsDark.current), letterSpacing = 0.1.em), fontWeight = FontWeight.Medium)
             Text(item.title, style = MaterialTheme.typography.headlineSmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
             Text(listOf(kind, detail).filter { it.isNotBlank() }.joinToString(" · "), style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
@@ -500,7 +514,7 @@ private fun TopCard(item: BrowseItem, onClick: () -> Unit, onPlay: () -> Unit) {
                 .border(1.5.dp, com.prism.music.ui.theme.PrismTokens.spectrumRing(), CircleShape).clickable { if (mine) c.player.togglePlay() else onPlay() },
             contentAlignment = Alignment.Center,
         ) {
-            Icon(if (playing) PrismIcons.Pause else PrismIcons.Play, if (playing) "Pause" else "Play", Modifier.size(22.dp), tint = scheme.surface)
+            Icon(if (playing) PrismIcons.Pause else PrismIcons.Play, (if (playing) "Pause" else "Play").localized(), Modifier.size(22.dp), tint = scheme.surface)
         }
     }
 }
@@ -517,15 +531,15 @@ private fun SuggestionRow(
         Icon(icon, null, Modifier.size(if (dense) 18.dp else 24.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(Modifier.width(16.dp))
         Text(text, Modifier.weight(1f), style = if (dense) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
-        if (onRemove != null) IconButton(onClick = onRemove, Modifier.size(32.dp)) { Icon(PrismIcons.Close, "Remove", Modifier.size(18.dp)) }
-        else IconButton(onClick = { onFill(text) }, Modifier.size(32.dp)) { Icon(PrismIcons.FillIn, "Fill", Modifier.size(18.dp)) }
+        if (onRemove != null) IconButton(onClick = onRemove, Modifier.size(32.dp)) { Icon(PrismIcons.Close, "Remove".localized(), Modifier.size(18.dp)) }
+        else IconButton(onClick = { onFill(text) }, Modifier.size(32.dp)) { Icon(PrismIcons.FillIn, "Fill".localized(), Modifier.size(18.dp)) }
     }
 }
 
 @Composable
 fun ResultRow(item: BrowseItem, onLongClick: (() -> Unit)? = null, onClick: () -> Unit) {
     if (item is SongItem) {
-        SongRow(item.song, trailingInfo = if (item.song.isLive) "● LIVE" else if (item.song.isEpisode) "Episode" else if (item.song.isVideo) "Video" else null, onClick = onClick)
+        SongRow(item.song, trailingInfo = if (item.song.isLive) "● LIVE" else if (item.song.isEpisode) "Episode".localized() else if (item.song.isVideo) "Video".localized() else null, onClick = onClick)
         return
     }
     val ui = com.prism.music.ui.theme.LocalUi.current
@@ -548,8 +562,8 @@ fun ResultRow(item: BrowseItem, onLongClick: (() -> Unit)? = null, onClick: () -
         Column(Modifier.weight(1f)) {
             Text(item.title, style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text(
-                if (item is com.prism.music.data.model.PodcastItem) listOf("Podcast", item.subtitle).filter { it.isNotBlank() }.joinToString(" • ")
-                else item.subtitle.ifBlank { when (item) { is ArtistItem -> "Artist"; is AlbumItem -> "Album"; is PlaylistItem -> "Playlist"; else -> "" } },
+                if (item is com.prism.music.data.model.PodcastItem) listOf("Podcast".localized(), item.subtitle).filter { it.isNotBlank() }.joinToString(" • ")
+                else item.subtitle.ifBlank { when (item) { is ArtistItem -> "Artist".localized(); is AlbumItem -> "Album".localized(); is PlaylistItem -> "Playlist".localized(); else -> "" } },
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis,
             )
         }

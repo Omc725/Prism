@@ -1,5 +1,6 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.ui.i18n.localized
 import com.prism.music.ui.components.PrismSlider
 import com.prism.music.ui.components.PrismSwitch
 import com.prism.music.ui.theme.PrismIcons
@@ -72,7 +73,7 @@ fun Group(title: String, info: String? = null, content: @Composable ColumnScope.
     }
     Column(Modifier.then(if (found) Modifier.bringIntoViewRequester(requester) else Modifier)) {
         if (title.isNotBlank()) Row(Modifier.padding(start = 12.dp, bottom = if (info != null) 2.dp else 8.dp), verticalAlignment = Alignment.CenterVertically) {
-            Eyebrow(title)
+            Eyebrow(title.localized())
             if (info != null) InfoMark(open, title) { open = !open }
         }
         Column(
@@ -81,7 +82,7 @@ fun Group(title: String, info: String? = null, content: @Composable ColumnScope.
                 .then(if (glow.value > 0.02f) Modifier.border((2.5f * glow.value).dp, com.prism.music.ui.theme.PrismTokens.spectrum, ui.card) else Modifier)
                 .padding(vertical = ui.gap(6.dp)),
         ) {
-            InfoText(open && info != null, info, Modifier.padding(horizontal = 16.dp, vertical = 4.dp))
+            InfoText(open && info != null, info?.localized(), Modifier.padding(horizontal = 16.dp, vertical = 4.dp))
             content()
         }
     }
@@ -93,10 +94,10 @@ fun Label(text: String, info: String? = null) {
     var open by androidx.compose.runtime.saveable.rememberSaveable(text, "label") { androidx.compose.runtime.mutableStateOf(false) }
     Column(Modifier.padding(start = 16.dp, end = 16.dp, top = if (info != null) 8.dp else 14.dp, bottom = if (info != null) 2.dp else 8.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text, style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f, fill = false))
+            Text(text.localized(), style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f, fill = false))
             if (info != null) InfoMark(open, text) { open = !open }
         }
-        InfoText(open && info != null, info, Modifier.padding(bottom = 4.dp))
+        InfoText(open && info != null, info?.localized(), Modifier.padding(bottom = 4.dp))
     }
 }
 
@@ -107,7 +108,7 @@ fun Label(text: String, info: String? = null) {
 @Composable
 fun Note(text: String) {
     Text(
-        text, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+        text.localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
     )
 }
@@ -116,7 +117,7 @@ fun Note(text: String) {
 @Composable
 fun InfoMark(open: Boolean, about: String, onClick: () -> Unit) {
     Icon(
-        PrismIcons.Info, if (open) "Hide details" else "More about $about",
+        PrismIcons.Info, if (open) "Hide details".localized() else "More about %s".localized(about.localized()),
         Modifier.padding(start = 6.dp).size(28.dp).clip(androidx.compose.foundation.shape.CircleShape)
             .clickable(onClick = onClick).padding(6.dp),
         tint = if (open) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.ink3,
@@ -139,11 +140,11 @@ fun InfoText(open: Boolean, text: String?, modifier: Modifier = Modifier) {
 private fun ColumnScope.SettingText(title: String, subtitle: String?, info: String?) {
     var open by androidx.compose.runtime.saveable.rememberSaveable(title) { androidx.compose.runtime.mutableStateOf(false) }
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Text(title, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f, fill = false))
+        Text(title.localized(), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f, fill = false))
         if (info != null) InfoMark(open, title) { open = !open }
     }
-    if (subtitle != null) Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    InfoText(open && info != null, info, Modifier.padding(top = 6.dp))
+    if (subtitle != null) Text(subtitle.localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    InfoText(open && info != null, info?.localized(), Modifier.padding(top = 6.dp))
 }
 
 @Composable
@@ -192,7 +193,7 @@ fun ShowChips(options: List<ShowOption>) {
     ) {
         options.forEach { o ->
             com.prism.music.ui.components.PrismChip(
-                o.on, { o.onChange(!o.on) }, o.label,
+                o.on, { o.onChange(!o.on) }, o.label.localized(),
                 icon = if (o.on) PrismIcons.Check else null,
                 modifier = androidx.compose.ui.Modifier.semantics { role = androidx.compose.ui.semantics.Role.Checkbox; stateDescription = if (o.on) "Shown" else "Hidden" },
             )
@@ -220,10 +221,10 @@ fun NavRow(icon: ImageVector, title: String, subtitle: String?, selected: Boolea
         else Icon(icon, null, Modifier.size(22.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(Modifier.width(if (hue != null) 14.dp else 18.dp))
         Column(Modifier.weight(1f)) {
-            Text(title, style = MaterialTheme.typography.bodyLarge)
-            if (!subtitle.isNullOrBlank()) Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
+            Text(title.localized(), style = MaterialTheme.typography.bodyLarge)
+            if (!subtitle.isNullOrBlank()) Text(subtitle.localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
             // What to do first (a search result hidden behind another switch).
-            if (!hint.isNullOrBlank()) Text(hint, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+            if (!hint.isNullOrBlank()) Text(hint.localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
         }
         Icon(PrismIcons.ChevronRight, null, Modifier.size(18.dp), tint = MaterialTheme.colorScheme.ink3)
     }
@@ -257,12 +258,12 @@ fun SliderSetting(
     Column(Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-                Text(title, Modifier.weight(1f, fill = false), style = MaterialTheme.typography.bodyLarge)
+                Text(title.localized(), Modifier.weight(1f, fill = false), style = MaterialTheme.typography.bodyLarge)
                 if (info != null) InfoMark(open, title) { open = !open }
             }
             Text(valueText(v), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
-        InfoText(open && info != null, info, Modifier.padding(top = 2.dp, bottom = 2.dp))
+        InfoText(open && info != null, info?.localized(), Modifier.padding(top = 2.dp, bottom = 2.dp))
         PrismSlider(v, { v = it }, enabled = enabled, valueRange = range, steps = steps, onValueChangeFinished = { onSave(v) })
     }
 }

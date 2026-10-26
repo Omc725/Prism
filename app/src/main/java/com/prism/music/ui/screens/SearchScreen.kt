@@ -562,8 +562,8 @@ fun ResultRow(item: BrowseItem, onLongClick: (() -> Unit)? = null, onClick: () -
         Column(Modifier.weight(1f)) {
             Text(item.title, style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text(
-                if (item is com.prism.music.data.model.PodcastItem) listOf("Podcast".localized(), item.subtitle).filter { it.isNotBlank() }.joinToString(" • ")
-                else item.subtitle.ifBlank { when (item) { is ArtistItem -> "Artist".localized(); is AlbumItem -> "Album".localized(); is PlaylistItem -> "Playlist".localized(); else -> "" } },
+                if (item is com.prism.music.data.model.PodcastItem) listOf("Podcast".localized(), item.subtitle.localized()).filter { it.isNotBlank() }.joinToString(" • ")
+                else item.subtitle.localized().ifBlank { when (item) { is ArtistItem -> "Artist".localized(); is AlbumItem -> "Album".localized(); is PlaylistItem -> "Playlist".localized(); else -> "" } },
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis,
             )
         }

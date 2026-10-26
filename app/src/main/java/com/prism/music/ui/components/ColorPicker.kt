@@ -124,6 +124,7 @@ fun ColorPickerSheet(
     onPick: (Int) -> Unit,
 ) {
     val c = LocalContainer.current
+    val context = LocalContext.current
     val scheme = MaterialTheme.colorScheme
     // The color lives as HSV so the hue survives greys and black (where RGB has none).
     var hue by remember { mutableFloatStateOf(ColorMath.toHsv(initial)[0]) }
@@ -150,12 +151,12 @@ fun ColorPickerSheet(
                 Box(Modifier.size(52.dp).clip(RoundedCornerShape(16.dp)).background(Color(color)).border(1.dp, scheme.onSurface.copy(alpha = 0.15f), RoundedCornerShape(16.dp)))
                 Spacer(Modifier.width(14.dp))
                 Column(Modifier.weight(1f)) {
-                    Text(title, style = MaterialTheme.typography.titleMedium)
+                    Text(title.localized(), style = MaterialTheme.typography.titleMedium)
                     Text(ColorMath.toHex(color), style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant)
                 }
                 val starred = color in saved
                 Icon(
-                    if (starred) PrismIcons.StarFilled else PrismIcons.Star, if (starred) "Remove from saved colors" else "Save this color",
+                    if (starred) PrismIcons.StarFilled else PrismIcons.Star, (if (starred) "Remove from saved colors" else "Save this color").localized(),
                     Modifier.size(44.dp).clip(CircleShape).clickable { c.savedColors.setSaved(color, !starred) }.padding(10.dp),
                     tint = if (starred) scheme.onSurface else scheme.onSurfaceVariant,
                 )
@@ -166,7 +167,7 @@ fun ColorPickerSheet(
                 preview(color)
             }
 
-            Segmented(listOf(0, 1), mode, { if (it == 0) "Wheel" else "Values" }, Modifier.fillMaxWidth()) { mode = it }
+            Segmented(listOf(0, 1), mode, { (if (it == 0) "Wheel" else "Values").localized(context) }, Modifier.fillMaxWidth()) { mode = it }
             if (mode == 0) ColorWheel(hue, sat, value, Modifier.fillMaxWidth().padding(horizontal = 12.dp)) { h, s, v -> hue = h; sat = s; value = v }
             else ColorValues(color, hue) { set(it) }
 
@@ -179,8 +180,8 @@ fun ColorPickerSheet(
             if (recent.isNotEmpty()) Swatches("Recent", recent, color) { set(it) }
 
             Readability(color)
-            note?.invoke(color)?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant) }
-            reset?.let { (label, action) -> PrismTextButton({ close { action() } }, Modifier.fillMaxWidth()) { Text(label) } }
+            note?.invoke(color)?.let { Text(it.localized(), style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant) }
+            reset?.let { (label, action) -> PrismTextButton({ close { action() } }, Modifier.fillMaxWidth()) { Text(label.localized()) } }
 
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 PrismOutlinedButton({ close {} }, Modifier.weight(1f)) { Text("Cancel".localized()) }
@@ -358,7 +359,7 @@ private fun Eyedropper(onColor: (Int) -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Eyebrow("Take a color from")
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            PrismChip(false, { pick.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }, "A photo", icon = PrismIcons.Photo)
+            PrismChip(false, { pick.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }, "A photo".localized(), icon = PrismIcons.Photo)
         }
         if (cover.isNotEmpty()) SwatchRow("What's playing", cover, onColor)
         if (wallpaper.isNotEmpty()) SwatchRow("Your wallpaper", wallpaper, onColor)
@@ -413,7 +414,7 @@ private fun Readability(color: Int) {
                 Modifier.weight(1f).clip(RoundedCornerShape(14.dp)).background(Color(bg)).border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f), RoundedCornerShape(14.dp)).padding(10.dp),
             ) {
                 Text("Aa", color = Color(color), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium)
-                Text("$label · ${r.label}", color = if (bg == darkPage) Color.White.copy(alpha = 0.75f) else Color.Black.copy(alpha = 0.7f), style = MaterialTheme.typography.labelSmall)
+                Text("${label.localized()} · ${r.label.localized()}", color = if (bg == darkPage) Color.White.copy(alpha = 0.75f) else Color.Black.copy(alpha = 0.7f), style = MaterialTheme.typography.labelSmall)
             }
         }
         // Text on the color itself (buttons): whichever of white or black reads better.
@@ -421,7 +422,7 @@ private fun Readability(color: Int) {
         val ink = if (onWhite) 0xFFFFFFFF.toInt() else 0xFF000000.toInt()
         Column(Modifier.weight(1f).clip(RoundedCornerShape(14.dp)).background(Color(color)).padding(10.dp)) {
             Text("Aa", color = Color(ink), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium)
-            Text("Text on it · ${ColorMath.readability(ink, color).label}".localized(), color = Color(ink).copy(alpha = 0.8f), style = MaterialTheme.typography.labelSmall)
+            Text("${"Text on it".localized()} · ${ColorMath.readability(ink, color).label.localized()}", color = Color(ink).copy(alpha = 0.8f), style = MaterialTheme.typography.labelSmall)
         }
     }
 }
@@ -451,7 +452,7 @@ private fun PhotoDropper(bitmap: Bitmap, onDismiss: () -> Unit, onPick: (Int) ->
     Dialog(onDismiss, DialogProperties(usePlatformDefaultWidth = false)) {
         Column(Modifier.fillMaxSize().background(Color.Black).navigationBarsPadding()) {
             Row(Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                RoundAction(PrismIcons.Close, "Close", glass = true, onClick = onDismiss)
+                RoundAction(PrismIcons.Close, "Close".localized(), glass = true, onClick = onDismiss)
                 Text("Tap or drag to pick a color".localized(), Modifier.weight(1f).padding(horizontal = 12.dp), color = Color.White, style = MaterialTheme.typography.bodyMedium)
             }
             Box(

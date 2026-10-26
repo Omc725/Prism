@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import com.prism.music.data.model.BrowseItem
 import com.prism.music.data.prefs.SectionStyle
 import com.prism.music.ui.components.Artwork
+import com.prism.music.ui.i18n.localized
 import com.prism.music.ui.components.ItemCard
 import com.prism.music.ui.components.ItemCarousel
 import com.prism.music.ui.theme.LocalUi
@@ -144,8 +145,8 @@ private fun EntryCard(e: HomeEntry, width: Dp) {
     Column(Modifier.width(width).clip(ui.tile).combinedClickable(onClick = e.onClick, onLongClick = e.onLongClick).padding(4.dp)) {
         EntryArt(e, Modifier.fillMaxWidth().aspectRatio(1f), ui.art, 40.dp)
         Spacer(Modifier.height(8.dp))
-        Text(e.title, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-        e.subtitle?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis) }
+        Text(e.title.localized(), style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        e.subtitle?.let { Text(it.localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis) }
     }
 }
 
@@ -160,8 +161,8 @@ private fun EntryRow(e: HomeEntry, modifier: Modifier) {
         EntryArt(e, Modifier.size(50.dp), ui.smallArt, 22.dp)
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
-            Text(e.title, style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            e.subtitle?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis) }
+            Text(e.title.localized(), style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            e.subtitle?.let { Text(it.localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis) }
         }
     }
 }
@@ -178,8 +179,8 @@ private fun EntryHero(e: HomeEntry) {
         Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black.copy(alpha = 0.75f)))))
         Row(Modifier.align(Alignment.BottomStart).padding(18.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
-                Text(e.title, color = Color.White, style = MaterialTheme.typography.titleLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                e.subtitle?.let { Text(it, color = Color.White.copy(alpha = 0.78f), style = MaterialTheme.typography.bodySmall, maxLines = 2, overflow = TextOverflow.Ellipsis) }
+                Text(e.title.localized(), color = Color.White, style = MaterialTheme.typography.titleLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                e.subtitle?.let { Text(it.localized(), color = Color.White.copy(alpha = 0.78f), style = MaterialTheme.typography.bodySmall, maxLines = 2, overflow = TextOverflow.Ellipsis) }
             }
             Box(Modifier.size(44.dp).clip(CircleShape).background(Color.White), contentAlignment = Alignment.Center) {
                 Icon(PrismIcons.ChevronRight, null, tint = Color.Black)

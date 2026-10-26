@@ -935,11 +935,11 @@ fun LyricsPanel(
             if (roman != null && needsJapanese && ja != com.prism.music.data.ModelStore.State.Ready) {
                 val scope = rememberCoroutineScope()
                 Text(
-                    when (ja) {
+                    (when (ja) {
                         is com.prism.music.data.ModelStore.State.Downloading -> "Downloading Japanese kanji readings… ${(ja.fraction * 100).toInt()}%"
                         is com.prism.music.data.ModelStore.State.Failed -> "Couldn't download the Japanese kanji readings. Tap to try again"
                         else -> "Better romaji for Japanese: tap to download the reading data (13 MB)"
-                    },
+                    }).localized(),
                     style = MaterialTheme.typography.labelMedium, color = Color.White.copy(alpha = 0.7f),
                     modifier = Modifier.padding(top = 10.dp).clip(RoundedCornerShape(8.dp))
                         .clickable(enabled = ja !is com.prism.music.data.ModelStore.State.Downloading) {
@@ -1013,7 +1013,7 @@ fun LyricsStatusWithChange(state: LyricsState, onChange: () -> Unit) {
     val status = when {
         state.loading -> "Looking for lyrics…".localized()
         state.lyrics == null -> "No lyrics found".localized()
-        else -> "Lyrics from ${state.lyrics!!.source.label}"
+        else -> "Lyrics from ${state.lyrics!!.source.label}".localized()
     }
     Row(Modifier.fillMaxWidth().offset(y = 6.dp).padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
         Text(status, style = MaterialTheme.typography.titleMedium, color = Color.White.copy(alpha = 0.55f), maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
@@ -1075,7 +1075,7 @@ fun LyricsProviderSheet(state: LyricsState, onDismiss: () -> Unit) {
                                 ProviderState.FOUND_SYNCED -> "Time-synced lines"
                                 ProviderState.FOUND_PLAIN -> "Plain text"
                                 ProviderState.NONE -> "Not available for this song"
-                            }).localized() + if (starred && st != ProviderState.NONE) " · Censored" else "",
+                            }).localized() + if (starred && st != ProviderState.NONE) " · " + "Censored".localized() else "",
                             style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
                         )
                     }
@@ -1113,7 +1113,7 @@ private fun SearchAsPane(state: LyricsState, sources: List<LyricsSource>, onSear
             Column(Modifier.weight(1f)) {
                 Text("Search with another title".localized(), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
                 Text(
-                    current?.let { (t, a) -> "Looking up \"$t\"" + if (a.isNotBlank()) " by $a" else "" }
+                    current?.let { (t, a) -> ("Looking up \"$t\"" + if (a.isNotBlank()) " by $a" else "").localized() }
                         ?: "When the lyrics are listed under a different name".localized(),
                     style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis,
                 )

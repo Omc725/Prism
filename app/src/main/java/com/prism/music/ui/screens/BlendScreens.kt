@@ -199,15 +199,15 @@ fun BlendsScreen(bottomPadding: Dp) {
         val friend = remember(p) { BlendCode.decode(p) }
         AlertDialog(
             onDismissRequest = { c.blends.pending.value = null },
-            title = { Text(if (friend != null) "Blend with ${friend.name}?" else "Not a Blend code") },
+            title = { Text((if (friend != null) "Blend with ${friend.name}?" else "Not a Blend code").localized()) },
             text = {
                 Text(
-                    when {
+                    (when {
                         friend == null -> "That message didn't hold a Prism Blend code."
                         com.prism.music.data.blend.BlendExchange.parseHint(p) != null ->
                             "Prism makes a playlist from your tastes together. Your code (what's under \"What you share\") goes straight back to their phone over Wi-Fi, so you both have it."
                         else -> "Prism makes a playlist from your tastes together, on this phone. Only your code (what's under \"What you share\") goes to them, if you send it back."
-                    },
+                    }).localized(),
                 )
             },
             confirmButton = { if (friend != null) PrismTextButton({ c.blends.pending.value = null; take(p) }) { Text("Make the Blend".localized()) } },
@@ -498,7 +498,7 @@ private fun BlendCardDialog(blend: Blend, me: TasteCode, friend: TasteCode, onDi
         confirmButton = {
             PrismTextButton({
                 scope.launch {
-                    val ok = shareLayer(context, layer, "prism-blend.png", "Our Blend on Prism: ${blend.match}% taste match", "Share your Blend")
+                    val ok = shareLayer(context, layer, "prism-blend.png", "Our Blend on Prism: ${blend.match}% taste match".localized(context), "Share your Blend".localized(context))
                     if (!ok) Toast.makeText(context, "Couldn't make the picture".localized(context), Toast.LENGTH_SHORT).show()
                     onDismiss()
                 }

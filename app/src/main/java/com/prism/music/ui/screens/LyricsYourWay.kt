@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import com.prism.music.ui.i18n.localized
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -344,7 +345,7 @@ fun LyricsBackgroundGroup() {
                 ColorDot("Top", Color(s.lyricsBgColor)) { picking = 1 }
                 ColorDot("Bottom", if (s.lyricsBgColor2 == 0) null else Color(s.lyricsBgColor2)) { picking = 2 }
                 if (s.lyricsBgColor2 != 0) Text(
-                    "One color", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary,
+                    "One color".localized(), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.clip(RoundedCornerShape(8.dp)).clickable { prefs.setLyricsBgColors(s.lyricsBgColor, 0) }.padding(8.dp),
                 )
             }
@@ -386,7 +387,7 @@ private fun ColorDot(label: String, color: Color?, onClick: () -> Unit) {
             contentAlignment = Alignment.Center,
         ) { if (color == null) Text("+", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) }
         Spacer(Modifier.height(4.dp))
-        Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(label.localized(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 

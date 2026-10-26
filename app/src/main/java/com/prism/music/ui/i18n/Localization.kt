@@ -2166,6 +2166,79 @@ object LocalizedStrings {
         "yesterday" to "dün",
         "never" to "asla",
         "Album, playlist and artist pages use their picture's color instead (Artist & album pages, below)" to "Albüm, çalma listesi ve sanatçı sayfaları bunun yerine kendi resimlerinin rengini kullanır (aşağıdaki Sanatçı ve albüm sayfaları)",
+        "From artists you listen to" to "Dinlediğiniz sanatçılardan",
+        "Not in my library" to "Kitaplığımda değil",
+        "MORE MUSIC" to "DAHA FAZLA MÜZİK",
+        "LESS MUSIC" to "DAHA AZ MÜZİK",
+        "Open in Prism" to "Prism'de aç",
+        "See in Prism" to "Prism'de gör",
+        "Behind the player, darkened so its white text reads" to "Oynatıcının arkasında, beyaz metinlerin okunabilmesi için karartılmış",
+        "Color from what's playing, ready-made designs or your own photo" to "Çalan müzikten renk, hazır tasarımlar veya kendi fotoğrafınız",
+        "Make my account" to "Hesabımı oluştur",
+        "Copy again" to "Yeniden kopyala",
+        "Copy into Prism" to "Prism'e kopyala",
+        "Import playlist" to "Çalma listesini içe aktar",
+        "Hide" to "Gizle",
+        "Show" to "Göster",
+        "The next song" to "Sıradaki şarkı",
+        "The cover" to "Kapak",
+        "Unknown album" to "Bilinmeyen albüm",
+        "Not a Blend code" to "Bir Blend kodu değil",
+        "Change the cover" to "Kapağı değiştir",
+        "Couldn't make the picture" to "Resim oluşturulamadı",
+        "Go back to it as saved" to "Kaydedilen haline geri dön",
+        "Use this Look" to "Bu Görünümü kullan",
+        "Save a copy to change" to "Değiştirmek için bir kopyasını kaydet",
+        "Duplicate" to "Çoğalt",
+        "Saved to your Looks" to "Görünümlerinize kaydedildi",
+        "Censored" to "Sansürlü",
+        "Better romaji for Japanese: tap to download the reading data (13 MB)" to "Japonca için daha iyi romaji: okuma verilerini indirmek için dokunun (13 MB)",
+        "Couldn't download the Japanese kanji readings. Tap to try again" to "Japonca kanji okuma verileri indirilemedi. Tekrar denemek için dokunun",
+        "That message didn't hold a Prism Blend code." to "Bu mesaj bir Prism Blend kodu içermiyordu.",
+        "Prism makes a playlist from your tastes together. Your code (what's under \"What you share\") goes straight back to their phone over Wi-Fi, so you both have it." to "Prism, zevklerinizi birleştirerek bir çalma listesi oluşturur. Kodunuz (\"Neler paylaşıyorsunuz\" altındaki), her ikinizde de olması için Wi-Fi üzerinden doğrudan onların telefonuna geri gider.",
+        "Prism makes a playlist from your tastes together, on this phone. Only your code (what's under \"What you share\") goes to them, if you send it back." to "Prism, bu telefonda zevklerinizi birleştirerek bir çalma listesi oluşturur. Yalnızca kodunuz (\"Neler paylaşıyorsunuz\" altındaki), geri gönderirseniz onlara iletilir.",
+        "Share your Blend" to "Blend'inizi paylaşın",
+        "Change what %s does" to "%s eylemini değiştir",
+        "Couldn't get that correction: %s" to "Düzeltme alınamadı: %s",
+        "Couldn't load AutoEq's list: %s" to "AutoEq listesi yüklenemedi: %s",
+        "Drag %s" to "%s öğesini sürükleyin",
+        "Keep Prism-%s.apk next to it" to "Prism-%s.apk dosyasını yanında saklayın",
+        "Matched automatically — the song starts %s into the video, so the lyrics wait for it." to "Otomatik eşlendi — şarkı videonun %s sonrasında başlıyor, şarkı sözleri bunu bekliyor.",
+        "Matched automatically — the video skips the song's first %s." to "Otomatik eşlendi — video şarkının ilk %s kısmını atlıyor.",
+        "No headphones match \"%s\". AutoEq only has headphones someone has measured; you can also import a ParametricEQ file." to "\"%s\" ile eşleşen kulaklık yok. AutoEq'da yalnızca ölçümü yapılmış kulaklıklar bulunur; ayrıca bir ParametricEQ dosyası da içe aktarabilirsiniz.",
+        "Options for %s" to "%s için seçenekler",
+        "Prism %s is redrawn from the ground up and does more than ever. Here's a minute's tour: swipe, or tap Start." to "Prism %s baştan aşağı yeniden tasarlandı ve her zamankinden daha fazlasını yapıyor. İşte bir dakikalık tur: kaydırın veya Başlat'a dokunun.",
+        "Show the %s section to see these on Home" to "Bunları Ana Sayfa'da görmek için %s bölümünü gösterin",
+        "Then open Prism-%s.apk from your files" to "Ardından dosyalarınızdan Prism-%s.apk dosyasını açın",
+        "What's new in Prism %s" to "Prism %s sürümündeki yenilikler",
+        "Plain" to "Düz",
+        "Accent tint" to "Vurgu tonu",
+        "Grey, the frost in greys too" to "Gri, buzlu cam da gri tonlarında",
+        "The cover's colors in the frost; a hint of the accent on plain pages" to "Buzlu camda kapağın renkleri; düz sayfalarda vurgunun hafif bir tonu",
+        "Grey: the frost loses its color too" to "Gri: buzlu cam da rengini kaybeder",
+        "The accent's color, frost included" to "Buzlu cam dahil vurgu rengi",
+        "The accent's color, frost included (changes with each song)" to "Buzlu cam dahil vurgu rengi (her şarkıda değişir)",
+        "A color you pick, frost included" to "Buzlu cam dahil seçtiğiniz bir renk",
+        "Very easy to read" to "Okunması çok kolay",
+        "Easy to read" to "Okunması kolay",
+        "OK for big text" to "Büyük metin için uygun",
+        "Hard to read" to "Okunması zor",
+        "Text on it" to "Üzerindeki metin",
+        "On dark" to "Koyu temada",
+        "On light" to "Açık temada",
+        "Wheel" to "Renk tekeri",
+        "Values" to "Değerler",
+        "Remove from saved colors" to "Kaydedilen renklerden kaldır",
+        "Save this color" to "Bu rengi kaydet",
+        "Top" to "Üst",
+        "Bottom" to "Alt",
+        "The song's cover's color" to "Şarkı kapağının rengi",
+        "Your phone wallpaper's colors" to "Telefon duvar kağıdınızın renkleri",
+        "One color you choose" to "Seçtiğiniz tek bir renk",
+        "Soft grey text" to "Yumuşak gri metin",
+        "Firmer" to "Daha belirgin",
+        "Strongest, easiest to read" to "En güçlü, okunması en kolay",
+        "Your accent" to "Sizin vurgunuz",
 
     )
     private val trMap = trMap1 + trMap2
@@ -4169,6 +4242,79 @@ object LocalizedStrings {
         "yesterday" to "dünən",
         "never" to "heç vaxt",
         "Album, playlist and artist pages use their picture's color instead (Artist & album pages, below)" to "Albom, pleylist və ifaçı səhifələri bunun əvəzinə öz şəkillərinin rəngini istifadə edir (aşağıdakı İfaçı və albom səhifələri)",
+        "From artists you listen to" to "Dinlədiyiniz ifaçılardan",
+        "Not in my library" to "Kitabxanamda deyil",
+        "MORE MUSIC" to "DAHA ÇOX MUSİQİ",
+        "LESS MUSIC" to "DAHA AZ MUSİQİ",
+        "Open in Prism" to "Prism-də aç",
+        "See in Prism" to "Prism-də gör",
+        "Behind the player, darkened so its white text reads" to "Oxuducunun arxasında, ağ mətnlərin oxunması üçün qaraldılmış",
+        "Color from what's playing, ready-made designs or your own photo" to "Oxunan musiqidən rəng, hazır dizaynlar və ya öz fotoşəkliniz",
+        "Make my account" to "Hesabımı yarat",
+        "Copy again" to "Yenidən kopyala",
+        "Copy into Prism" to "Prism-ə kopyala",
+        "Import playlist" to "Pleylisti idxal et",
+        "Hide" to "Gizlət",
+        "Show" to "Göstər",
+        "The next song" to "Növbəti mahnı",
+        "The cover" to "Üzlük",
+        "Unknown album" to "Bilinməyən albom",
+        "Not a Blend code" to "Blend kodu deyil",
+        "Change the cover" to "Üzlüyü dəyiş",
+        "Couldn't make the picture" to "Şəkil yaradıla bilmədi",
+        "Go back to it as saved" to "Yadda saxlanılan halına qayıt",
+        "Use this Look" to "Bu Görünüşü istifadə et",
+        "Save a copy to change" to "Dəyişmək üçün nüsxəsini saxla",
+        "Duplicate" to "Dublikatını çıxart",
+        "Saved to your Looks" to "Görünüşlərinizə saxlanıldı",
+        "Censored" to "Senzuralı",
+        "Better romaji for Japanese: tap to download the reading data (13 MB)" to "Yapon dili üçün daha yaxşı romaji: oxu məlumatlarını endirmək üçün toxunun (13 MB)",
+        "Couldn't download the Japanese kanji readings. Tap to try again" to "Yapon kanci oxu məlumatları endirilə bilmədi. Yenidən cəhd etmək üçün toxunun",
+        "That message didn't hold a Prism Blend code." to "Bu mesajda Prism Blend kodu yox idi.",
+        "Prism makes a playlist from your tastes together. Your code (what's under \"What you share\") goes straight back to their phone over Wi-Fi, so you both have it." to "Prism, zövqlərinizi birləşdirərək bir pleylist yaradır. Kodunuz (\"Nə paylaşırsınız\" altındakı), hər ikinizdə olması üçün Wi-Fi üzərindən birbaşa onların telefonuna qayıdır.",
+        "Prism makes a playlist from your tastes together, on this phone. Only your code (what's under \"What you share\") goes to them, if you send it back." to "Prism, bu telefonda zövqlərinizi birləşdirərək bir pleylist yaradır. Yalnız kodunuz (\"Nə paylaşırsınız\" altındakı), geri göndərsəniz onlara çatdırılar.",
+        "Share your Blend" to "Blend-inizi bölüşün",
+        "Change what %s does" to "%s əməliyyatını dəyiş",
+        "Couldn't get that correction: %s" to "Düzəliş alına bilmədi: %s",
+        "Couldn't load AutoEq's list: %s" to "AutoEq siyahısı yüklənə bilmədi: %s",
+        "Drag %s" to "%s elementini sürükləyin",
+        "Keep Prism-%s.apk next to it" to "Prism-%s.apk faylını yanında saxlayın",
+        "Matched automatically — the song starts %s into the video, so the lyrics wait for it." to "Avtomatik uyğunlaşdırıldı — mahnı videonun %s sonra başlayır, mahnı sözləri bunu gözləyir.",
+        "Matched automatically — the video skips the song's first %s." to "Avtomatik uyğunlaşdırıldı — video mahnının ilk %s hissəsini ötürür.",
+        "No headphones match \"%s\". AutoEq only has headphones someone has measured; you can also import a ParametricEQ file." to "\"%s\" ilə uyğunlaşan qulaqlıq yoxdur. AutoEq-da yalnız ölçülmüş qulaqlıqlar mövcuddur; həmçinin ParametricEQ faylını da idxal edə bilərsiniz.",
+        "Options for %s" to "%s üçün seçimlər",
+        "Prism %s is redrawn from the ground up and does more than ever. Here's a minute's tour: swipe, or tap Start." to "Prism %s başdan-ayağa yenidən dizayn edildi və həmişəkindən daha çoxunu edir. Budur bir dəqiqəlik tur: sürüşdürün və ya Başla toxunun.",
+        "Show the %s section to see these on Home" to "Bunları Əsas Səhifədə görmək üçün %s bölməsini göstərin",
+        "Then open Prism-%s.apk from your files" to "Sonra fayllarınızdan Prism-%s.apk faylını açın",
+        "What's new in Prism %s" to "Prism %s versiyasındakı yeniliklər",
+        "Plain" to "Sadə",
+        "Accent tint" to "Vurğu çaları",
+        "Grey, the frost in greys too" to "Boz, buzlu şüşə də boz çalarlarda",
+        "The cover's colors in the frost; a hint of the accent on plain pages" to "Buzlu şüşədə üzlüyün rəngləri; sadə səhifələrdə vurğunun yüngül çaları",
+        "Grey: the frost loses its color too" to "Boz: buzlu şüşə də rəngini itirir",
+        "The accent's color, frost included" to "Buzlu şüşə daxil vurğu rəngi",
+        "The accent's color, frost included (changes with each song)" to "Buzlu şüşə daxil vurğu rəngi (hər mahnıda dəyişir)",
+        "A color you pick, frost included" to "Buzlu şüşə daxil seçdiyiniz bir rəng",
+        "Very easy to read" to "Oxunması çox asan",
+        "Easy to read" to "Oxunması asan",
+        "OK for big text" to "Böyük mətn üçün uyğun",
+        "Hard to read" to "Oxunması çətin",
+        "Text on it" to "Üzərindəki mətn",
+        "On dark" to "Qaranlıq temada",
+        "On light" to "Açıq temada",
+        "Wheel" to "Rəng çarxı",
+        "Values" to "Dəyərlər",
+        "Remove from saved colors" to "Saxlanılan rənglərdən sil",
+        "Save this color" to "Bu rəngi saxla",
+        "Top" to "Üst",
+        "Bottom" to "Alt",
+        "The song's cover's color" to "Mahnı üzlüyünün rəngi",
+        "Your phone wallpaper's colors" to "Telefon divar kağızınızın rəngləri",
+        "One color you choose" to "Seçdiyiniz tək bir rəng",
+        "Soft grey text" to "Yumşaq boz mətn",
+        "Firmer" to "Daha aydın",
+        "Strongest, easiest to read" to "Ən güclü, oxunması ən asan",
+        "Your accent" to "Sizin vurğunuz",
 
     )
     private val azMap = azMap1 + azMap2
@@ -4396,6 +4542,22 @@ object LocalizedStrings {
     private val replayStoryPlayedTimesRegex = Regex("""^You played it\s+(\d+)\s+(?:time|times),\s+for\s+(.*?)\.$""")
     private val allSettingsPageRegex = Regex("""^All\s+(.*?)\s+settings$""")
     private val togetherListenStepRegex = Regex("""^The same music plays on this phone, in step with (.*?)'s\. Off: just add songs to their queue\.$""")
+    private val pickControlsRowRegex = Regex("""^Pick (\d+) to (\d+) for the row under the controls\. Hold one \(or drag its grip\) to put them in your order\. The rest stay in the player's ⋯ menu\.$""")
+    private val savedToYouTubeMusicRegex = Regex("""^Saved "(.*?)" to YouTube Music$""")
+    private val lookingUpSongRegex = Regex("""^Looking up "(.*?)"(?:\s+by\s+(.*?))?$""")
+    private val downloadingJapaneseKanjiRegex = Regex("""^Downloading Japanese kanji readings…\s*(\d+)%$""")
+    private val ourBlendOnPrismRegex = Regex("""^Our Blend on Prism:\s*(\d+)%\s*taste match$""")
+    private val sendLookRegex = Regex("""^Send\s+(.*?)$""")
+    private val timeRemainingRegex = Regex("""^([\d:]+)\s+left$""")
+    private val playlistsCountRegex = Regex("""^(\d+)\s+playlists$""")
+    private val nextLookAtRegex = Regex("""^Next:\s*(.*?)\s*at\s*(\d{1,2}:\d{2})$""")
+    private val lastStepsChangesRegex = Regex("""^Your last\s+(\d+)\s+changes to the look show here, to go back through\.$""")
+    private val andMoreUpcomingRegex = Regex("""^…and\s+(\d+)\s+more$""")
+    private val togetherHostQueueRegex = Regex("""^Add songs from any song's ⋯ menu: they go to (.*?)'s queue\.$""")
+    private val aboutSmartSongsFreeRegex = Regex("""^About\s+(.*?)\s+songs\s+·\s+(.*?)\s+used\s+·\s+([\d\.,]+\s*GB)\s+free on the phone$""")
+    private val replayYearNumberOneRegex = Regex("""^Replay\s+(\d{4})\s+·\s+your #1$""")
+    private val homeBackdropOverColorRegex = Regex("""^Home has the (.*?) background \(Glass & backgrounds\), drawn over this color, so it only shows a little there\. Pick Ambient there to see it fully$""")
+    private val tourPlanThingsRegex = Regex("""^(\d+)\s+(?:thing|things)\s+to know since you last looked, in about a minute\.$""")
 
     fun get(text: String, context: Context): String {
         val clean = text.trim()
@@ -4435,6 +4597,14 @@ object LocalizedStrings {
             val translatedParts = parts.map { get(it, context) }
             if (translatedParts != parts) {
                 return translatedParts.joinToString(" › ")
+            }
+        }
+
+        if (clean.contains(" • ")) {
+            val parts = clean.split(" • ")
+            val translatedParts = parts.map { get(it, context) }
+            if (translatedParts != parts) {
+                return translatedParts.joinToString(" • ")
             }
         }
 
@@ -6368,6 +6538,155 @@ object LocalizedStrings {
             return when (lang) {
                 "tr" -> "Aynı müzik $host cihazı ile eşzamanlı olarak bu telefonda da çalar. Kapalı: yalnızca onların sırasına şarkı ekler."
                 "az" -> "Eyni musiqi $host cihazı ilə sinxron olaraq bu telefonda da oxunur. Sönülü: yalnız onların növbəsinə mahnı əlavə edir."
+                else -> clean
+            }
+        }
+
+        pickControlsRowRegex.matchEntire(clean)?.let { m ->
+            val min = m.groupValues[1]
+            val max = m.groupValues[2]
+            return when (lang) {
+                "tr" -> "Kontrollerin altındaki satır için $min ile $max arasında seçim yapın. Sıralamak için basılı tutun (veya tutamağından sürükleyin). Geri kalanı oynatıcının ⋯ menüsünde kalır."
+                "az" -> "İdarəetmələrin altındakı cərgə üçün $min ilə $max arasında seçim edin. Sıralamaq üçün basıb saxlayın (və ya tutacağından dartın). Qalanları oxuducunun ⋯ menyusunda qalır."
+                else -> clean
+            }
+        }
+
+        savedToYouTubeMusicRegex.matchEntire(clean)?.let { m ->
+            val name = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "\"$name\" YouTube Music'e kaydedildi"
+                "az" -> "\"$name\" YouTube Music-ə saxlanıldı"
+                else -> clean
+            }
+        }
+
+        lookingUpSongRegex.matchEntire(clean)?.let { m ->
+            val title = m.groupValues[1]
+            val artist = m.groupValues[2]
+            return when (lang) {
+                "tr" -> if (artist.isNotBlank()) "\"$title\" ($artist) aranıyor" else "\"$title\" aranıyor"
+                "az" -> if (artist.isNotBlank()) "\"$title\" ($artist) axtarılır" else "\"$title\" axtarılır"
+                else -> clean
+            }
+        }
+
+        downloadingJapaneseKanjiRegex.matchEntire(clean)?.let { m ->
+            val pct = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "Japonca kanji okuma verileri indiriliyor… %$pct"
+                "az" -> "Yapon kanci oxu məlumatları endirilir… %$pct"
+                else -> clean
+            }
+        }
+
+        ourBlendOnPrismRegex.matchEntire(clean)?.let { m ->
+            val match = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "Prism'de Blend'imiz: %$match zevk uyumu"
+                "az" -> "Prism-də Blend-imiz: %$match zövq uyğunluğu"
+                else -> clean
+            }
+        }
+
+        sendLookRegex.matchEntire(clean)?.let { m ->
+            val look = get(m.groupValues[1], context)
+            return when (lang) {
+                "tr" -> "$look gönder"
+                "az" -> "$look göndər"
+                else -> clean
+            }
+        }
+
+        timeRemainingRegex.matchEntire(clean)?.let { m ->
+            val time = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "$time kaldı"
+                "az" -> "$time qaldı"
+                else -> clean
+            }
+        }
+
+        playlistsCountRegex.matchEntire(clean)?.let { m ->
+            val count = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "$count çalma listesi"
+                "az" -> "$count pleylist"
+                else -> clean
+            }
+        }
+
+        nextLookAtRegex.matchEntire(clean)?.let { m ->
+            val look = get(m.groupValues[1], context)
+            val at = m.groupValues[2]
+            return when (lang) {
+                "tr" -> "Sıradaki: $look ($at)"
+                "az" -> "Növbəti: $look ($at)"
+                else -> clean
+            }
+        }
+
+        lastStepsChangesRegex.matchEntire(clean)?.let { m ->
+            val steps = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "Görünümde yaptığınız son $steps değişiklik geriye dönmeniz için burada gösterilir."
+                "az" -> "Görünüşdə etdiyiniz son $steps dəyişiklik geriyə qayıtmağınız üçün burada göstərilir."
+                else -> clean
+            }
+        }
+
+        andMoreUpcomingRegex.matchEntire(clean)?.let { m ->
+            val n = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "…ve $n tane daha"
+                "az" -> "…və $n dənə daha"
+                else -> clean
+            }
+        }
+
+        togetherHostQueueRegex.matchEntire(clean)?.let { m ->
+            val host = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "Herhangi bir şarkının ⋯ menüsünden şarkı ekleyin: $host cihazının sırasına gider."
+                "az" -> "İstənilən mahnının ⋯ menyusundan mahnı əlavə edin: $host cihazının növbəsinə gedər."
+                else -> clean
+            }
+        }
+
+        aboutSmartSongsFreeRegex.matchEntire(clean)?.let { m ->
+            val songs = m.groupValues[1]
+            val used = get(m.groupValues[2], context)
+            val free = m.groupValues[3]
+            return when (lang) {
+                "tr" -> "Yaklaşık $songs şarkı · $used kullanıldı · Telefonda $free boş alan"
+                "az" -> "Təxminən $songs mahnı · $used istifadə edildi · Telefonda $free boş yer"
+                else -> clean
+            }
+        }
+
+        replayYearNumberOneRegex.matchEntire(clean)?.let { m ->
+            val year = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "$year Replay · 1 numaranız"
+                "az" -> "$year Replay · 1 nömrəniz"
+                else -> clean
+            }
+        }
+
+        homeBackdropOverColorRegex.matchEntire(clean)?.let { m ->
+            val backdrop = get(m.groupValues[1], context)
+            return when (lang) {
+                "tr" -> "Ana Sayfa, bu rengin üzerine çizilen $backdrop arka planına (Cam ve arka planlar) sahiptir, bu nedenle orada yalnızca biraz görünür. Tamamen görmek için orada Ambiyans'ı seçin"
+                "az" -> "Əsas Səhifə, bu rəngin üzərinə çəkilən $backdrop fonuna (Şüşə və fonlar) malikdir, buna görə orada yalnız bir az görünür. Tam görmək üçün orada Ambiyansı seçin"
+                else -> clean
+            }
+        }
+
+        tourPlanThingsRegex.matchEntire(clean)?.let { m ->
+            val count = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "Son baktığınızdan bu yana bilmeniz gereken $count şey, yaklaşık bir dakika içinde."
+                "az" -> "Son baxdığınızdan bəri bilməli olduğunuz $count şey, təxminən bir dəqiqə ərzində."
                 else -> clean
             }
         }

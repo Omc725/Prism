@@ -99,13 +99,13 @@ fun MoreOptions(groups: List<String>, content: @Composable () -> Unit) {
     val ui = LocalUi.current
     Column(verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(22.dp)) {
         Row(
-            Modifier.fillMaxWidth().clip(ui.card).pane(ui.card).clickable(onClickLabel = if (open) "Show fewer options" else "Show more options") { open = !open }
+            Modifier.fillMaxWidth().clip(ui.card).pane(ui.card).clickable(onClickLabel = (if (open) "Show fewer options" else "Show more options").localized()) { open = !open }
                 .padding(horizontal = 16.dp, vertical = ui.gap(14.dp)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(Modifier.weight(1f)) {
-                Text(if (open) "Fewer options" else "More options", style = MaterialTheme.typography.bodyLarge)
-                if (!open) Text(groups.joinToString(", "), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text((if (open) "Fewer options" else "More options").localized(), style = MaterialTheme.typography.bodyLarge)
+                if (!open) Text(groups.map { it.localized() }.joinToString(", "), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Icon(if (open) PrismIcons.ChevronUp else PrismIcons.ChevronDown, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
         }

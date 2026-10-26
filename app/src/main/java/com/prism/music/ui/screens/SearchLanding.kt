@@ -56,6 +56,7 @@ import com.prism.music.data.model.PodcastItem
 import com.prism.music.data.model.Song
 import com.prism.music.data.model.SongItem
 import com.prism.music.data.prefs.SearchSection
+import com.prism.music.ui.i18n.localized
 import com.prism.music.ui.LocalNavigator
 import com.prism.music.ui.Load
 import com.prism.music.ui.Routes
@@ -155,7 +156,7 @@ internal fun SearchLanding(
                 SearchSection.RECENT -> {
                     val items = opened.mapNotNull { o -> o.item()?.let { o to it } }
                     if (items.isNotEmpty()) {
-                        item(key = "opened-h") { SectionHeader("Recently opened") }
+                        item(key = "opened-h") { SectionHeader("Recently opened".localized()) }
                         item(key = "opened") {
                             LazyRow(contentPadding = PaddingValues(horizontal = 12.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                                 items(items, key = { (o, _) -> o.kind + o.id }) { (o, item) ->
@@ -165,19 +166,19 @@ internal fun SearchLanding(
                         }
                     }
                     if (recents.isNotEmpty()) {
-                        item(key = "recents-h") { SectionHeader("Recent searches") }
+                        item(key = "recents-h") { SectionHeader("Recent searches".localized()) }
                         item(key = "recents") {
                             FlowRow(Modifier.padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 recents.take(10).forEach { r ->
                                     // The chip takes the long press itself: wrapped in another clickable, its own click ate it.
-                                    PrismChip(false, { onPick(r) }, r, icon = PrismIcons.History, onLongClick = { onRemove(r) }, onLongClickLabel = "Remove")
+                                    PrismChip(false, { onPick(r) }, r, icon = PrismIcons.History, onLongClick = { onRemove(r) }, onLongClickLabel = "Remove".localized())
                                 }
                             }
                         }
                     }
                 }
                 SearchSection.ARTISTS -> if (artists.isNotEmpty()) {
-                    item(key = "artists-h") { SectionHeader("Your artists") }
+                    item(key = "artists-h") { SectionHeader("Your artists".localized()) }
                     item(key = "artists") {
                         LazyRow(contentPadding = PaddingValues(horizontal = 12.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             items(artists, key = { it.id }) { a -> ItemCard(a, width = 104.dp) { onOpen(a) } }
@@ -194,7 +195,7 @@ internal fun SearchLanding(
                     }
                     groups.forEach { (title, tiles) ->
                         if (tiles.isEmpty()) return@forEach
-                        item(key = "mh:$title") { SectionHeader(if (title == "For you") "Moods & genres for you" else title, onMore = { nav.go(Routes.MOODS) }) }
+                        item(key = "mh:$title") { SectionHeader((if (title == "For you") "Moods & genres for you" else title).localized(), onMore = { nav.go(Routes.MOODS) }) }
                         tiles.chunked(2).forEachIndexed { i, pair ->
                             item(key = "m:$title:$i") {
                                 Row(Modifier.padding(horizontal = 16.dp, vertical = 5.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -210,7 +211,7 @@ internal fun SearchLanding(
         item(key = "arrange") {
             Box(Modifier.fillMaxWidth().padding(top = 18.dp), contentAlignment = Alignment.Center) {
                 PrismTextButton(onClick = { arranging = true }) {
-                    Icon(PrismIcons.SwapVertical, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Arrange this page")
+                    Icon(PrismIcons.SwapVertical, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("Arrange this page".localized())
                 }
             }
         }
@@ -250,7 +251,7 @@ internal fun PrismMoodTile(mood: MoodItem, modifier: Modifier = Modifier, onClic
     val dark = com.prism.music.ui.theme.LocalIsDark.current
     val base = Color(mood.color or 0xFF000000).lit()
     val pattern = remember(mood.title) { MOOD_PATTERNS[Math.floorMod(mood.title.hashCode(), MOOD_PATTERNS.size)] }
-    Box(modifier.height(88.dp).clip(ui.tile).clickable(onClickLabel = mood.title, onClick = onClick)) {
+    Box(modifier.height(88.dp).clip(ui.tile).clickable(onClickLabel = mood.title.localized(), onClick = onClick)) {
         Canvas(Modifier.fillMaxSize()) {
             drawRect(Brush.linearGradient(listOf(base, base.copy(alpha = 0.55f).compositeOver(Color.Black)), Offset.Zero, Offset(size.width, size.height)))
             drawPattern(pattern, Color.Transparent, Color.White, Color.White, dark = true, t = 0f, density = density, glow = 0f)
@@ -260,7 +261,7 @@ internal fun PrismMoodTile(mood: MoodItem, modifier: Modifier = Modifier, onClic
             )
         }
         Text(
-            mood.title, color = Color.White, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Medium,
+            mood.title.localized(), color = Color.White, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Medium,
             maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.align(Alignment.BottomStart).padding(12.dp),
         )
     }
@@ -274,19 +275,19 @@ private fun ArrangeSearchSheet(onDismiss: () -> Unit) {
     val settings = LocalAppSettings.current
     val shown = settings.searchSections
     androidx.compose.material3.ModalBottomSheet(onDismissRequest = onDismiss) {
-        Text("Arrange Search", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(horizontal = 24.dp))
+        Text("Arrange Search".localized(), style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(horizontal = 24.dp))
         Column(Modifier.padding(top = 8.dp, bottom = 28.dp)) {
             com.prism.music.ui.components.ReorderList(shown, { it }, { c.settings.setSearchSections(it) }) { s, _, _, mod ->
                 Row(mod.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                    PrismCheck(true, enabled = shown.size > 1, label = s.label) { c.settings.setSearchSections(shown - s) }
-                    Text(s.label, Modifier.weight(1f).padding(start = 8.dp), style = MaterialTheme.typography.bodyLarge)
-                    com.prism.music.ui.components.DragGrip(Modifier.dragHandle(), "Drag ${s.label}")
+                    PrismCheck(true, enabled = shown.size > 1, label = s.label.localized()) { c.settings.setSearchSections(shown - s) }
+                    Text(s.label.localized(), Modifier.weight(1f).padding(start = 8.dp), style = MaterialTheme.typography.bodyLarge)
+                    com.prism.music.ui.components.DragGrip(Modifier.dragHandle(), "Drag %s".localized(s.label.localized()))
                 }
             }
             SearchSection.entries.filter { it !in shown }.forEach { s ->
                 Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                    PrismCheck(false, label = s.label) { c.settings.setSearchSections(shown + s) }
-                    Text(s.label, Modifier.weight(1f).padding(start = 8.dp), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    PrismCheck(false, label = s.label.localized()) { c.settings.setSearchSections(shown + s) }
+                    Text(s.label.localized(), Modifier.weight(1f).padding(start = 8.dp), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         }

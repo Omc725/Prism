@@ -418,7 +418,7 @@ fun LibraryScreen(bottomPadding: Dp) {
                             items(folders, key = { "f" + it.id }) { f ->
                                 val first = f.playlists.firstNotNullOfOrNull { id -> myPlaylists.firstOrNull { com.prism.music.data.PrismLibrary.samePlaylist(it.id, id) } }
                                 ShortcutTile(
-                                    f.name, if (!settings.librarySubtitles) "" else if (f.playlists.size == 1) "Folder · 1 playlist" else "Folder · ${f.playlists.size} playlists",
+                                    f.name, if (!settings.librarySubtitles) "" else if (f.playlists.size == 1) "Folder · 1 playlist".localized() else "Folder · %s playlists".localized(f.playlists.size),
                                     PrismIcons.Folder, asList, art = first?.let { c.covers.art(it) },
                                 ) { nav.go(Routes.folder(f.id)) }
                             }
@@ -532,7 +532,7 @@ fun LibraryScreen(bottomPadding: Dp) {
 
     fun pinItem(p: com.prism.music.data.model.BrowseItem): com.prism.music.ui.components.SheetItem {
         val on = pinned.any { it.removePrefix("VL") == p.id.removePrefix("VL") }
-        return com.prism.music.ui.components.SheetItem(if (on) PrismIcons.PinFilled else PrismIcons.Pin, if (on) "Unpin" else "Pin to the top") {
+        return com.prism.music.ui.components.SheetItem(if (on) PrismIcons.PinFilled else PrismIcons.Pin, (if (on) "Unpin" else "Pin to the top").localized(context)) {
             c.library.setPinned(pinned.firstOrNull { it.removePrefix("VL") == p.id.removePrefix("VL") } ?: p.id, !on)
         }
     }
@@ -543,9 +543,9 @@ fun LibraryScreen(bottomPadding: Dp) {
             com.prism.music.ui.components.Playable.Of(p),
             extra = listOfNotNull(
                 pinItem(p),
-                com.prism.music.ui.components.SheetItem(PrismIcons.Folder, "Move to a folder") { foldering = p },
-                com.prism.music.ui.components.SheetItem(PrismIcons.SwapVertical, "Rearrange playlists") { saveOrder(sortedPlaylists); rearranging = true },
-                if (deletable) com.prism.music.ui.components.SheetItem(PrismIcons.Delete, "Delete playlist", danger = true) { deleting = p } else null,
+                com.prism.music.ui.components.SheetItem(PrismIcons.Folder, "Move to a folder".localized()) { foldering = p },
+                com.prism.music.ui.components.SheetItem(PrismIcons.SwapVertical, "Rearrange playlists".localized()) { saveOrder(sortedPlaylists); rearranging = true },
+                if (deletable) com.prism.music.ui.components.SheetItem(PrismIcons.Delete, "Delete playlist".localized(), danger = true) { deleting = p } else null,
             ),
         ) { menuFor = null }
     }
@@ -816,16 +816,16 @@ private fun OpenPlaylistLinkDialog(onDismiss: () -> Unit, onOpen: (String) -> Un
     val id = playlistIdIn(text)
     androidx.compose.material3.AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Open a playlist link") },
+        title = { Text("Open a playlist link".localized()) },
         text = {
             com.prism.music.ui.components.PrismTextField(
                 text, { text = it }, Modifier.fillMaxWidth(), singleLine = true,
                 placeholder = { Text("youtube.com/playlist?list=…") },
-                supportingText = if (text.isNotBlank() && id == null) ({ Text("That isn't a playlist's link") }) else null,
+                supportingText = if (text.isNotBlank() && id == null) ({ Text("That isn't a playlist's link".localized()) }) else null,
                 isError = text.isNotBlank() && id == null,
             )
         },
-        confirmButton = { PrismTextButton(onClick = { id?.let(onOpen) }, enabled = id != null) { Text("Open") } },
-        dismissButton = { PrismTextButton(onClick = onDismiss) { Text("Cancel") } },
+        confirmButton = { PrismTextButton(onClick = { id?.let(onOpen) }, enabled = id != null) { Text("Open".localized()) } },
+        dismissButton = { PrismTextButton(onClick = onDismiss) { Text("Cancel".localized()) } },
     )
 }

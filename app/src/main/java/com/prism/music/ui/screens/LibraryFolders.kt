@@ -31,6 +31,7 @@ import com.prism.music.ui.components.EmptyState
 import com.prism.music.ui.components.PrismTextButton
 import com.prism.music.ui.components.RoundAction
 import com.prism.music.ui.components.SubPage
+import com.prism.music.ui.i18n.localized
 import com.prism.music.ui.theme.LocalAppSettings
 import com.prism.music.ui.theme.LocalContainer
 import com.prism.music.ui.theme.PrismIcons
@@ -62,24 +63,24 @@ fun FolderScreen(id: String, bottomPadding: Dp) {
     var renaming by remember { mutableStateOf(false) }
     var menuFor by remember { mutableStateOf<BrowseItem?>(null) }
     if (folder == null) {
-        SubPage("Folder", bottomPadding) { item { EmptyState(PrismIcons.Folder, "This folder is gone", "Its playlists are back in Library → Playlists.") } }
+        SubPage("Folder".localized(), bottomPadding) { item { EmptyState(PrismIcons.Folder, "This folder is gone".localized(), "Its playlists are back in Library → Playlists.".localized()) } }
         return
     }
     val inside = folder.playlists.mapNotNull { pid -> all.firstOrNull { PrismLibrary.samePlaylist(it.id, pid) } }
-    SubPage(folder.name, bottomPadding, subtitle = if (inside.size == 1) "1 playlist" else "${inside.size} playlists", actions = {
-        RoundAction(PrismIcons.Edit, "Rename folder") { renaming = true }
-        RoundAction(PrismIcons.Delete, "Take the folder apart") { c.prismLibrary.deleteFolder(id); nav.back() }
+    SubPage(folder.name, bottomPadding, subtitle = if (inside.size == 1) "1 playlist".localized() else "${inside.size} playlists".localized(), actions = {
+        RoundAction(PrismIcons.Edit, "Rename folder".localized()) { renaming = true }
+        RoundAction(PrismIcons.Delete, "Take the folder apart".localized()) { c.prismLibrary.deleteFolder(id); nav.back() }
     }) {
         if (inside.isEmpty()) item {
-            EmptyState(PrismIcons.Folder, "Nothing in here yet", "Hold a playlist in Library → Playlists and pick \"Move to a folder\".")
+            EmptyState(PrismIcons.Folder, "Nothing in here yet".localized(), "Hold a playlist in Library → Playlists and pick \"Move to a folder\".".localized())
         }
         items(inside, key = { it.id }) { p -> ResultRow(p, onLongClick = { menuFor = p }) { nav.open(p) {} } }
     }
-    if (renaming) FolderNameDialog("Rename folder", folder.name, { renaming = false }) { c.prismLibrary.renameFolder(id, it); renaming = false }
+    if (renaming) FolderNameDialog("Rename folder".localized(), folder.name, { renaming = false }) { c.prismLibrary.renameFolder(id, it); renaming = false }
     menuFor?.let { p ->
         com.prism.music.ui.components.PlayActionsSheet(
             com.prism.music.ui.components.Playable.Of(p),
-            extra = listOf(com.prism.music.ui.components.SheetItem(PrismIcons.Folder, "Take out of \"${folder.name}\"") { c.prismLibrary.moveToFolder(p.id, null) }),
+            extra = listOf(com.prism.music.ui.components.SheetItem(PrismIcons.Folder, "Take out of \"%s\"".localized(folder.name)) { c.prismLibrary.moveToFolder(p.id, null) }),
         ) { menuFor = null }
     }
 }
@@ -92,19 +93,19 @@ internal fun MoveToFolderSheet(playlist: BrowseItem, onDismiss: () -> Unit) {
     val current = folders.firstOrNull { f -> f.playlists.any { PrismLibrary.samePlaylist(it, playlist.id) } }
     var naming by remember { mutableStateOf(false) }
     if (naming) {
-        FolderNameDialog("New folder", "", { naming = false }) { c.prismLibrary.createFolder(it, playlist.id); naming = false; onDismiss() }
+        FolderNameDialog("New folder".localized(), "", { naming = false }) { c.prismLibrary.createFolder(it, playlist.id); naming = false; onDismiss() }
         return
     }
     com.prism.music.ui.components.ActionSheet(c.covers.art(playlist), onDismiss) { close ->
-        com.prism.music.ui.components.ActionHeader(c.covers.art(playlist), playlist.title, current?.let { "In \"${it.name}\"" } ?: "Move to a folder", placeholderIcon = PrismIcons.QueueMusic)
+        com.prism.music.ui.components.ActionHeader(c.covers.art(playlist), playlist.title, current?.let { "In \"%s\"".localized(it.name) } ?: "Move to a folder".localized(), placeholderIcon = PrismIcons.QueueMusic)
         Column(Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
             folders.filter { it.id != current?.id }.forEach { f ->
-                FolderRow(PrismIcons.Folder, f.name, if (f.playlists.size == 1) "1 playlist" else "${f.playlists.size} playlists") {
+                FolderRow(PrismIcons.Folder, f.name, if (f.playlists.size == 1) "1 playlist".localized() else "${f.playlists.size} playlists".localized()) {
                     c.prismLibrary.moveToFolder(playlist.id, f.id); close {}
                 }
             }
-            FolderRow(PrismIcons.Add, "New folder", null) { naming = true }
-            if (current != null) FolderRow(PrismIcons.Remove, "Take out of \"${current.name}\"", null) {
+            FolderRow(PrismIcons.Add, "New folder".localized(), null) { naming = true }
+            if (current != null) FolderRow(PrismIcons.Remove, "Take out of \"%s\"".localized(current.name), null) {
                 c.prismLibrary.moveToFolder(playlist.id, null); close {}
             }
         }
@@ -134,10 +135,10 @@ internal fun FolderNameDialog(title: String, current: String, onDismiss: () -> U
         title = { Text(title) },
         text = {
             com.prism.music.ui.components.PrismTextField(
-                text, { text = it.take(60) }, Modifier.fillMaxWidth(), singleLine = true, placeholder = { Text("Folder name") },
+                text, { text = it.take(60) }, Modifier.fillMaxWidth(), singleLine = true, placeholder = { Text("Folder name".localized()) },
             )
         },
-        confirmButton = { PrismTextButton(onClick = { onSave(text) }, enabled = text.isNotBlank()) { Text("Save") } },
-        dismissButton = { PrismTextButton(onClick = onDismiss) { Text("Cancel") } },
+        confirmButton = { PrismTextButton(onClick = { onSave(text) }, enabled = text.isNotBlank()) { Text("Save".localized()) } },
+        dismissButton = { PrismTextButton(onClick = onDismiss) { Text("Cancel".localized()) } },
     )
 }

@@ -61,6 +61,7 @@ import androidx.compose.ui.unit.sp
 import com.prism.music.R
 import com.prism.music.ui.components.PrismChip
 import com.prism.music.ui.components.PrismTextButton
+import com.prism.music.ui.i18n.localized
 import com.prism.music.ui.theme.BackdropKind
 import com.prism.music.ui.theme.LocalContainer
 import com.prism.music.ui.theme.PrismTokens
@@ -145,29 +146,30 @@ fun CoverMakerSheet(key: String, title: String, onDismiss: () -> Unit) {
     val measurer = rememberTextMeasurer()
     androidx.compose.material3.ModalBottomSheet(onDismissRequest = onDismiss) {
         Column(Modifier.verticalScroll(rememberScrollState()).padding(bottom = 28.dp)) {
-            Text("Make a cover", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(horizontal = 24.dp))
+            Text("Make a cover".localized(), style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(horizontal = 24.dp))
             Box(Modifier.fillMaxWidth().padding(vertical = 14.dp), contentAlignment = Alignment.Center) {
                 Canvas(Modifier.size(220.dp).clip(RoundedCornerShape(10.dp))) { drawCover(design, measurer) }
             }
             com.prism.music.ui.components.PrismTextField(
                 design.title, { design = design.copy(title = it.take(60)) }, Modifier.fillMaxWidth().padding(horizontal = 20.dp),
-                singleLine = true, label = { Text("Name on the cover") },
+                singleLine = true, label = { Text("Name on the cover".localized()) },
             )
-            Text("Colors", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 24.dp, top = 14.dp))
+            Text("Colors".localized(), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 24.dp, top = 14.dp))
             Row(Modifier.padding(horizontal = 20.dp, vertical = 8.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                 Swatch("Top", design.top) { picking = 1 }
                 Swatch("Bottom", design.bottom) { picking = 2 }
             }
-            Text("Pattern", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 24.dp, top = 8.dp))
+            Text("Pattern".localized(), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 24.dp, top = 8.dp))
             FlowRow(Modifier.padding(horizontal = 20.dp, vertical = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                PrismChip(design.pattern == null, { design = design.copy(pattern = null) }, "None")
+                PrismChip(design.pattern == null, { design = design.copy(pattern = null) }, "None".localized())
                 COVER_PATTERNS.forEach { k ->
-                    PrismChip(design.pattern == k, { design = design.copy(pattern = k) }, k.name.lowercase().replaceFirstChar { it.uppercase() })
+                    val patLabel = k.name.lowercase().replaceFirstChar { it.uppercase() }
+                    PrismChip(design.pattern == k, { design = design.copy(pattern = k) }, patLabel.localized())
                 }
             }
-            Toggle("Split light around it", null, design.edge) { design = design.copy(edge = it) }
+            Toggle("Split light around it".localized(), null, design.edge) { design = design.copy(edge = it) }
             Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp), horizontalArrangement = Arrangement.End) {
-                PrismTextButton(onClick = onDismiss) { Text("Cancel") }
+                PrismTextButton(onClick = onDismiss) { Text("Cancel".localized()) }
                 PrismTextButton(onClick = {
                     val made = design
                     scope.launch {
@@ -175,25 +177,26 @@ fun CoverMakerSheet(key: String, title: String, onDismiss: () -> Unit) {
                         c.covers.useBitmap(key, bmp)
                         onDismiss()
                     }
-                }) { Text("Use this cover") }
+                }) { Text("Use this cover".localized()) }
             }
         }
     }
     picking?.let { which ->
         com.prism.music.ui.components.ColorPickerSheet(
-            if (which == 1) "Top color" else "Bottom color", if (which == 1) design.top else design.bottom, { picking = null },
+            (if (which == 1) "Top color" else "Bottom color").localized(), if (which == 1) design.top else design.bottom, { picking = null },
         ) { picked -> design = if (which == 1) design.copy(top = picked) else design.copy(bottom = picked); picking = null }
     }
 }
 
 @Composable
 private fun Swatch(label: String, color: Int, onClick: () -> Unit) {
+    val locLabel = label.localized()
     Row(
-        Modifier.clip(CircleShape).clickable(onClickLabel = "Change the $label color", onClick = onClick).padding(end = 10.dp),
+        Modifier.clip(CircleShape).clickable(onClickLabel = "Change the %s color".localized(locLabel), onClick = onClick).padding(end = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(Modifier.size(34.dp).clip(CircleShape).background(Color(color)).border(1.dp, Color.White.copy(alpha = 0.3f), CircleShape))
         Spacer(Modifier.size(8.dp))
-        Text(label, style = MaterialTheme.typography.bodyMedium)
+        Text(locLabel, style = MaterialTheme.typography.bodyMedium)
     }
 }

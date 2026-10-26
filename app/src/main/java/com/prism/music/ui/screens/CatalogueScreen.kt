@@ -333,8 +333,8 @@ private fun HeaderPicturePicker() {
     ) {
         PrismChip(current == com.prism.music.ui.theme.Backdrop.PHOTO, {
             picker.launch(androidx.activity.result.PickVisualMediaRequest(androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }, "Your photo", icon = PrismIcons.Photo)
-        designs.forEach { d -> PrismChip(current == d, { c.settings.setHomeHeaderPicture(d.name) }, d.label) }
+        }, "Your photo".localized(), icon = PrismIcons.Photo)
+        designs.forEach { d -> PrismChip(current == d, { c.settings.setHomeHeaderPicture(d.name) }, d.label.localized()) }
     }
 }
 
@@ -344,19 +344,19 @@ private fun SectionNameDialog(cfg: HomeSectionConfig, onDismiss: () -> Unit, onS
     var text by remember { mutableStateOf(cfg.name ?: cfg.title) }
     androidx.compose.material3.AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Rename section") },
+        title = { Text("Rename section".localized()) },
         text = {
             com.prism.music.ui.components.PrismTextField(
-                text, { text = it.replace('\n', ' ').take(40) }, Modifier.fillMaxWidth(), singleLine = true, placeholder = { Text(cfg.title) },
+                text, { text = it.replace('\n', ' ').take(40) }, Modifier.fillMaxWidth(), singleLine = true, placeholder = { Text(cfg.title.localized()) },
             )
         },
         confirmButton = {
-            com.prism.music.ui.components.PrismTextButton(onClick = { onSave(text.trim().takeIf { it.isNotEmpty() && it != cfg.title }) }) { Text("Save") }
+            com.prism.music.ui.components.PrismTextButton(onClick = { onSave(text.trim().takeIf { it.isNotEmpty() && it != cfg.title }) }) { Text("Save".localized()) }
         },
         dismissButton = {
             Row {
-                if (cfg.name != null) com.prism.music.ui.components.PrismTextButton(onClick = { onSave(null) }) { Text("Use \"${cfg.title}\"") }
-                com.prism.music.ui.components.PrismTextButton(onClick = onDismiss) { Text("Cancel") }
+                if (cfg.name != null) com.prism.music.ui.components.PrismTextButton(onClick = { onSave(null) }) { Text("Use \"%s\"".localized(cfg.title.localized())) }
+                com.prism.music.ui.components.PrismTextButton(onClick = onDismiss) { Text("Cancel".localized()) }
             }
         },
     )

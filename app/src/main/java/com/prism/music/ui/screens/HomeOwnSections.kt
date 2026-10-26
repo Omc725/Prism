@@ -54,12 +54,15 @@ object OwnSections {
     }
 
     /** What a rule section says about itself under its name. */
-    fun strapline(key: String): String? = when {
-        key == HomeSections.LIKED_MONTH -> "Your likes from the last 30 days"
-        key == HomeSections.UNPLAYED_DOWNLOADS -> "On the phone, not played yet"
-        key.startsWith(HomeSections.YEAR_PREFIX) -> "Your most played that year"
-        key.startsWith(HomeSections.PIN_PREFIX) -> "Pinned"
-        else -> null
+    fun strapline(key: String, context: android.content.Context? = null): String? {
+        val s = when {
+            key == HomeSections.LIKED_MONTH -> "Your likes from the last 30 days"
+            key == HomeSections.UNPLAYED_DOWNLOADS -> "On the phone, not played yet"
+            key.startsWith(HomeSections.YEAR_PREFIX) -> "Your most played that year"
+            key.startsWith(HomeSections.PIN_PREFIX) -> "Pinned"
+            else -> null
+        } ?: return null
+        return if (context != null) com.prism.music.ui.i18n.LocalizedStrings.get(s, context) else s
     }
 
     /** The rule sections Customize Home can add (years with plays in them, newest first). */

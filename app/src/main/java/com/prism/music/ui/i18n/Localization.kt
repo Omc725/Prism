@@ -166,7 +166,8 @@ object LocalizedStrings {
     )
 
 
-                        private val trMap1 = mapOf(
+    private object Tr1 {
+        val map = mapOf(
         "\"Continue …\" picks up the album you were in" to "\"Devam et …\" dinlemekte olduğunuz albüme kaldığı yerden devam eder",
         "\"Not for me\" and \"Leave out of my taste\" keep things out" to "\"Bana göre değil\" ve \"Zevkimden hariç tut\" istenmeyenleri uzak tutar",
         "\"On this phone\" searches your own music files" to "\"Bu telefonda\" kendi müzik dosyalarınızı arar",
@@ -1153,7 +1154,9 @@ object LocalizedStrings {
         "Sort" to "Sırala",
         "Sort albums" to "Albümleri sırala",
     )
-    private val trMap2 = mapOf(
+    }
+    private object Tr2 {
+        val map = mapOf(
         "Sort artists" to "Sanatçıları sırala",
         "Sort by" to "Sıralama ölçütü",
         "Sort songs" to "Şarkıları sırala",
@@ -2347,8 +2350,192 @@ object LocalizedStrings {
         "Gaming" to "Oyun",
         "On repeat" to "Tekrar tekrar",
     )
-    private val trMap = trMap1 + trMap2
-    private val azMap1 = mapOf(
+    }
+    private object Tr3 {
+        val map = mapOf(
+        "Make a cover" to "Kapak oluştur",
+        "Name on the cover" to "Kapağın üzerindeki isim",
+        "Pattern" to "Desen",
+        "Split light around it" to "Etrafında kırılmış ışık",
+        "Use this cover" to "Bu kapağı kullan",
+        "Change the %s color" to "%s rengini değiştir",
+        "Folder" to "Klasör",
+        "Folder name" to "Klasör adı",
+        "Its playlists are back in Library → Playlists." to "Çalma listeleri Kitaplık → Çalma Listeleri bölümüne geri döndü.",
+        "Move to a folder" to "Bir klasöre taşı",
+        "New folder" to "Yeni klasör",
+        "Nothing in here yet" to "Burada henüz hiçbir şey yok",
+        "Rename folder" to "Klasörü yeniden adlandır",
+        "Take the folder apart" to "Klasörü dağıt",
+        "This folder is gone" to "Bu klasör artık yok",
+        "Hold a playlist in Library → Playlists and pick \"Move to a folder\"." to "Kitaplık → Çalma Listeleri bölümünde bir çalma listesini basılı tutun ve \"Bir klasöre taşı\" seçeneğini seçin.",
+        "Take out of \"%s\"" to "\"%s\" klasöründen çıkar",
+        "In \"%s\"" to "\"%s\" içinde",
+        "1 playlist" to "1 çalma listesi",
+        "%s playlists" to "%s çalma listesi",
+        "Folder · 1 playlist" to "Klasör · 1 çalma listesi",
+        "Folder · %s playlists" to "Klasör · %s çalma listesi",
+        "Arrange Search" to "Aramayı Düzenle",
+        "Arrange this page" to "Bu sayfayı düzenle",
+        "Recently opened" to "Son açılanlar",
+        "Moods & genres for you" to "Sizin için modlar ve türler",
+        "Your photo" to "Fotoğrafınız",
+        "Rename section" to "Bölümü yeniden adlandır",
+        "Use \"%s\"" to "\"%s\" kullan",
+        "To pin an album, playlist, artist or mix as a section: hold it anywhere in Prism and pick \"Pin to Home\"." to "Bir albümü, çalma listesini, sanatçıyı veya miksi bölüm olarak sabitlemek için: Prism'de herhangi bir yerde basılı tutun ve \"Ana Sayfaya Sabitle\" seçeneğini seçin.",
+        "On the phone, not played yet" to "Telefonda, henüz dinlenmedi",
+        "Your most played that year" to "O yıl en çok dinledikleriniz",
+        "Liked this month" to "Bu ay beğenilenler",
+        "Downloads you haven't played" to "Henüz dinlemediğiniz indirmeler",
+        "Most played in %s" to "%s yılında en çok dinlenenler",
+        "Most played in a year" to "Bir yılda en çok dinlenenler",
+        "Open a link" to "Bağlantı aç",
+        "Open a playlist link" to "Çalma listesi bağlantısı aç",
+        "That isn't a playlist's link" to "Bu bir çalma listesi bağlantısı değil",
+        "Pin to the top" to "Başa sabitle",
+        "Unpin" to "Sabitlemeyi kaldır",
+        "Make one with New playlist, or from any song's menu (Add to playlist). A YouTube playlist can be kept here too: open it and tap its bookmark. All on this phone, no account needed." to "Yeni çalma listesi ile veya herhangi bir şarkının menüsünden (Çalma listesine ekle) bir tane oluşturun. Bir YouTube çalma listesi de burada tutulabilir: açın ve yer işaretine dokunun. Hepsi bu telefonda, hesap gerekmez.",
+        "Save a copy as a Prism playlist" to "Bir kopyasını Prism çalma listesi olarak kaydet",
+        "Pin to Home" to "Ana Sayfaya Sabitle",
+        "Unpin from Home" to "Ana Sayfadan Kaldır",
+        "Taken off Home" to "Ana Sayfadan kaldırıldı",
+        "Pinned to the top of Home" to "Ana Sayfanın başına sabitlendi",
+        "Copying \"%s\"…" to "\"%s\" kopyalanıyor…",
+        "Couldn't load \"%s\"" to "\"%s\" yüklenemedi",
+        "\"%s\" has no songs to copy" to "\"%s\" kopyalanacak şarkı içermiyor",
+        "Saved \"%s\" as a Prism playlist (%s)" to "\"%s\", Prism çalma listesi olarak kaydedildi (%s)",
+        "Fewer options" to "Daha az seçenek",
+        "More options" to "Daha fazla seçenek",
+        "Show fewer options" to "Daha az seçenek göster",
+        "Show more options" to "Daha fazla seçenek göster",
+        "Home, your way" to "Ana Sayfa, sizin tarzınızda",
+        "Customize Home (the button at the top of Home) has more in it." to "Ana Sayfayı Özelleştir (Ana Sayfa'nın üstündeki düğme) artık daha fazla seçenek sunuyor.",
+        "Hold any album, playlist, artist or mix → Pin to Home: a section of its own" to "Herhangi bir albümü, çalma listesini, sanatçıyı veya miksi basılı tutun → Ana Sayfaya Sabitle: kendine ait bir bölüm",
+        "Sections from your own listening: Liked this month, Downloads you haven't played, Most played in a year" to "Kendi dinlemelerinizden bölümler: Bu ay beğenilenler, Dinlemediğiniz indirmeler, Bir yılda en çok dinlenenler",
+        "Rename any section; leave YouTube Music's video or podcast sections off" to "Herhangi bir bölümü yeniden adlandırın; YouTube Music'in video veya podcast bölümlerini hariç tutun",
+        "The top of Home: the greeting, just the buttons, or the greeting over a picture or the playing cover" to "Ana Sayfa'nın üst kısmı: karşılama, yalnızca düğmeler veya bir resim ya da çalan kapak üzerinde karşılama",
+        "Home shows at once when Prism opens, while the new one loads" to "Prism açıldığında Ana Sayfa anında gösterilir, yenisi arka planda yüklenir",
+        "Library and tabs, your way" to "Kitaplık ve sekmeler, sizin tarzınızda",
+        "Folders, pins, and tabs of your own." to "Kendinize ait klasörler, sabitlemeler ve sekmeler.",
+        "Hold a playlist → Move to a folder; hold anything in Library → Pin to the top" to "Çalma listesini basılı tutun → Bir klasöre taşı; Kitaplıktaki herhangi bir şeyi basılı tutun → Başa sabitle",
+        "Playlists, Albums and Artists each a list or a grid; 2, 3 or 4 covers across" to "Çalma Listeleri, Albümler ve Sanatçılar için liste veya ızgara; yan yana 2, 3 veya 4 kapak",
+        "Make a cover for a playlist, or use your own photo of an artist" to "Bir çalma listesi için kapak oluşturun veya bir sanatçı için kendi fotoğrafınızı kullanın",
+        "Keep YouTube playlists and copy them as Prism playlists, no account needed" to "YouTube çalma listelerini saklayın ve hesap gerekmeden Prism çalma listesi olarak kopyalayın",
+        "Tabs: Downloads, Liked songs or Podcasts as tabs, your own names, words only, swipe between them" to "Sekmeler: İndirmeler, Beğenilen şarkılar veya Podcast'ler sekme olarak, kendi adlarınız, yalnızca kelimeler, aralarında kaydırma",
+        "Search, redesigned" to "Arama, yeniden tasarlandı",
+        "Search starts from your music." to "Arama kendi müziğinizden başlar.",
+        "Type a line of a song's lyrics to find it" to "Bulmak için bir şarkının sözlerinden bir satır yazın",
+        "What you opened lately, your artists, and moods drawn by Prism" to "Son açtıklarınız, sanatçılarınız ve Prism tarafından çizilen modlar",
+        "Artists and songs with their pictures while you type" to "Yazarken resimleriyle birlikte görünen sanatçılar ve şarkılar",
+        "Results already in your library, right after the top one" to "En üstteki sonucun hemen ardından kitaplığınızda zaten bulunan sonuçlar",
+        "Settings, easier to find" to "Ayarlar, bulması daha kolay",
+        "Settings are sorted by what they do." to "Ayarlar işlevlerine göre düzenlendi.",
+        "Everything about how Prism looks is under Customize Prism" to "Prism'in nasıl göründüğüne dair her şey Prism'i Özelleştir altında",
+        "Gestures and buttons in Controls & gestures" to "Kontroller ve hareketler altında hareketler ve düğmeler",
+        "Every mobile data choice on one page" to "Tüm hücresel veri seçenekleri tek bir sayfada",
+        "Android Auto, speakers and Discord in Car & devices" to "Araç ve cihazlar altında Android Auto, hoparlörler ve Discord",
+        "Performance mode, at the top, for slower phones" to "Daha yavaş telefonlar için en üstte Performans modu",
+        "Translate them, or read other scripts in Latin letters (Settings → Lyrics & Sing)" to "Sözleri çevirin veya diğer alfabeleri Latin harfleriyle okuyun (Ayarlar → Şarkı Sözleri ve Eşlik Et)",
+        "Settings → Customize Prism → Color: every choice shows what it looks like before you pick it." to "Ayarlar → Prism'i Özelleştir → Renk: her seçenek seçmeden önce nasıl göründüğünü gösterir.",
+        "Settings → Customize Prism → Looks: your whole look, saved, switched and shared in one tap." to "Ayarlar → Prism'i Özelleştir → Görünümler: tüm görünümünüz tek dokunuşla kaydedilir, değiştirilir ve paylaşılır.",
+        "Settings → Customize Prism → Player, or ⋯ → Player settings on the player itself." to "Ayarlar → Prism'i Özelleştir → Oynatıcı veya oynatıcının üzerindeki ⋯ → Oynatıcı ayarları.",
+        "A waveform progress bar, its color, the title centered or bigger, and which times show" to "Dalga formu ilerleme çubuğu, rengi, başlığın ortalanması veya büyütülmesi ve hangi sürelerin gösterileceği",
+        "If something still stutters, Settings → Backup & about → Diagnostics notes where it happened, to share" to "Hala takılma oluyorsa, Ayarlar → Yedekleme ve hakkında → Tanılama paylaşmak üzere nerede olduğunu kaydeder",
+        "Settings → Customize Prism → Lyrics: how your lyrics look, with an example of every choice." to "Ayarlar → Prism'i Özelleştir → Şarkı Sözleri: her seçeneğin bir örneğiyle şarkı sözlerinizin nasıl göründüğü.",
+        "Prism's own volume, apart from the phone's (Settings → Customize Prism → Player)" to "Telefonunkinden ayrı, Prism'in kendi ses seviyesi (Ayarlar → Prism'i Özelleştir → Oynatıcı)",
+        "Hide the status bar (Customize Prism → Tabs & mini player)" to "Durum çubuğunu gizle (Prism'i Özelleştir → Sekmeler ve mini oynatıcı)",
+        "The Replay card at the top: your year so far (pick its look in Settings → Customize Prism → Home & Library)" to "En üstteki Replay kartı: şu ana kadarki yılınız (görünümünü Ayarlar → Prism'i Özelleştir → Ana Sayfa ve Kitaplık bölümünden seçin)",
+        "You can take it again from Settings → Backup & about." to "Turu Ayarlar → Yedekleme ve hakkında bölümünden tekrar alabilirsiniz.",
+        "The date and a hello, as now" to "Şimdiki gibi tarih ve bir karşılama",
+        "Just the buttons" to "Yalnızca düğmeler",
+        "No greeting: Home starts with its sections" to "Karşılama yok: Ana Sayfa doğrudan bölümleriyle başlar",
+        "A picture" to "Bir resim",
+        "Your photo or a design behind the greeting" to "Karşılamanın arkasında fotoğrafınız veya bir tasarım",
+        "The playing cover, frosted, behind it" to "Arkada buzlu cam efektiyle çalan şarkının kapağı",
+        "Short" to "Kısa",
+        "Tall" to "Uzun",
+        "As the glass" to "Cam gibi",
+        "See-through" to "Yarı saydam",
+        "Solid" to "Düz renk",
+        "Recent" to "Son",
+        "Auto" to "Otomatik",
+        "Performance mode" to "Performans modu",
+        "For slower phones: lighter, fewer effects" to "Daha yavaş telefonlar için: daha hafif, daha az efekt",
+        "On: Prism is drawn lightly" to "Açık: Prism hafif çizilir",
+        "Performance mode is on" to "Performans modu açık",
+        "Some of these effects are paused for now" to "Bu efektlerden bazıları şimdilik duraklatıldı",
+        "Swipe between tabs" to "Sekmeler arasında kaydır",
+        "Swipe sideways on a tab's page" to "Sekmenin sayfasında yana kaydırın",
+        "Joined to the tab bar" to "Sekme çubuğuna birleşik",
+        "One piece of glass with the tabs" to "Sekmelerle tek bir parça cam",
+        "Full-bleed video" to "Tam ekran video",
+        "Music videos fill the top of the player" to "Müzik videoları oynatıcının üst kısmını doldurur",
+        "For Normalize volume and Crossfade, 1–4 MB a song" to "Sesi normalleştir ve Çapraz geçiş için şarkı başına 1–4 MB",
+        "Get songs ready for Sing on mobile data" to "Hücresel veride şarkıları Eşlik Et için hazırla",
+        "Animated covers on mobile data" to "Hücresel veride hareketli kapaklar",
+        "Save animated covers on mobile data" to "Hücresel veride hareketli kapakları kaydet",
+        "Sections, the top of Home, shortcuts" to "Bölümler, Ana Sayfa'nın üstü, kısayollar",
+        "Song counts, owners and years" to "Şarkı sayıları, sahipleri ve yıllar",
+        "Buttons in the car" to "Araçtaki düğmeler",
+        "Beside play, in the order the car shows them" to "Oynatmanın yanında, aracın gösterdiği sırada",
+        "Covers across" to "Kapak sayısı",
+        "Details under each one" to "Her birinin altındaki ayrıntılar",
+        "Each part" to "Her bölüm",
+        "The whole look" to "Tüm görünüm",
+        "Other devices" to "Diğer cihazlar",
+        "Performance" to "Performans",
+        "Customize Prism" to "Prism'i Özelleştir",
+        "Lyrics & Sing" to "Şarkı Sözleri ve Eşlik Et",
+        "Controls & gestures" to "Kontroller ve hareketler",
+        "Car & devices" to "Araç ve cihazlar",
+        "Backup & about" to "Yedekleme ve hakkında",
+        "Tabs & mini player" to "Sekmeler ve mini oynatıcı",
+        "Home & Library" to "Ana Sayfa ve Kitaplık",
+        "Downloads, storage & data" to "İndirmeler, depolama ve veri",
+        "Speakers, TVs & browser" to "Hoparlörler, TV'ler ve tarayıcı",
+        "Recommendations & Replay" to "Öneriler ve Replay",
+        "Playlists as" to "Çalma listeleri görünümü",
+        "Albums as" to "Albümler görünümü",
+        "Artists as" to "Sanatçılar görünümü",
+        "A music video runs to the screen's edges at the top of the player, cropped to fill it, and fades into the background, as on YouTube Music. The button on the video switches it too." to "Bir müzik videosu, YouTube Music'te olduğu gibi oynatıcının üst kısmında ekranın kenarlarına kadar uzanır, doldurmak için kırpılır ve arka planda kaybolur. Videodaki düğme de bunu değiştirir.",
+        "A sideways swipe on a tab's own page goes to the tab beside it. Rows that scroll sideways (and Library's own pages) keep their swipes." to "Bir sekmenin kendi sayfasında yana kaydırma, yanındaki sekmeye gider. Yana kaydırılan satırlar (ve Kitaplığın kendi sayfaları) kaydırmalarını korur.",
+        "In the grid. Auto fits as many as the screen's width allows." to "Izgara görünümünde. Otomatik, ekran genişliğinin izin verdiği kadarını sığdırır.",
+        "Motion artwork and video covers. Turn them off for one song from the player's ⋯ menu. Whether they play on mobile data, and the ones kept on the phone, are in Downloads, storage & data." to "Hareketli kapaklar ve video kapakları. Oynatıcının ⋯ menüsünden tek bir şarkı için kapatabilirsiniz. Hücresel veride oynatılıp oynatılmayacağı ve telefonda tutulanlar İndirmeler, depolama ve veri bölümündedir.",
+        "Never shows only the icons; Words only shows only the names." to "Asla yalnızca simgeleri göstermez; Yalnızca kelimeler yalnızca adları gösterir.",
+        "Off, songs are only loaded ahead on Wi-Fi (Playback & sound → Load ahead). Whole songs loaded ahead count toward Smart Downloads' space." to "Kapalıyken şarkılar yalnızca Wi-Fi'da önceden yüklenir (Oynatma ve ses → Önceden yükle). Önceden yüklenen tam şarkılar Akıllı İndirmeler alanından sayılır.",
+        "See-through lets the page show through the bar; Solid hides it. The blur itself comes from Glass (Customize Prism → Glass & backgrounds)." to "Yarı saydam sayfanın çubuğun arkasından görünmesini sağlar; Düz renk gizler. Bulanıklığın kendisi Cam'dan gelir (Prism'i Özelleştir → Cam ve arka planlar).",
+        "The mini player sits on top of the tabs in the same floating bar, instead of floating above it." to "Mini oynatıcı üzerinde yüzmek yerine, aynı yüzen çubukta sekmelerin üstüne oturur.",
+        "The playing song and the next are separated in the background even with Sing off. It uses more battery while music plays; on mobile data it follows Downloads, storage & data → Mobile data." to "Çalan şarkı ve bir sonraki, Eşlik Et kapalıyken bile arka planda ayrıştırılır. Müzik çalarken daha fazla pil tüketir; hücresel veride İndirmeler, depolama ve veri → Mobil veri ayarını izler.",
+        "What Prism may use mobile data for. On Wi-Fi none of these change anything." to "Prism'in hücresel veriyi ne için kullanabileceği. Wi-Fi'da bunların hiçbiri hiçbir şeyi değiştirmez.",
+        "Ambient" to "Ambiyans",
+        "Rosé" to "Rozé",
+        "Graphite" to "Grafit",
+        "Soft tint" to "Yumuşak ton",
+        "Dusk" to "Alacakaranlık",
+        "Sand" to "Kum",
+        "Mist" to "Sis",
+        "Dots" to "Noktalar",
+        "Paper" to "Kağıt",
+        "Pinstripe" to "İnce çizgili",
+        "Ripples" to "Halkalar",
+        "Diamonds" to "Baklavalar",
+        "Zigzag" to "Zikzak",
+        "Halftone" to "Nokta tonlama",
+        "Crosses" to "Artılar",
+        "Scales" to "Pullar",
+        "Confetti" to "Konfeti",
+        "Constellation" to "Takımyıldız",
+        "Contours" to "Eş yükselti",
+        "Mosaic" to "Mozaik",
+        "Bokeh" to "Bulanıklık küreleri",
+        "Silk" to "İpek",
+        "Horizon" to "Ufuk",
+    )
+    }
+    private val trMap by lazy { Tr1.map + Tr2.map + Tr3.map }
+
+    private object Az1 {
+        val map = mapOf(
         "\"Continue …\" picks up the album you were in" to "\"Davam et …\" dinlədiyiniz alboma qaldığı yerdən davam edir",
         "\"Not for me\" and \"Leave out of my taste\" keep things out" to "\"Mənə görə deyil\" və \"Zövqümdən kənar saxla\" istənməyənləri kənarda saxlayır",
         "\"On this phone\" searches your own music files" to "\"Bu telefonda\" öz musiqi fayllarınızı axtarır",
@@ -3335,7 +3522,9 @@ object LocalizedStrings {
         "Sort" to "Sırala",
         "Sort albums" to "Albomları sırala",
     )
-    private val azMap2 = mapOf(
+    }
+    private object Az2 {
+        val map = mapOf(
         "Sort artists" to "Sənətçiləri sırala",
         "Sort by" to "Sıralama meyarı",
         "Sort songs" to "Mahnıları sırala",
@@ -4529,7 +4718,201 @@ object LocalizedStrings {
         "Gaming" to "Oyun",
         "On repeat" to "Təkrar-təkrar",
     )
-    private val azMap = azMap1 + azMap2
+    }
+    private object Az3 {
+        val map = mapOf(
+        "Make a cover" to "Üz qabığı yarat",
+        "Name on the cover" to "Üz qabığındakı ad",
+        "Pattern" to "Naxış",
+        "Split light around it" to "Ətrafında sınan işıq",
+        "Use this cover" to "Bu üz qabığından istifadə et",
+        "Change the %s color" to "%s rəngini dəyiş",
+        "Folder" to "Qovluq",
+        "Folder name" to "Qovluq adı",
+        "Its playlists are back in Library → Playlists." to "Pleylistləri Kitabxana → Pleylistlər bölməsinə geri qayıtdı.",
+        "Move to a folder" to "Qovluğa köçür",
+        "New folder" to "Yeni qovluq",
+        "Nothing in here yet" to "Hələlik burada heç nə yoxdur",
+        "Rename folder" to "Qovluğun adını dəyiş",
+        "Take the folder apart" to "Qovluğu ləğv et",
+        "This folder is gone" to "Bu qovluq artıq yoxdur",
+        "Hold a playlist in Library → Playlists and pick \"Move to a folder\"." to "Kitabxana → Pleylistlər bölməsində bir pleylisti basıb saxlayın və \"Qovluğa köçür\" seçimini edin.",
+        "Take out of \"%s\"" to "\"%s\" qovluğundan çıxar",
+        "In \"%s\"" to "\"%s\" daxilində",
+        "1 playlist" to "1 pleylist",
+        "%s playlists" to "%s pleylist",
+        "Folder · 1 playlist" to "Qovluq · 1 pleylist",
+        "Folder · %s playlists" to "Qovluq · %s pleylist",
+        "Arrange Search" to "Axtarışı Nizamla",
+        "Arrange this page" to "Bu səhifəni nizamla",
+        "Recently opened" to "Son açılanlar",
+        "Moods & genres for you" to "Sizin üçün əhval-ruhiyyələr və janrlar",
+        "Your photo" to "Fotoşəkliniz",
+        "Rename section" to "Bölmənin adını dəyiş",
+        "Use \"%s\"" to "\"%s\" istifadə et",
+        "To pin an album, playlist, artist or mix as a section: hold it anywhere in Prism and pick \"Pin to Home\"." to "Albomu, pleylisti, sənətçini və ya miksi bölmə kimi sancmaq üçün: Prism-də istənilən yerdə basıb saxlayın və \"Əsas Səhifəyə sanc\" seçimini edin.",
+        "On the phone, not played yet" to "Telefonda, hələ dinlənilməyib",
+        "Your most played that year" to "O il ən çox dinlədikləriniz",
+        "Liked this month" to "Bu ay bəyənilənlər",
+        "Downloads you haven't played" to "Hələ dinləmədiyiniz endirmələr",
+        "Most played in %s" to "%s ilində ən çox dinlənilənlər",
+        "Most played in a year" to "Bir ildə ən çox dinlənilənlər",
+        "Open a link" to "Keçid aç",
+        "Open a playlist link" to "Pleylist keçidi aç",
+        "That isn't a playlist's link" to "Bu, pleylist keçidi deyil",
+        "Pin to the top" to "Yuxarıya sanc",
+        "Unpin" to "Sancılmanı ləğv et",
+        "Make one with New playlist, or from any song's menu (Add to playlist). A YouTube playlist can be kept here too: open it and tap its bookmark. All on this phone, no account needed." to "Yeni pleylist vasitəsilə və ya hər hansı mahnının menyusundan (Pleylistə əlavə et) birini yaradın. YouTube pleylistini də burada saxlamaq olar: açın və əlfəcininə toxunun. Hamısı bu telefonda, hesab tələb olunmur.",
+        "Save a copy as a Prism playlist" to "Kopyasını Prism pleylisti kimi saxla",
+        "Pin to Home" to "Əsas Səhifəyə sanc",
+        "Unpin from Home" to "Əsas Səhifədən çıxar",
+        "Taken off Home" to "Əsas Səhifədən çıxarıldı",
+        "Pinned to the top of Home" to "Əsas Səhifənin yuxarısına sancıldı",
+        "Copying \"%s\"…" to "\"%s\" kopyalanır…",
+        "Couldn't load \"%s\"" to "\"%s\" yüklənmədi",
+        "\"%s\" has no songs to copy" to "\"%s\" kopyalanacaq mahnıya malik deyil",
+        "Saved \"%s\" as a Prism playlist (%s)" to "\"%s\", Prism pleylisti kimi saxlanıldı (%s)",
+        "Fewer options" to "Daha az seçim",
+        "More options" to "Daha çox seçim",
+        "Show fewer options" to "Daha az seçim göstər",
+        "Show more options" to "Daha çox seçim göstər",
+        "Home, your way" to "Əsas Səhifə, sizin tərzinizdə",
+        "Customize Home (the button at the top of Home) has more in it." to "Əsas Səhifəni Fərdiləşdir (Əsas Səhifənin yuxarısındakı düymə) artıq daha çox seçim təklif edir.",
+        "Hold any album, playlist, artist or mix → Pin to Home: a section of its own" to "İstənilən albomu, pleylisti, sənətçini və ya miksi basıb saxlayın → Əsas Səhifəyə sanc: özünəməxsus bir bölmə",
+        "Sections from your own listening: Liked this month, Downloads you haven't played, Most played in a year" to "Öz dinləmələrinizdən bölmələr: Bu ay bəyənilənlər, Dinləmədiyiniz endirmələr, Bir ildə ən çox dinlənilənlər",
+        "Rename any section; leave YouTube Music's video or podcast sections off" to "İstənilən bölmənin adını dəyişin; YouTube Music-in video və ya podkast bölmələrini kənarda saxlayın",
+        "The top of Home: the greeting, just the buttons, or the greeting over a picture or the playing cover" to "Əsas Səhifənin yuxarı hissəsi: salamlama, yalnız düymələr və ya şəkil yaxud oxunan üzlük üzərində salamlama",
+        "Home shows at once when Prism opens, while the new one loads" to "Prism açılanda Əsas Səhifə dərhal göstərilir, yenisi arxa planda yüklənir",
+        "Library and tabs, your way" to "Kitabxana və vərəqələr, sizin tərzinizdə",
+        "Folders, pins, and tabs of your own." to "Özünüzə məxsus qovluqlar, sancmalar və vərəqələr.",
+        "Hold a playlist → Move to a folder; hold anything in Library → Pin to the top" to "Pleylisti basıb saxlayın → Qovluğa köçür; Kitabxanadakı hər hansı elementi basıb saxlayın → Yuxarıya sanc",
+        "Playlists, Albums and Artists each a list or a grid; 2, 3 or 4 covers across" to "Pleylistlər, Albomlar və Sənətçilər üçün siyahı və ya tor görünüşü; yan-yana 2, 3 və ya 4 üz qabığı",
+        "Make a cover for a playlist, or use your own photo of an artist" to "Pleylist üçün üz qabığı hazırlayın və ya sənətçi üçün öz fotoşəklinizi istifadə edin",
+        "Keep YouTube playlists and copy them as Prism playlists, no account needed" to "YouTube pleylistlərini saxlayın və hesab tələb olunmadan Prism pleylisti kimi kopyalayın",
+        "Tabs: Downloads, Liked songs or Podcasts as tabs, your own names, words only, swipe between them" to "Vərəqələr: Endirmələr, Bəyənilən mahnılar və ya Podkastlar vərəqə kimi, öz adlarınız, yalnız sözlər, aralarında sürüşdürmə",
+        "Search, redesigned" to "Axtarış, yenidən dizayn edildi",
+        "Search starts from your music." to "Axtarış öz musiqinizdən başlayır.",
+        "Type a line of a song's lyrics to find it" to "Tapmaq üçün mahnının sözlərindən bir sətir yazın",
+        "What you opened lately, your artists, and moods drawn by Prism" to "Son açdıqlarınız, sənətçiləriniz və Prism tərəfindən çəkilmiş əhval-ruhiyyələr",
+        "Artists and songs with their pictures while you type" to "Yazarkən şəkilləri ilə birlikdə görünən sənətçilər və mahnılar",
+        "Results already in your library, right after the top one" to "Ən yuxarıdakı nəticədən dərhal sonra artıq kitabxananızda olan nəticələr",
+        "Settings, easier to find" to "Parametrlər, tapmaq daha asan",
+        "Settings are sorted by what they do." to "Parametrlər funksiyalarına görə sıralandı.",
+        "Everything about how Prism looks is under Customize Prism" to "Prism-in necə göründüyünə aid hər şey Prism-i Fərdiləşdir bölməsində",
+        "Gestures and buttons in Controls & gestures" to "İdarəetmə və jestlər bölməsində jestlər və düymələr",
+        "Every mobile data choice on one page" to "Bütün mobil data seçimləri tək səhifədə",
+        "Android Auto, speakers and Discord in Car & devices" to "Avtomobil və cihazlar bölməsində Android Auto, dinamiklər və Discord",
+        "Performance mode, at the top, for slower phones" to "Daha yavaş telefonlar üçün yuxarıda Performans rejimi",
+        "Translate them, or read other scripts in Latin letters (Settings → Lyrics & Sing)" to "Sözləri tərcümə edin və ya digər əlifbaları Latın hərfləri ilə oxuyun (Parametrlər → Mahnı Sözləri və Müşayiət)",
+        "Settings → Customize Prism → Color: every choice shows what it looks like before you pick it." to "Parametrlər → Prism-i Fərdiləşdir → Rəng: hər seçim seçilməzdən əvvəl necə göründüyünü göstərir.",
+        "Settings → Customize Prism → Looks: your whole look, saved, switched and shared in one tap." to "Parametrlər → Prism-i Fərdiləşdir → Görünüşlər: bütün görünüşünüz tək toxunuşla saxlanılır, dəyişdirilir və paylaşılır.",
+        "Settings → Customize Prism → Player, or ⋯ → Player settings on the player itself." to "Parametrlər → Prism-i Fərdiləşdir → Oxuducu və ya oxuducunun üzərindəki ⋯ → Oxuducu parametrləri.",
+        "A waveform progress bar, its color, the title centered or bigger, and which times show" to "Dalğa forması irəliləyiş zolağı, rəngi, başlığın mərkəzləşdirilməsi və ya böyüdülməsi və hansı vaxtların göstəriləcəyi",
+        "If something still stutters, Settings → Backup & about → Diagnostics notes where it happened, to share" to "Hələ də ilişmə olarsa, Parametrlər → Ehtiyat nüsxə və haqqında → Diaqnostika paylaşmaq üçün harada baş verdiyini qeyd edir",
+        "Settings → Customize Prism → Lyrics: how your lyrics look, with an example of every choice." to "Parametrlər → Prism-i Fərdiləşdir → Mahnı Sözləri: hər seçimin nümunəsi ilə mahnı sözlərinizin necə görünəcəyi.",
+        "Prism's own volume, apart from the phone's (Settings → Customize Prism → Player)" to "Telefonunkundan ayrı, Prism-in öz səs səviyyəsi (Parametrlər → Prism-i Fərdiləşdir → Oxuducu)",
+        "Hide the status bar (Customize Prism → Tabs & mini player)" to "Vəziyyət zolağını gizlət (Prism-i Fərdiləşdir → Vərəqələr və mini oxuducu)",
+        "The Replay card at the top: your year so far (pick its look in Settings → Customize Prism → Home & Library)" to "Yuxarıdakı Replay kartı: indiyə qədərki iliniz (görünüşünü Parametrlər → Prism-i Fərdiləşdir → Əsas Səhifə və Kitabxana bölməsindən seçin)",
+        "You can take it again from Settings → Backup & about." to "Turu Parametrlər → Ehtiyat nüsxə və haqqında bölməsindən yenidən keçə bilərsiniz.",
+        "The date and a hello, as now" to "İndiki kimi tarix və bir salamlama",
+        "Just the buttons" to "Yalnız düymələr",
+        "No greeting: Home starts with its sections" to "Salamlama yoxdur: Əsas Səhifə birbaşa bölmələri ilə başlayır",
+        "A picture" to "Bir şəkil",
+        "Your photo or a design behind the greeting" to "Salamlamanın arxasında fotoşəkliniz və ya bir dizayn",
+        "The playing cover, frosted, behind it" to "Arxada buzlu şüşə effekti ilə oxunan mahnının üzlüyü",
+        "Short" to "Qısa",
+        "Tall" to "Hündür",
+        "As the glass" to "Şüşə kimi",
+        "See-through" to "Şəffaf",
+        "Solid" to "Bütöv",
+        "Recent" to "Son",
+        "Auto" to "Avtomatik",
+        "Performance mode" to "Performans rejimi",
+        "For slower phones: lighter, fewer effects" to "Daha yavaş telefonlar üçün: daha yüngül, daha az effekt",
+        "On: Prism is drawn lightly" to "Aktiv: Prism yüngül çəkilir",
+        "Performance mode is on" to "Performans rejimi aktivdir",
+        "Some of these effects are paused for now" to "Bu effektlərdən bəziləri hələlik dayandırıldı",
+        "Swipe between tabs" to "Vərəqələr arasında sürüşdür",
+        "Swipe sideways on a tab's page" to "Vərəqənin səhifəsində yana sürüşdürün",
+        "Joined to the tab bar" to "Vərəqə panelinə birləşdirilmiş",
+        "One piece of glass with the tabs" to "Vərəqələrlə tək bir parça şüşə",
+        "Full-bleed video" to "Tam ekran video",
+        "Music videos fill the top of the player" to "Musiqi videoları oxuducunun yuxarısını doldurur",
+        "For Normalize volume and Crossfade, 1–4 MB a song" to "Səsi normallaşdır və Çarpaz keçid üçün mahnı başına 1–4 MB",
+        "Get songs ready for Sing on mobile data" to "Mobil datada mahnıları Müşayiət üçün hazırla",
+        "Animated covers on mobile data" to "Mobil datada animasiyalı üzlüklər",
+        "Save animated covers on mobile data" to "Mobil datada animasiyalı üzlükləri saxla",
+        "Sections, the top of Home, shortcuts" to "Bölmələr, Əsas Səhifənin yuxarısı, qısayollar",
+        "Song counts, owners and years" to "Mahnı sayları, sahibləri və illər",
+        "Buttons in the car" to "Avtomobildəki düymələr",
+        "Beside play, in the order the car shows them" to "Oxutmanın yanında, avtomobilin göstərdiyi ardıcıllıqla",
+        "Covers across" to "Üz qabığı sayı",
+        "Details under each one" to "Hər birinin altındakı təfərrüatlar",
+        "Each part" to "Hər hissə",
+        "The whole look" to "Bütün görünüş",
+        "Other devices" to "Digər cihazlar",
+        "Performance" to "Performans",
+        "Customize Prism" to "Prism-i Fərdiləşdir",
+        "Lyrics & Sing" to "Mahnı Sözləri və Müşayiət",
+        "Controls & gestures" to "İdarəetmə və jestlər",
+        "Car & devices" to "Avtomobil və cihazlar",
+        "Backup & about" to "Ehtiyat nüsxə və haqqında",
+        "Tabs & mini player" to "Vərəqələr və mini oxuducu",
+        "Home & Library" to "Əsas Səhifə və Kitabxana",
+        "Downloads, storage & data" to "Endirmələr, yaddaş və data",
+        "Speakers, TVs & browser" to "Dinamiklər, TV-lər və brauzer",
+        "Recommendations & Replay" to "Tövsiyələr və Replay",
+        "Playlists as" to "Pleylistlərin görünüşü",
+        "Albums as" to "Albomların görünüşü",
+        "Artists as" to "Sənətçilərin görünüşü",
+        "A music video runs to the screen's edges at the top of the player, cropped to fill it, and fades into the background, as on YouTube Music. The button on the video switches it too." to "Musiqi videosu YouTube Music-də olduğu kimi oxuducunun yuxarı hissəsində ekranın kənarlarına qədər uzanır, doldurmaq üçün kəsilir və arxa planda itir. Videodakı düymə də bunu dəyişir.",
+        "A sideways swipe on a tab's own page goes to the tab beside it. Rows that scroll sideways (and Library's own pages) keep their swipes." to "Vərəqənin öz səhifəsində yana sürüşdürmə yanındakı vərəqəyə keçir. Yana sürüşdürülən sıralar (və Kitabxananın öz səhifələri) öz sürüşdürmələrini saxlayır.",
+        "In the grid. Auto fits as many as the screen's width allows." to "Tor görünüşündə. Avtomatik, ekran eninin icazə verdiyi qədərini sığdırır.",
+        "Motion artwork and video covers. Turn them off for one song from the player's ⋯ menu. Whether they play on mobile data, and the ones kept on the phone, are in Downloads, storage & data." to "Hərəkətli təsvirlər və video üzlükləri. Oxuducunun ⋯ menyusundan tək bir mahnı üçün söndürə bilərsiniz. Mobil datada oxudulub-oxudulmayacağı və telefonda saxlanılanlar Endirmələr, yaddaş və data bölməsindədir.",
+        "Never shows only the icons; Words only shows only the names." to "Heç vaxt yalnız nişanları göstərmir; Yalnız sözlər yalnız adları göstərir.",
+        "Off, songs are only loaded ahead on Wi-Fi (Playback & sound → Load ahead). Whole songs loaded ahead count toward Smart Downloads' space." to "Qapalı olduqda mahnılar yalnız Wi-Fi-da qabaqcadan yüklənir (Oxutma və səs → Qabaqcadan yüklə). Qabaqcadan yüklənən bütöv mahnılar Ağıllı Endirmələr yaddaşına daxildir.",
+        "See-through lets the page show through the bar; Solid hides it. The blur itself comes from Glass (Customize Prism → Glass & backgrounds)." to "Şəffaf səhifənin panelin arxasından görünməsinə imkan verir; Bütöv gizlədir. Bulanıqlığın özü Şüşədən gəlir (Prism-i Fərdiləşdir → Şüşə və fonlar).",
+        "The mini player sits on top of the tabs in the same floating bar, instead of floating above it." to "Mini oxuducu üzərində üzmək əvəzinə, eyni üzən paneldə vərəqələrin üstündə oturur.",
+        "The playing song and the next are separated in the background even with Sing off. It uses more battery while music plays; on mobile data it follows Downloads, storage & data → Mobile data." to "Oxunan mahnı və növbəti mahnı, Müşayiət qapalı olsa belə arxa planda ayrılır. Musiqi oxunarkən daha çox batareya sərf edir; mobil datada Endirmələr, yaddaş və data → Mobil data parametrini izləyir.",
+        "What Prism may use mobile data for. On Wi-Fi none of these change anything." to "Prism-in mobil datanı nə üçün istifadə edə biləcəyi. Wi-Fi-da bunların heç biri heç nəyi dəyişmir.",
+        "Ambient" to "Ambiyans",
+        "Rosé" to "Roze",
+        "Graphite" to "Qrafit",
+        "Soft tint" to "Yumşaq çalar",
+        "Dusk" to "Qürub",
+        "Sand" to "Qum",
+        "Mist" to "Duman",
+        "Dots" to "Nöqtələr",
+        "Paper" to "Kağız",
+        "Pinstripe" to "İncə zolaqlı",
+        "Ripples" to "Ləpələr",
+        "Diamonds" to "Rombik",
+        "Zigzag" to "Ziqzaq",
+        "Halftone" to "Yarımton",
+        "Crosses" to "Xaçlar",
+        "Scales" to "Pulaqlar",
+        "Confetti" to "Konfeti",
+        "Constellation" to "Bürclər",
+        "Contours" to "Konturlar",
+        "Mosaic" to "Mozaika",
+        "Bokeh" to "Boke",
+        "Silk" to "İpək",
+        "Horizon" to "Üfüq",
+    )
+    }
+    private val azMap by lazy { Az1.map + Az2.map + Az3.map }
+        private val takeOutOfFolderRegex = Regex("""^Take out of "(.*)"$""")
+    private val inFolderRegex = Regex("""^In "(.*)"$""")
+    private val changeColorRegex = Regex("""^Change the (.*) color$""")
+    private val mostPlayedInYearRegex = Regex("""^Most played in (\d{4})$""")
+    private val folderPlaylistsRegex = Regex("""^Folder · (\d+) playlists$""")
+    private val allSettingsPageRegex2 = Regex("""^All (.*) settings$""")
+    private val resetSectionRegex = Regex("""^Reset (.*)\?$""")
+    private val undoStepRegex = Regex("""^Undo: (.*)$""")
+    private val copyingPlaylistRegex = Regex("""^Copying "(.*)"…$""")
+    private val couldntLoadPlaylistRegex = Regex("""^Couldn't load "(.*)"$""")
+    private val noSongsToCopyRegex = Regex("""^"(.*)" has no songs to copy$""")
+    private val savedCopyPrismRegex = Regex("""^Saved "(.*)" as a Prism playlist \((.*)\)$""")
     private val songRegex = Regex("""^(\d+)\s*songs?$""")
     private val albumRegex = Regex("""^(\d+)\s*albums?$""")
     private val artistRegex = Regex("""^(\d+)\s*artists?$""")
@@ -7193,6 +7576,115 @@ object LocalizedStrings {
             return when (lang) {
                 "tr" -> "Ana Sayfa, bu rengin üzerine çizilen $backdrop arka planına (Cam ve arka planlar) sahiptir, bu nedenle orada yalnızca biraz görünür. Tamamen görmek için orada Ambiyans'ı seçin"
                 "az" -> "Əsas Səhifə, bu rəngin üzərinə çəkilən $backdrop fonuna (Şüşə və fonlar) malikdir, buna görə orada yalnız bir az görünür. Tam görmək üçün orada Ambiyansı seçin"
+                else -> clean
+            }
+        }
+
+        takeOutOfFolderRegex.matchEntire(clean)?.let { m ->
+            val folder = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "\"$folder\" klasöründen çıkar"
+                "az" -> "\"$folder\" qovluğundan çıxar"
+                else -> clean
+            }
+        }
+
+        inFolderRegex.matchEntire(clean)?.let { m ->
+            val folder = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "\"$folder\" içinde"
+                "az" -> "\"$folder\" daxilində"
+                else -> clean
+            }
+        }
+
+        changeColorRegex.matchEntire(clean)?.let { m ->
+            val color = get(m.groupValues[1], context)
+            return when (lang) {
+                "tr" -> "$color rengini değiştir"
+                "az" -> "$color rəngini dəyiş"
+                else -> clean
+            }
+        }
+
+        mostPlayedInYearRegex.matchEntire(clean)?.let { m ->
+            val year = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "$year yılında en çok dinlenenler"
+                "az" -> "$year ilində ən çox dinlənilənlər"
+                else -> clean
+            }
+        }
+
+        folderPlaylistsRegex.matchEntire(clean)?.let { m ->
+            val count = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "Klasör · $count çalma listesi"
+                "az" -> "Qovluq · $count pleylist"
+                else -> clean
+            }
+        }
+
+        allSettingsPageRegex2.matchEntire(clean)?.let { m ->
+            val page = get(m.groupValues[1], context)
+            return when (lang) {
+                "tr" -> "Tüm $page ayarları"
+                "az" -> "Bütün $page parametrləri"
+                else -> clean
+            }
+        }
+
+        resetSectionRegex.matchEntire(clean)?.let { m ->
+            val sec = get(m.groupValues[1], context)
+            return when (lang) {
+                "tr" -> "$sec sıfırlansın mı?"
+                "az" -> "$sec sıfırlansın?"
+                else -> clean
+            }
+        }
+
+        undoStepRegex.matchEntire(clean)?.let { m ->
+            val step = get(m.groupValues[1], context)
+            return when (lang) {
+                "tr" -> "Geri al: $step"
+                "az" -> "Geri qaytar: $step"
+                else -> clean
+            }
+        }
+
+        copyingPlaylistRegex.matchEntire(clean)?.let { m ->
+            val name = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "\"$name\" kopyalanıyor…"
+                "az" -> "\"$name\" kopyalanır…"
+                else -> clean
+            }
+        }
+
+        couldntLoadPlaylistRegex.matchEntire(clean)?.let { m ->
+            val name = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "\"$name\" yüklenemedi"
+                "az" -> "\"$name\" yüklənmədi"
+                else -> clean
+            }
+        }
+
+        noSongsToCopyRegex.matchEntire(clean)?.let { m ->
+            val name = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "\"$name\" kopyalanacak şarkı içermiyor"
+                "az" -> "\"$name\" kopyalanacaq mahnıya malik deyil"
+                else -> clean
+            }
+        }
+
+        savedCopyPrismRegex.matchEntire(clean)?.let { m ->
+            val name = m.groupValues[1]
+            val count = get(m.groupValues[2], context)
+            return when (lang) {
+                "tr" -> "\"$name\", Prism çalma listesi olarak kaydedildi ($count)"
+                "az" -> "\"$name\", Prism pleylisti kimi saxlanıldı ($count)"
                 else -> clean
             }
         }

@@ -141,6 +141,7 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
     val c = LocalContainer.current
     val nav = LocalNavigator.current
     val settings = LocalAppSettings.current
+    val context = androidx.compose.ui.platform.LocalContext.current
     val layoutNow by rememberUpdatedState(settings.homeLayout)
     val home = rememberLoad("home") {
         // YouTube's personalised feed reshuffles per load, so pinned shelves (e.g. "Mixed for you")
@@ -309,7 +310,7 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
                             val songs by OwnSections.rememberSongs(cfg.key, refreshes)
                             val shownSongs = songs.filter(offline).take(if (cfg.style == SectionStyle.LIST) 20 else 30)
                             if (shownSongs.isNotEmpty()) SongSection(
-                                cfg, cfg.titled(), OwnSections.strapline(cfg.key), shownSongs,
+                                cfg, (cfg.name ?: cfg.title.localized()), OwnSections.strapline(cfg.key, context), shownSongs,
                                 onMore = OwnSections.pageOf(cfg.key)?.let { r -> { nav.go(r) } },
                             )
                         } else if (online) {

@@ -321,7 +321,7 @@ fun SearchScreen(bottomPadding: Dp) {
 
         // One row of chips: YouTube Music's kinds, and the music on this phone last (it was a row of its own).
         com.prism.music.ui.components.ChipRow(
-            SearchFilter.entries + null, { if (it == null) onPhone else !onPhone && it == filter }, { (it?.label ?: "On this phone").localized() },
+            SearchFilter.entries + null, { if (it == null) onPhone else !onPhone && it == filter }, { (it?.label ?: "On this phone").localized(context) },
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 4.dp),
         ) { if (it == null) onPhone = true else { onPhone = false; filter = it } }
         Box(Modifier.fillMaxWidth().height(3.dp).padding(horizontal = 16.dp)) {
@@ -451,6 +451,14 @@ private suspend fun playTop(c: com.prism.music.AppContainer, item: BrowseItem) {
     }
 }
 
+/** The best match up top, then songs, albums, artists, playlists and videos, best-matching first. */
+@Composable
+private fun TopResults(
+    r: TopSearch, query: String, inLibrary: List<BrowseItem>, onPhoneHits: List<com.prism.music.data.model.Song>,
+    lyricHits: List<com.prism.music.data.lyrics.LyricSearch.Hit>,
+    bottomPadding: Dp, onSeeAll: (SearchFilter) -> Unit, onSeePhone: () -> Unit, open: (BrowseItem) -> Unit,
+    onSongs: (List<com.prism.music.data.model.Song>, Int) -> Unit, onPlay: (BrowseItem) -> Unit,
+) {
     val context = LocalContext.current
     // Lyric matches only when the search didn't find the song by its name: when the top card's title has half the words
     // typed or more ("the best you ever had" → "Tonight (Best You Ever Had)"), they were only clutter. Songs already
@@ -475,11 +483,11 @@ private suspend fun playTop(c: com.prism.music.AppContainer, item: BrowseItem) {
         if (!lyricsFirst) fromTheLyrics()
         // Already yours (1.7.6): what in your library matches, before the rest.
         if (inLibrary.isNotEmpty()) {
-            item("lib-h") { SectionHeader("In your library") }
+            item("lib-h") { SectionHeader("In your library".localized()) }
             items(inLibrary, key = { "lib:" + it.id }) { item -> ResultRow(item) { open(item) } }
         }
         if (onPhoneHits.isNotEmpty()) {
-            item("phone-h") { SectionHeader("On this phone", onMore = onSeePhone) }
+            item("phone-h") { SectionHeader("On this phone".localized(), onMore = onSeePhone) }
             items(onPhoneHits, key = { "ph:" + it.id }) { s -> SongRow(s) { onSongs(onPhoneHits, onPhoneHits.indexOf(s)) } }
         }
         r.sections.forEach { (f, items) ->

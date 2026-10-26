@@ -155,7 +155,7 @@ enum class NavTab(val label: String) {
     // 1.7.6: any of these pages as a tab too.
     DOWNLOADS("Downloads"), LIKED("Liked songs"), PODCASTS("Podcasts");
 
-    fun label(context: android.content.Context): String = com.prism.music.ui.i18n.localized(label, context)
+    fun label(context: android.content.Context): String = with(com.prism.music.ui.i18n.LocalizedStrings) { get(label, context) }
 
     companion object {
         /** The most tabs the bar holds (labels still fit on a phone). */

@@ -303,7 +303,7 @@ open class MainActivity : ComponentActivity() {
 private data class Tab(val route: String, val label: String, val icon: ImageVector, val selectedIcon: ImageVector)
 
 /** [name]: the listener's own name for it (1.7.6), else its own. */
-private fun NavTab.tab(name: String? = null, context: android.content.Context? = null): Tab {
+private fun NavTab.tab(context: android.content.Context? = null, name: String? = null): Tab {
     val label = name ?: (if (context != null) label(context) else label)
     return when (this) {
         NavTab.HOME -> Tab(Routes.HOME, label, PrismIcons.Home, PrismIcons.HomeFilled)
@@ -450,7 +450,7 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
         val onboardingPicker = (route?.startsWith(Routes.PICK_ARTISTS) == true || route?.startsWith(Routes.ACCOUNT) == true) &&
             backStack?.arguments?.getBoolean("onboarding") == true
         val showChrome = route != Routes.LOGIN && route != Routes.LOGIN_ADD && route != Routes.DISCORD_LOGIN && route != Routes.WELCOME && !onboardingPicker
-        val tabs = settings.navTabs.map { it.tab(settings.tabNames[it], context) }
+        val tabs = settings.navTabs.map { it.tab(context, settings.tabNames[it]) }
 
         val together by c.together.state.collectAsState()
         val inSession = together is com.prism.music.playback.together.TogetherState.Hosting || together is com.prism.music.playback.together.TogetherState.Guest

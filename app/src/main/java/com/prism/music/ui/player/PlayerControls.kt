@@ -548,7 +548,7 @@ private fun PlayDisc(isPlaying: Boolean, isLoading: Boolean, filled: Boolean, si
             val tint = if (filled) Color.Black else Color.White
             if (isLoading) CircularProgressIndicator(color = tint, strokeWidth = 1.5.dp, modifier = Modifier.size(size * 0.42f))
             else Crossfade(isPlaying, animationSpec = tween(160), label = "playDisc") { p ->
-                Icon(if (p) PrismIcons.Pause else PrismIcons.Play, if (p) "Pause" else "Play", tint = tint, modifier = Modifier.size(size * (if (filled) 0.56f else 0.46f)))
+                Icon(if (p) PrismIcons.Pause else PrismIcons.Play, (if (p) "Pause" else "Play").localized(), tint = tint, modifier = Modifier.size(size * (if (filled) 0.56f else 0.46f)))
             }
         }
     }
@@ -597,7 +597,7 @@ private fun TransportGlyph(
         ),
         contentAlignment = Alignment.Center,
     ) {
-        Icon(icon, description, tint = Color.White.copy(alpha = alpha), modifier = Modifier.size(size).graphicsLayer { scaleY = heightScale })
+        Icon(icon, description.localized(), tint = Color.White.copy(alpha = alpha), modifier = Modifier.size(size).graphicsLayer { scaleY = heightScale })
     }
 }
 
@@ -1014,7 +1014,7 @@ fun OutputCaption() {
         else Box(Modifier.size(6.dp).clip(CircleShape).background(com.prism.music.ui.theme.PrismTokens.spectrumRing()))
         Spacer(Modifier.width(7.dp))
         Text(
-            castLabel ?: current?.let { outputLabel(it, phoneName) } ?: phoneName,
+            (castLabel ?: current?.let { outputLabel(it, phoneName) } ?: phoneName).localized(),
             style = MaterialTheme.typography.labelMedium,
             color = Color.White.copy(alpha = if (away) 0.95f else 0.62f),
             maxLines = 1,
@@ -1141,7 +1141,7 @@ fun OutputPickerSheet(phoneName: String, onDismiss: () -> Unit) {
         Column(Modifier.padding(start = 24.dp, end = 24.dp, bottom = 4.dp)) {
             Text("Play on".localized(), style = MaterialTheme.typography.titleLarge)
             Text(
-                castingName?.let { "Playing on $it".localized() } ?: current?.let { "Playing on ${outputLabel(it, phoneName)}" } ?: "Pick where the music plays".localized(),
+                castingName?.let { "Playing on $it".localized() } ?: current?.let { "Playing on ${outputLabel(it, phoneName)}".localized() } ?: "Pick where the music plays".localized(),
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
@@ -1213,7 +1213,7 @@ internal fun DeviceRow(
         }
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
-            Text(title, style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(title.localized(), style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text(
                 subtitle + if (selected) " · " + "Playing".localized() else "",
                 style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis,
@@ -1292,7 +1292,7 @@ private fun SpeakersAndTvs(castState: com.prism.music.connect.CastState, casting
 @Composable
 fun PlaybackOriginCaption(text: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Text(
-        text,
+        text.localized(),
         style = MaterialTheme.typography.labelSmall.copy(shadow = textShadow),
         color = Color.White,
         maxLines = 1,

@@ -305,7 +305,7 @@ fun ReplayScreen(bottomPadding: Dp) {
                     Text(s.artistName, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 Column(horizontalAlignment = Alignment.End) {
-                    Text(minutes(s.ms), style = MaterialTheme.typography.labelMedium)
+                    Text(minutes(s.ms).localized(), style = MaterialTheme.typography.labelMedium)
                     Text("${s.plays} ${if (s.plays == 1) "play" else "plays"}".localized(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
@@ -361,7 +361,7 @@ private fun HeroCard(d: ReplayData, period: Period, notYet: Boolean, loading: Bo
                     Column {
                         Text("Your #1 song".localized(), color = Color.White.copy(alpha = 0.75f), style = MaterialTheme.typography.labelMedium)
                         Text(top.title, color = Color.White, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                        Text("${minutes(top.ms)} · ${top.artistName}", color = Color.White.copy(alpha = 0.75f), style = MaterialTheme.typography.bodySmall, maxLines = 1)
+                        Text("${minutes(top.ms).localized()} · ${top.artistName}", color = Color.White.copy(alpha = 0.75f), style = MaterialTheme.typography.bodySmall, maxLines = 1)
                     }
                 }
             }
@@ -388,8 +388,7 @@ private fun HeroCard(d: ReplayData, period: Period, notYet: Boolean, loading: Bo
  * Anything under a minute shows "<1 min".
  */
 @Composable
-@ReadOnlyComposable
-fun listenTime(ms: Long): String = listenTime(ms, LocalAppSettings.current.replayHours)
+fun listenTime(ms: Long): String = listenTime(ms, LocalAppSettings.current.replayHours).localized()
 
 fun listenTime(ms: Long, hours: Boolean): String {
     val m = ms / 60_000
@@ -405,7 +404,6 @@ fun hoursAndMinutes(totalMinutes: Long): String =
     if (totalMinutes % 60 == 0L) "%,dh".format(totalMinutes / 60) else "%,dh %dm".format(totalMinutes / 60, totalMinutes % 60)
 
 @Composable
-@ReadOnlyComposable
 private fun minutes(ms: Long): String = listenTime(ms)
 
 /** Tapping the headline listening time flips Replay between minutes and hours. */
@@ -454,8 +452,8 @@ private fun Color.compositeDark(amount: Float = 0.7f): Color = Color(red * (1 - 
 @Composable
 private fun GenreLabels(name: String, time: String, nameInk: Color, timeInk: Color, modifier: Modifier) {
     Box(modifier.fillMaxSize()) {
-        Text(name, style = MaterialTheme.typography.labelLarge, color = nameInk, modifier = Modifier.align(Alignment.CenterStart).padding(start = 12.dp))
-        Text(time, style = MaterialTheme.typography.labelMedium, color = timeInk, modifier = Modifier.align(Alignment.CenterEnd).padding(end = 12.dp))
+        Text(name.localized(), style = MaterialTheme.typography.labelLarge, color = nameInk, modifier = Modifier.align(Alignment.CenterStart).padding(start = 12.dp))
+        Text(time.localized(), style = MaterialTheme.typography.labelMedium, color = timeInk, modifier = Modifier.align(Alignment.CenterEnd).padding(end = 12.dp))
     }
 }
 

@@ -283,6 +283,7 @@ private val STILL_BARS: List<androidx.compose.runtime.State<Float>> = listOf(0.6
 fun ItemCard(item: BrowseItem, modifier: Modifier = Modifier, width: Dp = Dp.Unspecified, onLongClick: (() -> Unit)? = null, onClick: () -> Unit) {
     val round = item is ArtistItem
     val ui = com.prism.music.ui.theme.LocalUi.current
+    val context = androidx.compose.ui.platform.LocalContext.current
     val w = if (width == Dp.Unspecified) ui.cardWidth else width
     // Without a long press of its own, holding a card offers to play or shuffle it.
     val menu = rememberPlayMenu()
@@ -306,12 +307,12 @@ fun ItemCard(item: BrowseItem, modifier: Modifier = Modifier, width: Dp = Dp.Uns
                 )
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    item.title, maxLines = if (video) 1 else 2, overflow = TextOverflow.Ellipsis,
+                    item.title.localized(), maxLines = if (video) 1 else 2, overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleSmall.copy(lineHeight = MaterialTheme.typography.titleSmall.fontSize * 1.25f),
                     modifier = if (round) Modifier.align(Alignment.CenterHorizontally) else Modifier,
                 )
                 if (item.subtitle.isNotBlank()) Text(
-                    item.subtitle, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    item.subtitle.split(" • ").joinToString(" • ") { it.localized(context) }, maxLines = 1, overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = if (round) Modifier.align(Alignment.CenterHorizontally) else Modifier,
                 )
@@ -333,7 +334,7 @@ fun MoodTile(item: MoodItem, modifier: Modifier = Modifier, onClick: () -> Unit)
     ) {
         Box(Modifier.matchParentSize().background(Brush.radialGradient(listOf(Color.White.copy(alpha = 0.18f), Color.Transparent), radius = 260f, center = androidx.compose.ui.geometry.Offset(0f, 0f))))
         Text(
-            item.title, color = Color.White, style = MaterialTheme.typography.titleLarge, maxLines = 2,
+            item.title.localized(), color = Color.White, style = MaterialTheme.typography.titleLarge, maxLines = 2,
             modifier = Modifier.align(Alignment.BottomStart).padding(12.dp),
         )
     }
@@ -720,8 +721,8 @@ fun PlaylistPicker(song: Song, onDismiss: () -> Unit) {
                         Artwork(c.covers.art(p), Modifier.size(46.dp), com.prism.music.ui.theme.LocalUi.current.smallArt, size = 120, placeholderIcon = PrismIcons.QueueMusic)
                         Spacer(Modifier.width(14.dp))
                         Column(Modifier.weight(1f)) {
-                            Text(p.title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                            if (p.subtitle.isNotBlank()) Text(p.subtitle.removePrefix("Playlist • "), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            Text(p.title.localized(), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            if (p.subtitle.isNotBlank()) Text(p.subtitle.removePrefix("Playlist • ").split(" • ").joinToString(" • ") { it.localized(context) }, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
                         }
                     }
                 }
@@ -733,6 +734,7 @@ fun PlaylistPicker(song: Song, onDismiss: () -> Unit) {
 /** Name a new playlist: a YouTube Music one (and who can open it), or with [local] a Prism one kept on this phone. */
 @Composable
 fun NewPlaylistDialog(onDismiss: () -> Unit, local: Boolean = false, onCreate: (name: String, privacy: String) -> Unit) {
+    val context = androidx.compose.ui.platform.LocalContext.current
     var name by remember { mutableStateOf("") }
     var privacy by remember { mutableStateOf("PRIVATE") }
     AlertDialog(
@@ -748,7 +750,7 @@ fun NewPlaylistDialog(onDismiss: () -> Unit, local: Boolean = false, onCreate: (
                     )
                     return@Column
                 }
-                Segmented(listOf("PRIVATE", "UNLISTED", "PUBLIC"), privacy, { when (it) { "PRIVATE" -> "Private"; "UNLISTED" -> "Unlisted"; else -> "Public" } }) { privacy = it }
+                Segmented(listOf("PRIVATE", "UNLISTED", "PUBLIC"), privacy, { (when (it) { "PRIVATE" -> "Private"; "UNLISTED" -> "Unlisted"; else -> "Public" }).localized(context) }) { privacy = it }
                 Text(
                     when (privacy) {
                         "PRIVATE" -> "Only you can see it.".localized()
@@ -821,7 +823,7 @@ fun goToArtists(song: Song, go: (String) -> Unit): List<ActionItem> =
 @Composable
 fun <T> SortBar(count: String, options: List<T>, selected: T, label: (T) -> String, modifier: Modifier = Modifier, onSelect: (T) -> Unit) {
     Row(modifier.fillMaxWidth().padding(start = 8.dp, top = 4.dp, bottom = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-        Text(count, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1f))
+        Text(count.localized(), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1f))
         SortButton(options, selected, label, onSelect = onSelect)
     }
 }

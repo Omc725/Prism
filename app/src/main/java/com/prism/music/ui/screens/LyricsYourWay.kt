@@ -79,13 +79,28 @@ import kotlin.math.roundToInt
 private val SampleDark = Color(0xFF15141B)
 
 /** Prism's own words for the examples, timed word by word: a line sung over three seconds. */
-private val SAMPLE_WORDS = listOf("Every ", "color ", "finds ", "its ", "way")
-private val SAMPLE_LINE = LyricLine(
-    0, SAMPLE_WORDS.joinToString(""), 3000,
-    SAMPLE_WORDS.mapIndexed { i, w -> LyricWord(i * 560L, i * 560L + 520L, w) },
-)
-private val SAMPLE_BEFORE = LyricLine(-1, "Somewhere a light is turning on")
-private val SAMPLE_AFTER = LyricLine(-1, "We follow the line of the sound")
+@Composable
+private fun rememberSampleSungLine(): LyricLine {
+    val text = "Every color finds its way".localized()
+    val parts = text.split(" ")
+    val words = parts.mapIndexed { i, p -> if (i == parts.lastIndex) p else "$p " }
+    val step = 3000L / words.size.coerceAtLeast(1)
+    return remember(text) {
+        LyricLine(0, text, 3000, words.mapIndexed { i, w -> LyricWord(i * step, i * step + (step * 0.9f).toLong(), w) })
+    }
+}
+
+@Composable
+private fun rememberSampleBeforeLine(): LyricLine {
+    val text = "Somewhere a light is turning on".localized()
+    return remember(text) { LyricLine(-1, text) }
+}
+
+@Composable
+private fun rememberSampleAfterLine(): LyricLine {
+    val text = "We follow the line of the sound".localized()
+    return remember(text) { LyricLine(-1, text) }
+}
 
 /** The examples' clock: round and round the sample line, or held part-way through with Reduce motion. */
 @Composable
@@ -129,15 +144,18 @@ fun LyricsSample(look: LyricsLook, modifier: Modifier = Modifier, ground: Brush?
         fontWeight = FontWeight(look.weight), textAlign = if (centred) TextAlign.Center else TextAlign.Start,
     )
     val bg = ground ?: look.card?.let { SolidColor(it) } ?: Brush.verticalGradient(listOf(Color(0xFF2A2140), SampleDark))
+    val lineBefore = rememberSampleBeforeLine()
+    val lineSung = rememberSampleSungLine()
+    val lineAfter = rememberSampleAfterLine()
     Box(modifier.clip(RoundedCornerShape(12.dp)).background(bg).padding(horizontal = 12.dp, vertical = 10.dp)) {
         Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy((5 * look.spacing).dp)) {
-            if (lines >= 3) RestingLine(look.shown(SAMPLE_BEFORE), style, look, 0.8f * look.othersAlpha, Modifier.fillMaxWidth(), maxLines = 1)
+            if (lines >= 3) RestingLine(look.shown(lineBefore), style, look, 0.8f * look.othersAlpha, Modifier.fillMaxWidth(), maxLines = 1)
             Column(Modifier.fillMaxWidth()) {
                 if (extra != null && look.extraAbove) SampleExtra(extra, style, look)
-                SungLine(look.shown(SAMPLE_LINE), clock, style, look, axis, Modifier.fillMaxWidth(), maxLines = 1, onCard = look.card != null)
+                SungLine(look.shown(lineSung), clock, style, look, axis, Modifier.fillMaxWidth(), maxLines = 1, onCard = look.card != null)
                 if (extra != null && !look.extraAbove) SampleExtra(extra, style, look)
             }
-            if (lines >= 2 && look.ahead > 0) RestingLine(look.shown(SAMPLE_AFTER), style, look, 0.8f * look.othersAlpha, Modifier.fillMaxWidth(), maxLines = 1)
+            if (lines >= 2 && look.ahead > 0) RestingLine(look.shown(lineAfter), style, look, 0.8f * look.othersAlpha, Modifier.fillMaxWidth(), maxLines = 1)
         }
     }
 }
@@ -264,7 +282,7 @@ private fun LyricsColorSwatches(selected: LyricsColor, custom: Int, onSelect: (L
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    o.label, style = MaterialTheme.typography.labelSmall, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    o.label.localized(), style = MaterialTheme.typography.labelSmall, maxLines = 1, overflow = TextOverflow.Ellipsis,
                     color = if (on) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }

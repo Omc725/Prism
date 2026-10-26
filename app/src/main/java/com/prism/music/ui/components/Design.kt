@@ -296,7 +296,7 @@ fun <T> Segmented(options: List<T>, selected: T, label: (T) -> String, modifier:
 @Composable
 fun <T> ChoiceFlow(options: List<T>, selected: (T) -> Boolean, label: (T) -> String, modifier: Modifier = Modifier, onSelect: (T) -> Unit) {
     FlowRow(modifier, horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        options.forEach { o -> PrismChip(selected(o), { onSelect(o) }, label(o)) }
+        options.forEach { o -> PrismChip(selected(o), { onSelect(o) }, label(o).localized()) }
     }
 }
 

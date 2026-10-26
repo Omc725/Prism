@@ -60,13 +60,13 @@ fun MiniHome(c: ThemeColors, song: Song?) {
                 Column {
                     Box(Modifier.width(28.dp).height(3.dp).clip(CircleShape).background(light))
                     Spacer(Modifier.height(10.dp))
-                    Text("42h 10m", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.ExtraLight, color = scheme.onBackground)
+                    Text("42h 10m".localized(), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.ExtraLight, color = scheme.onBackground)
                     Text("Your year so far".localized(), style = MaterialTheme.typography.bodySmall, color = c.ink2)
                 }
             }
             Text("Quick picks".localized(), style = MaterialTheme.typography.titleMedium, color = scheme.onBackground)
             Column(verticalArrangement = Arrangement.spacedBy(ui.gap(10.dp))) {
-                listOf("Northern Lights", "Paper Planes", "Slow Tide").forEachIndexed { i, title ->
+                listOf("Northern Lights".localized(), "Paper Planes".localized(), "Slow Tide".localized()).forEachIndexed { i, title ->
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         if (i == 0) StandIn(song, Modifier.size(44.dp), ui.smallArt, standIns[0])
                         else Box(Modifier.size(44.dp).clip(ui.smallArt).background(Brush.linearGradient(standIns[i])))
@@ -112,8 +112,8 @@ private fun MiniBar(c: ThemeColors, song: Song?) {
             StandIn(song, Modifier.size(height - 20.dp), if (s.miniPlayerStyle == MiniPlayerStyle.PILL) CircleShape else ui.smallArt, standIns[0])
             Spacer(Modifier.width(10.dp))
             Column(Modifier.weight(1f)) {
-                Text(song?.title ?: "Northern Lights", style = MaterialTheme.typography.bodyMedium, color = scheme.onBackground, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text(song?.artistText ?: "Prism Sample", style = MaterialTheme.typography.bodySmall, color = c.ink2, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(song?.title ?: "Northern Lights".localized(), style = MaterialTheme.typography.bodyMedium, color = scheme.onBackground, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(song?.artistText ?: "Prism Sample".localized(), style = MaterialTheme.typography.bodySmall, color = c.ink2, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
             if (s.miniPrevButton) Icon(PrismIcons.Previous, null, Modifier.size(22.dp), tint = scheme.onBackground)
             Box(Modifier.padding(horizontal = 6.dp).size(36.dp).clip(CircleShape).border(1.5.dp, Brush.sweepGradient(c.ring), CircleShape), contentAlignment = Alignment.Center) {

@@ -323,9 +323,12 @@ fun MiniLyrics(c: ThemeColors, song: Song?) {
     // Lyrics, your way (1.7.5): the sung line in its style (held part-way through), the others in their color.
     val look = com.prism.music.ui.player.rememberLyricsLook(s, song?.thumbnail)
     val clock = remember { androidx.compose.runtime.mutableLongStateOf(1300L) }
-    val sung = remember(look.uppercase) {
-        val words = listOf("Every ", "color ", "finds ", "its ", "way")
-        look.shown(com.prism.music.data.lyrics.LyricLine(0, words.joinToString(""), 2800, words.mapIndexed { k, w -> com.prism.music.data.lyrics.LyricWord(k * 520L, k * 520L + 480L, w) }))
+    val sungText = "Every color finds its way".localized()
+    val sung = remember(look.uppercase, sungText) {
+        val parts = sungText.split(" ")
+        val words = parts.mapIndexed { i, p -> if (i == parts.lastIndex) p else "$p " }
+        val step = 2800L / words.size.coerceAtLeast(1)
+        look.shown(com.prism.music.data.lyrics.LyricLine(0, sungText, 2800, words.mapIndexed { k, w -> com.prism.music.data.lyrics.LyricWord(k * step, k * step + (step * 0.9f).toLong(), w) }))
     }
     val axis = remember(s.lyricsFont, s.fontChoice) {
         (if (s.lyricsFont.isEmpty()) s.fontChoice else com.prism.music.data.prefs.FontChoice.entries.firstOrNull { it.name == s.lyricsFont })?.let(AppFonts::axis)
@@ -346,7 +349,7 @@ fun MiniLyrics(c: ThemeColors, song: Song?) {
                 Column(Modifier.fillMaxWidth()) {
                     if (now) com.prism.music.ui.player.SungLine(sung, clock, base.copy(textAlign = align, fontWeight = FontWeight(look.weight)), look, axis, Modifier.fillMaxWidth(), onCard = look.card != null)
                     else com.prism.music.ui.player.RestingLine(
-                        look.shown(com.prism.music.data.lyrics.LyricLine(-1, line)), base.copy(textAlign = align),
+                        look.shown(com.prism.music.data.lyrics.LyricLine(-1, line.localized())), base.copy(textAlign = align),
                         look, 0.7f * look.othersAlpha, Modifier.fillMaxWidth().then(if (look.blur > 0f && look.card == null) Modifier.blur((2 * look.blur).dp) else Modifier),
                     )
                     if (now && s.lyricsProgressLine) Box(

@@ -99,9 +99,9 @@ fun ReplayCard(style: ReplayCardStyle, d: ReplayCardData, art: Painter?, modifie
                 .clickable(onClick = onClick).padding(22.dp),
         ) {
             Column(Modifier.align(Alignment.BottomStart)) {
-                Eyebrow("Replay ${d.year}")
+                Eyebrow("Replay ${d.year}".localized())
                 Spacer(Modifier.height(4.dp))
-                Text(d.total, style = big, color = scheme.onSurface, maxLines = 1)
+                Text(d.total.localized(), style = big, color = scheme.onSurface, maxLines = 1)
                 Text("Your top songs, artists and genres".localized(), style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
             Icon(PrismIcons.ChevronRight, null, Modifier.align(Alignment.TopEnd), tint = scheme.onSurfaceVariant)
@@ -111,7 +111,7 @@ fun ReplayCard(style: ReplayCardStyle, d: ReplayCardData, art: Painter?, modifie
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(Modifier.size(8.dp).clip(CircleShape).background(PrismTokens.spectrumRing()))
                 Spacer(Modifier.width(8.dp))
-                Eyebrow("Replay ${d.year}", Modifier.weight(1f))
+                Eyebrow("Replay ${d.year}".localized(), Modifier.weight(1f))
                 Icon(PrismIcons.ChevronRight, null, tint = scheme.onSurfaceVariant)
             }
             Spacer(Modifier.weight(1f))
@@ -120,7 +120,7 @@ fun ReplayCard(style: ReplayCardStyle, d: ReplayCardData, art: Painter?, modifie
                     if (i > 0) Box(Modifier.padding(horizontal = 12.dp).width(0.7.dp).fillMaxHeight().background(scheme.outlineVariant.copy(alpha = 0.6f)))
                     Column(Modifier.weight(1f), verticalArrangement = Arrangement.Bottom) {
                         Text(label.localized(), style = MaterialTheme.typography.labelMedium, color = scheme.onSurfaceVariant, maxLines = 1)
-                        Text(value, style = (if (i == 0) MaterialTheme.typography.titleLarge else MaterialTheme.typography.titleMedium).copy(fontWeight = FontWeight.Light), color = scheme.onSurface, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        Text(value.localized(), style = (if (i == 0) MaterialTheme.typography.titleLarge else MaterialTheme.typography.titleMedium).copy(fontWeight = FontWeight.Light), color = scheme.onSurface, maxLines = 2, overflow = TextOverflow.Ellipsis)
                     }
                 }
             }
@@ -137,9 +137,9 @@ fun ReplayCard(style: ReplayCardStyle, d: ReplayCardData, art: Painter?, modifie
                 .clickable(onClick = onClick).padding(22.dp),
         ) {
             Column(Modifier.align(Alignment.BottomStart).fillMaxWidth(0.68f)) {
-                Eyebrow("Replay ${d.year}")
+                Eyebrow("Replay ${d.year}".localized())
                 Box(Modifier.padding(top = 6.dp, bottom = 8.dp).size(28.dp, 2.dp).clip(CircleShape).background(PrismTokens.spectrum(dark)))
-                Text(d.total, style = big, color = scheme.onSurface, maxLines = 1)
+                Text(d.total.localized(), style = big, color = scheme.onSurface, maxLines = 1)
                 Text("Your top songs, artists and genres".localized(), color = scheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium, maxLines = 1)
             }
             MonthBars(d.months, hues, Modifier.align(Alignment.BottomEnd).size(width = (d.months.size * 7).dp, height = 54.dp), slim = true)
@@ -149,8 +149,8 @@ fun ReplayCard(style: ReplayCardStyle, d: ReplayCardData, art: Painter?, modifie
             base.pane(shape).border(1.5.dp, PrismTokens.spectrum(dark), shape).clickable(onClick = onClick).padding(22.dp),
         ) {
             Column(Modifier.align(Alignment.BottomStart)) {
-                Eyebrow("Replay ${d.year}")
-                Text(d.total, style = big.copy(brush = PrismTokens.spectrum(dark)), maxLines = 1)
+                Eyebrow("Replay ${d.year}".localized())
+                Text(d.total.localized(), style = big.copy(brush = PrismTokens.spectrum(dark)), maxLines = 1)
                 Text("Your top songs, artists and genres".localized(), color = scheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium, maxLines = 2)
             }
             Icon(PrismIcons.ReplayFilled, null, Modifier.align(Alignment.TopEnd), tint = scheme.onSurface)
@@ -178,9 +178,9 @@ fun ReplayCard(style: ReplayCardStyle, d: ReplayCardData, art: Painter?, modifie
             }
             Spacer(Modifier.width(20.dp))
             Column(Modifier.weight(1f)) {
-                Eyebrow("Replay ${d.year}")
+                Eyebrow("Replay ${d.year}".localized())
                 Spacer(Modifier.height(4.dp))
-                Text(d.total, style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraLight), color = scheme.onSurface, maxLines = 1)
+                Text(d.total.localized(), style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraLight), color = scheme.onSurface, maxLines = 1)
                 Text("Your top songs, artists and genres".localized(), style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
             }
         }
@@ -194,7 +194,7 @@ fun ReplayCard(style: ReplayCardStyle, d: ReplayCardData, art: Painter?, modifie
                 }
                 Spacer(Modifier.width(16.dp))
                 Column(Modifier.weight(1f)) {
-                    Eyebrow("Replay ${d.year} · your #1", color = Color.White.copy(alpha = 0.75f))
+                    Eyebrow("Replay ${d.year} · your #1".localized(), color = Color.White.copy(alpha = 0.75f))
                     Spacer(Modifier.height(4.dp))
                     Text((d.topSong ?: "Your year so far").localized(), style = MaterialTheme.typography.titleLarge, color = Color.White, maxLines = 2, overflow = TextOverflow.Ellipsis)
                     d.topSongArtist?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = 0.78f), maxLines = 1) }
@@ -220,9 +220,9 @@ fun ReplayCard(style: ReplayCardStyle, d: ReplayCardData, art: Painter?, modifie
                 .clickable(onClick = onClick).padding(start = 110.dp, end = 20.dp, top = 20.dp, bottom = 20.dp),
         ) {
             Column(Modifier.align(Alignment.CenterStart)) {
-                Eyebrow("Replay ${d.year}")
+                Eyebrow("Replay ${d.year}".localized())
                 Spacer(Modifier.height(4.dp))
-                Text(d.total, style = big, color = scheme.onSurface, maxLines = 1)
+                Text(d.total.localized(), style = big, color = scheme.onSurface, maxLines = 1)
                 Text("Your top songs, artists and genres".localized(), style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
             }
         }
@@ -230,8 +230,8 @@ fun ReplayCard(style: ReplayCardStyle, d: ReplayCardData, art: Painter?, modifie
         ReplayCardStyle.BARS -> Box(base.pane(shape).border(0.7.dp, glassEdge(), shape).clickable(onClick = onClick)) {
             MonthBars(d.months, hues, Modifier.align(Alignment.BottomCenter).fillMaxWidth().height(86.dp).padding(horizontal = 18.dp, vertical = 14.dp), slim = false)
             Column(Modifier.align(Alignment.TopStart).padding(start = 20.dp, top = 18.dp)) {
-                Eyebrow("Replay ${d.year}")
-                Text(d.total, style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraLight), color = scheme.onSurface, maxLines = 1)
+                Eyebrow("Replay ${d.year}".localized())
+                Text(d.total.localized(), style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraLight), color = scheme.onSurface, maxLines = 1)
             }
             Icon(PrismIcons.ChevronRight, null, Modifier.align(Alignment.TopEnd).padding(16.dp), tint = scheme.onSurfaceVariant)
         }
@@ -250,8 +250,8 @@ fun ReplayCard(style: ReplayCardStyle, d: ReplayCardData, art: Painter?, modifie
                 .clickable(onClick = onClick).padding(22.dp),
         ) {
             Column(Modifier.align(Alignment.BottomStart)) {
-                Eyebrow("Replay ${d.year}", color = Color.White.copy(alpha = 0.85f))
-                Text(d.total, style = big, color = Color.White, maxLines = 1)
+                Eyebrow("Replay ${d.year}".localized(), color = Color.White.copy(alpha = 0.85f))
+                Text(d.total.localized(), style = big, color = Color.White, maxLines = 1)
                 Text("Your top songs, artists and genres".localized(), style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = 0.85f), maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
             Icon(PrismIcons.ChevronRight, null, Modifier.align(Alignment.TopEnd), tint = Color.White)

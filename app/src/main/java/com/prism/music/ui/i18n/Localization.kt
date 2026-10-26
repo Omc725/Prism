@@ -518,6 +518,14 @@ object LocalizedStrings {
         "Handoff" to "Cihazlar arası aktarım",
         "Haptics" to "Titreşim bildirimleri",
         "Headline" to "Manşet",
+        "Indie & alternative" to "İndie ve alternatif",
+        "Dance & electronic" to "Dans ve elektronik",
+        "Soundtracks & musicals" to "Film müzikleri ve müzikaller",
+        "Country & Americana" to "Country ve Americana",
+        "Folk & acoustic" to "Halk müziği ve akustik",
+        "R&B & soul" to "R&B ve soul",
+        "Sorting…" to "Sıralanıyor…",
+        "Search in album" to "Albümde ara",
         "Hear a song you like? Let Prism listen for a few seconds: what it finds is kept here." to "Beğendiğiniz bir şarkı mı duydunuz? Prism'in birkaç saniye dinlemesine izin verin: bulduğu şarkılar burada saklanır.",
         "Helps the words read over photos and moving covers" to "Sözlerin fotoğraf ve hareketli kapaklar üzerinde daha rahat okunmasını sağlar",
         "Hidden" to "Gizlenen",
@@ -1097,7 +1105,7 @@ object LocalizedStrings {
         "Similar music plays next" to "Sırada benzer müzikler çalacak",
         "Similar music when the queue ends" to "Kuyruk bittiğinde benzer müzikler",
         "Similar music will play after your queue" to "Kuyruğunuz bittikten sonra benzer müzikler çalacak",
-        "Sing" to "Sing",
+        "Sing" to "Vokal",
         "Sing doesn't run on this phone's kind of processor." to "Eşlik Et bu telefonun işlemci türünde çalışmıyor.",
         "Sing needs each song whole on the phone. Off, it waits for Wi-Fi unless the song is downloaded or already played through." to "Eşlik Et her şarkının tamamının telefonda olmasına ihtiyaç duyar. Kapalıyken, şarkı indirilmediyse veya sonuna kadar çalınmadıysa Wi-Fi bekler.",
         "Sing works with songs, not live streams or podcasts." to "Eşlik Et canlı yayınlar veya podcast'lerle değil, şarkılarla çalışır.",
@@ -1719,9 +1727,9 @@ object LocalizedStrings {
         "✦ Pick" to "✦ Seç",
         "Drag to move" to "Taşımak için sürükleyin",
         " · Karaoke" to " · Karaoke",
-        "Turn Sing off" to "Sing'i kapat",
-        "Sing" to "Sing",
-        "Show or hide Sing's controls" to "Sing kontrollerini göster veya gizle",
+        "Turn Sing off" to "Vokali kapat",
+        "Sing" to "Vokal",
+        "Show or hide Sing's controls" to "Vokal kontrollerini göster veya gizle",
         "Ready" to "Hazır",
         "Getting ready…" to "Hazırlanıyor…",
         "Original" to "Orijinal",
@@ -2239,7 +2247,102 @@ object LocalizedStrings {
         "Firmer" to "Daha belirgin",
         "Strongest, easiest to read" to "En güçlü, okunması en kolay",
         "Your accent" to "Sizin vurgunuz",
-
+        "Like songs from the player and they'll show up here." to "Oynatıcıdan şarkıları beğenin, burada görünecekler.",
+        "Add songs from any song's menu (⋯ or a long press) → Add to playlist." to "Herhangi bir şarkının menüsünden (⋯ veya uzun basarak) → Çalma listesine ekle seçeneğini kullanın.",
+        "Songs you add will show up here." to "Eklediğiniz şarkılar burada görünecek.",
+        "Download all" to "Tümünü indir",
+        "Downloaded" to "İndirildi",
+        "Downloading" to "İndiriliyor",
+        "In your library" to "Kitaplığınızda",
+        "Add to library" to "Kitaplığa ekle",
+        "Other versions" to "Diğer sürümler",
+        "Back in my taste" to "Zevkime geri dahil et",
+        "Leave out of my taste" to "Zevkimden hariç tut",
+        "It counts towards your recommendations again" to "Yeniden önerilerinizi şekillendirecek",
+        "Its plays count towards your recommendations again" to "Çalmaları yeniden önerilerinizi şekillendirecek",
+        "Its plays won't shape your recommendations" to "Çalmaları önerilerinizi şekillendirmeyecek",
+        "Got it — Prism will steer clear of this song" to "Anlaşıldı — Prism bu şarkıdan uzak duracak",
+        "Get missing lyrics" to "Eksik şarkı sözlerini al",
+        "Delete all downloads" to "Tüm indirmeleri sil",
+        "loading more…" to "daha fazlası yükleniyor…",
+        " · loading more…" to " · daha fazlası yükleniyor…",
+        "Change picture" to "Resmi değiştir",
+        "Choose a photo" to "Bir fotoğraf seçin",
+        "From your phone's photos" to "Telefonunuzun fotoğraflarından",
+        "Or a cover from this playlist" to "Veya bu çalma listesinden bir kapak",
+        "Use the original picture" to "Orijinal resmi kullan",
+        "The picture shows everywhere in Prism, including Android Auto. YouTube Music keeps its own." to "Resim, Android Auto dahil olmak üzere Prism'in her yerinde gösterilir. YouTube Music kendininkini korur.",
+        "Who can open it" to "Kimler açabilir",
+        "Only you can see it." to "Yalnızca siz görebilirsiniz.",
+        "Anyone with the link can open it; it doesn't show up in search." to "Bağlantıya sahip olan herkes açabilir; aramada görünmez.",
+        "Anyone can find it and open it." to "Herkes bulabilir ve açabilir.",
+        "Anyone with the link can open it, so it's easy to share." to "Bağlantıya sahip olan herkes açabilir, paylaşması kolaydır.",
+        "Anyone can find it." to "Herkes bulabilir.",
+        "Kept on this phone (and in your backups), no account needed. Sign in to YouTube Music for playlists on your account." to "Bu telefonda (ve yedeklerinizde) tutulur, hesap gerekmez. Hesabınızdaki çalma listeleri için YouTube Music'te oturum açın.",
+        "Turn off Wi-Fi only" to "Yalnızca kablosuz ağ kuralını kapat",
+        "See which" to "Hangileri olduğunu gör",
+        "Try again" to "Tekrar dene",
+        "Try all again" to "Tümünü tekrar dene",
+        "Remove all" to "Tümünü kaldır",
+        "Prism also tries them again by itself when the phone is back online." to "Prism, telefon tekrar çevrimiçi olduğunda bunları kendiliğinden yeniden dener.",
+        "Failed before Prism kept the reason" to "Prism sebebi kaydetmeye başlamadan önce başarısız oldu",
+        "Text size" to "Metin boyutu",
+        "Line spacing" to "Satır aralığı",
+        "Tight" to "Sıkı",
+        "As usual" to "Her zamanki gibi",
+        "Airy" to "Geniş",
+        "Other lines" to "Diğer satırlar",
+        "Faint" to "Çok soluk",
+        "Dimmed" to "Soluk",
+        "Bright" to "Parlak",
+        "Background vocals" to "Geri vokaller",
+        "Progress bar color" to "İlerleme çubuğu rengi",
+        "The split light" to "Ayrık ışık",
+        "Your accent color" to "Vurgu renginiz",
+        "Plain white" to "Düz beyaz",
+        "The song's cover's color" to "Şarkı kapağının rengi",
+        "The player's own background" to "Oynatıcının kendi arka planı",
+        "Filling the screen, as now" to "Şimdiki gibi, tüm ekranı kaplayarak",
+        "Top color" to "Üst renk",
+        "Bottom color" to "Alt renk",
+        "Your color" to "Kendi renginiz",
+        "From the cover" to "Kapak renginden",
+        "Download video" to "Videoyu indir",
+        "Remove downloaded video" to "İndirilen videoyu kaldır",
+        "Saved" to "Kaydedildi",
+        "Failed: tap to remove" to "Başarısız: kaldırmak için dokunun",
+        "Save lyrics into the file" to "Şarkı sözlerini dosyaya kaydet",
+        "Make your first playlist: it's kept on this phone, no account needed." to "İlk çalma listenizi oluşturun: bu telefonda tutulur, hesap gerekmez.",
+        "This Phone" to "Bu telefon",
+        "This phone" to "Bu telefon",
+        "Steady" to "Sabit",
+        "Build up" to "Yükselen",
+        "Wind down" to "Sakinleşen",
+        "Use mobile data" to "Mobil veri kullan",
+        "DJ mode: no clear keys to order these by" to "DJ modu: bunları sıralamak için net tonlar bulunamadı",
+        "DJ mode: in key order, beat-matched" to "DJ modu: ton sırasına göre, tempoya uyumlu",
+        "DJ mode" to "DJ modu",
+        "song" to "şarkı",
+        "songs" to "şarkı",
+        "play" to "çalma",
+        "plays" to "çalma",
+        "artist" to "sanatçı",
+        "artists" to "sanatçı",
+        "day" to "gün",
+        "days" to "gün",
+        "minute" to "dakika",
+        "minutes" to "dakika",
+        "hour" to "saat",
+        "hours" to "saat",
+        "minute listened" to "dakika dinlendi",
+        "minutes listened" to "dakika dinlendi",
+        "hour listened" to "saat dinlendi",
+        "hours listened" to "saat dinlendi",
+        "of music" to "müzik",
+        "Mute" to "Sesi kapat",
+        "Unmute" to "Sesi aç",
+        "Gaming" to "Oyun",
+        "On repeat" to "Tekrar tekrar",
     )
     private val trMap = trMap1 + trMap2
     private val azMap1 = mapOf(
@@ -2594,6 +2697,14 @@ object LocalizedStrings {
         "Handoff" to "Cihazlararası ötürmə",
         "Haptics" to "Haptik əks-əlaqə",
         "Headline" to "Başlıq",
+        "Indie & alternative" to "İndi və alternativ",
+        "Dance & electronic" to "Rəqs və elektron",
+        "Soundtracks & musicals" to "Film musiqiləri və müzikllər",
+        "Country & Americana" to "Kantri və Amerikana",
+        "Folk & acoustic" to "Xalq musiqisi və akustik",
+        "R&B & soul" to "R&B və soul",
+        "Sorting…" to "Sıralanır…",
+        "Search in album" to "Albomda axtar",
         "Hear a song you like? Let Prism listen for a few seconds: what it finds is kept here." to "Bəyəndiyiniz mahnı eşitdiniz? Prism-in bir neçə saniyə dinləməsinə icazə verin: tapdıqları burada saxlanılır.",
         "Helps the words read over photos and moving covers" to "Sözlərin foto və animasiyalı üzlüklər üzərində daha rahat oxunmasına kömək edir",
         "Hidden" to "Gizlədilən",
@@ -3173,7 +3284,7 @@ object LocalizedStrings {
         "Similar music plays next" to "Növbədə oxşar musiqilər oxunacaq",
         "Similar music when the queue ends" to "Növbə bitdikdə oxşar musiqi",
         "Similar music will play after your queue" to "Növbəniz bitdikdən sonra oxşar musiqilər oxunacaq",
-        "Sing" to "Sing",
+        "Sing" to "Vokal",
         "Sing doesn't run on this phone's kind of processor." to "Müşayiət bu telefonun prosessor növündə işləmir.",
         "Sing needs each song whole on the phone. Off, it waits for Wi-Fi unless the song is downloaded or already played through." to "Müşayiət hər mahnının bütöv şəkildə telefonda olmasına ehtiyac duyur. Bağlı olduqda, mahnı endirilməyibsə və ya əvvəldən sonadək oxunmayıbsa Wi-Fi gözləyir.",
         "Sing works with songs, not live streams or podcasts." to "Müşayiət canlı yayımlar və ya podkastlarla deyil, mahnılarla işləyir.",
@@ -3795,9 +3906,9 @@ object LocalizedStrings {
         "✦ Pick" to "✦ Seç",
         "Drag to move" to "Köçürmək üçün sürükləyin",
         " · Karaoke" to " · Karaoke",
-        "Turn Sing off" to "Sing-i bağla",
-        "Sing" to "Sing",
-        "Show or hide Sing's controls" to "Sing idarəetmələrini göstər və ya gizlə",
+        "Turn Sing off" to "Vokalı bağla",
+        "Sing" to "Vokal",
+        "Show or hide Sing's controls" to "Vokal idarəetmələrini göstər və ya gizlə",
         "Ready" to "Hazır",
         "Getting ready…" to "Hazırlanır…",
         "Original" to "Orijinal",
@@ -4315,7 +4426,102 @@ object LocalizedStrings {
         "Firmer" to "Daha aydın",
         "Strongest, easiest to read" to "Ən güclü, oxunması ən asan",
         "Your accent" to "Sizin vurğunuz",
-
+        "Like songs from the player and they'll show up here." to "Oxuducudan mahnıları bəyənin, burada görünəcəklər.",
+        "Add songs from any song's menu (⋯ or a long press) → Add to playlist." to "İstənilən mahnının menyusundan (⋯ və ya uzun basaraq) → Pleylistə əlavə et seçimindən istifadə edin.",
+        "Songs you add will show up here." to "Əlavə etdiyiniz mahnılar burada görünəcək.",
+        "Download all" to "Hamısını endir",
+        "Downloaded" to "Endirildi",
+        "Downloading" to "Endirilir",
+        "In your library" to "Kitabxananızda",
+        "Add to library" to "Kitabxanaya əlavə et",
+        "Other versions" to "Digər versiyalar",
+        "Back in my taste" to "Zövqümə yenidən daxil et",
+        "Leave out of my taste" to "Zövqümdən kənar saxla",
+        "It counts towards your recommendations again" to "Yenidən tövsiyələrinizi formalaşdıracaq",
+        "Its plays count towards your recommendations again" to "Oxunmaları yenidən tövsiyələrinizi formalaşdıracaq",
+        "Its plays won't shape your recommendations" to "Oxunmaları tövsiyələrinizi formalaşdırmayacaq",
+        "Got it — Prism will steer clear of this song" to "Aydındır — Prism bu mahnıdan uzaq duracaq",
+        "Get missing lyrics" to "Çatışmayan mahnı sözlərini əldə et",
+        "Delete all downloads" to "Bütün endirmələri sil",
+        "loading more…" to "daha çoxu yüklənir…",
+        " · loading more…" to " · daha çoxu yüklənir…",
+        "Change picture" to "Şəkli dəyişdir",
+        "Choose a photo" to "Fotoşəkil seçin",
+        "From your phone's photos" to "Telefonunuzun fotolarından",
+        "Or a cover from this playlist" to "Və ya bu pleylistdən bir üzlük",
+        "Use the original picture" to "Orijinal şəkildən istifadə et",
+        "The picture shows everywhere in Prism, including Android Auto. YouTube Music keeps its own." to "Şəkil Android Auto daxil olmaqla Prism-in hər yerində göstərilir. YouTube Music özününkünü saxlayır.",
+        "Who can open it" to "Kimlər aça bilər",
+        "Only you can see it." to "Yalnız siz görə bilərsiniz.",
+        "Anyone with the link can open it; it doesn't show up in search." to "Linkə sahib hər kəs aça bilər; axtarışda görünmür.",
+        "Anyone can find it and open it." to "Hər kəs tapa və aça bilər.",
+        "Anyone with the link can open it, so it's easy to share." to "Linkə sahib hər kəs aça bilər, paylaşmaq asandır.",
+        "Anyone can find it." to "Hər kəs tapa bilər.",
+        "Kept on this phone (and in your backups), no account needed. Sign in to YouTube Music for playlists on your account." to "Bu telefonda (və nüsxələrinizdə) saxlanılır, hesaba ehtiyac yoxdur. Hesabınızdakı pleylistlər üçün YouTube Music-ə daxil olun.",
+        "Turn off Wi-Fi only" to "Yalnız Wi-Fi rejimini söndür",
+        "See which" to "Hansılar olduğunu gör",
+        "Try again" to "Yenidən cəhd et",
+        "Try all again" to "Hamısını yenidən cəhd et",
+        "Remove all" to "Hamısını sil",
+        "Prism also tries them again by itself when the phone is back online." to "Telefon yenidən internetə bağlandıqda Prism bunları avtomatik yenidən yoxlayır.",
+        "Failed before Prism kept the reason" to "Prism səbəbi qeyd etməyə başlamazdan əvvəl uğursuz oldu",
+        "Text size" to "Mətn ölçüsü",
+        "Line spacing" to "Sətir arası məsafə",
+        "Tight" to "Sıx",
+        "As usual" to "Həmişəki kimi",
+        "Airy" to "Geniş",
+        "Other lines" to "Digər sətirlər",
+        "Faint" to "Çox solğun",
+        "Dimmed" to "Solğun",
+        "Bright" to "Parlaq",
+        "Background vocals" to "Bek-vokallar",
+        "Progress bar color" to "İrəliləyiş zolağının rəngi",
+        "The split light" to "Ayrılmış işıq",
+        "Your accent color" to "Vurğu rənginiz",
+        "Plain white" to "Sadə ağ",
+        "The song's cover's color" to "Mahnı üzlüyünün rəngi",
+        "The player's own background" to "Oxuducunun öz arxa planı",
+        "Filling the screen, as now" to "İndiki kimi, bütün ekranı dolduraraq",
+        "Top color" to "Üst rəng",
+        "Bottom color" to "Alt rəng",
+        "Your color" to "Öz rənginiz",
+        "From the cover" to "Üzlük rəngindən",
+        "Download video" to "Videonı endir",
+        "Remove downloaded video" to "Endirilmiş videonu sil",
+        "Saved" to "Saxlanıldı",
+        "Failed: tap to remove" to "Uğursuz: silmək üçün toxunun",
+        "Save lyrics into the file" to "Mahnı sözlərini fayla saxla",
+        "Make your first playlist: it's kept on this phone, no account needed." to "İlk çalğı siyahınızı yaradın: bu telefonda saxlanılır, hesab tələb olunmur.",
+        "This Phone" to "Bu telefon",
+        "This phone" to "Bu telefon",
+        "Steady" to "Sabit",
+        "Build up" to "Yüksələn",
+        "Wind down" to "Sakitləşən",
+        "Use mobile data" to "Mobil data istifadə et",
+        "DJ mode: no clear keys to order these by" to "DJ rejimi: bunları sıralamaq üçün aydın tonlar tapılmadı",
+        "DJ mode: in key order, beat-matched" to "DJ modu: ton sırasına görə, tempə uyğun",
+        "DJ mode" to "DJ rejimi",
+        "song" to "mahnı",
+        "songs" to "mahnı",
+        "play" to "oxunma",
+        "plays" to "oxunma",
+        "artist" to "sənətçi",
+        "artists" to "sənətçi",
+        "day" to "gün",
+        "days" to "gün",
+        "minute" to "dəqiqə",
+        "minutes" to "dəqiqə",
+        "hour" to "saat",
+        "hours" to "saat",
+        "minute listened" to "dəqiqə dinlənildi",
+        "minutes listened" to "dəqiqə dinlənildi",
+        "hour listened" to "saat dinlənildi",
+        "hours listened" to "saat dinlənildi",
+        "of music" to "musiqi",
+        "Mute" to "Səsi bağla",
+        "Unmute" to "Səsi aç",
+        "Gaming" to "Oyun",
+        "On repeat" to "Təkrar-təkrar",
     )
     private val azMap = azMap1 + azMap2
     private val songRegex = Regex("""^(\d+)\s*songs?$""")
@@ -4324,9 +4530,35 @@ object LocalizedStrings {
     private val offlineRegex = Regex("""^(\d+)\s*songs offline$""")
     private val listeningRegex = Regex("""^Listening\s*\((\d+)\)$""")
     private val smartDlsRegex = Regex("""^Clear Smart Downloads\s*\((\d+)\)$""")
+    private val downloadedCountRegex = Regex("""^(\d+)\s+downloaded$""")
+    private val percentOfLineRegex = Regex("""^(\d+)%\s+of the line$""")
+    private val moreByRegex = Regex("""^More by\s+(.*)$""")
+    private val deleteAllDownloadsRegex = Regex("""^Delete all (\d+) downloads \((.*?)\)\? This frees the space straight away\.(.*)$""")
+    private val deleteSavedVideosRegex = Regex("""^Delete the (\d+) saved music videos\? The songs stay downloaded\.$""")
+    private val deleteSmartDlsPromptRegex = Regex("""^Delete the (.*?) smart downloads added\? They may come back later if smart downloads stays on\.$""")
+    private val nothingInMatchesRegex = Regex("""^Nothing in (.*?) matches \"(.*?)\"(.*)$""")
     private val nextFromRegex = Regex("""^Next from:\s*(.*)$""")
+    private val continueAlbumRegex = Regex("""^Continue\s+(.+)$""")
+    private val fromTheAlbumRegex = Regex("""^From the album\s+(.+)$""")
+    private val singPercentRegex = Regex("""^Sing\s*·\s*(\d+)%$""")
+    private val usersPhoneRegex = Regex("""^(.+)'s Phone$""")
+    private val djReadingRegex = Regex("""^DJ mode: reading keys and tempos…\s*(\d+)\s+of\s+(\d+)$""")
+    private val djWaitForWifiRegex = Regex("""^(.*?),\s*(\d+)\s+wait for Wi-Fi$""")
+    private val djKeysOnWifiRegex = Regex("""^DJ mode: keys are read on Wi-Fi\s*\((\d+)\s+songs?\s+waiting\)$""")
+    private val djKeyOrderWifiRegex = Regex("""^DJ mode:\s*(\d+)\s+of\s+(\d+)\s+songs in key order,\s*the rest wait for Wi-Fi$""")
+    private val djKeyOrderStayRegex = Regex("""^DJ mode:\s*(\d+)\s+of\s+(\d+)\s+songs in key order,\s*the rest stay put$""")
+    private val minutePluralRegex = Regex("""^([\d,.]+)\s+minutes?$""")
+    private val minShortRegex = Regex("""^([\d,.]+)\s+min$""")
+    private val hourShortRegex = Regex("""^([\d,.]+)\s*h$""")
+    private val hourMinShortRegex = Regex("""^([\d,.]+)\s*h\s+([\d,.]+)\s*m$""")
+    private val lessThanMinShortRegex = Regex("""^<1\s+min$""")
+    private val searchInRegex = Regex("""^Search in\s*(.*)$""")
+    private val titleCountRegex = Regex("""^(.*?)\s*·\s*(\d+)$""")
     private val spaceToUseRegex = Regex("""^Space to use:\s*(.*)$""")
     private val storageInfoRegex = Regex("""^About\s+(.*?)\s+songs\s+·\s+(.*?)\s+used\s+·\s+(.*?)\s+free on the phone.*$""")
+    private val aboutSongsRegex = Regex("""^About\s+([\d\.,]+)\s+songs?$""")
+    private val usedSizeRegex = Regex("""^([\d\.,]+\s*(?:MB|GB|KB|B))\s+used$""")
+    private val freeOnPhoneRegex = Regex("""^([\d\.,]+\s*(?:MB|GB|KB|B))\s+free on the phone$""")
     private val allSettingsRegex = Regex("""^All\s+(.*?)\s+settings$""")
     private val resetQuestionRegex = Regex("""^Reset\s+(.*?)\?$""")
     private val undoRegex = Regex("""^Undo:\s*(.*)$""")
@@ -4339,7 +4571,6 @@ object LocalizedStrings {
     private val couldntAddRegex = Regex("""^Couldn't add to\s*(.*)$""")
     private val lyricsSecondsRegex = Regex("""^Lyrics\s+(.*?)\s+seconds$""")
     private val stopsInMinRegex = Regex("""^Stops in\s+(\d+)\s+min$""")
-    private val minRegex = Regex("""^(\d+)\s+min$""")
     private val videoWaitRegex = Regex("""^Matched automatically — the song starts\s+(.*?)\s+into the video, so the lyrics wait for it\.$""")
     private val videoSkipRegex = Regex("""^Matched automatically — the video skips the song's first\s+(.*?)\.$""")
     private val topSongsYearRegex = Regex("""^Top songs of (\d+)$""")
@@ -4408,7 +4639,7 @@ object LocalizedStrings {
     private val addToSourceRegex = Regex("""^Add to\s+(.*)$""")
         private val goBackAsSavedRegex = Regex("""^Go back to\s+(.*?)\s+as saved$""")
     private val howReplayLooksRegex = Regex("""^How Replay looks on Home, from the quietest to the most colorful\.\s*(.*?):\s*(.*)$""")
-        private val lyricsForKaraokeRegex = Regex("""^Lyrics for\s+(.*?)\s*·\s*(.*?)\s*karaoke$""")
+        private val lyricsForKaraokeRegex = Regex("""^Lyrics for\s+(.*?)\s*·\s*(.*?)\s*karaoke(?:\s*·\s*getting more…)?$""")
     private val lyricsFromSrcRegex = Regex("""^Lyrics from\s+(.*)$""")
         private val pairWithRegex = Regex("""^Pair with\s+(.*?)\??$""")
         private val replayYearRegex = Regex("""^Replay\s+(\d{4})$""")
@@ -4584,6 +4815,20 @@ object LocalizedStrings {
         val res = stringResMap[clean]
         if (res != null) return context.getString(res)
 
+        storageInfoRegex.matchEntire(clean)?.let { m ->
+            val songs = m.groupValues[1]
+            val used = m.groupValues[2]
+            val free = m.groupValues[3]
+            val extra = if (clean.contains("stops when storage runs low")) {
+                if (lang == "tr") " (depolama azaldığında durur)" else " (yaddaş azaldıqda dayanır)"
+            } else ""
+            return when (lang) {
+                "tr" -> "Yaklaşık $songs şarkı · $used kullanıldı · telefonda $free boş$extra"
+                "az" -> "Təxminən $songs mahnı · $used istifadə edildi · telefonda $free boşdur$extra"
+                else -> clean
+            }
+        }
+
         if (clean.contains(" · ")) {
             val parts = clean.split(" · ")
             val translatedParts = parts.map { get(it, context) }
@@ -4662,6 +4907,75 @@ object LocalizedStrings {
             }
         }
 
+        downloadedCountRegex.matchEntire(clean)?.let { m ->
+            val count = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "$count indirildi"
+                "az" -> "$count endirildi"
+                else -> clean
+            }
+        }
+
+        percentOfLineRegex.matchEntire(clean)?.let { m ->
+            val pct = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "Satırın %$pct'si"
+                "az" -> "Sətrin %$pct-i"
+                else -> clean
+            }
+        }
+
+        moreByRegex.matchEntire(clean)?.let { m ->
+            val name = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "$name sanatçısından daha fazlası"
+                "az" -> "$name sənətçisindən daha çox"
+                else -> clean
+            }
+        }
+
+        deleteAllDownloadsRegex.matchEntire(clean)?.let { m ->
+            val count = m.groupValues[1]
+            val size = m.groupValues[2]
+            val rest = m.groupValues[3]
+            return when (lang) {
+                "tr" -> "Tüm $count indirmeyi ($size) silmek istiyor musunuz? Bu hemen yer açar.$rest"
+                "az" -> "Bütün $count endirməni ($size) silmək istəyirsiniz? Bu dərhal yer açır.$rest"
+                else -> clean
+            }
+        }
+
+        deleteSavedVideosRegex.matchEntire(clean)?.let { m ->
+            val count = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "$count kayıtlı müzik videosu silinsin mi? Şarkılar indirilmiş olarak kalır."
+                "az" -> "$count saxlanılan musiqi videosu silinsin? Mahnılar endirilmiş olaraq qalır."
+                else -> clean
+            }
+        }
+
+        deleteSmartDlsPromptRegex.matchEntire(clean)?.let { m ->
+            val count = m.groupValues[1].localized(context)
+            return when (lang) {
+                "tr" -> "Eklenen $count akıllı indirme silinsin mi? Akıllı indirmeler açık kalırsa daha sonra tekrar gelebilirler."
+                "az" -> "Əlavə edilmiş $count ağıllı endirmə silinsin? Ağıllı endirmələr açıq qalsa, daha sonra yenidən gələ bilər."
+                else -> clean
+            }
+        }
+
+        nothingInMatchesRegex.matchEntire(clean)?.let { m ->
+            val title = m.groupValues[1]
+            val query = m.groupValues[2]
+            val rest = m.groupValues[3]
+            val restTr = if (rest.contains("yet — more songs are still loading")) " henüz eşleşen bir şey yok — daha fazla şarkı hâlâ yükleniyor." else " bir şey bulunamadı."
+            val restAz = if (rest.contains("yet — more songs are still loading")) " hələlik uyğun gələn heç nə yoxdur — daha çox mahnı hələ də yüklənir." else " heç nə tapılmadı."
+            return when (lang) {
+                "tr" -> "$title içinde \"$query\" ile$restTr"
+                "az" -> "$title daxilində \"$query\" ilə$restAz"
+                else -> clean
+            }
+        }
+
         nextFromRegex.matchEntire(clean)?.let { m ->
             val from = m.groupValues[1]
             val translatedFrom = if (from == "Queue") {
@@ -4678,6 +4992,151 @@ object LocalizedStrings {
             }
         }
 
+        continueAlbumRegex.matchEntire(clean)?.let { m ->
+            val album = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "$album albümüne devam et"
+                "az" -> "$album albomuna davam et"
+                else -> clean
+            }
+        }
+
+        fromTheAlbumRegex.matchEntire(clean)?.let { m ->
+            val album = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "$album albümünden"
+                "az" -> "$album albomundan"
+                else -> clean
+            }
+        }
+
+        singPercentRegex.matchEntire(clean)?.let { m ->
+            val pct = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "Vokal · %$pct"
+                "az" -> "Vokal · %$pct"
+                else -> clean
+            }
+        }
+
+        usersPhoneRegex.matchEntire(clean)?.let { m ->
+            val user = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "$user telefonu"
+                "az" -> "$user telefonu"
+                else -> clean
+            }
+        }
+
+        djReadingRegex.matchEntire(clean)?.let { m ->
+            val a = m.groupValues[1]
+            val b = m.groupValues[2]
+            return when (lang) {
+                "tr" -> "DJ modu: tonlar ve tempolar okunuyor… $a / $b"
+                "az" -> "DJ rejimi: tonlar və templər oxunur… $a / $b"
+                else -> clean
+            }
+        }
+
+        djWaitForWifiRegex.matchEntire(clean)?.let { m ->
+            val prefix = get(m.groupValues[1], context)
+            val count = m.groupValues[2]
+            return when (lang) {
+                "tr" -> "$prefix, $count Wi-Fi bekliyor"
+                "az" -> "$prefix, $count Wi-Fi gözləyir"
+                else -> clean
+            }
+        }
+
+        djKeysOnWifiRegex.matchEntire(clean)?.let { m ->
+            val count = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "DJ modu: tonlar Wi-Fi üzerinde okunur ($count şarkı bekliyor)"
+                "az" -> "DJ rejimi: tonlar Wi-Fi üzərində oxunur ($count mahnı gözləyir)"
+                else -> clean
+            }
+        }
+
+        djKeyOrderWifiRegex.matchEntire(clean)?.let { m ->
+            val a = m.groupValues[1]
+            val b = m.groupValues[2]
+            return when (lang) {
+                "tr" -> "DJ modu: ton sırasına göre $a / $b şarkı, geri kalanı Wi-Fi bekliyor"
+                "az" -> "DJ rejimi: ton sırasına görə $a / $b mahnı, qalanı Wi-Fi gözləyir"
+                else -> clean
+            }
+        }
+
+        djKeyOrderStayRegex.matchEntire(clean)?.let { m ->
+            val a = m.groupValues[1]
+            val b = m.groupValues[2]
+            return when (lang) {
+                "tr" -> "DJ modu: ton sırasına göre $a / $b şarkı, geri kalanı yerinde kalır"
+                "az" -> "DJ rejimi: ton sırasına görə $a / $b mahnı, qalanı yerində qalır"
+                else -> clean
+            }
+        }
+
+        minutePluralRegex.matchEntire(clean)?.let { m ->
+            val count = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "$count dakika"
+                "az" -> "$count dəqiqə"
+                else -> clean
+            }
+        }
+
+        minShortRegex.matchEntire(clean)?.let { m ->
+            val count = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "$count dk"
+                "az" -> "$count dəq"
+                else -> clean
+            }
+        }
+
+        hourShortRegex.matchEntire(clean)?.let { m ->
+            val count = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "$count sa"
+                "az" -> "$count saat"
+                else -> clean
+            }
+        }
+
+        hourMinShortRegex.matchEntire(clean)?.let { m ->
+            val h = m.groupValues[1]
+            val min = m.groupValues[2]
+            return when (lang) {
+                "tr" -> "$h sa $min dk"
+                "az" -> "$h saat $min dəq"
+                else -> clean
+            }
+        }
+
+        lessThanMinShortRegex.matchEntire(clean)?.let {
+            return when (lang) {
+                "tr" -> "<1 dk"
+                "az" -> "<1 dəq"
+                else -> clean
+            }
+        }
+
+        searchInRegex.matchEntire(clean)?.let { m ->
+            val target = get(m.groupValues[1], context)
+            return when (lang) {
+                "tr" -> "$target içinde ara"
+                "az" -> "$target daxilində axtar"
+                else -> clean
+            }
+        }
+
+        titleCountRegex.matchEntire(clean)?.let { m ->
+            val title = get(m.groupValues[1], context)
+            val count = m.groupValues[2]
+            return "$title · $count"
+        }
+
         spaceToUseRegex.matchEntire(clean)?.let { m ->
             val size = m.groupValues[1]
             return when (lang) {
@@ -4687,11 +5146,29 @@ object LocalizedStrings {
             }
         }
 
-        storageInfoRegex.matchEntire(clean)?.let { m ->
-            val (songs, used, free) = Triple(m.groupValues[1], m.groupValues[2], m.groupValues[3])
+        aboutSongsRegex.matchEntire(clean)?.let { m ->
+            val count = m.groupValues[1]
             return when (lang) {
-                "tr" -> "Yaklaşık $songs şarkı · $used kullanıldı · telefonda $free boş"
-                "az" -> "Təxminən $songs mahnı · $used istifadə edildi · telefonda $free boşdur"
+                "tr" -> "Yaklaşık $count şarkı"
+                "az" -> "Təxminən $count mahnı"
+                else -> clean
+            }
+        }
+
+        usedSizeRegex.matchEntire(clean)?.let { m ->
+            val size = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "$size kullanıldı"
+                "az" -> "$size istifadə edildi"
+                else -> clean
+            }
+        }
+
+        freeOnPhoneRegex.matchEntire(clean)?.let { m ->
+            val size = m.groupValues[1]
+            return when (lang) {
+                "tr" -> "telefonda $size boş"
+                "az" -> "telefonda $size boşdur"
                 else -> clean
             }
         }
@@ -4745,7 +5222,7 @@ object LocalizedStrings {
         }
 
         playingOnRegex.matchEntire(clean)?.let { m ->
-            val device = m.groupValues[1]
+            val device = get(m.groupValues[1], context)
             return when (lang) {
                 "tr" -> "$device üzerinde çalınıyor"
                 "az" -> "$device üzərində oxudulur"
@@ -4804,15 +5281,6 @@ object LocalizedStrings {
             return when (lang) {
                 "tr" -> "$min dk içinde durur"
                 "az" -> "$min dəq ərzində dayanır"
-                else -> clean
-            }
-        }
-
-        minRegex.matchEntire(clean)?.let { m ->
-            val min = m.groupValues[1]
-            return when (lang) {
-                "tr" -> "$min dk"
-                "az" -> "$min dəq"
                 else -> clean
             }
         }
@@ -5379,9 +5847,10 @@ object LocalizedStrings {
         lyricsForKaraokeRegex.matchEntire(clean)?.let { m ->
             val lyrics = m.groupValues[1]
             val karaoke = m.groupValues[2]
+            val gettingMore = clean.contains("getting more…")
             return when (lang) {
-                "tr" -> "$lyrics için sözler · $karaoke karaoke"
-                "az" -> "$lyrics üçün sözlər · $karaoke karaoke"
+                "tr" -> "$lyrics için sözler · $karaoke karaoke" + (if (gettingMore) " · daha fazlası alınıyor…" else "")
+                "az" -> "$lyrics üçün sözlər · $karaoke karaoke" + (if (gettingMore) " · daha çoxu əldə edilir…" else "")
                 else -> clean
             }
         }

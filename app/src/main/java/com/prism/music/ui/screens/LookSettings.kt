@@ -418,7 +418,7 @@ private fun ShareLookSheet(look: Look, onDismiss: () -> Unit) {
                     QrCode(code, Modifier.fillMaxSize())
                 }
                 Spacer(Modifier.height(8.dp))
-                Text("Scan it in Prism: Appearance → Looks → Scan".localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+                Text("Scan it in Prism: Settings → Customize Prism → Looks → Scan".localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
             } else Text("Too much for a QR code: send it as text or a file".localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             if (hasPhotos || hasFont) Text(
                 "Codes leave out photos and your own font; a file can carry them.",

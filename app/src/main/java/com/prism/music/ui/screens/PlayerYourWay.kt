@@ -211,12 +211,11 @@ fun PlayerButtonsGroup() {
             Text("Back to Lyrics, Video and Up next".localized())
         }
     }
-    SessionButtonsGroup()
 }
 
-/** The buttons beside play outside Prism: the notification, the lock screen, Android Auto. */
+/** The buttons beside play outside Prism: the notification, the lock screen, Android Auto (Controls & gestures). */
 @Composable
-private fun SessionButtonsGroup() {
+fun SessionButtonsGroup() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     val chosen = s.sessionButtons

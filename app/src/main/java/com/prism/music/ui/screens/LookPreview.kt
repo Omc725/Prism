@@ -1,5 +1,6 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.ui.i18n.localized
 import com.prism.music.ui.player.lyricsPageBackground
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -168,8 +169,8 @@ fun MiniPlayerScreen(c: ThemeColors, song: Song?) {
             val title = @Composable {
                 Column(Modifier.fillMaxWidth(), horizontalAlignment = if (centred) Alignment.CenterHorizontally else Alignment.Start) {
                     val big = MaterialTheme.typography.headlineSmall.let { it.copy(fontSize = it.fontSize * s.playerTitleSize.scale) }
-                    Text(song?.title ?: "Northern Lights", style = big, color = Color.White, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    Text(song?.artistText ?: "Prism Sample", style = MaterialTheme.typography.bodyLarge, color = Color.White.copy(alpha = 0.7f), maxLines = 1)
+                    Text(song?.title ?: "Northern Lights".localized(), style = big, color = Color.White, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(song?.artistText ?: "Prism Sample".localized(), style = MaterialTheme.typography.bodyLarge, color = Color.White.copy(alpha = 0.7f), maxLines = 1)
                 }
             }
             if (layout == com.prism.music.data.prefs.PlayerLayout.LYRICS) {
@@ -181,7 +182,7 @@ fun MiniPlayerScreen(c: ThemeColors, song: Song?) {
                 }
                 Column(Modifier.padding(horizontal = 28.dp).padding(top = 40.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
                     listOf("Somewhere a light is turning on", "Every color finds its way", "We follow the line of the sound").forEachIndexed { i, l ->
-                        Text(l, style = MaterialTheme.typography.headlineSmall, color = Color.White.copy(alpha = if (i == 1) 1f else 0.35f))
+                        Text(l.localized(), style = MaterialTheme.typography.headlineSmall, color = Color.White.copy(alpha = if (i == 1) 1f else 0.35f))
                     }
                 }
                 return@Column
@@ -219,7 +220,7 @@ fun MiniPlayerScreen(c: ThemeColors, song: Song?) {
                         when (part) {
                             com.prism.music.data.prefs.DeckPart.STRIP -> if (s.lyricsOnPlayer) {
                                 Spacer(Modifier.height(16.dp))
-                                Text("Every color finds its way", style = MaterialTheme.typography.bodyLarge, color = Color.White.copy(alpha = 0.8f), maxLines = 1)
+                                Text("Every color finds its way".localized(), style = MaterialTheme.typography.bodyLarge, color = Color.White.copy(alpha = 0.8f), maxLines = 1)
                             }
                             com.prism.music.data.prefs.DeckPart.SCRUBBER -> { Spacer(Modifier.height(20.dp)); PreviewBar(s, light) }
                             com.prism.music.data.prefs.DeckPart.TRANSPORT -> {

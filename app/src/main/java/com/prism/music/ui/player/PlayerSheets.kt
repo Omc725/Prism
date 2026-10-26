@@ -105,7 +105,7 @@ fun NerdStatsPanel(modifier: Modifier = Modifier) {
         ) + if (stats.videoResolution.isNotBlank()) listOf("Video" to "${stats.videoResolution} · ${stats.videoCodec} · dropped ${stats.droppedFrames}") else emptyList()
         rows.forEach { (k, v) ->
             Row(Modifier.padding(vertical = 3.dp)) {
-                Text(k, style = MonoStyle, color = Color.White.copy(alpha = 0.5f), modifier = Modifier.width(92.dp))
+                Text(k.localized(), style = MonoStyle, color = Color.White.copy(alpha = 0.5f), modifier = Modifier.width(92.dp))
                 Text(v.ifBlank { "—" }, style = MonoStyle, color = Color.White.copy(alpha = 0.9f))
             }
         }

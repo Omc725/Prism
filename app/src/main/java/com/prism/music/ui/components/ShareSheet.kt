@@ -105,7 +105,7 @@ fun ShareSheet(target: ShareTarget, onDismiss: () -> Unit) {
         scope.launch {
             val text = target.url?.let { "$message\n$it" } ?: message
             if (!shareLayer(context, card, "prism-share.png", text, chooserTitle)) {
-                Toast.makeText(context, "Couldn't make the picture to share", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Couldn't make the picture to share".localized(context), Toast.LENGTH_SHORT).show()
             }
             busy = false
         }
@@ -113,7 +113,7 @@ fun ShareSheet(target: ShareTarget, onDismiss: () -> Unit) {
 
     PrismSheet(onDismiss = onDismiss) { close ->
         Column(Modifier.verticalScroll(rememberScrollState()).padding(bottom = 28.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("Share ${target.kind.lowercase()}", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+            Text("Share ${target.kind.lowercase()}".localized(), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(14.dp))
 
             // The card, as it'll be sent. It's recorded at 1080 px wide whatever its size here.
@@ -131,8 +131,8 @@ fun ShareSheet(target: ShareTarget, onDismiss: () -> Unit) {
                     if (ok) {
                         privacy = "UNLISTED"
                         c.library.refreshCollections()
-                        Toast.makeText(context, "Anyone with the link can now open it", Toast.LENGTH_SHORT).show()
-                    } else Toast.makeText(context, "Couldn't change who can see it", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Anyone with the link can now open it".localized(context), Toast.LENGTH_SHORT).show()
+                    } else Toast.makeText(context, "Couldn't change who can see it".localized(context), Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -157,7 +157,7 @@ fun ShareSheet(target: ShareTarget, onDismiss: () -> Unit) {
                 }
             }
             if (target.url == null) Text(
-                "${target.title} lives in Prism, so there's no link to it. The picture and the track list share what's in it.",
+                "${target.title} lives in Prism, so there's no link to it. The picture and the track list share what's in it.".localized(),
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center,
                 modifier = Modifier.padding(start = 28.dp, end = 28.dp, top = 14.dp),
             )
@@ -219,7 +219,7 @@ private fun ShareCard(target: ShareTarget, frost: FrostImage?, palette: ArtPalet
             }
             Spacer(Modifier.height(16.dp))
             Text(
-                target.kind.uppercase(), color = Color.White.copy(alpha = 0.7f),
+                target.kind.localized().uppercase(), color = Color.White.copy(alpha = 0.7f),
                 style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.18.em, fontWeight = FontWeight.Bold, fontSize = 8.sp),
             )
             Spacer(Modifier.height(3.dp))
@@ -233,7 +233,7 @@ private fun ShareCard(target: ShareTarget, frost: FrostImage?, palette: ArtPalet
             )
             Spacer(Modifier.weight(1f))
             Text(
-                if (target.url != null) "Listen on YouTube Music" else com.prism.music.data.model.songCount(target.songs.size), color = Color.White.copy(alpha = 0.7f),
+                (if (target.url != null) "Listen on YouTube Music" else com.prism.music.data.model.songCount(target.songs.size)).localized(), color = Color.White.copy(alpha = 0.7f),
                 style = MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp),
             )
             Spacer(Modifier.height(2.dp))
@@ -252,13 +252,13 @@ private fun trackList(t: ShareTarget): String = buildString {
 
 private fun sendText(context: Context, text: String, title: String) {
     val send = Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, text)
-    context.startActivity(Intent.createChooser(send, title))
+    context.startActivity(Intent.createChooser(send, title.localized(context)))
 }
 
 private fun copy(context: Context, text: String) {
     context.getSystemService(ClipboardManager::class.java)?.setPrimaryClip(ClipData.newPlainText("Link", text))
     // Android 13 and up confirm copies themselves.
-    if (Build.VERSION.SDK_INT < 33) Toast.makeText(context, "Link copied", Toast.LENGTH_SHORT).show()
+    if (Build.VERSION.SDK_INT < 33) Toast.makeText(context, "Link copied".localized(context), Toast.LENGTH_SHORT).show()
 }
 
 /** The share target for a song. */

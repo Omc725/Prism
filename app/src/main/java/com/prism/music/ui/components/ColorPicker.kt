@@ -370,7 +370,7 @@ private fun Eyedropper(onColor: (Int) -> Unit) {
 @Composable
 private fun SwatchRow(label: String, colors: List<Int>, onColor: (Int) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Text(label, Modifier.width(110.dp), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(label.localized(), Modifier.width(110.dp), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             colors.distinct().forEach { col -> Dot(col, false) { onColor(col) } }
         }

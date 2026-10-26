@@ -1,5 +1,6 @@
 package com.prism.music.ui.player
 
+import com.prism.music.ui.i18n.localized
 import com.prism.music.ui.theme.PrismIcons
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -74,7 +75,7 @@ fun PlayerOptionsSheet(
     val isLiked = song.id in liked
     val dl = downloads[song.id]
     val downloaded = dl?.state == androidx.media3.exoplayer.offline.Download.STATE_COMPLETED
-    fun toast(text: String) = android.widget.Toast.makeText(context, text, android.widget.Toast.LENGTH_SHORT).show()
+    fun toast(text: String) = android.widget.Toast.makeText(context, text.localized(context), android.widget.Toast.LENGTH_SHORT).show()
     val sleepMin = if (sleepAt > 0) ((sleepAt - System.currentTimeMillis()) / 60_000).coerceAtLeast(0) + 1 else 0
     val sleeping = sleepAt > 0 || sleepEnd
     val inSession = together !is com.prism.music.playback.together.TogetherState.Idle

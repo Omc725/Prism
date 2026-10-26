@@ -568,7 +568,7 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
     // A file on the phone isn't on YouTube: no radio, download, sharing, YouTube playlists, or sending it to a session.
     val local = song.isLocal
     val guest = (together as? com.prism.music.playback.together.TogetherState.Guest)?.takeIf { !local }
-    fun toast(text: String) = android.widget.Toast.makeText(context, text, android.widget.Toast.LENGTH_SHORT).show()
+    fun toast(text: String) = android.widget.Toast.makeText(context, text.localized(context), android.widget.Toast.LENGTH_SHORT).show()
 
     // The playlist picker and the share sheet take over from the sheet.
     if (pickPlaylist) { PlaylistPicker(song) { pickPlaylist = false; onDismiss() }; return }
@@ -671,7 +671,7 @@ fun PlaylistPicker(song: Song, onDismiss: () -> Unit) {
     val context = LocalContext.current
     var creating by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf("") }
-    fun toast(text: String) = android.widget.Toast.makeText(context, text, android.widget.Toast.LENGTH_SHORT).show()
+    fun toast(text: String) = android.widget.Toast.makeText(context, text.localized(context), android.widget.Toast.LENGTH_SHORT).show()
     if (creating) {
         NewPlaylistDialog(onDismiss = { creating = false; onDismiss() }, local = !signedIn) { name, privacy ->
             creating = false

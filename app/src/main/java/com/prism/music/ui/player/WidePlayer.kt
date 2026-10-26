@@ -1,5 +1,6 @@
 package com.prism.music.ui.player
 
+import com.prism.music.ui.i18n.localized
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -302,11 +303,11 @@ private fun PaneTabs(pane: PlayerPane, onPane: (PlayerPane) -> Unit, modifier: M
                 Modifier.clip(RoundedCornerShape(50))
                     .background(if (on) Color.White.copy(alpha = 0.18f) else Color.Transparent)
                     .then(if (on) Modifier.border(1.2.dp, com.prism.music.ui.theme.PrismTokens.spectrum, RoundedCornerShape(50)) else Modifier)
-                    .clickable(onClickLabel = p.label) { haptics.tick(); onPane(p) }
+                    .clickable(onClickLabel = p.label.localized()) { haptics.tick(); onPane(p) }
                     .padding(horizontal = 16.dp, vertical = 7.dp),
             ) {
                 Text(
-                    p.label, color = Color.White.copy(alpha = if (on) 1f else 0.65f),
+                    p.label.localized(), color = Color.White.copy(alpha = if (on) 1f else 0.65f),
                     style = MaterialTheme.typography.labelLarge,
                 )
             }
@@ -349,9 +350,9 @@ internal fun PlayerCredits(song: Song, onMore: () -> Unit, onCollapse: () -> Uni
         Spacer(Modifier.width(10.dp))
         val isLiked = song.id in liked
         if (heart) {
-            CircleGlyph(if (isLiked) PrismIcons.HeartFilled else PrismIcons.Heart, if (isLiked) "Remove from liked" else "Like", isLiked) { c.library.toggleLike(song) }
+            CircleGlyph(if (isLiked) PrismIcons.HeartFilled else PrismIcons.Heart, (if (isLiked) "Remove from liked" else "Like").localized(), isLiked) { c.library.toggleLike(song) }
             Spacer(Modifier.width(8.dp))
         }
-        CircleGlyph(PrismIcons.More, "Song options", onClick = onMore)
+        CircleGlyph(PrismIcons.More, "Song options".localized(), onClick = onMore)
     }
 }

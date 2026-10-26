@@ -1,5 +1,6 @@
 package com.prism.music.ui.components
 
+import com.prism.music.ui.i18n.localized
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -41,7 +42,7 @@ import com.prism.music.ui.theme.PrismTokens
  */
 @Composable
 fun DesignGallery(bottomPadding: Dp) {
-    SubPage("Design gallery", bottomPadding, subtitle = "Spectrum · every component, every state") {
+    SubPage("Design gallery".localized(), bottomPadding, subtitle = "Spectrum · every component, every state".localized()) {
         item { DesignGalleryContent() }
     }
 }
@@ -49,18 +50,19 @@ fun DesignGallery(bottomPadding: Dp) {
 /** The gallery's content alone: needs only the theme (no app around it), so tests can draw it. */
 @Composable
 fun DesignGalleryContent(modifier: Modifier = Modifier) {
+    val context = androidx.compose.ui.platform.LocalContext.current
     val ty = MaterialTheme.typography
     Column(modifier.fillMaxWidth().padding(bottom = 24.dp), verticalArrangement = Arrangement.spacedBy(28.dp)) {
-        Section("Type") {
+        Section("Type".localized()) {
             Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text("3 h 52 m", style = ty.displayLarge)
-                Text("Good evening", style = ty.headlineLarge)
+                Text("Good evening".localized(), style = ty.headlineLarge)
                 Text("After Hours", style = ty.headlineMedium)
-                Text("Made for you", style = ty.titleLarge)
+                Text("Made for you".localized(), style = ty.titleLarge)
                 Text("Blinding Lights", style = ty.titleMedium)
                 Text("Waterfalls Coming Out Your Mouth", style = ty.bodyLarge)
                 Text("The Weeknd · After Hours", style = ty.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Eyebrow("Monday 19 October")
+                Eyebrow("Monday 19 October".localized())
             }
         }
         Section("The split light") {
@@ -70,27 +72,27 @@ fun DesignGalleryContent(modifier: Modifier = Modifier) {
                 PlayingBars(Modifier.size(13.dp, 14.dp), spectrum = true)
             }
         }
-        Section("Buttons") {
+        Section("Buttons".localized()) {
             Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    PrismButton({}) { Text("Play") }
-                    PrismOutlinedButton({}) { Text("Shuffle") }
-                    PrismFilledTonalButton({}) { Text("Save") }
-                    PrismTextButton({}) { Text("Cancel") }
+                    PrismButton({}) { Text("Play".localized()) }
+                    PrismOutlinedButton({}) { Text("Shuffle".localized()) }
+                    PrismFilledTonalButton({}) { Text("Save".localized()) }
+                    PrismTextButton({}) { Text("Cancel".localized()) }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    PrismButton({}, enabled = false) { Text("Play") }
-                    PrismOutlinedButton({}, enabled = false) { Text("Shuffle") }
-                    RoundAction(PrismIcons.Search, "Search") {}
-                    RoundAction(PrismIcons.More, "More") {}
+                    PrismButton({}, enabled = false) { Text("Play".localized()) }
+                    PrismOutlinedButton({}, enabled = false) { Text("Shuffle".localized()) }
+                    RoundAction(PrismIcons.Search, "Search".localized()) {}
+                    RoundAction(PrismIcons.More, "More".localized()) {}
                 }
             }
         }
-        Section("Choices") {
+        Section("Choices".localized()) {
             var chip by remember { mutableStateOf("Songs") }
-            ChipRow(listOf("Playlists", "Songs", "Albums", "Artists"), { it == chip }, { it }) { chip = it }
+            ChipRow(listOf("Playlists", "Songs", "Albums", "Artists"), { it == chip }, { it.localized(context) }) { chip = it }
             var seg by remember { mutableStateOf("Dark") }
-            Segmented(listOf("System", "Light", "Dark"), seg, { it }, Modifier.padding(horizontal = 16.dp)) { seg = it }
+            Segmented(listOf("System", "Light", "Dark"), seg, { it.localized(context) }, Modifier.padding(horizontal = 16.dp)) { seg = it }
             Row(Modifier.padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) {
                 var a by remember { mutableStateOf(true) }
                 var b by remember { mutableStateOf(false) }

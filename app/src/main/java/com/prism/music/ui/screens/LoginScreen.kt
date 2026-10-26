@@ -97,7 +97,7 @@ fun LoginScreen(onDone: () -> Unit, onBack: () -> Unit, addAccount: Boolean = fa
             val s = c.settings.current
             c.settings.saveIdentity(s.authUser, s.dataSyncId, cookie)
             android.widget.Toast.makeText(
-                c.app, "Account added. Pick its channel under Switch account", android.widget.Toast.LENGTH_LONG,
+                c.app, "Account added. Pick its channel under Switch account".localized(c.app), android.widget.Toast.LENGTH_LONG,
             ).show()
             onBack()
         }

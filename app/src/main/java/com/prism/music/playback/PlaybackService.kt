@@ -1,6 +1,7 @@
 package com.prism.music.playback
 
 import com.prism.music.data.friendlyMessage
+import com.prism.music.ui.i18n.localized
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -1469,7 +1470,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         val id = player.currentMediaItem?.mediaId
         val liked = id != null && id in c.library.likedIds.value
         fun button(icon: Int, name: String, command: SessionCommand) =
-            CommandButton.Builder(icon).setDisplayName(name).setSessionCommand(command).setSlots(CommandButton.SLOT_OVERFLOW).build()
+            CommandButton.Builder(icon).setDisplayName(name.localized(this)).setSessionCommand(command).setSlots(CommandButton.SLOT_OVERFLOW).build()
         val custom = c.settings.current.sessionButtons.map { b ->
             when (b) {
                 SessionButton.LIKE -> button(if (liked) CommandButton.ICON_HEART_FILLED else CommandButton.ICON_HEART_UNFILLED, if (liked) "Remove from liked" else "Like", likeCommand)
@@ -1490,9 +1491,9 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         // Previous/next are named for their slots outright: with only custom buttons, a controller that lays out by
         // slots (the Pixel Watch's media controls) filled the back/forward places with like and shuffle.
         val buttons = listOf(
-            CommandButton.Builder(CommandButton.ICON_PREVIOUS).setDisplayName("Previous")
+            CommandButton.Builder(CommandButton.ICON_PREVIOUS).setDisplayName("Previous".localized(this))
                 .setPlayerCommand(Player.COMMAND_SEEK_TO_PREVIOUS).setSlots(CommandButton.SLOT_BACK).build(),
-            CommandButton.Builder(CommandButton.ICON_NEXT).setDisplayName("Next")
+            CommandButton.Builder(CommandButton.ICON_NEXT).setDisplayName("Next".localized(this))
                 .setPlayerCommand(Player.COMMAND_SEEK_TO_NEXT).setSlots(CommandButton.SLOT_FORWARD).build(),
         ) + custom
         session.setMediaButtonPreferences(buttons)

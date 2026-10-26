@@ -119,7 +119,7 @@ fun ReplayCard(style: ReplayCardStyle, d: ReplayCardData, art: Painter?, modifie
                 listOf("Listened" to d.total, "Top artist" to (d.topArtist ?: "—"), "Top song" to (d.topSong ?: "—")).forEachIndexed { i, (label, value) ->
                     if (i > 0) Box(Modifier.padding(horizontal = 12.dp).width(0.7.dp).fillMaxHeight().background(scheme.outlineVariant.copy(alpha = 0.6f)))
                     Column(Modifier.weight(1f), verticalArrangement = Arrangement.Bottom) {
-                        Text(label, style = MaterialTheme.typography.labelMedium, color = scheme.onSurfaceVariant, maxLines = 1)
+                        Text(label.localized(), style = MaterialTheme.typography.labelMedium, color = scheme.onSurfaceVariant, maxLines = 1)
                         Text(value, style = (if (i == 0) MaterialTheme.typography.titleLarge else MaterialTheme.typography.titleMedium).copy(fontWeight = FontWeight.Light), color = scheme.onSurface, maxLines = 2, overflow = TextOverflow.Ellipsis)
                     }
                 }
@@ -173,7 +173,7 @@ fun ReplayCard(style: ReplayCardStyle, d: ReplayCardData, art: Painter?, modifie
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(yearPercent(d.yearDone), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Light), color = scheme.onSurface)
-                    Text("of ${d.year}", style = MaterialTheme.typography.labelSmall, color = scheme.onSurfaceVariant)
+                    Text("of ${d.year}".localized(), style = MaterialTheme.typography.labelSmall, color = scheme.onSurfaceVariant)
                 }
             }
             Spacer(Modifier.width(20.dp))
@@ -196,10 +196,10 @@ fun ReplayCard(style: ReplayCardStyle, d: ReplayCardData, art: Painter?, modifie
                 Column(Modifier.weight(1f)) {
                     Eyebrow("Replay ${d.year} · your #1", color = Color.White.copy(alpha = 0.75f))
                     Spacer(Modifier.height(4.dp))
-                    Text(d.topSong ?: "Your year so far", style = MaterialTheme.typography.titleLarge, color = Color.White, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                    Text((d.topSong ?: "Your year so far").localized(), style = MaterialTheme.typography.titleLarge, color = Color.White, maxLines = 2, overflow = TextOverflow.Ellipsis)
                     d.topSongArtist?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = 0.78f), maxLines = 1) }
                     Spacer(Modifier.height(8.dp))
-                    Text("${d.total} listened", style = MaterialTheme.typography.labelLarge, color = Color.White.copy(alpha = 0.9f))
+                    Text("${d.total} listened".localized(), style = MaterialTheme.typography.labelLarge, color = Color.White.copy(alpha = 0.9f))
                 }
             }
         }

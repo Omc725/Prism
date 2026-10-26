@@ -1,5 +1,6 @@
 package com.prism.music.ui.components
 
+import com.prism.music.ui.i18n.localized
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -66,7 +67,7 @@ fun SwipeToQueue(song: Song, modifier: Modifier = Modifier, content: @Composable
             if (next) c.player.playNext(song) else c.player.addToQueue(song)
             if (next) "Playing next" else "Added to queue"
         }
-        android.widget.Toast.makeText(context, text, android.widget.Toast.LENGTH_SHORT).show()
+        android.widget.Toast.makeText(context, text.localized(context), android.widget.Toast.LENGTH_SHORT).show()
     }
 
     Box(modifier.fillMaxWidth().clipToBounds()) {
@@ -94,7 +95,7 @@ fun SwipeToQueue(song: Song, modifier: Modifier = Modifier, content: @Composable
                     if (abs(x) > mark * 0.7f) {
                         if (next) Spacer(Modifier.width(8.dp))
                         Text(
-                            if (next) "Play next" else "Add to queue", color = ink, style = MaterialTheme.typography.labelLarge,
+                            (if (next) "Play next" else "Add to queue").localized(), color = ink, style = MaterialTheme.typography.labelLarge,
                             maxLines = 1, overflow = TextOverflow.Clip,
                         )
                         if (!next) Spacer(Modifier.width(8.dp))

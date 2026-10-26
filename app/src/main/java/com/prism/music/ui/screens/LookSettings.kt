@@ -136,13 +136,13 @@ private fun LooksSettings() {
 
     fun apply(look: Look) = scope.launch { c.looks.apply(look) }
     fun take(look: Look?) {
-        if (look == null) Toast.makeText(context, "That isn't a Prism Look", Toast.LENGTH_SHORT).show() else c.looks.pending.value = look
+        if (look == null) Toast.makeText(context, "That isn't a Prism Look".localized(context), Toast.LENGTH_SHORT).show() else c.looks.pending.value = look
     }
     val openFile = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         if (uri != null) scope.launch {
             val r = runCatching { withContext(Dispatchers.IO) { context.contentResolver.openInputStream(uri)?.use { c.looks.readFile(it) } } }
             r.getOrNull()?.let { c.looks.pending.value = it }
-                ?: Toast.makeText(context, r.exceptionOrNull()?.message ?: "That file isn't a Prism Look", Toast.LENGTH_SHORT).show()
+                ?: Toast.makeText(context, (r.exceptionOrNull()?.message ?: "That file isn't a Prism Look").localized(context), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -155,15 +155,15 @@ private fun LooksSettings() {
         Column(Modifier.padding(horizontal = 4.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(
                 when {
-                    edited != null -> "You're on ${edited!!.name}, with changes"
-                    now != null -> "You're on ${now.name}"
-                    else -> "You're on your own mix of settings"
+                    edited != null -> "You're on ${edited!!.name}, with changes".localized()
+                    now != null -> "You're on ${now.name}".localized()
+                    else -> "You're on your own mix of settings".localized()
                 },
                 style = MaterialTheme.typography.bodyMedium,
             )
             Text(
-                edited?.let { e -> remember(e, app) { c.looks.edits(e) }?.let { "$it since you saved it. Update it to keep them in ${e.name}." } }
-                    ?: "A Look keeps colors, type, icons, backgrounds, the player and lyrics' look together. Pick one and everything changes at once; Undo puts it back.",
+                (edited?.let { e -> remember(e, app) { c.looks.edits(e) }?.let { "$it since you saved it. Update it to keep them in ${e.name}." } }
+                    ?: "A Look keeps colors, type, icons, backgrounds, the player and lyrics' look together. Pick one and everything changes at once; Undo puts it back.").localized(),
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -205,7 +205,7 @@ private fun LooksSettings() {
         saving = false
         scope.launch {
             val look = c.looks.saveCurrent(name)
-            Toast.makeText(context, "Saved \"${look.name}\"", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Saved \"${look.name}\"".localized(context), Toast.LENGTH_SHORT).show()
         }
     }
     renaming?.let { look ->
@@ -269,7 +269,7 @@ private fun CommunityGroup(current: String?) {
                             opening = g.entry.id
                             runCatching { c.lookGallery.fetch(g, c.looks) }
                                 .onSuccess { c.looks.pending.value = it }
-                                .onFailure { Toast.makeText(context, it.message ?: "Couldn't download that Look", Toast.LENGTH_SHORT).show() }
+                                .onFailure { Toast.makeText(context, (it.message ?: "Couldn't download that Look").localized(context), Toast.LENGTH_SHORT).show() }
                             opening = null
                         }
                     },
@@ -445,8 +445,8 @@ private fun ShareLookSheet(look: Look, onDismiss: () -> Unit) {
                             val send = Intent(Intent.ACTION_SEND).setType("application/zip").putExtra(Intent.EXTRA_STREAM, uri)
                                 .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             send.clipData = android.content.ClipData.newRawUri(null, uri)
-                            context.startActivity(Intent.createChooser(send, "Send ${look.name}"))
-                        }.onFailure { Toast.makeText(context, it.message ?: "Couldn't make the file", Toast.LENGTH_LONG).show() }
+                            context.startActivity(Intent.createChooser(send, "Send ${look.name}".localized(context)))
+                        }.onFailure { Toast.makeText(context, (it.message ?: "Couldn't make the file").localized(context), Toast.LENGTH_LONG).show() }
                     }
                 }) { Text("Send as a file".localized()) }
             }

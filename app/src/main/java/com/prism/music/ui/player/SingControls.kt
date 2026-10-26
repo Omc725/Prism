@@ -88,10 +88,10 @@ fun LyricsFooter(state: LyricsState, song: Song, onChangeSource: () -> Unit, onN
                 else -> "Lyrics from ${lyrics.source.label}" + if (lyrics.wordSynced) " · Karaoke" else ""
             }
             Row(
-                Modifier.weight(1f).clip(CircleShape).clickable(onClickLabel = "Change lyrics source", onClick = onChangeSource).padding(vertical = 10.dp),
+                Modifier.weight(1f).clip(CircleShape).clickable(onClickLabel = "Change lyrics source".localized(), onClick = onChangeSource).padding(vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(source, style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = 0.62f), maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
+                Text(source.localized(), style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = 0.62f), maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
                 Icon(PrismIcons.ChevronRight, null, Modifier.padding(start = 2.dp).size(16.dp), tint = Color.White.copy(alpha = 0.4f))
             }
             if (singable) SingPill(song, onNeedsDownload)
@@ -115,8 +115,8 @@ fun SingPill(song: Song, onNeedsDownload: () -> Unit) {
         Modifier.clip(shape).background(Color.White.copy(alpha = if (on) 0.18f else 0.10f))
             .then(if (on) Modifier.border(1.5.dp, com.prism.music.ui.theme.PrismTokens.spectrum, shape) else Modifier.border(1.dp, Color.White.copy(alpha = 0.16f), shape))
             .combinedClickable(
-                onClickLabel = if (on) "Turn Sing off" else "Sing",
-                onLongClickLabel = if (on) "Show or hide Sing's controls" else null,
+                onClickLabel = (if (on) "Turn Sing off" else "Sing").localized(),
+                onLongClickLabel = if (on) "Show or hide Sing's controls".localized() else null,
                 onLongClick = if (on) ({ haptics.tick(); SingUi.panel = !SingUi.panel }) else null,
             ) { haptics.tick(); toggleSing(c, onNeedsDownload) }
             .padding(horizontal = 14.dp, vertical = 8.dp),
@@ -125,7 +125,7 @@ fun SingPill(song: Song, onNeedsDownload: () -> Unit) {
         Icon(if (on) PrismIcons.MicFilled else PrismIcons.Mic, null, tint = Color.White, modifier = Modifier.size(18.dp))
         Spacer(Modifier.width(8.dp))
         Text(
-            if (on && p != null) "Sing · ${(p * 100).toInt()}%" else "Sing",
+            (if (on && p != null) "Sing · ${(p * 100).toInt()}%" else "Sing").localized(),
             style = MaterialTheme.typography.labelLarge, color = Color.White,
         )
     }
@@ -161,7 +161,7 @@ fun SingPanel(song: Song, modifier: Modifier = Modifier) {
             Spacer(Modifier.width(8.dp))
             Text(if (level <= 0.005f) "None".localized() else "${(level * 100).toInt()}%", style = MaterialTheme.typography.labelLarge, color = Color.White.copy(alpha = 0.6f))
             Spacer(Modifier.weight(1f))
-            Text(status, style = MaterialTheme.typography.labelMedium, color = Color.White.copy(alpha = 0.55f), maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
+            Text(status.localized(), style = MaterialTheme.typography.labelMedium, color = Color.White.copy(alpha = 0.55f), maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
             Icon(
                 PrismIcons.ChevronDown, "Hide Sing's controls".localized(),
                 Modifier.padding(start = 4.dp).size(32.dp).clip(CircleShape).clickable { SingUi.panel = false }.padding(6.dp),
@@ -173,7 +173,7 @@ fun SingPanel(song: Song, modifier: Modifier = Modifier) {
             Text("Key".localized(), style = MaterialTheme.typography.labelLarge, color = Color.White, modifier = Modifier.weight(1f))
             KeyStep("−", "Key down".localized(), semitones > -6) { sing.setSemitones(semitones - 1) }
             Text(
-                if (semitones == 0) "Original" else "%+d".format(semitones), style = MaterialTheme.typography.labelLarge, color = Color.White,
+                if (semitones == 0) "Original".localized() else "%+d".format(semitones), style = MaterialTheme.typography.labelLarge, color = Color.White,
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center, modifier = Modifier.width(72.dp),
             )
             KeyStep("+", "Key up".localized(), semitones < 6) { sing.setSemitones(semitones + 1) }
@@ -261,7 +261,7 @@ fun SingSheet(song: Song, onDismiss: () -> Unit) {
                     Spacer(Modifier.height(14.dp))
                     Row {
                         Text("Lead voice".localized(), Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
-                        Text(if (level <= 0.005f) "None" else "${(level * 100).toInt()}%", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                        Text(if (level <= 0.005f) "None".localized() else "${(level * 100).toInt()}%", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                     }
                     PrismSlider(level, { sing.setLevel(it) }, enabled = on, valueRange = 0f..1f)
                     Text("Keep a little of it in to sing along with, or none for karaoke. Backing vocals go with it.".localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)

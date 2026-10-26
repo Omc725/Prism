@@ -66,7 +66,7 @@ fun rememberBackupFlow(onDone: (Boolean) -> Unit = {}): () -> Unit {
         scope.launch {
             val r = runCatching { c.backup.export(uri, withDownloads) }
             busy = false
-            Toast.makeText(context, r.exceptionOrNull()?.let { "Backup failed: ${it.message}" } ?: "Backed up", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, (r.exceptionOrNull()?.let { "Backup failed: ${it.message}" } ?: "Backed up").localized(context), Toast.LENGTH_SHORT).show()
             onDone(r.isSuccess)
         }
     }

@@ -769,7 +769,7 @@ fun LyricsPanel(
         justTurnedOn = false
         if (t.sameLanguage) {
             val name = java.util.Locale.forLanguageTag(t.to).getDisplayLanguage(java.util.Locale.getDefault()).ifBlank { t.to }
-            android.widget.Toast.makeText(context, "These lyrics are already in $name. Translations show for songs in other languages.", android.widget.Toast.LENGTH_LONG).show()
+            android.widget.Toast.makeText(context, "These lyrics are already in $name. Translations show for songs in other languages.".localized(context), android.widget.Toast.LENGTH_LONG).show()
         }
     }
     // Lyrics in a script the listener can't read, in Latin letters: under each line, or in its place.

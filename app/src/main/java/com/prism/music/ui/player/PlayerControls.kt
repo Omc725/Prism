@@ -420,7 +420,7 @@ fun BoxScope.BestPartChip(): Boolean {
     ) {
         Icon(if (now.mine) PrismIcons.FlameFilled else PrismIcons.Flame, null, tint = Color.White.copy(alpha = 0.92f), modifier = Modifier.size(12.dp))
         Spacer(Modifier.width(5.dp))
-        Text(if (now.mine) "Your best part" else "Best part", style = MaterialTheme.typography.labelMedium, color = Color.White.copy(alpha = 0.92f))
+        Text((if (now.mine) "Your best part" else "Best part").localized(), style = MaterialTheme.typography.labelMedium, color = Color.White.copy(alpha = 0.92f))
     }
     return true
 }
@@ -513,11 +513,12 @@ fun MinimalPlay(isPlaying: Boolean, isLoading: Boolean) {
 private fun ModeGlyph(icon: ImageVector, description: String, active: Boolean, badge: String? = null, onClick: () -> Unit) {
     val haptics = rememberHaptics()
     val alpha by animateFloatAsState(if (active) 1f else 0.45f, label = "modeAlpha")
+    val locDescription = description.localized()
     Box(
-        Modifier.size(44.dp).clickable(remember { MutableInteractionSource() }, indication = null, onClickLabel = description) { haptics.tick(); onClick() },
+        Modifier.size(44.dp).clickable(remember { MutableInteractionSource() }, indication = null, onClickLabel = locDescription) { haptics.tick(); onClick() },
         contentAlignment = Alignment.Center,
     ) {
-        Icon(icon, description, tint = Color.White.copy(alpha = alpha), modifier = Modifier.size(24.dp))
+        Icon(icon, locDescription, tint = Color.White.copy(alpha = alpha), modifier = Modifier.size(24.dp))
         if (badge != null) Text(
             badge, color = Color.White, fontSize = 9.sp, fontWeight = FontWeight.Medium,
             modifier = Modifier.align(Alignment.TopEnd).padding(top = 6.dp, end = 6.dp),
@@ -604,7 +605,7 @@ private fun TransportGlyph(
 @Composable
 private fun SkipGlyph(seconds: Int, ahead: Boolean, touch: Dp, onClick: () -> Unit) {
     val haptics = rememberHaptics()
-    val label = if (ahead) "Ahead $seconds seconds" else "Back $seconds seconds"
+    val label = (if (ahead) "Ahead $seconds seconds" else "Back $seconds seconds").localized()
     Box(
         Modifier.size(touch).clickable(remember { MutableInteractionSource() }, indication = null, onClickLabel = label) { haptics.click(); onClick() }
             .semantics { contentDescription = label },
@@ -941,7 +942,7 @@ private fun PillSegment(
         val tint = Color.White.copy(alpha = when { !enabled -> 0.25f; highlighted -> 1f; else -> 0.7f })
         Crossfade(Triple(icon, label, loading), animationSpec = tween(200), label = "segment") { (ic, lb, busy) ->
             if (busy) CircularProgressIndicator(color = Color.White, strokeWidth = 1.5.dp, modifier = Modifier.size(20.dp))
-            else if (ic != null) Icon(ic, description, tint = tint, modifier = Modifier.size(24.dp))
+            else if (ic != null) Icon(ic, description.localized(), tint = tint, modifier = Modifier.size(24.dp))
             else if (lb != null) Text(lb, color = tint, fontSize = 17.sp, fontWeight = FontWeight.Medium)
         }
         OnMark(highlighted && enabled)
@@ -951,14 +952,15 @@ private fun PillSegment(
 @Composable
 private fun BottomGlyph(icon: ImageVector, description: String, highlighted: Boolean, onClick: () -> Unit, width: Dp = 56.dp, enabled: Boolean = true) {
     val haptics = rememberHaptics()
+    val locDescription = description.localized()
     Box(
         Modifier.size(width = width, height = BOTTOM_ACTION_SIZE).clip(CircleShape)
             .background(if (highlighted && enabled) Color.White.copy(alpha = 0.16f) else Color.Transparent)
             .semantics { selected = highlighted }
-            .clickable(remember { MutableInteractionSource() }, indication = null, enabled = enabled) { haptics.tick(); onClick() },
+            .clickable(remember { MutableInteractionSource() }, indication = null, enabled = enabled, onClickLabel = locDescription) { haptics.tick(); onClick() },
         contentAlignment = Alignment.Center,
     ) {
-        Icon(icon, description, tint = Color.White.copy(alpha = when { !enabled -> 0.25f; highlighted -> 1f; else -> 0.7f }), modifier = Modifier.size(25.dp))
+        Icon(icon, locDescription, tint = Color.White.copy(alpha = when { !enabled -> 0.25f; highlighted -> 1f; else -> 0.7f }), modifier = Modifier.size(25.dp))
         OnMark(highlighted && enabled)
     }
 }
@@ -968,12 +970,13 @@ private fun BottomGlyph(icon: ImageVector, description: String, highlighted: Boo
 fun CircleGlyph(icon: ImageVector, description: String, active: Boolean = false, onClick: () -> Unit) {
     val ink by animateFloatAsState(if (active) 1f else 0.8f, label = "glyphInk")
     val haptics = rememberHaptics()
+    val locDescription = description.localized()
     Box(
         Modifier.size(40.dp).clip(CircleShape).background(Color.White.copy(alpha = if (active) 0.22f else 0.13f)).border(1.dp, Color.White.copy(alpha = 0.16f), CircleShape)
-            .clickable(remember { MutableInteractionSource() }, indication = null, onClickLabel = description) { haptics.click(); onClick() },
+            .clickable(remember { MutableInteractionSource() }, indication = null, onClickLabel = locDescription) { haptics.click(); onClick() },
         contentAlignment = Alignment.Center,
     ) {
-        Crossfade(icon, animationSpec = tween(180), label = "glyph") { Icon(it, description, tint = Color.White.copy(alpha = ink), modifier = Modifier.size(20.dp)) }
+        Crossfade(icon, animationSpec = tween(180), label = "glyph") { Icon(it, locDescription, tint = Color.White.copy(alpha = ink), modifier = Modifier.size(20.dp)) }
     }
 }
 

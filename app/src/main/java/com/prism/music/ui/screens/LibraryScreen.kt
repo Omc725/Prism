@@ -463,7 +463,7 @@ fun LibraryScreen(bottomPadding: Dp) {
             if (!settings.isLoggedIn) { nav.go(Routes.playlist(c.prismLibrary.create(name))); return@NewPlaylistDialog }
             scope.launch {
                 val id = runCatching { c.ytm.createPlaylist(name, emptyList(), privacy = privacy) }.getOrNull()
-                if (id == null) android.widget.Toast.makeText(context, "Couldn't make the playlist", android.widget.Toast.LENGTH_SHORT).show()
+                if (id == null) android.widget.Toast.makeText(context, "Couldn't make the playlist".localized(context), android.widget.Toast.LENGTH_SHORT).show()
                 else {
                     c.library.refreshCollections()
                     nav.go(Routes.playlist(id))
@@ -499,7 +499,7 @@ fun LibraryScreen(bottomPadding: Dp) {
                     if (com.prism.music.data.PrismLibrary.isPrismList(p.id)) { c.prismLibrary.delete(p.id); return@PrismTextButton }
                     scope.launch {
                         c.library.deletePlaylist(p).onFailure {
-                            android.widget.Toast.makeText(context, "Couldn't delete \"${p.title}\": ${it.friendlyMessage()}", android.widget.Toast.LENGTH_LONG).show()
+                            android.widget.Toast.makeText(context, "Couldn't delete \"${p.title}\": ${it.friendlyMessage()}".localized(context), android.widget.Toast.LENGTH_LONG).show()
                         }
                     }
                 }) { Text("Delete".localized(), color = MaterialTheme.colorScheme.error) }
@@ -725,7 +725,7 @@ private fun DownloadsSummary() {
             d.song?.let { s ->
                 Row(Modifier.padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
                     Text(s.title, Modifier.weight(1f), maxLines = 1, style = MaterialTheme.typography.bodyMedium)
-                    Text(com.prism.music.ui.screens.downloadStateText(d, waiting), style = MaterialTheme.typography.labelMedium, color = Color.Gray)
+                    Text(com.prism.music.ui.screens.downloadStateText(d, waiting).localized(), style = MaterialTheme.typography.labelMedium, color = Color.Gray)
                 }
             }
         }

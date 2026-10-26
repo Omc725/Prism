@@ -345,7 +345,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     val ready = remember(songs, downloads, online) { if (online) null else songs.filter { c.availableOffline(it.id) }.map { it.id }.toSet() }
     val playable = remember(visible, ready) { if (ready == null) visible else visible.filter { it.id in ready } }
     val playFrom: (List<Song>, Song, QueueSource) -> Unit = { list, s, src ->
-        if (ready != null && s.id !in ready) Toast.makeText(context, "You're offline, and this song isn't downloaded", Toast.LENGTH_SHORT).show()
+        if (ready != null && s.id !in ready) Toast.makeText(context, "You're offline, and this song isn't downloaded".localized(context), Toast.LENGTH_SHORT).show()
         else {
             val q = if (ready == null) list else list.filter { it.id in ready }
             c.player.playQueue(q, q.indexOfFirst { it.id == s.id }.coerceAtLeast(0), src)
@@ -384,7 +384,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                 val done = if (type == CollectionType.ALBUM && now) c.library.removeAlbum(page.id, id) else c.library.setSaved(id, !now)
                 if (!done) {
                     saved = now
-                    Toast.makeText(context, "Couldn't update your library", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Couldn't update your library".localized(context), Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -396,7 +396,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     val toggleSavedHere: () -> Unit = {
         if (savedHere) {
             c.prismLibrary.unsaveAlbum(page.id)
-            Toast.makeText(context, "Removed from your library", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Removed from your library".localized(context), Toast.LENGTH_SHORT).show()
         } else {
             val by = page.artists.joinToString(", ") { it.name }.ifBlank { page.subtitle }
             c.prismLibrary.saveAlbum(
@@ -405,7 +405,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                     page.thumbnail, page.playlistId, System.currentTimeMillis(),
                 ),
             )
-            Toast.makeText(context, "Saved to your library", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Saved to your library".localized(context), Toast.LENGTH_SHORT).show()
         }
     }
     val radioId = when (type) {
@@ -418,7 +418,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
             scope.launch {
                 runCatching { c.radio(null, rid) }.onSuccess { r ->
                     c.player.playQueue(r.songs, 0, QueueSource(QueueKind.RADIO, "${page.title} Radio"))
-                }.onFailure { Toast.makeText(context, "Couldn't start the radio", Toast.LENGTH_SHORT).show() }
+                }.onFailure { Toast.makeText(context, "Couldn't start the radio".localized(context), Toast.LENGTH_SHORT).show() }
             }
         }
     }
@@ -426,10 +426,10 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     val toggleDownloads: () -> Unit = {
         if (allDownloaded) {
             c.downloads.removeMany(page.songs.map { it.id })
-            Toast.makeText(context, "Removed ${page.songs.size} downloads", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Removed ${page.songs.size} downloads".localized(context), Toast.LENGTH_SHORT).show()
         } else {
             c.downloads.downloadAll(page.songs)
-            Toast.makeText(context, "Downloading ${com.prism.music.data.model.songCount(page.songs.size - downloadedCount)}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Downloading ${com.prism.music.data.model.songCount(page.songs.size - downloadedCount)}".localized(context), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -438,7 +438,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     fun removeAction(s: Song): List<SheetItem> {
         if (type == CollectionType.PRISM) return listOf(SheetItem(PrismIcons.PlaylistRemove, "Remove from this playlist") {
             c.prismLibrary.remove(page.id, s.id)
-            Toast.makeText(context, "Removed from ${page.title}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Removed from ${page.title}".localized(context), Toast.LENGTH_SHORT).show()
         })
         val slot = slots[s.id]
         if (type != CollectionType.PLAYLIST || !live.page.owned || slot == null) return emptyList()
@@ -447,10 +447,10 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
             live.songs.value = before.filterNot { it.id == s.id }
             scope.launch {
                 runCatching { c.ytm.removeFromPlaylist(page.id, s.id, slot) }
-                    .onSuccess { Toast.makeText(context, "Removed from ${page.title}", Toast.LENGTH_SHORT).show() }
+                    .onSuccess { Toast.makeText(context, "Removed from ${page.title}".localized(context), Toast.LENGTH_SHORT).show() }
                     .onFailure {
                         live.songs.value = before
-                        Toast.makeText(context, "Couldn't remove it: ${it.friendlyMessage()}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Couldn't remove it: ${it.friendlyMessage()}".localized(context), Toast.LENGTH_SHORT).show()
                     }
             }
         })
@@ -703,7 +703,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                     val out = excludedLists.any { it.id == listId }
                     add(SheetItem(PrismIcons.Block, if (out) "Back in my taste" else "Leave out of my taste") {
                         c.exclusions.setPlaylist(com.prism.music.data.foryou.Excluded(listId, title, art), !out)
-                        Toast.makeText(context, if (out) "Its plays count towards your recommendations again" else "Its plays won't shape your recommendations", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, (if (out) "Its plays count towards your recommendations again" else "Its plays won't shape your recommendations").localized(context), Toast.LENGTH_SHORT).show()
                     })
                 }
                 addAll(downloadsItems)
@@ -738,8 +738,8 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                 }.onSuccess {
                     title = t; description = d.ifBlank { null }; privacy = p
                     c.library.refreshCollections()
-                    Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
-                }.onFailure { Toast.makeText(context, "Couldn't save: ${it.friendlyMessage()}", Toast.LENGTH_SHORT).show() }
+                    Toast.makeText(context, "Saved".localized(context), Toast.LENGTH_SHORT).show()
+                }.onFailure { Toast.makeText(context, "Couldn't save: ${it.friendlyMessage()}".localized(context), Toast.LENGTH_SHORT).show() }
             }
         }
     }
@@ -754,7 +754,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                 scope.launch {
                     c.library.deletePlaylist(PlaylistItem(page.id, title, "", page.thumbnail))
                         .onSuccess { nav.back() }
-                        .onFailure { Toast.makeText(context, "Couldn't delete \"$title\": ${it.friendlyMessage()}", Toast.LENGTH_LONG).show() }
+                        .onFailure { Toast.makeText(context, "Couldn't delete \"$title\": ${it.friendlyMessage()}".localized(context), Toast.LENGTH_LONG).show() }
                 }
             }) { Text("Delete".localized(), color = MaterialTheme.colorScheme.error) }
         },
@@ -1137,7 +1137,7 @@ private fun CoverSheet(key: String, songs: List<Song>, onDismiss: () -> Unit) {
     val scope = rememberCoroutineScope()
     val picker = androidx.activity.compose.rememberLauncherForActivityResult(androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) scope.launch {
-            if (!c.covers.usePhoto(key, uri)) Toast.makeText(context, "Couldn't use that picture", Toast.LENGTH_SHORT).show()
+            if (!c.covers.usePhoto(key, uri)) Toast.makeText(context, "Couldn't use that picture".localized(context), Toast.LENGTH_SHORT).show()
             onDismiss()
         }
     }
@@ -1193,6 +1193,7 @@ private fun sizeText(bytes: Long): String =
 /** Under the Downloads header: space used, saved lyrics, and anything still downloading. */
 @Composable
 private fun DownloadsInfo(songs: List<Song>, ask: (String, () -> Unit) -> Unit) {
+    val context = androidx.compose.ui.platform.LocalContext.current
     val c = LocalContainer.current
     val scheme = MaterialTheme.colorScheme
     val all by c.downloads.downloads.collectAsState()
@@ -1203,21 +1204,21 @@ private fun DownloadsInfo(songs: List<Song>, ask: (String, () -> Unit) -> Unit) 
     val bytes = remember(all) { all.values.filter { it.state == Download.STATE_COMPLETED }.sumOf { it.bytes } }
     Column(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 6.dp)) {
         Text(
-            "${songs.size} song${if (songs.size == 1) "" else "s"} · ${sizeText(bytes)} on this phone" +
-                if (videos.isNotEmpty()) " (${sizeText(bytes + videos.values.sumOf { it.bytes })} with videos)" else "",
+            ("${songs.size} song${if (songs.size == 1) "" else "s"} · ${sizeText(bytes)} on this phone" +
+                if (videos.isNotEmpty()) " (${sizeText(bytes + videos.values.sumOf { it.bytes })} with videos)" else "").localized(),
             style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
         )
         // Saved music videos take far more room than songs, so they get their own line.
         val savedVideos = remember(videos) { videos.values.filter { it.state == Download.STATE_COMPLETED } }
         val videosLoading = remember(videos) { videos.values.count { it.state == Download.STATE_QUEUED || it.state == Download.STATE_DOWNLOADING } }
         if (videos.isNotEmpty()) Text(
-            "${savedVideos.size} music video${if (savedVideos.size == 1) "" else "s"} · ${sizeText(videos.values.sumOf { it.bytes })}" +
-                if (videosLoading > 0) " · $videosLoading downloading" else "",
+            ("${savedVideos.size} music video${if (savedVideos.size == 1) "" else "s"} · ${sizeText(videos.values.sumOf { it.bytes })}" +
+                if (videosLoading > 0) " · $videosLoading downloading" else "").localized(),
             style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
         )
         val lossless = remember(all) { all.count { it.value.lossless } }
         if (lossless > 0) Text(
-            "$lossless lossless from your phone's music files",
+            "$lossless lossless from your phone's music files".localized(),
             style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
         )
         val ids = songs.map { it.id }
@@ -1225,13 +1226,13 @@ private fun DownloadsInfo(songs: List<Song>, ask: (String, () -> Unit) -> Unit) 
             val withLyrics = ids.count { (levels[it] ?: 0) > 0 }
             val karaoke = ids.count { (levels[it] ?: 0) >= 3 }
             Text(
-                "Lyrics for $withLyrics · $karaoke karaoke" + if (working > 0) " · getting more…" else "",
+                ("Lyrics for $withLyrics · $karaoke karaoke" + if (working > 0) " · getting more…" else "").localized(),
                 style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
             )
         }
         if (active.isNotEmpty()) Row(verticalAlignment = Alignment.CenterVertically) {
             Text("Downloading ${active.size}…".localized(), style = MaterialTheme.typography.labelMedium, color = scheme.primary)
-            PrismTextButton(onClick = { ask("Cancel ${active.size} downloads that haven't finished?") { c.downloads.removeMany(active.keys) } }) { Text("Cancel".localized()) }
+            PrismTextButton(onClick = { ask("Cancel ${active.size} downloads that haven't finished?".localized(context)) { c.downloads.removeMany(active.keys) } }) { Text("Cancel".localized()) }
         }
         val unfinished = remember(all) { all.values.filter { it.state != Download.STATE_COMPLETED } }
         if (unfinished.isNotEmpty()) DownloadQueueStatus(unfinished)
@@ -1259,13 +1260,13 @@ fun DownloadQueueStatus(unfinished: Collection<com.prism.music.download.Download
     val failed = unfinished.count { it.state == Download.STATE_FAILED }
     val queued = unfinished.count { it.state == Download.STATE_QUEUED }
     if (waiting && queued > 0) Row(verticalAlignment = Alignment.CenterVertically) {
-        Text("$queued waiting for Wi-Fi", style = MaterialTheme.typography.labelMedium, color = scheme.onSurfaceVariant)
+        Text("$queued waiting for Wi-Fi".localized(), style = MaterialTheme.typography.labelMedium, color = scheme.onSurfaceVariant)
         // It switches the setting off for good (Settings → Downloads & storage), so it says so.
         PrismTextButton(onClick = { c.settings.setDownloadWifiOnly(false) }) { Text("Turn off Wi-Fi only".localized()) }
     }
     var showFailed by remember { mutableStateOf(false) }
     if (failed > 0) Row(verticalAlignment = Alignment.CenterVertically) {
-        Text(if (failed == 1) "1 download failed" else "$failed downloads failed", style = MaterialTheme.typography.labelMedium, color = scheme.error)
+        Text((if (failed == 1) "1 download failed" else "$failed downloads failed").localized(), style = MaterialTheme.typography.labelMedium, color = scheme.error)
         // Which ones, and why (#98).
         PrismTextButton(onClick = { showFailed = true }) { Text("See which".localized()) }
         PrismTextButton(onClick = { c.downloads.retryFailed() }) { Text("Try again".localized()) }
@@ -1289,9 +1290,9 @@ fun FailedDownloadsSheet(onDismiss: () -> Unit) {
     LaunchedEffect(failed.isEmpty()) { if (failed.isEmpty()) onDismiss() }
     ActionSheet(art = null, onDismiss = onDismiss) { close ->
         Column(Modifier.padding(start = 24.dp, end = 24.dp, bottom = 12.dp)) {
-            Text(if (failed.size == 1) "1 download failed" else "${failed.size} downloads failed", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Light)
+            Text((if (failed.size == 1) "1 download failed" else "${failed.size} downloads failed").localized(), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Light)
             Text(
-                "Prism also tries them again by itself when the phone is back online.",
+                "Prism also tries them again by itself when the phone is back online.".localized(),
                 style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
             )
         }
@@ -1302,10 +1303,10 @@ fun FailedDownloadsSheet(onDismiss: () -> Unit) {
                     Artwork(d.song?.thumbnail, Modifier.size(46.dp), ui.art, size = 226)
                     Spacer(Modifier.width(12.dp))
                     Column(Modifier.weight(1f)) {
-                        Text(d.song?.title ?: "Unknown song", style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        Text(d.song?.title ?: "Unknown song".localized(), style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
                         d.song?.let { Text(it.artistText, style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis) }
                         Text(
-                            why[id] ?: "Failed before Prism kept the reason",
+                            why[id]?.localized() ?: "Failed before Prism kept the reason".localized(),
                             style = MaterialTheme.typography.bodySmall, color = scheme.error, maxLines = 3,
                         )
                     }
@@ -1315,7 +1316,7 @@ fun FailedDownloadsSheet(onDismiss: () -> Unit) {
             }
         }
         if (failed.size > MAX_FAILED_ROWS) Text(
-            "and ${failed.size - MAX_FAILED_ROWS} more",
+            "and ${failed.size - MAX_FAILED_ROWS} more".localized(),
             Modifier.padding(start = 28.dp, top = 8.dp), style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
         )
         Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 14.dp), horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)) {

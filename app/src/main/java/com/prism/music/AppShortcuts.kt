@@ -7,6 +7,8 @@ import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 
+import com.prism.music.ui.i18n.localized
+
 /**
  * The shortcuts a long press on Prism's app icon shows (Reddit 1.7: "long-press app icon quick actions"). Each opens a
  * prism:// link that [MainActivity] handles like a widget's. Published at start; dynamic, so they follow whichever
@@ -26,8 +28,8 @@ object AppShortcuts {
         val max = ShortcutManagerCompat.getMaxShortcutCountPerActivity(context).coerceAtLeast(1)
         val shortcuts = specs.take(max).mapIndexed { i, s ->
             ShortcutInfoCompat.Builder(context, s.id)
-                .setShortLabel(s.short)
-                .setLongLabel(s.long)
+                .setShortLabel(s.short.localized(context))
+                .setLongLabel(s.long.localized(context))
                 .setIcon(IconCompat.createWithResource(context, s.icon))
                 .setRank(i)
                 .setIntent(Intent(Intent.ACTION_VIEW, Uri.parse(s.link), context, PrismActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))

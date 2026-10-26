@@ -162,7 +162,7 @@ fun BlendsScreen(bottomPadding: Dp) {
     DisposableEffect(Unit) { onDispose { c.blendExchange.close() } }
     LaunchedEffect(Unit) {
         c.blendExchange.made.collect { r ->
-            Toast.makeText(context, "${r.name} scanned your code: your Blend is made", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "${r.name} scanned your code: your Blend is made".localized(context), Toast.LENGTH_LONG).show()
             nav.go(Routes.blend(r.who))
         }
     }
@@ -170,7 +170,7 @@ fun BlendsScreen(bottomPadding: Dp) {
     fun take(text: String) = scope.launch {
         when (val r = c.blends.import(text)) {
             is Blends.Import.Added -> {
-                Toast.makeText(context, if (r.updated) "${r.name}'s Blend is up to date" else "Blend with ${r.name} made", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, (if (r.updated) "${r.name}'s Blend is up to date" else "Blend with ${r.name} made").localized(context), Toast.LENGTH_SHORT).show()
                 nav.go(Routes.blend(r.who))
                 // Their phone gets the Blend too: this phone's code, as stored with the Blend, goes back to the one shown.
                 val myCode = c.blends.get(r.who)?.myCode
@@ -181,16 +181,16 @@ fun BlendsScreen(bottomPadding: Dp) {
                         Toast.makeText(
                             context,
                             when (back) {
-                                is com.prism.music.data.blend.BlendExchange.SendBack.Done -> "Made on ${back.name}'s phone too"
-                                else -> "Couldn't reach ${r.name}'s phone (on another Wi-Fi?). Let them scan your code to have it too."
+                                is com.prism.music.data.blend.BlendExchange.SendBack.Done -> "Made on ${back.name}'s phone too".localized(context)
+                                else -> "Couldn't reach ${r.name}'s phone (on another Wi-Fi?). Let them scan your code to have it too.".localized(context)
                             },
                             Toast.LENGTH_LONG,
                         ).show()
                     }
                 }
             }
-            Blends.Import.Yours -> Toast.makeText(context, "That's your own code", Toast.LENGTH_SHORT).show()
-            Blends.Import.NotACode -> Toast.makeText(context, "That isn't a Prism Blend code", Toast.LENGTH_SHORT).show()
+            Blends.Import.Yours -> Toast.makeText(context, "That's your own code".localized(context), Toast.LENGTH_SHORT).show()
+            Blends.Import.NotACode -> Toast.makeText(context, "That isn't a Prism Blend code".localized(context), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -273,7 +273,7 @@ fun BlendsScreen(bottomPadding: Dp) {
                 BlendCover(e, Modifier.size(56.dp), small = true)
                 Spacer(Modifier.width(14.dp))
                 Column(Modifier.weight(1f)) {
-                    Text("${c.blends.myName.ifBlank { "You" }} + ${e.friendName}", style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text("${c.blends.myName.ifBlank { "You".localized() }} + ${e.friendName}", style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Text("${b?.match ?: 0}% ${"taste match".localized()} · ${b?.songs?.size ?: 0} ${"songs".localized()}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
@@ -392,15 +392,15 @@ fun BlendScreen(who: String, bottomPadding: Dp) {
     val hasOwnCover = remember(who, stamp) { c.blends.coverFile(who).exists() }
     val pickCover = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) scope.launch {
-            if (!c.blends.setCover(who, uri)) Toast.makeText(context, "Couldn't use that picture", Toast.LENGTH_SHORT).show()
+            if (!c.blends.setCover(who, uri)) Toast.makeText(context, "Couldn't use that picture".localized(context), Toast.LENGTH_SHORT).show()
         }
     }
 
     SubPage(
-        title, bottomPadding, subtitle = "${blend.match}% taste match",
+        title, bottomPadding, subtitle = "${blend.match}% taste match".localized(),
         actions = {
             Box {
-                RoundAction(PrismIcons.More, "More", glass = true) { menu = true }
+                RoundAction(PrismIcons.More, "More".localized(), glass = true) { menu = true }
                 DropdownMenu(menu, { menu = false }) {
                     DropdownMenuItem({ Text("Share as a picture".localized()) }, { menu = false; card = true }, leadingIcon = { Icon(PrismIcons.Share, null) })
                     DropdownMenuItem({ Text((if (hasOwnCover) "Change the cover" else "Pick a cover").localized()) }, {
@@ -413,7 +413,7 @@ fun BlendScreen(who: String, bottomPadding: Dp) {
                         menu = false
                         scope.launch {
                             val id = runCatching { withContext(Dispatchers.IO) { c.ytm.createPlaylist("Blend · $title", songs.map { it.id }, privacy = "PRIVATE") } }.getOrNull()
-                            Toast.makeText(context, if (id != null) "Saved as a private playlist" else "Couldn't save the Blend", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, (if (id != null) "Saved as a private playlist" else "Couldn't save the Blend").localized(context), Toast.LENGTH_SHORT).show()
                             if (id != null) c.library.refreshCollections()
                         }
                     }, leadingIcon = { Icon(PrismIcons.PlaylistAdd, null) })

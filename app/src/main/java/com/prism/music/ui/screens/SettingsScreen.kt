@@ -282,7 +282,7 @@ private fun SettingsPage(
                 if (query.isNotBlank()) {
                     item(key = "results") {
                         if (results.isEmpty()) Text(
-                            "No settings match \"${query.trim()}\"",
+                            "No settings match \"${query.trim()}\"".localized(),
                             style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(horizontal = 8.dp),
                         ) else Group("") {
@@ -773,7 +773,7 @@ private fun androidx.compose.foundation.lazy.LazyListScope.appearance() {
                         info = "While it's on, those parts of Prism are outlined, and tapping one opens just its settings. Done, at the top of the screen, turns it off. Holding the Settings tab (when it's in the tab bar) turns it on and off too.",
                     ) {
                         c.customizing.value = it
-                        if (it) android.widget.Toast.makeText(context, "Tap anything outlined to change it", android.widget.Toast.LENGTH_SHORT).show()
+                        if (it) android.widget.Toast.makeText(context, "Tap anything outlined to change it".localized(context), android.widget.Toast.LENGTH_SHORT).show()
                     }
                 }
             }

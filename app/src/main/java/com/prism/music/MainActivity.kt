@@ -1,5 +1,6 @@
 package com.prism.music
 
+import com.prism.music.ui.i18n.localized
 import android.Manifest
 import android.content.Intent
 import android.net.Uri
@@ -257,14 +258,14 @@ open class MainActivity : ComponentActivity() {
         val lookCode = if (intent?.action == Intent.ACTION_SEND) com.prism.music.data.looks.LookCode.findIn(intent.getStringExtra(Intent.EXTRA_TEXT)) else null
         if (lookCode != null) {
             container.looks.decode(lookCode)?.let { container.looks.pending.value = it }
-                ?: Toast.makeText(this, "That Look code couldn't be read", Toast.LENGTH_SHORT).show()
+                ?: Toast.makeText(this, "That Look code couldn't be read".localized(this), Toast.LENGTH_SHORT).show()
             return Uri.parse("prism://looks")
         }
         lookFile(intent)?.let { file ->
             container.scope.launch(Dispatchers.Main) {
                 val look = runCatching { contentResolver.openInputStream(file)?.use { container.looks.readFile(it) } }
                 look.getOrNull()?.let { container.looks.pending.value = it }
-                    ?: Toast.makeText(this@MainActivity, look.exceptionOrNull()?.message ?: "That file isn't a Prism Look", Toast.LENGTH_SHORT).show()
+                    ?: Toast.makeText(this@MainActivity, (look.exceptionOrNull()?.message ?: "That file isn't a Prism Look").localized(this@MainActivity), Toast.LENGTH_SHORT).show()
             }
             return Uri.parse("prism://looks")
         }
@@ -287,7 +288,7 @@ open class MainActivity : ComponentActivity() {
 
     private fun linkOf(intent: Intent?): Uri? = when (intent?.action) {
         Intent.ACTION_SEND -> com.prism.music.data.ShareLinks.findIn(intent.getStringExtra(Intent.EXTRA_TEXT))?.let(Uri::parse).also {
-            if (it == null) Toast.makeText(this, "That isn't a YouTube or YouTube Music link", Toast.LENGTH_SHORT).show()
+            if (it == null) Toast.makeText(this, "That isn't a YouTube or YouTube Music link".localized(this), Toast.LENGTH_SHORT).show()
         }
         else -> intent?.data
     }
@@ -411,7 +412,7 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                 c.scope.launch(kotlinx.coroutines.Dispatchers.Main) {
                     val r = runCatching { kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { c.radio(mix.seedVideoId, mix.id, mix.params, keepFirst = true) } }.getOrNull()
                     if (r == null || r.songs.isEmpty()) {
-                        Toast.makeText(context, "Couldn't start ${mix.title}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Couldn't start ${mix.title}".localized(context), Toast.LENGTH_SHORT).show()
                         return@launch
                     }
                     // Stations like "Listen together" open on a live stream: found out now (the stream is resolved anyway), it starts as one.
@@ -485,16 +486,16 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
         )
 
         LaunchedEffect(Unit) {
-            c.player.errors.collect { Toast.makeText(context, it, Toast.LENGTH_SHORT).show() }
+            c.player.errors.collect { Toast.makeText(context, it.localized(context), Toast.LENGTH_SHORT).show() }
         }
         LaunchedEffect(Unit) {
-            c.together.events.collect { Toast.makeText(context, it, Toast.LENGTH_SHORT).show() }
+            c.together.events.collect { Toast.makeText(context, it.localized(context), Toast.LENGTH_SHORT).show() }
         }
         LaunchedEffect(Unit) {
-            c.cast.events.collect { Toast.makeText(context, it, Toast.LENGTH_LONG).show() }
+            c.cast.events.collect { Toast.makeText(context, it.localized(context), Toast.LENGTH_LONG).show() }
         }
         LaunchedEffect(Unit) {
-            c.handoff.events.collect { Toast.makeText(context, it, Toast.LENGTH_LONG).show() }
+            c.handoff.events.collect { Toast.makeText(context, it.localized(context), Toast.LENGTH_LONG).show() }
         }
         com.prism.music.ui.components.HandoffDialogs()
         LaunchedEffect(Unit) {
@@ -601,7 +602,7 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                             com.prism.music.ui.screens.BlendScanScreen("Point at a Prism Look's code", com.prism.music.data.looks.LookCode::findIn) { code ->
                                 navController.popBackStack()
                                 c.looks.decode(code)?.let { c.looks.pending.value = it }
-                                    ?: Toast.makeText(context, "That Look code couldn't be read", Toast.LENGTH_SHORT).show()
+                                    ?: Toast.makeText(context, "That Look code couldn't be read".localized(context), Toast.LENGTH_SHORT).show()
                             }
                         }
                         composable("blend/{who}", listOf(navArgument("who") { type = NavType.StringType })) {

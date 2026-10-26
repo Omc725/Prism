@@ -610,7 +610,7 @@ private fun Intro(s: ReplayStory, modifier: Modifier) {
                 Period.Kind.MONTH -> "Your month in music."
                 Period.Kind.DAYS30 -> "Your last 30 days in music."
                 Period.Kind.ALL -> "Everything you've played, in one story."
-            },
+            }.localized(),
             style = body.copy(fontSize = 24.sp), modifier = Modifier.reveal(800).padding(top = 8.dp),
         )
         Text("Tap to go on · hold to pause".localized(), style = body.copy(fontSize = 14.sp, color = Color.White.copy(alpha = 0.6f)), modifier = Modifier.reveal(1_400).padding(top = 24.dp))
@@ -627,11 +627,11 @@ private fun Minutes(s: ReplayStory, modifier: Modifier) {
         val text = total.text(count.value.toLong())
         val longest = total.text(total.value).length
         Text(text, style = display(if (longest > 8) 72.sp else if (longest > 6) 96.sp else 130.sp), maxLines = 1, modifier = Modifier.reveal(200))
-        Text(total.unit.ifEmpty { "of music" }.uppercase(),style = display(46.sp, ArtistTypography.extended), modifier = Modifier.reveal(400))
+        Text(total.unit.ifEmpty { "of music" }.localized().uppercase(), style = display(46.sp, ArtistTypography.extended), modifier = Modifier.reveal(400))
         Spacer(Modifier.height(28.dp))
         val hours = s.totalMs / 3_600_000.0
         Text(
-            if (hours >= 24) "That's %.1f days of music, start to finish.".format(hours / 24) else "That's %.1f hours of music, start to finish.".format(hours),
+            (if (hours >= 24) "That's %.1f days of music, start to finish.".format(hours / 24) else "That's %.1f hours of music, start to finish.".format(hours)).localized(),
             style = body, modifier = Modifier.reveal(2_400),
         )
         if (s.previousMs != null && s.previousLabel != null) {
@@ -639,7 +639,7 @@ private fun Minutes(s: ReplayStory, modifier: Modifier) {
             Row(Modifier.reveal(3_000).padding(top = 14.dp), verticalAlignment = Alignment.CenterVertically) {
                 Icon(if (change >= 0) PrismIcons.TrendingUp else PrismIcons.TrendingDown, null, tint = Color.White, modifier = Modifier.size(26.dp))
                 Spacer(Modifier.width(8.dp))
-                Text(if (change >= 0) "$change% more than ${s.previousLabel}" else "${-change}% less than ${s.previousLabel}", style = body)
+                Text((if (change >= 0) "$change% more than ${s.previousLabel}" else "${-change}% less than ${s.previousLabel}").localized(), style = body)
             }
         }
         Row(Modifier.reveal(3_600).padding(top = 22.dp), horizontalArrangement = Arrangement.spacedBy(22.dp)) {
@@ -654,7 +654,7 @@ private fun Minutes(s: ReplayStory, modifier: Modifier) {
 private fun Stat(value: String, label: String) {
     Column {
         Text(value, style = display(40.sp))
-        Text(label, style = body.copy(fontSize = 14.sp, color = Color.White.copy(alpha = 0.75f)))
+        Text(label.localized(), style = body.copy(fontSize = 14.sp, color = Color.White.copy(alpha = 0.75f)))
     }
 }
 
@@ -711,7 +711,7 @@ private fun TopArtist(s: ReplayStory, modifier: Modifier) {
                 Stat("${s.songs.count { it.mainArtist == a.artistName }}", "songs")
             }
             val share = (a.ms * 100.0 / s.totalMs.coerceAtLeast(1)).toInt()
-            Text("$share% of everything you played was them.", style = body, modifier = Modifier.reveal(1_800).padding(top = 16.dp))
+            Text("$share% of everything you played was them.".localized(), style = body, modifier = Modifier.reveal(1_800).padding(top = 16.dp))
         }
     }
 }
@@ -761,7 +761,7 @@ private fun TopSong(s: ReplayStory, modifier: Modifier) {
             Text(song.artistName, style = body.copy(fontSize = 20.sp), textAlign = TextAlign.Center, modifier = Modifier.reveal(900).padding(top = 6.dp))
             Spacer(Modifier.height(20.dp))
             Text(
-                "You played it ${song.plays} ${if (song.plays == 1) "time" else "times"}, for ${listenTime(song.ms)}.",
+                "You played it ${song.plays} ${if (song.plays == 1) "time" else "times"}, for ${listenTime(song.ms)}.".localized(),
                 style = body, textAlign = TextAlign.Center, modifier = Modifier.reveal(1_500),
             )
             // The line it's playing from (its best part).
@@ -839,8 +839,8 @@ private fun Fact(label: String, value: String, delayMs: Int) {
         Modifier.fillMaxWidth().reveal(delayMs).clip(RoundedCornerShape(16.dp)).background(Color.White.copy(alpha = 0.12f)).padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(label.uppercase(), style = kicker(11.sp).copy(color = Color.White.copy(alpha = 0.75f)), modifier = Modifier.weight(1f))
-        Text(value, style = body.copy(fontSize = 16.sp, fontWeight = FontWeight.Bold))
+        Text(label.localized().uppercase(), style = kicker(11.sp).copy(color = Color.White.copy(alpha = 0.75f)), modifier = Modifier.weight(1f))
+        Text(value.localized(), style = body.copy(fontSize = 16.sp, fontWeight = FontWeight.Bold))
     }
 }
 
@@ -852,7 +852,7 @@ private fun Discovery(s: ReplayStory, modifier: Modifier) {
     Column(modifier, verticalArrangement = Arrangement.Center) {
         Text("NEW TO YOU".localized(), style = kicker(), modifier = Modifier.reveal(100))
         Text(fmt(found.size.toLong()), style = display(140.sp), modifier = Modifier.reveal(250))
-        Text(if (found.size == 1) "NEW ARTIST" else "NEW ARTISTS", style = display(44.sp, ArtistTypography.extended), modifier = Modifier.reveal(450))
+        Text((if (found.size == 1) "NEW ARTIST" else "NEW ARTISTS").localized(), style = display(44.sp, ArtistTypography.extended), modifier = Modifier.reveal(450))
         Text("found their way into your rotation.".localized(), style = body, modifier = Modifier.reveal(700).padding(top = 8.dp))
         Spacer(Modifier.height(26.dp))
         Row(Modifier.reveal(1_000)) {
@@ -865,7 +865,7 @@ private fun Discovery(s: ReplayStory, modifier: Modifier) {
         }
         found.firstOrNull()?.let { a ->
             Text(
-                "Your favorite find: ${a.artistName}, with ${listenTime(a.ms)}.",
+                "Your favorite find: ${a.artistName}, with ${listenTime(a.ms)}.".localized(),
                 style = body, modifier = Modifier.reveal(1_500).padding(top = 22.dp),
             )
         }
@@ -888,8 +888,8 @@ private fun PersonalitySlide(p: Personality, modifier: Modifier) {
             drawPath(tri, Color.White.copy(alpha = 0.6f), style = Stroke(3.dp.toPx()))
         }
         Spacer(Modifier.height(28.dp))
-        Text(p.name.uppercase(), style = display(64.sp), modifier = Modifier.reveal(700))
-        Text(p.line, style = body, modifier = Modifier.reveal(1_200).padding(top = 14.dp))
+        Text(p.name.localized().uppercase(), style = display(64.sp), modifier = Modifier.reveal(700))
+        Text(p.line.localized(), style = body, modifier = Modifier.reveal(1_200).padding(top = 14.dp))
     }
 }
 
@@ -904,9 +904,9 @@ private fun Seasons(s: ReplayStory, modifier: Modifier) {
                 Modifier.fillMaxWidth().padding(vertical = 6.dp).reveal(300 + i * 260)
                     .clip(RoundedCornerShape(18.dp)).background(Color.White.copy(alpha = 0.12f)).padding(horizontal = 18.dp, vertical = 14.dp),
             ) {
-                Text(q.label.uppercase(), style = kicker(11.sp).copy(color = Color.White.copy(alpha = 0.75f)))
-                Text(q.genre ?: "A bit of everything", style = display(34.sp), maxLines = 1, overflow = TextOverflow.Ellipsis)
-                q.topSong?.let { Text("On repeat: $it", style = body.copy(fontSize = 15.sp, color = Color.White.copy(alpha = 0.8f)), maxLines = 1, overflow = TextOverflow.Ellipsis) }
+                Text(q.label.localized().uppercase(), style = kicker(11.sp).copy(color = Color.White.copy(alpha = 0.75f)))
+                Text((q.genre ?: "A bit of everything").localized(), style = display(34.sp), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                q.topSong?.let { Text("On repeat: $it".localized(), style = body.copy(fontSize = 15.sp, color = Color.White.copy(alpha = 0.8f)), maxLines = 1, overflow = TextOverflow.Ellipsis) }
             }
         }
     }
@@ -934,7 +934,7 @@ private fun TopAlbum(s: ReplayStory, modifier: Modifier) {
         Text(a.albumTitle.uppercase(), style = display(44.sp), textAlign = TextAlign.Center, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.reveal(700))
         Text(a.artistName, style = body.copy(fontSize = 20.sp), modifier = Modifier.reveal(900).padding(top = 6.dp))
         Text(
-            "${a.songs} of its songs, ${a.plays} plays, ${listenTime(a.ms)}.",
+            "${a.songs} of its songs, ${a.plays} plays, ${listenTime(a.ms)}.".localized(),
             style = body, textAlign = TextAlign.Center, modifier = Modifier.reveal(1_400).padding(top = 16.dp),
         )
     }
@@ -953,7 +953,7 @@ private fun Months(s: ReplayStory, modifier: Modifier) {
     Column(modifier, verticalArrangement = Arrangement.Center) {
         Text("YOUR BIGGEST MONTH".localized(), style = kicker(), modifier = Modifier.reveal(100))
         Text(names.getOrElse(peak) { "" }.uppercase(), style = display(72.sp), maxLines = 1, modifier = Modifier.reveal(300))
-        Text("${listenTime(byMonth[peak])} that month.", style = body, modifier = Modifier.reveal(600).padding(top = 6.dp))
+        Text("${listenTime(byMonth[peak])} that month.".localized(), style = body, modifier = Modifier.reveal(600).padding(top = 6.dp))
         Spacer(Modifier.height(30.dp))
         Canvas(Modifier.fillMaxWidth().height(200.dp).reveal(400)) {
             val max = byMonth.max().coerceAtLeast(1)
@@ -990,7 +990,7 @@ private fun FirstSong(s: ReplayStory, modifier: Modifier) {
         Text(f.title.uppercase(), style = display(44.sp), textAlign = TextAlign.Center, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.reveal(800).padding(top = 6.dp))
         Text(f.artistName, style = body.copy(fontSize = 20.sp), modifier = Modifier.reveal(1_000).padding(top = 4.dp))
         Text(
-            at.format(DateTimeFormatter.ofPattern("MMMM d")) + " at " + at.format(DateTimeFormatter.ofPattern("h:mm a")),
+            (at.format(DateTimeFormatter.ofPattern("MMMM d")) + " at " + at.format(DateTimeFormatter.ofPattern("h:mm a"))).localized(),
             style = body.copy(fontSize = 15.sp, color = Color.White.copy(alpha = 0.75f)), modifier = Modifier.reveal(1_400).padding(top = 12.dp),
         )
     }
@@ -1064,7 +1064,7 @@ private fun Summary(s: ReplayStory, modifier: Modifier, onReplay: () -> Unit, on
                 )
                 Spacer(Modifier.width(16.dp))
                 Column {
-                    Text(s.brand, style = kicker(12.sp))
+                    Text(s.brand.localized(), style = kicker(12.sp))
                     Text(s.title.uppercase(), style = display(if (s.title.length > 6) 34.sp else 52.sp), maxLines = 1)
                 }
             }
@@ -1078,7 +1078,7 @@ private fun Summary(s: ReplayStory, modifier: Modifier, onReplay: () -> Unit, on
             Row {
                 Column(Modifier.weight(1f)) {
                     val total = listenTotal(s.totalMs)
-                    Text("${total.unit} listened".trim().uppercase(), style = kicker(10.sp).copy(color = Color.White.copy(alpha = 0.75f)))
+                    Text("${total.unit} listened".trim().localized().uppercase(), style = kicker(10.sp).copy(color = Color.White.copy(alpha = 0.75f)))
                     Text(total.text(total.value), style = display(36.sp), maxLines = 1)
                 }
                 s.genres.firstOrNull()?.let { (g, _) ->
@@ -1089,7 +1089,7 @@ private fun Summary(s: ReplayStory, modifier: Modifier, onReplay: () -> Unit, on
                 }
             }
             Spacer(Modifier.height(8.dp))
-            Text(s.personality.name, style = body.copy(fontSize = 13.sp, color = Color.White.copy(alpha = 0.75f)))
+            Text(s.personality.name.localized(), style = body.copy(fontSize = 13.sp, color = Color.White.copy(alpha = 0.75f)))
         }
         Spacer(Modifier.height(18.dp))
         Row(Modifier.reveal(500), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -1097,7 +1097,7 @@ private fun Summary(s: ReplayStory, modifier: Modifier, onReplay: () -> Unit, on
                 scope.launch {
                     val name = if (s.rewind) "Rewind" else "Replay"
                     if (!shareLayer(context, card, "prism-${name.lowercase()}.png", "My Prism $name · ${s.title}", "Share your $name")) {
-                        Toast.makeText(context, "Couldn't share your $name", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Couldn't share your $name".localized(context), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -1109,7 +1109,7 @@ private fun Summary(s: ReplayStory, modifier: Modifier, onReplay: () -> Unit, on
                 scope.launch {
                     val name = if (s.rewind) "Top 100 of ${s.title}" else "Replay ${s.title}"
                     val id = runCatching { c.ytm.createPlaylist(name, s.songs.take(100).map { it.songId }, if (s.rewind) "Made with Prism Rewind" else "Made with Prism Replay") }.getOrNull()
-                    Toast.makeText(context, if (id != null) "Saved \"$name\" to YouTube Music" else "Couldn't create playlist", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, (if (id != null) "Saved \"$name\" to YouTube Music" else "Couldn't create playlist").localized(context), Toast.LENGTH_SHORT).show()
                 }
             }
             Pill("Watch again", PrismIcons.Refresh, onClick = onReplay)
@@ -1120,7 +1120,7 @@ private fun Summary(s: ReplayStory, modifier: Modifier, onReplay: () -> Unit, on
 @Composable
 private fun SummaryList(title: String, items: List<String>, modifier: Modifier) {
     Column(modifier) {
-        Text(title.uppercase(), style = kicker(10.sp).copy(color = Color.White.copy(alpha = 0.75f)))
+        Text(title.localized().uppercase(), style = kicker(10.sp).copy(color = Color.White.copy(alpha = 0.75f)))
         Spacer(Modifier.height(4.dp))
         items.forEachIndexed { i, t ->
             Text("${i + 1}  $t", style = body.copy(fontSize = 14.sp, lineHeight = 20.sp, fontWeight = FontWeight.SemiBold), maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -1138,6 +1138,6 @@ private fun Pill(label: String, icon: androidx.compose.ui.graphics.vector.ImageV
         val fg = if (primary) Color.Black else Color.White
         Icon(icon, null, Modifier.size(20.dp), tint = fg)
         Spacer(Modifier.width(8.dp))
-        Text(label, style = TextStyle(fontSize = 15.sp, fontWeight = FontWeight.Bold, color = fg))
+        Text(label.localized(), style = TextStyle(fontSize = 15.sp, fontWeight = FontWeight.Bold, color = fg))
     }
 }

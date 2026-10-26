@@ -744,7 +744,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                                 VideoChip(PrismIcons.AspectRatio, if (videoFill) "Fit video" else "Fill") { videoFill = !videoFill }
                                 if (activity != null) VideoChip(PrismIcons.PictureInPicture, "Picture-in-picture") {
                                     if (!activity.enterPip()) android.widget.Toast.makeText(
-                                        context, "Picture-in-picture is off for Prism in Android's settings", android.widget.Toast.LENGTH_SHORT,
+                                        context, "Picture-in-picture is off for Prism in Android's settings".localized(context), android.widget.Toast.LENGTH_SHORT,
                                     ).show()
                                 }
                                 VideoChip(PrismIcons.Fullscreen, "Full screen") { fullscreenVideo = true }
@@ -1051,7 +1051,7 @@ private fun VideoChip(icon: androidx.compose.ui.graphics.vector.ImageVector, des
     Box(
         Modifier.size(36.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.45f)).clickable(onClick = onClick),
         contentAlignment = Alignment.Center,
-    ) { Icon(icon, description, tint = Color.White, modifier = Modifier.size(20.dp)) }
+    ) { Icon(icon, description.localized(), tint = Color.White, modifier = Modifier.size(20.dp)) }
 }
 
 /** The main player's video, drawn on a TextureView so it composes with the layout. */

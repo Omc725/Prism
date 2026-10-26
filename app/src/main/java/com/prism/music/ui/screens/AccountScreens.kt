@@ -290,17 +290,17 @@ fun PrismAccountScreen(onboarding: Boolean, bottomPadding: Dp, onDone: () -> Uni
                                 bringing = null
                                 Toast.makeText(
                                     context,
-                                    if (r == null) "Couldn't reach YouTube Music. Try again."
-                                    else "Copied ${r.playlists} playlists, ${r.albums} albums and ${r.artists} artists" + if (r.failed > 0) " (${r.failed} playlists couldn't be read)" else "",
+                                    (if (r == null) "Couldn't reach YouTube Music. Try again."
+                                    else "Copied ${r.playlists} playlists, ${r.albums} albums and ${r.artists} artists" + if (r.failed > 0) " (${r.failed} playlists couldn't be read)" else "").localized(context),
                                     Toast.LENGTH_LONG,
                                 ).show()
                             }
                         }, Modifier.fillMaxWidth(), enabled = bringing == null) {
-                            if (bringing != null) { com.prism.music.ui.components.PrismSpinner(Modifier.size(16.dp), stroke = 2.dp); Spacer(Modifier.width(10.dp)); Text(bringing!!) }
+                            if (bringing != null) { com.prism.music.ui.components.PrismSpinner(Modifier.size(16.dp), stroke = 2.dp); Spacer(Modifier.width(10.dp)); Text(bringing!!.localized()) }
                             else Text(if (at > 0) "Copy again".localized() else "Copy into Prism".localized())
                         }
                         if (at > 0) Text(
-                            "Last copied " + java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(java.util.Date(at)),
+                            "Last copied ".localized() + java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(java.util.Date(at)),
                             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 6.dp),
                         )
                     }

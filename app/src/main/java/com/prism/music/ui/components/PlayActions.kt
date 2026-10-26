@@ -1,5 +1,6 @@
 package com.prism.music.ui.components
 
+import com.prism.music.ui.i18n.localized
 import com.prism.music.ui.theme.PrismIcons
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
@@ -105,7 +106,7 @@ fun PlayActionsSheet(target: Playable, extra: List<SheetItem> = emptyList(), ext
     fun play(shuffle: Boolean, mix: Boolean = false) = c.scope.launch(Dispatchers.Main) {
         val loaded = runCatching { withContext(Dispatchers.IO) { songsFor(c, target, shuffle, mix) } }.getOrNull()
         if (loaded == null || loaded.first.isEmpty()) {
-            Toast.makeText(context, if (loaded == null) "Couldn't load \"$title\"" else "Nothing to play in \"$title\"", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, (if (loaded == null) "Couldn't load \"$title\"" else "Nothing to play in \"$title\"").localized(context), Toast.LENGTH_SHORT).show()
             return@launch
         }
         // An artist's shuffle and mix come already in YouTube's order; the player shouldn't reshuffle them.
@@ -116,11 +117,11 @@ fun PlayActionsSheet(target: Playable, extra: List<SheetItem> = emptyList(), ext
     fun queue(next: Boolean) = c.scope.launch(Dispatchers.Main) {
         val loaded = runCatching { withContext(Dispatchers.IO) { songsFor(c, target, shuffle = false, mix = false) } }.getOrNull()
         if (loaded == null || loaded.first.isEmpty()) {
-            Toast.makeText(context, if (loaded == null) "Couldn't load \"$title\"" else "Nothing to play in \"$title\"", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, (if (loaded == null) "Couldn't load \"$title\"" else "Nothing to play in \"$title\"").localized(context), Toast.LENGTH_SHORT).show()
             return@launch
         }
         if (next) c.player.playNext(loaded.first, loaded.second) else c.player.addToQueue(loaded.first, loaded.second)
-        Toast.makeText(context, "${com.prism.music.data.model.songCount(loaded.first.size)} ${if (next) "playing next" else "added to the queue"}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "${com.prism.music.data.model.songCount(loaded.first.size)} ${if (next) "playing next" else "added to the queue"}".localized(context), Toast.LENGTH_SHORT).show()
     }
     val quick = if (item is ArtistItem) listOf(
         ActionItem(PrismIcons.Shuffle, "Shuffle") { play(shuffle = true) },
@@ -166,11 +167,11 @@ fun PlayActionsSheet(target: Playable, extra: List<SheetItem> = emptyList(), ext
         val savedHere = item is AlbumItem && !c.settings.current.isLoggedIn && c.prismLibrary.isSaved(item.id)
         val remove = if (savedHere) listOf(ActionItem(PrismIcons.Delete, "Remove from library") {
             c.prismLibrary.unsaveAlbum(item.id)
-            Toast.makeText(context, "Removed from your library", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Removed from your library".localized(context), Toast.LENGTH_SHORT).show()
         }) else if (inLibrary) listOf(ActionItem(PrismIcons.Delete, "Remove from library") {
             c.scope.launch(Dispatchers.Main) {
                 val ok = c.library.removeAlbum(item.id, (item as AlbumItem).playlistId)
-                Toast.makeText(context, if (ok) "Removed from your library" else "Couldn't update your library", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, (if (ok) "Removed from your library" else "Couldn't update your library").localized(context), Toast.LENGTH_SHORT).show()
             }
         }) else emptyList()
         // Played in the order that blends best, mixed and beat-matched (DJ mode).
@@ -178,7 +179,7 @@ fun PlayActionsSheet(target: Playable, extra: List<SheetItem> = emptyList(), ext
             c.scope.launch(Dispatchers.Main) {
                 val loaded = runCatching { withContext(Dispatchers.IO) { songsFor(c, target, shuffle = false, mix = false) } }.getOrNull()
                 if (loaded == null || loaded.first.size < 2) {
-                    Toast.makeText(context, if (loaded == null) "Couldn't load \"$title\"" else "A DJ set needs more than one song", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, (if (loaded == null) "Couldn't load \"$title\"" else "A DJ set needs more than one song").localized(context), Toast.LENGTH_SHORT).show()
                     return@launch
                 }
                 c.player.playDjSet(loaded.first, loaded.second)
@@ -209,11 +210,11 @@ private fun LibraryToggle(item: BrowseItem?) {
                 if (!signedIn) {
                     if (saved) c.prismLibrary.unsaveAlbum(item.id)
                     else c.prismLibrary.saveAlbum(com.prism.music.data.SavedAlbum(item.id, item.title, item.subtitle, item.thumbnail, item.playlistId, System.currentTimeMillis()))
-                    Toast.makeText(context, if (saved) "Removed from your library" else "Added to your library", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, (if (saved) "Removed from your library" else "Added to your library").localized(context), Toast.LENGTH_SHORT).show()
                 } else c.scope.launch(Dispatchers.Main) {
                     val ok = if (saved) c.library.removeAlbum(item.id, item.playlistId)
                     else c.library.setSaved(item.playlistId ?: item.id, true)
-                    Toast.makeText(context, if (!ok) "Couldn't update your library" else if (saved) "Removed from your library" else "Added to your library", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, (if (!ok) "Couldn't update your library" else if (saved) "Removed from your library" else "Added to your library").localized(context), Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -224,7 +225,7 @@ private fun LibraryToggle(item: BrowseItem?) {
             SheetIconButton(if (saved) PrismIcons.LibraryAdded else PrismIcons.LibraryAdd, if (saved) "Remove from library" else "Add to library") {
                 c.scope.launch(Dispatchers.Main) {
                     val ok = c.library.setSaved(item.id, !saved)
-                    Toast.makeText(context, if (!ok) "Couldn't update your library" else if (saved) "Removed from your library" else "Added to your library", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, (if (!ok) "Couldn't update your library" else if (saved) "Removed from your library" else "Added to your library").localized(context), Toast.LENGTH_SHORT).show()
                 }
             }
         }

@@ -251,7 +251,7 @@ private fun ColorSettings() {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    "Album, playlist and artist pages use their picture's color instead (Artist & album pages, below)",
+                    "Album, playlist and artist pages use their picture's color instead (Artist & album pages, below)".localized(),
                     Modifier.weight(1f), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface,
                 )
                 PrismTextButton({ prefs.setPageColors(false) }) { Text("Use mine".localized()) }
@@ -486,7 +486,7 @@ private fun AccentSample(c: ThemeColors) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(PrismIcons.StarFilled, null, Modifier.size(11.dp), tint = c.scheme.primary)
             Spacer(Modifier.width(4.dp))
-            Text("MORE", color = c.scheme.primary, fontSize = 8.sp, lineHeight = 10.sp, fontWeight = FontWeight.Bold)
+            Text("MORE".localized(), color = c.scheme.primary, fontSize = 8.sp, lineHeight = 10.sp, fontWeight = FontWeight.Bold)
         }
     }
 }
@@ -502,7 +502,7 @@ private fun AccentPair(s: AppSettings) {
                 Modifier.weight(1f).height(52.dp).clip(shape).background(c.scheme.background).border(1.dp, c.line, shape).padding(6.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
-                Text("Artist", color = c.scheme.primary, fontSize = 10.sp, lineHeight = 12.sp, fontWeight = FontWeight.Medium, maxLines = 1)
+                Text("Artist".localized(), color = c.scheme.primary, fontSize = 10.sp, lineHeight = 12.sp, fontWeight = FontWeight.Medium, maxLines = 1)
                 Box(Modifier.fillMaxWidth().height(10.dp).clip(CircleShape).background(c.scheme.primary))
             }
         }
@@ -599,7 +599,7 @@ private fun LightPresets(s: AppSettings, dark: Boolean, onPick: (String) -> Unit
                     )
                 }
                 Spacer(Modifier.height(8.dp))
-                Text(label, style = MaterialTheme.typography.labelMedium, color = if (on) scheme.onSurface else scheme.onSurfaceVariant, maxLines = 2)
+                Text(label.localized(), style = MaterialTheme.typography.labelMedium, color = if (on) scheme.onSurface else scheme.onSurfaceVariant, maxLines = 2)
             }
         }
         repeat(3 - row.size) { Spacer(Modifier.weight(1f)) }

@@ -261,7 +261,7 @@ fun SliderSetting(
                 Text(title.localized(), Modifier.weight(1f, fill = false), style = MaterialTheme.typography.bodyLarge)
                 if (info != null) InfoMark(open, title) { open = !open }
             }
-            Text(valueText(v), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(valueText(v).localized(), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         InfoText(open && info != null, info?.localized(), Modifier.padding(top = 2.dp, bottom = 2.dp))
         PrismSlider(v, { v = it }, enabled = enabled, valueRange = range, steps = steps, onValueChangeFinished = { onSave(v) })

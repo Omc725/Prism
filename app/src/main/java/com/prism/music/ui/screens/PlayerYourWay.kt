@@ -513,8 +513,8 @@ private fun TitleSample(align: PlayerTitleAlign) {
         Row(Modifier.fillMaxSize().padding(horizontal = 10.dp), verticalAlignment = Alignment.CenterVertically) {
             if (align == PlayerTitleAlign.CENTER) Spacer(Modifier.width(22.dp))
             Column(Modifier.weight(1f), horizontalAlignment = if (align == PlayerTitleAlign.CENTER) Alignment.CenterHorizontally else Alignment.Start) {
-                Text("Northern Lights", color = Color.White, fontSize = 12.sp, maxLines = 1, textAlign = if (align == PlayerTitleAlign.CENTER) TextAlign.Center else TextAlign.Start)
-                Text("Prism Sample", color = Color.White.copy(alpha = 0.6f), fontSize = 10.sp, maxLines = 1)
+                Text("Northern Lights".localized(), color = Color.White, fontSize = 12.sp, maxLines = 1, textAlign = if (align == PlayerTitleAlign.CENTER) TextAlign.Center else TextAlign.Start)
+                Text("Prism Sample".localized(), color = Color.White.copy(alpha = 0.6f), fontSize = 10.sp, maxLines = 1)
             }
             Box(Modifier.size(9.dp).clip(CircleShape).background(Faint))
             Spacer(Modifier.width(4.dp))
@@ -598,17 +598,17 @@ private fun GestureRow(title: String, value: PlayerGesture, choices: List<Player
     var open by remember { mutableStateOf(false) }
     Box {
         Row(
-            Modifier.fillMaxWidth().clickable(onClickLabel = "Change what $title does") { open = true }.padding(horizontal = 16.dp, vertical = 12.dp),
+            Modifier.fillMaxWidth().clickable(onClickLabel = "Change what %s does".localized(title.localized())) { open = true }.padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(title, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
-            Text(value.label, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(title.localized(), Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
+            Text(value.label.localized(), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Icon(PrismIcons.ChevronDown, null, Modifier.padding(start = 4.dp).size(18.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         DropdownMenu(open, { open = false }, Modifier.align(Alignment.TopEnd)) {
             choices.forEach { g ->
                 DropdownMenuItem(
-                    { Text(g.label) }, { open = false; onPick(g) },
+                    { Text(g.label.localized()) }, { open = false; onPick(g) },
                     trailingIcon = if (g == value) ({ Icon(PrismIcons.Check, null) }) else null,
                 )
             }

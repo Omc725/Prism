@@ -13,6 +13,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.prism.music.PrismActivity
 import com.prism.music.R
+import com.prism.music.ui.i18n.localized
 
 /**
  * Prism's own notifications (besides playback and downloads, which have theirs): each kind has its channel, so the
@@ -29,7 +30,7 @@ object Notifications {
         // Pairing codes are wanted on screen at once (the other device is waiting for them).
         nm.createNotificationChannel(
             NotificationChannelCompat.Builder(CONNECT, NotificationManagerCompat.IMPORTANCE_HIGH)
-                .setName("Prism Connect").setDescription("Pairing codes when another device wants to play here").build()
+                .setName("Prism Connect".localized(context)).setDescription("Pairing codes when another device wants to play here".localized(context)).build()
         )
         listOf(
             Triple(NEW_RELEASES, "New releases", "New music from artists you follow"),
@@ -38,7 +39,7 @@ object Notifications {
         ).forEach { (id, name, description) ->
             nm.createNotificationChannel(
                 NotificationChannelCompat.Builder(id, NotificationManagerCompat.IMPORTANCE_DEFAULT)
-                    .setName(name).setDescription(description).build()
+                    .setName(name.localized(context)).setDescription(description.localized(context)).build()
             )
         }
     }
@@ -65,9 +66,9 @@ object Notifications {
         if (!allowed(context)) return
         val n = NotificationCompat.Builder(context, channel)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle(title)
-            .setContentText(text)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(text))
+            .setContentTitle(title.localized(context))
+            .setContentText(text.localized(context))
+            .setStyle(NotificationCompat.BigTextStyle().bigText(text.localized(context)))
             .setAutoCancel(true)
             .setContentIntent(openIntent(context, link, id))
             .also(build)

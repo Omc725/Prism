@@ -68,7 +68,7 @@ fun LikedPlaylistSheet(art: String?, onDismiss: () -> Unit) {
     var making by remember { mutableStateOf(false) }
     var confirmDelete by remember { mutableStateOf(false) }
     val scheme = MaterialTheme.colorScheme
-    fun toast(text: String) = Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+    fun toast(text: String) = Toast.makeText(context, text.localized(context), Toast.LENGTH_SHORT).show()
 
     if (confirmDelete) {
         AlertDialog(
@@ -103,7 +103,7 @@ fun LikedPlaylistSheet(art: String?, onDismiss: () -> Unit) {
                     style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant,
                 )
                 com.prism.music.ui.components.PrismTextField(name, { name = it.take(150) }, label = { Text("Name".localized()) }, singleLine = true, modifier = Modifier.fillMaxWidth())
-                Segmented(listOf("PRIVATE", "UNLISTED", "PUBLIC"), privacy, { when (it) { "PRIVATE" -> "Private"; "UNLISTED" -> "Unlisted"; else -> "Public" } }) { privacy = it }
+                Segmented(listOf("PRIVATE", "UNLISTED", "PUBLIC"), privacy, { when (it) { "PRIVATE" -> "Private".localized(context); "UNLISTED" -> "Unlisted".localized(context); else -> "Public".localized(context) } }) { privacy = it }
                 PrismButton(
                     onClick = {
                         making = true
@@ -133,7 +133,7 @@ fun LikedPlaylistSheet(art: String?, onDismiss: () -> Unit) {
                             error != null -> "Last update failed: $error"
                             lastSynced > 0 -> "\"${title ?: "Playlist"}\" · updated ${DateUtils.getRelativeTimeSpanString(lastSynced, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS)}"
                             else -> "\"${title ?: "Playlist"}\""
-                        },
+                        }.localized(),
                         style = MaterialTheme.typography.bodyMedium, color = if (error != null && !syncing) scheme.error else scheme.onSurfaceVariant,
                     )
                 }

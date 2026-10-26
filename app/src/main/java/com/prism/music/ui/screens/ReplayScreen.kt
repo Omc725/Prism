@@ -172,7 +172,7 @@ fun ReplayScreen(bottomPadding: Dp) {
         if (!storyLoading) scope.launch {
             storyLoading = true
             story = runCatching { loadReplayStory(c, p) }.onFailure { android.util.Log.w("PrismRewind", "story failed", it) }.getOrNull()
-            if (story == null) Toast.makeText(context, if (p.isYear) "Couldn't build your Rewind" else "Couldn't build your Replay", Toast.LENGTH_SHORT).show()
+            if (story == null) Toast.makeText(context, (if (p.isYear) "Couldn't build your Rewind" else "Couldn't build your Replay").localized(context), Toast.LENGTH_SHORT).show()
             storyLoading = false
         }
     }
@@ -193,18 +193,18 @@ fun ReplayScreen(bottomPadding: Dp) {
     Box(Modifier.fillMaxSize()) {
     LazyColumn(Modifier.fillMaxSize(), state = list, contentPadding = PaddingValues(bottom = bottomPadding + 24.dp)) {
         item {
-            com.prism.music.ui.components.ScreenHeader("Replay", subtitle = "Your listening, recapped on-device")
+            com.prism.music.ui.components.ScreenHeader("Replay".localized(), subtitle = "Your listening, recapped on-device".localized())
         }
         item {
             com.prism.music.ui.components.ChipRow(
-                listOf(Period.MONTH, Period.DAYS30) + years.map { Period.year(it) } + Period.ALL, { it == period }, { it.label },
+                listOf(Period.MONTH, Period.DAYS30) + years.map { Period.year(it) } + Period.ALL, { it == period }, { it.label.localized(context) },
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
             ) { periodKey = it.key }
         }
         val d = data
         if (d == null) { item { LoadingState() }; return@LazyColumn }
         if (d.plays == 0) {
-            item { EmptyState(PrismIcons.ReplayFilled, "Nothing to replay yet", "Listen for a while — songs you play for 10 seconds or more count toward your Replay.") }
+            item { EmptyState(PrismIcons.ReplayFilled, "Nothing to replay yet".localized(), "Listen for a while — songs you play for 10 seconds or more count toward your Replay.".localized()) }
             return@LazyColumn
         }
         item { HeroCard(d, period, period.isYear && !c.rewind.isOpen(period.year), storyLoading, openStory) }
@@ -223,7 +223,7 @@ fun ReplayScreen(bottomPadding: Dp) {
                         scope.launch {
                             val name = if (period.isYear) "Top songs of ${period.year}" else "Replay · ${period.label}"
                             val id = runCatching { c.ytm.createPlaylist(name, songs.take(100).map { it.id }, "Made with Prism Replay") }.getOrNull()
-                            Toast.makeText(context, if (id != null) "Saved \"$name\" to YouTube Music" else "Couldn't create playlist", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, (if (id != null) "Saved \"$name\" to YouTube Music" else "Couldn't create playlist").localized(context), Toast.LENGTH_SHORT).show()
                             if (id != null) nav.go(Routes.playlist(id))
                         }
                     },
@@ -232,7 +232,7 @@ fun ReplayScreen(bottomPadding: Dp) {
             }
         }
         if (d.months.size > 1) item {
-            SectionHeader(if (LocalAppSettings.current.replayHours) "Hours by month" else "Minutes by month")
+            SectionHeader((if (LocalAppSettings.current.replayHours) "Hours by month" else "Minutes by month").localized())
             MonthChart(d.months, Modifier.padding(horizontal = 20.dp).fillMaxWidth().height(160.dp))
         }
         if (d.artists.isNotEmpty()) item {
@@ -306,7 +306,7 @@ fun ReplayScreen(bottomPadding: Dp) {
                 }
                 Column(horizontalAlignment = Alignment.End) {
                     Text(minutes(s.ms), style = MaterialTheme.typography.labelMedium)
-                    Text("${s.plays} ${if (s.plays == 1) "play" else "plays"}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text("${s.plays} ${if (s.plays == 1) "play" else "plays"}".localized(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         }
@@ -336,13 +336,13 @@ private fun HeroCard(d: ReplayData, period: Period, notYet: Boolean, loading: Bo
     ) {
         Column {
             Text(
-                (if (period.isYear) "REWIND ${period.year}" else "REPLAY " + period.label.uppercase()),
+                (if (period.isYear) "${"REWIND".localized()} ${period.year}" else "${"REPLAY".localized()} ${period.label.localized().uppercase()}"),
                 color = Color.White.copy(alpha = 0.8f), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Medium,
             )
             Spacer(Modifier.height(4.dp))
             Column(Modifier.toggleListenUnit()) {
                 Text(total.text(anim.value.toLong()), color = Color.White, style = MaterialTheme.typography.displayLarge, maxLines = 1)
-                Text("${total.unit} listened".trim(),color = Color.White.copy(alpha = 0.85f), style = MaterialTheme.typography.titleMedium)
+                Text("${total.unit} listened".trim().localized(), color = Color.White.copy(alpha = 0.85f), style = MaterialTheme.typography.titleMedium)
             }
             Spacer(Modifier.height(18.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(22.dp)) {
@@ -368,7 +368,7 @@ private fun HeroCard(d: ReplayData, period: Period, notYet: Boolean, loading: Bo
             Spacer(Modifier.height(18.dp))
             // The story: Prism's take on Wrapped / Replay. A year's is its Rewind, which opens on 1 December.
             if (notYet) Text(
-                "Your ${period.year} Rewind opens on December 1",
+                "Your ${period.year} Rewind opens on December 1".localized(),
                 color = Color.White.copy(alpha = 0.85f), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Medium,
             ) else Row(
                 Modifier.clip(CircleShape).background(Color.White).padding(start = 14.dp, end = 18.dp, top = 10.dp, bottom = 10.dp),
@@ -377,7 +377,7 @@ private fun HeroCard(d: ReplayData, period: Period, notYet: Boolean, loading: Bo
                 if (loading) androidx.compose.material3.CircularProgressIndicator(Modifier.size(18.dp), color = Color.Black, strokeWidth = 2.dp)
                 else Icon(PrismIcons.Play, null, Modifier.size(20.dp), tint = Color.Black)
                 Spacer(Modifier.width(8.dp))
-                Text(if (period.isYear) "Watch your Rewind" else "Watch your Replay", color = Color.Black, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Medium)
+                Text((if (period.isYear) "Watch your Rewind" else "Watch your Replay").localized(), color = Color.Black, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Medium)
             }
         }
     }
@@ -463,7 +463,7 @@ private fun GenreLabels(name: String, time: String, nameInk: Color, timeInk: Col
 private fun Stat(value: String, label: String) {
     Column {
         Text(value, color = Color.White, style = MaterialTheme.typography.headlineSmall)
-        Text(label, color = Color.White.copy(alpha = 0.75f), style = MaterialTheme.typography.labelMedium)
+        Text(label.localized(), color = Color.White.copy(alpha = 0.75f), style = MaterialTheme.typography.labelMedium)
     }
 }
 

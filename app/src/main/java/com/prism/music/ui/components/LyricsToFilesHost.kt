@@ -17,6 +17,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import com.prism.music.data.local.LyricsToFiles
+import com.prism.music.ui.i18n.localized
 import com.prism.music.ui.theme.LocalContainer
 import kotlinx.coroutines.launch
 
@@ -31,7 +32,7 @@ fun LyricsToFilesHost() {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var pending by remember { mutableStateOf<List<LyricsToFiles.Item>>(emptyList()) }
-    fun toast(text: String) = Toast.makeText(context, text, Toast.LENGTH_LONG).show()
+    fun toast(text: String) = Toast.makeText(context, text.localized(context), Toast.LENGTH_LONG).show()
     fun write(items: List<LyricsToFiles.Item>) = scope.launch {
         val n = c.lyricsToFiles.write(items)
         toast(

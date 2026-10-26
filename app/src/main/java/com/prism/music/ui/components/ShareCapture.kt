@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.core.content.FileProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import com.prism.music.ui.i18n.localized
 import java.io.File
 import kotlin.math.roundToInt
 
@@ -46,5 +47,5 @@ suspend fun shareLayer(context: Context, layer: GraphicsLayer, fileName: String,
         .putExtra(Intent.EXTRA_TEXT, text)
         .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     send.clipData = ClipData.newRawUri(null, uri)
-    context.startActivity(Intent.createChooser(send, chooserTitle))
+    context.startActivity(Intent.createChooser(send, chooserTitle.localized(context)))
 }.isSuccess

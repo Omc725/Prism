@@ -1084,22 +1084,36 @@ private fun LanguageGroup() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     val context = LocalContext.current
-    Group("Language") {
-        Label("App language", info = "Choose the display language for Prism")
-        Chips(
-            listOf("", "en", "tr", "az"),
-            s.appLanguage,
-            { code ->
-                when (code) {
-                    "" -> context.getString(com.prism.music.R.string.language_system_default)
-                    "en" -> "English"
-                    "tr" -> "Türkçe"
-                    "az" -> "Azərbaycanca"
-                    else -> code
-                }
+    var refreshKey by remember { mutableStateOf(0) }
+    val availableLanguages = remember(context, refreshKey) { com.prism.music.ui.i18n.TranslationManager.getAvailableLanguages(context) }
+    val codes = remember(availableLanguages) { availableLanguages.map { it.code } }
+    var importStatus by remember { mutableStateOf<String?>(null) }
+
+    val importLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        if (uri != null) {
+            val result = com.prism.music.ui.i18n.TranslationManager.importTranslation(context, uri, "custom")
+            result.onSuccess { lang ->
+                prefs.setAppLanguage(lang.code)
+                com.prism.music.ui.i18n.TranslationManager.setActiveLanguage(lang.code)
+                refreshKey++
+                importStatus = "Loaded %s".localized(context, lang.nativeName)
+            }.onFailure { err ->
+                importStatus = (err.message ?: "Could not import translation").localized(context)
             }
+        }
+    }
+
+    Group("Language".localized()) {
+        Label("App language".localized(), info = "Choose the display language for Prism".localized())
+        Chips(
+            codes,
+            s.appLanguage,
+            { code -> com.prism.music.ui.i18n.TranslationManager.getDisplayName(code, context) }
         ) { code ->
             prefs.setAppLanguage(code)
+            com.prism.music.ui.i18n.TranslationManager.setActiveLanguage(code)
             if (Build.VERSION.SDK_INT >= 33) {
                 runCatching {
                     val lm = context.getSystemService(android.app.LocaleManager::class.java)
@@ -1110,6 +1124,27 @@ private fun LanguageGroup() {
                     }
                 }
             }
+        }
+
+        Spacer(Modifier.height(8.dp))
+        PrismTextButton(
+            onClick = {
+                importLauncher.launch(arrayOf("application/json", "application/octet-stream", "*/*"))
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(PrismIcons.Folder, null, Modifier.size(18.dp))
+            Spacer(Modifier.width(8.dp))
+            Text("Import community translation (.json)".localized())
+        }
+
+        importStatus?.let { status ->
+            Text(
+                status,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+            )
         }
     }
 }

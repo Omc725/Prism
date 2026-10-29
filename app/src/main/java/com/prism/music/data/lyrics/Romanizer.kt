@@ -1,5 +1,7 @@
 package com.prism.music.data.lyrics
 
+import com.prism.music.R
+import com.prism.music.tr
 import android.os.Build
 import com.prism.music.data.ModelStore
 import com.prism.music.data.db.RomanizedDao
@@ -233,14 +235,14 @@ class Romanizer(
             .post(FormBody.Builder().add("q", texts.joinToString("\n")).build())
             .build()
         http.newCall(req).execute().use { resp ->
-            if (!resp.isSuccessful) throw IOException("Translate returned HTTP ${resp.code}")
+            if (!resp.isSuccessful) throw IOException(tr(R.string.translate_returned_http, resp.code))
             val root = Json.parseToJsonElement(resp.body.string()).jsonArray
             // The romanization of what was sent is the 4th field of an entry with no translation in it.
             val text = (root.getOrNull(0) as? JsonArray).orEmpty().mapNotNull { seg ->
                 (seg as? JsonArray)?.takeIf { it.getOrNull(0) !is JsonPrimitive || (it[0] as JsonPrimitive).contentOrNull == null }
                     ?.getOrNull(3)?.let { (it as? JsonPrimitive)?.contentOrNull }
             }.joinToString("")
-            if (text.isBlank()) throw IOException("No romanization in the answer")
+            if (text.isBlank()) throw IOException(tr(R.string.no_romanization_in_the_answer))
             return text.trimEnd('\n').split("\n")
         }
     }

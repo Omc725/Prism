@@ -162,7 +162,7 @@ class YourMusic(private val c: AppContainer) {
             ).filter { it.related }.map { it.song }
             val list = MadeForYou.interleave(theirs.take(20), around, MIX_SIZE) { it.primaryArtist.lowercase() }
             if (list.size < MIN_MIX) return@forEach
-            out += Mix("lib:artist:$artist", tr(R.string.mix_4, artist), tr(R.string.with_2) + MadeForYou.namesLine(artists(list).filterNot { it.equals(artist, true) }.ifEmpty { listOf(artist) }), listOf(artist), color(artist), s.at, list)
+            out += Mix("lib:artist:$artist", tr(R.string.mix_4, artist), tr(R.string.with_2, MadeForYou.namesLine(artists(list).filterNot { it.equals(artist, true) }.ifEmpty { listOf(artist) })), listOf(artist), color(artist), s.at, list)
         }
 
         // What plays with no connection at all: downloads, songs kept whole in the cache, files on the phone.

@@ -2,6 +2,7 @@ package com.prism.music.ui.screens
 
 import com.prism.music.R
 import com.prism.music.tr
+import com.prism.music.trp
 import com.prism.music.ui.theme.lit
 import androidx.compose.ui.draw.shadow
 import androidx.compose.foundation.border
@@ -458,7 +459,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
             val n = page.songs.size
             confirm = tr(R.string.delete_the_of_from_this_phone, com.prism.music.data.model.songCount(n), page.title) to {
                 c.downloads.removeMany(page.songs.map { it.id })
-                Toast.makeText(context, tr(R.string.removed_downloads, n), Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, trp(R.plurals.removed_n_downloads, n), Toast.LENGTH_SHORT).show()
             }
         } else {
             c.downloads.downloadAll(page.songs)
@@ -639,7 +640,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                 }
                 if (ready != null && type != CollectionType.DOWNLOADS) item("offline") {
                     Text(
-                        tr(R.string.you_re_offline_of_songs_are, ready.size, songs.size) +
+                        trp(R.plurals.offline_n_of_songs, songs.size, ready.size, songs.size) +
                             if (live.offline) tr(R.string.as_it_was_when_you_last) else "",
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 6.dp),
@@ -727,7 +728,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                     Text(
                         listOfNotNull(
                             page.year?.toString(),
-                            "${visible.size} ${if (visible.size == 1) "song" else "songs"}" + (if (totalSec > 0) ", ${durationText(totalSec)}" else ""),
+                            trp(R.plurals.n_songs, visible.size) + (if (totalSec > 0) ", ${durationText(totalSec)}" else ""),
                             if (downloadedCount > 0) tr(R.string.downloaded_2, downloadedCount) else null,
                         ).joinToString(" · ") + if (loadingMore) tr(R.string.loading_more) else "",
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -1464,7 +1465,7 @@ private fun DownloadsInfo(songs: List<Song>, ask: (String, () -> Unit) -> Unit) 
     val bytes = remember(all) { all.values.filter { it.state == Download.STATE_COMPLETED }.sumOf { it.bytes } }
     Column(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 6.dp)) {
         Text(
-            tr(R.string.song_on_this_phone, songs.size, if (songs.size == 1) "" else "s", sizeText(bytes)) +
+            trp(R.plurals.n_songs_on_this_phone, songs.size, songs.size, sizeText(bytes)) +
                 if (videos.isNotEmpty()) tr(R.string.with_videos, sizeText(bytes + videos.values.sumOf { it.bytes })) else "",
             style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
         )
@@ -1472,7 +1473,7 @@ private fun DownloadsInfo(songs: List<Song>, ask: (String, () -> Unit) -> Unit) 
         val savedVideos = remember(videos) { videos.values.filter { it.state == Download.STATE_COMPLETED } }
         val videosLoading = remember(videos) { videos.values.count { it.state == Download.STATE_QUEUED || it.state == Download.STATE_DOWNLOADING } }
         if (videos.isNotEmpty()) Text(
-            tr(R.string.music_video, savedVideos.size, if (savedVideos.size == 1) "" else "s", sizeText(videos.values.sumOf { it.bytes })) +
+            trp(R.plurals.n_music_videos, savedVideos.size, savedVideos.size, sizeText(videos.values.sumOf { it.bytes })) +
                 if (videosLoading > 0) tr(R.string.downloading_3, videosLoading) else "",
             style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
         )
@@ -1492,7 +1493,7 @@ private fun DownloadsInfo(songs: List<Song>, ask: (String, () -> Unit) -> Unit) 
         }
         if (active.isNotEmpty()) Row(verticalAlignment = Alignment.CenterVertically) {
             Text(tr(R.string.downloading_4, active.size), style = MaterialTheme.typography.labelMedium, color = scheme.primary)
-            PrismTextButton(onClick = { ask(tr(R.string.cancel_downloads_that_haven_t_finished, active.size)) { c.downloads.removeMany(active.keys) } }) { Text(tr(R.string.cancel)) }
+            PrismTextButton(onClick = { ask(trp(R.plurals.cancel_n_downloads, active.size)) { c.downloads.removeMany(active.keys) } }) { Text(tr(R.string.cancel)) }
         }
         val unfinished = remember(all) { all.values.filter { it.state != Download.STATE_COMPLETED } }
         if (unfinished.isNotEmpty()) DownloadQueueStatus(unfinished)
@@ -1526,7 +1527,7 @@ fun DownloadQueueStatus(unfinished: Collection<com.prism.music.download.Download
     }
     var showFailed by remember { mutableStateOf(false) }
     if (failed > 0) Row(verticalAlignment = Alignment.CenterVertically) {
-        Text(if (failed == 1) tr(R.string.t_1_download_failed) else tr(R.string.downloads_failed, failed), style = MaterialTheme.typography.labelMedium, color = scheme.error)
+        Text(trp(R.plurals.n_downloads_failed, failed), style = MaterialTheme.typography.labelMedium, color = scheme.error)
         // Which ones, and why (#98).
         PrismTextButton(onClick = { showFailed = true }) { Text(tr(R.string.see_which)) }
         PrismTextButton(onClick = { c.downloads.retryFailed() }) { Text(tr(R.string.try_again)) }
@@ -1550,7 +1551,7 @@ fun FailedDownloadsSheet(onDismiss: () -> Unit) {
     LaunchedEffect(failed.isEmpty()) { if (failed.isEmpty()) onDismiss() }
     ActionSheet(art = null, onDismiss = onDismiss) { close ->
         Column(Modifier.padding(start = 24.dp, end = 24.dp, bottom = 12.dp)) {
-            Text(if (failed.size == 1) tr(R.string.t_1_download_failed) else tr(R.string.downloads_failed, failed.size), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Light)
+            Text(trp(R.plurals.n_downloads_failed, failed.size), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Light)
             Text(
                 tr(R.string.prism_also_tries_them_again_by),
                 style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
@@ -1611,8 +1612,7 @@ private fun downloadsSheetItems(ask: (String, () -> Unit) -> Unit): List<SheetIt
         add(SheetItem(PrismIcons.Lyrics, tr(R.string.get_missing_lyrics)) { c.downloads.backfillLyrics(force = true) })
         if (below.isNotEmpty()) add(SheetItem(PrismIcons.Download, tr(R.string.download_again_in_premium_quality, below.size)) {
             ask(
-                tr(R.string.download_again_in_premium_quality_256, com.prism.music.data.model.songCount(below.size)) +
-                    tr(R.string.fetched_whole_again_until_it_s)
+                tr(R.string.download_again_in_premium_quality_256_all, com.prism.music.data.model.songCount(below.size))
             ) { c.downloads.downloadAgain(below) }
         })
         if (smart.isNotEmpty()) add(SheetItem(PrismIcons.Delete, tr(R.string.delete_smart_downloads, smart.size), danger = true) {
@@ -1624,7 +1624,7 @@ private fun downloadsSheetItems(ask: (String, () -> Unit) -> Unit): List<SheetIt
         add(SheetItem(PrismIcons.Delete, tr(R.string.delete_all_downloads), danger = true) {
             val lossless = all.count { it.value.lossless }
             ask(
-                tr(R.string.delete_all_downloads_this_frees_the, all.size, sizeText(c.downloads.totalBytes)) +
+                trp(R.plurals.delete_all_n_downloads, all.size, all.size, sizeText(c.downloads.totalBytes)) +
                     if (lossless > 0) tr(R.string.your_lossless_files_stay_on_the, lossless) else ""
             ) { c.downloads.removeAll() }
         })

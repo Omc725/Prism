@@ -1,5 +1,9 @@
 package com.prism.music.connect
 
+import com.prism.music.tr
+import com.prism.music.R
+import com.prism.music.trp
+
 /** This Prism's side of a handoff: who it is, its pairings, and its player. */
 interface HandoffLocal {
     val name: String
@@ -48,8 +52,8 @@ class HandoffPeer(private val local: HandoffLocal, private val clock: () -> Long
     fun serve(link: HLink) {
         link.timeout(8_000)
         val hello = link.read() as? HMsg.Hello ?: return
-        if (hello.version != Handoff.VERSION) { link.send(HMsg.Denied("Both devices need the latest Prism")); return }
-        val them = hello.name.trim().take(60).ifBlank { "Another device" }
+        if (hello.version != Handoff.VERSION) { link.send(HMsg.Denied(tr(R.string.both_devices_need_the_latest_prism))); return }
+        val them = hello.name.trim().take(60).ifBlank { tr(R.string.another_device) }
         val nonce = HandoffKeys.newNonce()
         link.send(HMsg.Challenge(local.name, local.device, nonce))
         when (val m = link.read()) {
@@ -57,13 +61,13 @@ class HandoffPeer(private val local: HandoffLocal, private val clock: () -> Long
                 val secret = local.secretFor(hello.device)
                 if (secret == null || !HandoffKeys.matches(HandoffKeys.mac(secret, nonce, hello.device), m.mac)) {
                     Thread.sleep(400)
-                    link.send(HMsg.Denied("$them isn't paired with ${local.name} any more", unpaired = true))
+                    link.send(HMsg.Denied(tr(R.string.isn_t_paired_with_any_more, them, local.name), unpaired = true))
                     return
                 }
                 link.send(HMsg.Ok)
             }
             HMsg.PairRequest -> {
-                if (!pairAllowed()) { link.send(HMsg.Denied("Too many pairing tries. Wait a minute.")); return }
+                if (!pairAllowed()) { link.send(HMsg.Denied(tr(R.string.too_many_pairing_tries_wait_a))); return }
                 val code = HandoffKeys.newCode()
                 local.showCode(code, them)
                 try {
@@ -72,7 +76,7 @@ class HandoffPeer(private val local: HandoffLocal, private val clock: () -> Long
                     val p = link.read() as? HMsg.Pair ?: return
                     if (!HandoffKeys.matches(p.code.filter { it.isDigit() }, code)) {
                         Thread.sleep(700)
-                        link.send(HMsg.Denied("That code didn't match. Try again for a new one."))
+                        link.send(HMsg.Denied(tr(R.string.that_code_didn_t_match_try)))
                         return
                     }
                     val secret = HandoffKeys.newSecret()
@@ -88,12 +92,12 @@ class HandoffPeer(private val local: HandoffLocal, private val clock: () -> Long
         when (val cmd = link.read()) {
             is HMsg.Move -> {
                 val s = cmd.snapshot.cleaned()
-                if (s == null) link.send(HMsg.Denied("What's playing on $them is only on $them"))
+                if (s == null) link.send(HMsg.Denied(tr(R.string.what_s_playing_on_is_only, them, them)))
                 else link.send(local.takeOver(s, them)?.let { HMsg.Denied(it) } ?: HMsg.Moved)
             }
             HMsg.Pull -> {
                 val s = local.snapshot()
-                if (s == null) { link.send(HMsg.Denied("Nothing's playing on ${local.name}")); return }
+                if (s == null) { link.send(HMsg.Denied(tr(R.string.nothing_s_playing_on, local.name))); return }
                 link.send(HMsg.Snap(s))
                 if (link.read() == HMsg.Moved) local.stepAside()
             }
@@ -107,13 +111,13 @@ class HandoffPeer(private val local: HandoffLocal, private val clock: () -> Long
      */
     fun call(link: HLink, command: HandoffCommand, askCode: (String) -> String?): HandoffResult {
         link.timeout(8_000)
-        if (!link.send(HMsg.Hello(local.name, local.device))) return HandoffResult.Failed("Couldn't reach it")
+        if (!link.send(HMsg.Hello(local.name, local.device))) return HandoffResult.Failed(tr(R.string.couldn_t_reach_it))
         val ch = when (val m = link.read()) {
             is HMsg.Challenge -> m
             is HMsg.Denied -> return HandoffResult.Failed(m.reason)
-            else -> return HandoffResult.Failed("It didn't answer")
+            else -> return HandoffResult.Failed(tr(R.string.it_didn_t_answer))
         }
-        val them = ch.name.trim().take(60).ifBlank { "the other device" }
+        val them = ch.name.trim().take(60).ifBlank { tr(R.string.the_other_device) }
         val secret = local.secretFor(ch.device)
         if (secret != null) {
             link.send(HMsg.Auth(HandoffKeys.mac(secret, ch.nonce, local.device)))
@@ -123,14 +127,14 @@ class HandoffPeer(private val local: HandoffLocal, private val clock: () -> Long
                     if (r.unpaired) { local.forget(ch.device); return HandoffResult.Unpaired }
                     return HandoffResult.Failed(r.reason)
                 }
-                else -> return HandoffResult.Failed("$them didn't answer")
+                else -> return HandoffResult.Failed(tr(R.string.didn_t_answer, them))
             }
         } else {
             link.send(HMsg.PairRequest)
             when (val r = link.read()) {
                 HMsg.EnterCode -> Unit
                 is HMsg.Denied -> return HandoffResult.Failed(r.reason)
-                else -> return HandoffResult.Failed("$them didn't answer")
+                else -> return HandoffResult.Failed(tr(R.string.didn_t_answer, them))
             }
             link.timeout(PAIR_WAIT_MS)
             val code = askCode(them) ?: return HandoffResult.Cancelled
@@ -139,35 +143,35 @@ class HandoffPeer(private val local: HandoffLocal, private val clock: () -> Long
             when (val r = link.read()) {
                 is HMsg.Paired -> local.savePairing(ch.device, them, r.secret)
                 is HMsg.Denied -> return HandoffResult.Failed(r.reason)
-                else -> return HandoffResult.Failed("$them didn't answer")
+                else -> return HandoffResult.Failed(tr(R.string.didn_t_answer, them))
             }
         }
         link.timeout(20_000)
         return when (command) {
             HandoffCommand.MOVE -> {
-                val s = local.snapshot() ?: return HandoffResult.Failed("Nothing's playing here")
-                val clean = s.cleaned() ?: return HandoffResult.Failed("This song is a file on this device: it can't move")
+                val s = local.snapshot() ?: return HandoffResult.Failed(tr(R.string.nothing_s_playing_here))
+                val clean = s.cleaned() ?: return HandoffResult.Failed(tr(R.string.this_song_is_a_file_on))
                 link.send(HMsg.Move(s))
                 when (val r = link.read()) {
                     HMsg.Moved -> {
                         local.stepAside()
-                        HandoffResult.Done(s.leftOut(clean).takeIf { it > 0 }?.let { "$it ${if (it == 1) "song" else "songs"} on this device stayed behind" })
+                        HandoffResult.Done(s.leftOut(clean).takeIf { it > 0 }?.let { trp(R.plurals.n_songs_stayed_behind, it) })
                     }
                     is HMsg.Denied -> HandoffResult.Failed(r.reason)
-                    else -> HandoffResult.Failed("$them didn't start playing")
+                    else -> HandoffResult.Failed(tr(R.string.didn_t_start_playing, them))
                 }
             }
             HandoffCommand.PULL -> {
                 link.send(HMsg.Pull)
                 when (val r = link.read()) {
                     is HMsg.Snap -> {
-                        val clean = r.snapshot.cleaned() ?: return HandoffResult.Failed("What's playing on $them is only on $them")
+                        val clean = r.snapshot.cleaned() ?: return HandoffResult.Failed(tr(R.string.what_s_playing_on_is_only, them, them))
                         local.takeOver(clean, them)?.let { return HandoffResult.Failed(it) }
                         link.send(HMsg.Moved)
-                        HandoffResult.Done(r.snapshot.leftOut(clean).takeIf { it > 0 }?.let { "$it ${if (it == 1) "song" else "songs"} stayed on $them" })
+                        HandoffResult.Done(r.snapshot.leftOut(clean).takeIf { it > 0 }?.let { trp(R.plurals.n_songs_stayed_on, it, it, them) })
                     }
                     is HMsg.Denied -> HandoffResult.Failed(r.reason)
-                    else -> HandoffResult.Failed("$them didn't answer")
+                    else -> HandoffResult.Failed(tr(R.string.didn_t_answer, them))
                 }
             }
         }

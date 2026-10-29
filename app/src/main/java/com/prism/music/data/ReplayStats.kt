@@ -2,6 +2,7 @@ package com.prism.music.data
 
 import com.prism.music.R
 import com.prism.music.tr
+import com.prism.music.trp
 import com.prism.music.data.db.PlayEventEntity
 import java.time.Instant
 import java.time.LocalDate
@@ -84,13 +85,13 @@ object ReplayStats {
             add(Triple(loyal / 0.55, tr(R.string.the_loyalist), tr(R.string.you_know_what_you_love_your, (loyal * 100).toInt())))
             if (newArtistCount != null && artistCount > 0) {
                 val share = newArtistCount.toDouble() / artistCount
-                add(Triple(share / 0.35, tr(R.string.the_explorer), tr(R.string.always_on_the_hunt_of_the, newArtistCount, artistCount)))
+                add(Triple(share / 0.35, tr(R.string.the_explorer), trp(R.plurals.explorer_n_of_artists, artistCount, newArtistCount, artistCount)))
             }
             if (songCount > 0) add(Triple(plays.toDouble() / songCount / 4.0, tr(R.string.the_replayer),
-                tr(R.string.when_a_song_hits_you_run, topSongTitle?.let { tr(R.string.alone_got_plays, it, topSongPlays) } ?: "").trim()))
+                tr(R.string.when_a_song_hits_you_run, topSongTitle?.let { trp(R.plurals.alone_got_n_plays, topSongPlays, it, topSongPlays) } ?: "").trim()))
             add(Triple(habits.nightShare / 0.35, tr(R.string.the_night_owl), tr(R.string.your_music_comes_alive_after_dark, (habits.nightShare * 100).toInt())))
             add(Triple(habits.morningShare / 0.30, tr(R.string.the_early_riser), tr(R.string.you_start_the_day_with_a, (habits.morningShare * 100).toInt())))
-            add(Triple(minutesPerDay / 150.0, tr(R.string.the_marathoner), tr(R.string.on_the_days_you_listened_you, minutesPerDay.toInt())))
+            add(Triple(minutesPerDay / 150.0, tr(R.string.the_marathoner), trp(R.plurals.marathon_n_minutes, minutesPerDay.toInt())))
             if (topGenreShare != null) add(Triple((1 - topGenreShare) / 0.65, tr(R.string.the_shapeshifter), tr(R.string.no_single_sound_could_hold_you)))
         }
         val best = candidates.maxByOrNull { it.first } ?: return Personality(tr(R.string.the_listener), tr(R.string.every_play_counted))

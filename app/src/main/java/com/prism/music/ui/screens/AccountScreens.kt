@@ -2,6 +2,7 @@ package com.prism.music.ui.screens
 
 import com.prism.music.R
 import com.prism.music.tr
+import com.prism.music.trp
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -266,10 +267,10 @@ fun PrismAccountScreen(onboarding: Boolean, bottomPadding: Dp, onDone: () -> Uni
                     val stars by c.artistPrefs.favorites.collectAsState()
                     Text(
                         listOf(
-                            tr(R.string.liked_2, liked.size, if (liked.size == 1) "song" else "songs"),
-                            "${lists.size} ${if (lists.size == 1) "playlist" else "playlists"}",
-                            tr(R.string.saved_3, albums.size, if (albums.size == 1) "album" else "albums"),
-                            tr(R.string.starred, stars.size, if (stars.size == 1) "artist" else "artists"),
+                            trp(R.plurals.n_liked_songs, liked.size),
+                            trp(R.plurals.n_playlists, lists.size),
+                            trp(R.plurals.n_saved_albums, albums.size),
+                            trp(R.plurals.n_starred_artists, stars.size),
                         ).joinToString(" · "),
                         style = MaterialTheme.typography.bodyMedium,
                     )
@@ -277,8 +278,7 @@ fun PrismAccountScreen(onboarding: Boolean, bottomPadding: Dp, onDone: () -> Uni
                         Spacer(Modifier.height(14.dp))
                         Text(tr(R.string.your_youtube_music_library), style = MaterialTheme.typography.titleSmall)
                         Text(
-                            tr(R.string.copy_its_playlists_saved_albums_and) +
-                                tr(R.string.your_account_isn_t_changed_copy),
+                            tr(R.string.copy_its_playlists_saved_albums_and_all),
                             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(top = 4.dp, bottom = 10.dp),
                         )
@@ -292,7 +292,7 @@ fun PrismAccountScreen(onboarding: Boolean, bottomPadding: Dp, onDone: () -> Uni
                                 Toast.makeText(
                                     context,
                                     if (r == null) tr(R.string.couldn_t_reach_youtube_music_try)
-                                    else tr(R.string.copied_playlists_albums_and_artists, r.playlists, r.albums, r.artists) + if (r.failed > 0) tr(R.string.playlists_couldn_t_be_read, r.failed) else "",
+                                    else tr(R.string.copied_playlists_albums_and_artists, trp(R.plurals.n_playlists, r.playlists), trp(R.plurals.n_albums, r.albums), trp(R.plurals.n_artists, r.artists)) + if (r.failed > 0) trp(R.plurals.n_playlists_couldn_t_be_read, r.failed) else "",
                                     Toast.LENGTH_LONG,
                                 ).show()
                             }
@@ -301,7 +301,7 @@ fun PrismAccountScreen(onboarding: Boolean, bottomPadding: Dp, onDone: () -> Uni
                             else Text(if (at > 0) tr(R.string.copy_again) else tr(R.string.copy_into_prism))
                         }
                         if (at > 0) Text(
-                            tr(R.string.last_copied) + java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(java.util.Date(at)),
+                            tr(R.string.last_copied, java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM).format(java.util.Date(at))),
                             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 6.dp),
                         )
                     }

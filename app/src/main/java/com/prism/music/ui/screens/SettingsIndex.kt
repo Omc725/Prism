@@ -73,6 +73,7 @@ object SettingsIndex {
         SettingEntry(DC, tr(R.string.discord), tr(R.string.show_what_you_re_playing), tr(R.string.discord_rich_presence_status_listening)),
         SettingEntry(DC, tr(R.string.discord), tr(R.string.sign_out_of_discord)),
         SettingEntry(DC, tr(R.string.discord), tr(R.string.about_this), tr(R.string.discord_terms_risk)),
+        SettingEntry(SettingsSection.LANGUAGE, tr(R.string.language), tr(R.string.language), tr(R.string.language_keywords)),
         // Appearance
         SettingEntry(A, tr(R.string.theme), tr(R.string.theme), tr(R.string.dark_light_system_mode_night)),
         SettingEntry(A, tr(R.string.theme), tr(R.string.pure_black), tr(R.string.amoled_oled)),

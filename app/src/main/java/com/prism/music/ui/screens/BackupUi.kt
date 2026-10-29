@@ -128,8 +128,8 @@ fun rememberRestoreFlow(): () -> Unit {
             text = {
                 Text(
                     parts?.let { p ->
-                        tr(R.string.it_holds) + com.prism.music.data.BackupPart.entries.filter { it in p }.joinToString(", ") { it.label.lowercase().replaceFirstChar(Char::uppercase) } +
-                            tr(R.string.those_are_replaced_with_the_backup)
+                        tr(R.string.it_holds_parts, com.prism.music.data.looks.LookLabels.listed(com.prism.music.data.BackupPart.entries.filter { it in p }.map { it.label }))
+
                     } ?: tr(R.string.prism_s_library_history_and_settings),
                 )
             },
@@ -210,8 +210,7 @@ fun NewSignatureSheet(version: String, apk: File, onDismiss: () -> Unit) {
         Column(Modifier.padding(start = 24.dp, end = 24.dp, bottom = 32.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Text(tr(R.string.moving_to_prism, version), style = MaterialTheme.typography.titleLarge)
             Text(
-                tr(R.string.from_prism_is_signed_with_its, version) +
-                    tr(R.string.android_can_t_update_across_that),
+                tr(R.string.from_prism_is_signed_with_its_all, version),
                 style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Step(1, tr(R.string.back_up), tr(R.string.save_a_backup_downloads_is_a), backedUp) { backup() }

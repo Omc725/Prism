@@ -2,6 +2,7 @@ package com.prism.music.ui.screens
 
 import com.prism.music.R
 import com.prism.music.tr
+import com.prism.music.trp
 import com.prism.music.data.db.mergeUploads
 import com.prism.music.ui.theme.PrismIcons
 import android.content.Context
@@ -226,7 +227,7 @@ private suspend fun loadPeriodStory(c: AppContainer, period: Period): ReplayStor
             Period.Kind.TODAY -> Triple(from - 86_400_000, to - 86_400_000, tr(R.string.this_time_yesterday))
             Period.Kind.WEEK -> Triple(from - 7 * 86_400_000L, to - 7 * 86_400_000L, tr(R.string.the_same_time_last_week))
             // Any days: as many days just before them.
-            Period.Kind.DAYS -> (to - from).let { span -> Triple(from - span - 1, from - 1, tr(R.string.the_days_before, span / 86_400_000 + 1)) }
+            Period.Kind.DAYS -> (to - from).let { span -> Triple(from - span - 1, from - 1, trp(R.plurals.the_n_days_before, (span / 86_400_000 + 1).toInt())) }
             Period.Kind.YEAR, Period.Kind.ALL -> Triple(0L, -1L, null)
         }
     }
@@ -652,9 +653,9 @@ private fun Minutes(s: ReplayStory, modifier: Modifier) {
             }
         }
         Row(Modifier.reveal(3_600).padding(top = 22.dp), horizontalArrangement = Arrangement.spacedBy(22.dp)) {
-            Stat(fmt(s.songCount.toLong()), if (s.songCount == 1) "song" else "songs")
-            Stat(fmt(s.artistCount.toLong()), if (s.artistCount == 1) "artist" else "artists")
-            Stat(fmt(s.activeDays.toLong()), if (s.activeDays == 1) "day" else "days")
+            Stat(fmt(s.songCount.toLong()), trp(R.plurals.songs_word, s.songCount))
+            Stat(fmt(s.artistCount.toLong()), trp(R.plurals.artists_word, s.artistCount))
+            Stat(fmt(s.activeDays.toLong()), trp(R.plurals.days_word, s.activeDays))
         }
     }
 }
@@ -770,7 +771,7 @@ private fun TopSong(s: ReplayStory, modifier: Modifier) {
             Text(song.artistName, style = body.copy(fontSize = 20.sp), textAlign = TextAlign.Center, modifier = Modifier.reveal(900).padding(top = 6.dp))
             Spacer(Modifier.height(20.dp))
             Text(
-                tr(R.string.you_played_it_for, song.plays, if (song.plays == 1) "time" else "times", listenTime(song.ms)),
+                trp(R.plurals.played_it_n_times, song.plays, song.plays, listenTime(song.ms)),
                 style = body, textAlign = TextAlign.Center, modifier = Modifier.reveal(1_500),
             )
             // The line it's playing from (its best part).
@@ -836,7 +837,7 @@ private fun HabitsSlide(h: Habits, modifier: Modifier) {
         val fmtDay = DateTimeFormatter.ofPattern(tr(R.string.mmm_d))
         Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Fact(tr(R.string.favorite_day), ReplayStats.weekdays[h.topWeekday], 1_200)
-            if (h.longestStreak > 1) Fact(tr(R.string.longest_streak), tr(R.string.days_in_a_row, h.longestStreak), 1_450)
+            if (h.longestStreak > 1) Fact(tr(R.string.longest_streak), trp(R.plurals.n_days_in_a_row, h.longestStreak), 1_450)
             h.biggestDay?.let { Fact(tr(R.string.biggest_day), "${it.format(fmtDay)} · ${listenTime(h.biggestDayMs)}", 1_700) }
         }
     }
@@ -861,7 +862,7 @@ private fun Discovery(s: ReplayStory, modifier: Modifier) {
     Column(modifier, verticalArrangement = Arrangement.Center) {
         Text(tr(R.string.new_to_you), style = kicker(), modifier = Modifier.reveal(100))
         Text(fmt(found.size.toLong()), style = display(140.sp), modifier = Modifier.reveal(250))
-        Text(if (found.size == 1) tr(R.string.new_artist) else tr(R.string.new_artists), style = display(44.sp, ArtistTypography.extended), modifier = Modifier.reveal(450))
+        Text(trp(R.plurals.new_artists_title, found.size), style = display(44.sp, ArtistTypography.extended), modifier = Modifier.reveal(450))
         Text(tr(R.string.found_their_way_into_your_rotation), style = body, modifier = Modifier.reveal(700).padding(top = 8.dp))
         Spacer(Modifier.height(26.dp))
         Row(Modifier.reveal(1_000)) {
@@ -943,7 +944,7 @@ private fun TopAlbum(s: ReplayStory, modifier: Modifier) {
         Text(a.albumTitle.uppercase(), style = display(44.sp), textAlign = TextAlign.Center, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.reveal(700))
         Text(a.artistName, style = body.copy(fontSize = 20.sp), modifier = Modifier.reveal(900).padding(top = 6.dp))
         Text(
-            tr(R.string.of_its_songs_plays, a.songs, a.plays, listenTime(a.ms)),
+            tr(R.string.of_its_songs_plays, trp(R.plurals.n_of_its_songs, a.songs), trp(R.plurals.n_plays, a.plays), listenTime(a.ms)),
             style = body, textAlign = TextAlign.Center, modifier = Modifier.reveal(1_400).padding(top = 16.dp),
         )
     }
@@ -999,7 +1000,7 @@ private fun FirstSong(s: ReplayStory, modifier: Modifier) {
         Text(f.title.uppercase(), style = display(44.sp), textAlign = TextAlign.Center, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.reveal(800).padding(top = 6.dp))
         Text(f.artistName, style = body.copy(fontSize = 20.sp), modifier = Modifier.reveal(1_000).padding(top = 4.dp))
         Text(
-            at.format(DateTimeFormatter.ofPattern(tr(R.string.mmmm_d))) + " at " + at.format(DateTimeFormatter.ofPattern(tr(R.string.h_mm_a))),
+            tr(R.string.date_at_time, at.format(DateTimeFormatter.ofPattern(tr(R.string.mmmm_d))), at.format(DateTimeFormatter.ofPattern(tr(R.string.h_mm_a)))),
             style = body.copy(fontSize = 15.sp, color = Color.White.copy(alpha = 0.75f)), modifier = Modifier.reveal(1_400).padding(top = 12.dp),
         )
     }
@@ -1014,7 +1015,7 @@ private fun PrismYearSlide(s: ReplayStory, modifier: Modifier) {
         p.djSongs.takeIf { it > 0 }?.let { tr(R.string.songs_in_dj_sets) to fmt(it.toLong()) },
         p.smartPicks.takeIf { it > 0 }?.let { tr(R.string.smart_shuffle_finds_played) to fmt(it.toLong()) },
         p.recognized.takeIf { it > 0 }?.let { tr(R.string.songs_recognized) to fmt(it.toLong()) },
-        p.blends.takeIf { it > 0 }?.let { (if (p.blends == 1) tr(R.string.blend_made) else tr(R.string.blends_made)) to fmt(it.toLong()) },
+        p.blends.takeIf { it > 0 }?.let { trp(R.plurals.blends_made, p.blends) to fmt(it.toLong()) },
         p.radarFinds.takeIf { it > 0 }?.let { tr(R.string.release_radar_finds) to fmt(it.toLong()) },
     )
     Column(modifier, verticalArrangement = Arrangement.Center) {

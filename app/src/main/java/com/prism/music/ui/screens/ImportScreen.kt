@@ -83,8 +83,7 @@ fun ImportScreen(bottomPadding: Dp) {
         item {
             Column(Modifier.padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
-                    tr(R.string.tunemymusic_copies_your_playlists_liked_songs) +
-                        tr(R.string.it_s_the_same_service_youtube),
+                    tr(R.string.tunemymusic_copies_your_playlists_liked_songs_all),
                     style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant,
                 )
                 PrismButton(onClick = { open("/spotify-to-youtube-music") }, Modifier.fillMaxWidth()) { Text(tr(R.string.from_spotify)) }
@@ -95,9 +94,7 @@ fun ImportScreen(bottomPadding: Dp) {
                 Spacer(Modifier.size(4.dp))
                 Text(tr(R.string.how_it_works), style = MaterialTheme.typography.titleSmall)
                 Text(
-                    tr(R.string.t_1_sign_in_to_spotify_or) +
-                        tr(R.string.t_2_choose_youtube_music_as_the) +
-                        settings.accountEmail.takeIf { it.isNotBlank() }?.let { " ($it)" }.orEmpty() + ".\n" +
+                    tr(R.string.t_1_sign_in_to_spotify_or_all, settings.accountEmail.takeIf { it.isNotBlank() }?.let { " ($it)" }.orEmpty()) + "\n" +
                         tr(R.string.t_3_when_the_transfer_finishes_come),
                     style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant,
                 )
@@ -108,8 +105,7 @@ fun ImportScreen(bottomPadding: Dp) {
                     Text(if (sync == SyncState.SYNCING) tr(R.string.syncing) else tr(R.string.sync_library_now))
                 }
                 Text(
-                    tr(R.string.tunemymusic_is_a_separate_service_not) +
-                        tr(R.string.playlists_you_move_its_free_plan),
+                    tr(R.string.tunemymusic_is_a_separate_service_not_all),
                     style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
                 )
             }

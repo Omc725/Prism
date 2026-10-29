@@ -1110,7 +1110,9 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             val existing = (0 until player.mediaItemCount).map { player.getMediaItemAt(it).mediaId }.toSet()
             val mine = if (!useYours) emptyList() else runCatching {
                 withContext(Dispatchers.IO) { c.yourMusic.radio(seeds, existing, 15, offlineOnly = offline) }
-            }.onFailure { android.util.Log.w("PrismRadio", "Prism radio failed", it) }.getOrNull().orEmpty().map { it.song }
+            }.onFailure { android.util.Log.w("PrismRadio", "Prism radio failed", it) }.getOrNull().orEmpty()
+                .let { com.prism.music.data.foryou.LocalRadio.besideYouTube(it, onlyYours = !useYouTube || mode == com.prism.music.data.prefs.AutoplaySource.YOURS) }
+                .map { it.song }
             // "Your music": YouTube only fills in when your own music has too little to follow with.
             val wantYouTube = useYouTube && (radio || mode != com.prism.music.data.prefs.AutoplaySource.YOURS || mine.size < 5)
             val r = if (!wantYouTube) null else runCatching {
@@ -1379,7 +1381,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         }
         val vid = if (enabled) {
             val found = videoIdFor(song)
-            found.id ?: return if (found.lookupFailed) "Couldn't reach YouTube for the music video. Tap to try again." else "No music video for this song"
+            found.id ?: return if (found.lookupFailed) tr(R.string.couldn_t_reach_youtube_for_the) else tr(R.string.no_music_video_for_this_song)
         } else null
         if (player.currentMediaItemIndex != idx) return null
         if (vid != null && failedVideos.remove(vid)) c.streams.invalidate(vid)

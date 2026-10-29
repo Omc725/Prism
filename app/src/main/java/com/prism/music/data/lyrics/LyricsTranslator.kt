@@ -1,5 +1,7 @@
 package com.prism.music.data.lyrics
 
+import com.prism.music.R
+import com.prism.music.tr
 import com.prism.music.playback.AudioDiagnostics
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -39,7 +41,7 @@ class LyricsTranslator(private val http: OkHttpClient, private val dir: File? = 
     }
 
     /** Both endpoints are resting after Google refused them; worth asking again from [retryAtMs] (wall clock). */
-    class Unavailable(val retryAtMs: Long) : IOException("Google Translate isn't answering right now")
+    class Unavailable(val retryAtMs: Long) : IOException(tr(R.string.google_translate_isn_t_answering_right))
 
     private val cache = object : LinkedHashMap<String, Translation>(32, 0.75f, true) {
         override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, Translation>?) = size > 40
@@ -61,7 +63,7 @@ class LyricsTranslator(private val http: OkHttpClient, private val dir: File? = 
     private val gtx = Endpoint("translate_a/single")
     private val dict = Endpoint("translate_a/t")
 
-    private class Refused(val code: Int) : IOException("Translate returned HTTP $code")
+    private class Refused(val code: Int) : IOException(tr(R.string.translate_returned_http, code))
 
     /** Translates [lines] into [to] (a language code such as "es" or "pt-BR"). Blank lines stay null. */
     suspend fun translate(lines: List<String>, to: String): Translation = withContext(Dispatchers.IO) {

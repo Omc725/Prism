@@ -2,6 +2,7 @@ package com.prism.music.ui.screens
 
 import com.prism.music.R
 import com.prism.music.tr
+import com.prism.music.trp
 import androidx.compose.foundation.border
 import com.prism.music.ui.components.PrismButton
 import com.prism.music.ui.components.PrismTextButton
@@ -392,7 +393,7 @@ fun LibraryScreen(bottomPadding: Dp) {
                             if (rearranging) Text(
                                 tr(R.string.hold_and_drag_or_use_the), style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 8.dp, top = 4.dp, bottom = 4.dp),
-                            ) else if (myPlaylists.size > 1) SortBar(tr(R.string.playlists_2, myPlaylists.size), PlaylistSort.entries, playlistSort, { it.label }) {
+                            ) else if (myPlaylists.size > 1) SortBar(trp(R.plurals.n_playlists, myPlaylists.size), PlaylistSort.entries, playlistSort, { it.label }) {
                                 c.library.setPlaylistSort(it.name)
                             }
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(start = 8.dp, top = 4.dp, bottom = 4.dp)) {
@@ -417,7 +418,7 @@ fun LibraryScreen(bottomPadding: Dp) {
                             items(folders, key = { "f" + it.id }) { f ->
                                 val first = f.playlists.firstNotNullOfOrNull { id -> myPlaylists.firstOrNull { com.prism.music.data.PrismLibrary.samePlaylist(it.id, id) } }
                                 ShortcutTile(
-                                    f.name, if (!settings.librarySubtitles) "" else if (f.playlists.size == 1) tr(R.string.folder_1_playlist) else tr(R.string.folder_playlists, f.playlists.size),
+                                    f.name, if (!settings.librarySubtitles) "" else trp(R.plurals.folder_n_playlists, f.playlists.size),
                                     PrismIcons.Folder, asList, art = first?.let { c.covers.art(it) },
                                 ) { nav.go(Routes.folder(f.id)) }
                             }
@@ -461,13 +462,13 @@ fun LibraryScreen(bottomPadding: Dp) {
                     }
                     LibTab.ALBUMS -> {
                         if (albums.isNotEmpty()) item(span = { GridItemSpan(maxLineSpan) }) {
-                            SortBar(if (albums.size == 1) tr(R.string.t_1_album) else tr(R.string.albums_2, albums.size), AlbumSort.entries, albumSort, { it.label }) { albumSort = it; c.library.setSort("library:albums", it.name) }
+                            SortBar(trp(R.plurals.n_albums, albums.size), AlbumSort.entries, albumSort, { it.label }) { albumSort = it; c.library.setSort("library:albums", it.name) }
                         }
                         items(pinnedFirst(sortedAlbums), key = { "a" + it.id }) { a -> LibraryItem(shown(a), asList, onLongClick = { itemMenu = a }) { nav.open(a, onSong) } }
                     }
                     LibTab.ARTISTS -> {
                         if (artists.isNotEmpty()) item(span = { GridItemSpan(maxLineSpan) }) {
-                            SortBar(if (artists.size == 1) tr(R.string.t_1_artist) else tr(R.string.artists_3, artists.size), ArtistSort.entries, artistSort, { it.label }) { artistSort = it; c.library.setSort("library:artists", it.name) }
+                            SortBar(trp(R.plurals.n_artists, artists.size), ArtistSort.entries, artistSort, { it.label }) { artistSort = it; c.library.setSort("library:artists", it.name) }
                         }
                         items(pinnedFirst(sortedArtists), key = { "r" + it.id }) { a -> LibraryItem(shown(a), asList, onLongClick = { itemMenu = a }) { nav.open(a, onSong) } }
                     }

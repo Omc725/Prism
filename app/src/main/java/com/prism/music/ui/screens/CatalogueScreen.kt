@@ -163,9 +163,9 @@ private fun CataloguePage(bottomPadding: Dp) {
         }
         item(key = "tiles") {
             // Greyed out (still editable) while the Shortcut tiles section is hidden or removed.
-            Column(Modifier.alpha(if (tilesOn) 1f else 0.45f)) { Group(HomeSections.TILES_TITLE, info = tr(R.string.shortcuts_appear_in_the_order_you)) {
+            Column(Modifier.alpha(if (tilesOn) 1f else 0.45f)) { Group(tr(R.string.section_shortcut_tiles), info = tr(R.string.shortcuts_appear_in_the_order_you)) {
                 // Why they're greyed out: a state, so it stays in view.
-                if (!tilesOn) Note(tr(R.string.show_the_section_to_see_these, HomeSections.TILES_TITLE))
+                if (!tilesOn) Note(tr(R.string.show_the_section_to_see_these, tr(R.string.section_shortcut_tiles)))
                 FlowRow(
                     Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp),

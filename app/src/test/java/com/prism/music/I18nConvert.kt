@@ -32,7 +32,7 @@ class I18nConvert {
         }
         for (f in files) {
             val text = f.readText()
-            val (out, n, kept) = convertFile(text, res)
+            val (out, n, kept) = convertFile(text, res, onlyLines[f.relativeTo(src).invariantSeparatorsPath])
             if (n > 0) {
                 f.writeText(withImports(out, f))
                 moved += n
@@ -99,7 +99,14 @@ class I18nConvert {
 
     private data class Result(val text: String, val moved: Int, val kept: List<String>)
 
-    private fun convertFile(text: String, res: Resources): Result {
+    /**
+     * PRISM_I18N_LINES="path:12,30;path2:7": in those files only the text on those lines moves, whatever the rules say
+     * (picked by hand from the dry run: a mixed file's on-screen errors, not its protocol words or diagnostics).
+     */
+    private val onlyLines: Map<String, Set<Int>> = System.getenv("PRISM_I18N_LINES").orEmpty().split(';').filter { ':' in it }
+        .associate { e -> e.substringBefore(':').trim().replace('\\', '/') to e.substringAfter(':').split(',').mapNotNull { it.trim().toIntOrNull() }.toSet() }
+
+    private fun convertFile(text: String, res: Resources, lines: Set<Int>? = null): Result {
         val lits = literals(text)
         val enums = enumBodies(text)
         val sb = StringBuilder()
@@ -110,7 +117,8 @@ class I18nConvert {
             val raw = text.substring(lit.start, lit.end)
             val plain = lit.parts.joinToString("") { if (it is String) it else "{}" }
             if (!looksLikeText(plain)) continue
-            val why = keepReason(text, lit, enums)
+            if (lines != null && lineOf(text, lit.start) !in lines) continue
+            val why = if (lines != null) null else keepReason(text, lit, enums)
             if (why != null) { kept += "${lineOf(text, lit.start)}: $raw   [$why]"; continue }
             val args = lit.parts.filterIsInstance<Expr>().map { it.code }
             var n = 0

@@ -36,10 +36,7 @@ fun ConnectSettings() {
         Group(tr(R.string.speakers_tvs)) {
             Item(
                 tr(R.string.play_on_a_speaker_or_tv), tr(R.string.pick_it_from_the_device_line),
-                info = tr(R.string.tap_the_line_under_the_player) +
-                    tr(R.string.it_has_to_be_on_this) +
-                    tr(R.string.sometimes_called_media_sharing_your_queue) +
-                    tr(R.string.speaker_s_volume_the_equalizer_crossfade),
+                info = tr(R.string.tap_the_line_under_the_player_all),
                 onClick = {},
             )
         }

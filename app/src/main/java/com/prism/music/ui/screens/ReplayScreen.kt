@@ -2,6 +2,7 @@ package com.prism.music.ui.screens
 
 import com.prism.music.R
 import com.prism.music.tr
+import com.prism.music.trp
 import com.prism.music.data.db.mergeUploads
 import com.prism.music.ui.theme.lit
 import androidx.compose.foundation.border
@@ -415,7 +416,7 @@ fun ReplayScreen(bottomPadding: Dp) {
                 }
                 Column(horizontalAlignment = Alignment.End) {
                     Text(minutes(s.ms), style = MaterialTheme.typography.labelMedium)
-                    Text("${s.plays} ${if (s.plays == 1) "play" else "plays"}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(trp(R.plurals.n_plays, s.plays), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         }
@@ -445,7 +446,7 @@ private fun HeroCard(d: ReplayData, period: Period, notYet: Boolean, loading: Bo
     ) {
         Column {
             Text(
-                (if (period.isYear) "REWIND ${period.year}" else "REPLAY " + period.label.uppercase()),
+                (if (period.isYear) tr(R.string.rewind_x, period.year) else tr(R.string.replay_x, period.label)).uppercase(),
                 color = Color.White.copy(alpha = 0.8f), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Medium,
             )
             Spacer(Modifier.height(4.dp))
@@ -455,9 +456,9 @@ private fun HeroCard(d: ReplayData, period: Period, notYet: Boolean, loading: Bo
             }
             Spacer(Modifier.height(18.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(22.dp)) {
-                Stat("${d.plays}", if (d.plays == 1) "play" else "plays")
-                Stat("${d.songCount}", if (d.songCount == 1) "song" else "songs")
-                Stat("${d.activeDays}", if (d.activeDays == 1) "day" else "days")
+                Stat("${d.plays}", trp(R.plurals.plays_word, d.plays))
+                Stat("${d.songCount}", trp(R.plurals.songs_word, d.songCount))
+                Stat("${d.activeDays}", trp(R.plurals.days_word, d.activeDays))
             }
             if (top != null) {
                 Spacer(Modifier.height(18.dp))

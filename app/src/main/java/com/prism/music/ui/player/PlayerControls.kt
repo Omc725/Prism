@@ -2,6 +2,7 @@ package com.prism.music.ui.player
 
 import com.prism.music.R
 import com.prism.music.tr
+import com.prism.music.trp
 import androidx.compose.foundation.layout.ColumnScope
 import android.content.Context
 import android.media.AudioDeviceInfo
@@ -666,7 +667,7 @@ private fun TransportGlyph(
 @Composable
 private fun SkipGlyph(seconds: Int, ahead: Boolean, touch: Dp, onClick: () -> Unit) {
     val haptics = rememberHaptics()
-    val label = if (ahead) tr(R.string.ahead_seconds, seconds) else tr(R.string.back_seconds, seconds)
+    val label = if (ahead) trp(R.plurals.ahead_n_seconds, seconds.toInt()) else trp(R.plurals.back_n_seconds, seconds.toInt())
     Box(
         Modifier.size(touch).clickable(remember { MutableInteractionSource() }, indication = null, onClickLabel = label) { haptics.click(); onClick() }
             .semantics { contentDescription = label },

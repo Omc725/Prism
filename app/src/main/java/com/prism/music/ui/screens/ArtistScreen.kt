@@ -2,6 +2,7 @@ package com.prism.music.ui.screens
 
 import com.prism.music.R
 import com.prism.music.tr
+import com.prism.music.trp
 import com.prism.music.ui.theme.PrismIcons
 import android.app.Activity
 import androidx.compose.animation.animateContentSize
@@ -524,7 +525,7 @@ private fun Spotlight(item: AlbumItem, onOpen: () -> Unit) {
         val min = (songs.sumOf { it.durationSec } + 30) / 60
         listOfNotNull(com.prism.music.data.model.songCount(songs.size), min.takeIf { it > 0 }?.let { tr(R.string.min, it) }).joinToString(" · ")
     }
-    val kind = item.subtitle.split(" • ").firstOrNull { it in setOf("Single", "EP", "Album") } ?: tr(R.string.album)
+    val kind = item.subtitle.split(" • ").firstOrNull { it in setOf("Single", "EP", "Album") }?.let { com.prism.music.data.model.kindName(it) } ?: tr(R.string.album)
     val year = yearOf(item).takeIf { it > 0 }
     val thisYear = remember { java.util.Calendar.getInstance().get(java.util.Calendar.YEAR) }
     FrostedPanel(Modifier.padding(start = 16.dp, end = 16.dp, top = 20.dp).fillMaxWidth(), onClick = onOpen) {
@@ -640,7 +641,7 @@ private fun CardRow(items: List<BrowseItem>, width: Dp, aspect: Float = 1f, roun
                     is ArtistItem -> ""
                     is PlaylistItem -> item.subtitle.removePrefix("Playlist • ")
                     is SongItem -> if (item.song.isLive) tr(R.string.live_now) else item.subtitle
-                    else -> item.subtitle
+                    else -> com.prism.music.data.model.shownKinds(item.subtitle)
                 }
                 if (second.isNotBlank()) Text(
                     second, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -848,7 +849,7 @@ private fun androidx.compose.foundation.lazy.LazyListScope.releaseGrid(
             ReleaseSort.entries.forEach { s -> com.prism.music.ui.components.PrismChip(sort == s, { onSort(s) }, s.label) }
             Spacer(Modifier.weight(1f))
             Text(
-                if (items.size == 1) tr(R.string.t_1_release) else tr(R.string.releases, items.size),
+                trp(R.plurals.n_releases, items.size),
                 style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
@@ -899,7 +900,7 @@ private fun ReleaseCard(item: BrowseItem, modifier: Modifier, open: (BrowseItem)
             maxLines = 2, overflow = TextOverflow.Ellipsis,
         )
         // "Single • 2024" reads as "2024 · Single"; plain albums just show the year.
-        val kind = item.subtitle.split(" • ").firstOrNull { it in setOf("Album", "Single", "EP") }
+        val kind = item.subtitle.split(" • ").firstOrNull { it in setOf("Album", "Single", "EP") }?.let { com.prism.music.data.model.kindName(it) }
         val year = yearOf(item).takeIf { it > 0 }?.toString()
         Text(
             (if (showArtist) listOfNotNull(kind, releaseArtist(item), year) else listOfNotNull(year, kind)).joinToString(" · ").ifBlank { item.subtitle },

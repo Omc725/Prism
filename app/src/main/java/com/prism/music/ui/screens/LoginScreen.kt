@@ -353,8 +353,7 @@ fun DiscordLoginScreen(onBack: () -> Unit) {
                     Text(tr(R.string.couldn_t_reach_discord), style = MaterialTheme.typography.titleLarge)
                     Spacer(Modifier.height(10.dp))
                     Text(
-                        tr(R.string.check_your_connection_some_networks_such) +
-                            tr(R.string.wi_fi_or_mobile_data),
+                        tr(R.string.check_your_connection_some_networks_such_all),
                         style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     if (why.isNotBlank()) {

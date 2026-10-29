@@ -64,6 +64,9 @@ android {
 
     buildTypes {
         debug {
+            // en-XA (stretched, accented English) and ar-XB (mirrored, right to left) in the phone's language list: text
+            // that gets cut off, or a layout that doesn't turn around, shows up before any translation does.
+            isPseudoLocalesEnabled = true
             // `-PsideBySide`: a debug Prism that installs next to the real one (for trying changes on your own phone), as
             // "Prism Dev". `-PsideBySide=name` installs as com.prism.music.name instead of .dev, beside an older dev copy.
             if (project.hasProperty("sideBySide")) {
@@ -102,6 +105,11 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
+    }
+
+    // Android 13+ lists Prism's languages (each values-xx folder) in the phone's own per-app language setting.
+    androidResources {
+        generateLocaleConfig = true
     }
 
     testOptions {

@@ -203,7 +203,7 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
     fun edits(look: Look): String? {
         val now = settings.lookValues.value
         val saved = settings.lookAfter(resolved(look))
-        return LookLabels.summary((now.keys + saved.keys).filter { now[it] != saved[it] }, look.icons != currentIcons(), lead = tr(R.string.you_ve_changed_its))
+        return LookLabels.summary((now.keys + saved.keys).filter { now[it] != saved[it] }, look.icons != currentIcons(), lead = R.string.you_ve_changed_its)
     }
 
     fun rename(id: String, name: String) {

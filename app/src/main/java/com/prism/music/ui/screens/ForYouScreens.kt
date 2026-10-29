@@ -2,6 +2,7 @@ package com.prism.music.ui.screens
 
 import com.prism.music.R
 import com.prism.music.tr
+import com.prism.music.trp
 import com.prism.music.ui.components.pane
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
@@ -211,7 +212,7 @@ private fun ReleaseEntity.dateText(today: LocalDate): String {
     val date = releaseDate?.let { runCatching { LocalDate.parse(it) }.getOrNull() } ?: return year.toString()
     val days = ChronoUnit.DAYS.between(date, today)
     return when {
-        days < 0 -> tr(R.string.out) + date.format(DateTimeFormatter.ofPattern(tr(R.string.eee_mmm_d), Locale.getDefault()))
+        days < 0 -> tr(R.string.out, date.format(DateTimeFormatter.ofPattern(tr(R.string.eee_mmm_d), Locale.getDefault())))
         days == 0L -> tr(R.string.today)
         days == 1L -> tr(R.string.yesterday)
         days < 7 -> date.format(DateTimeFormatter.ofPattern("EEEE", Locale.getDefault()))
@@ -258,7 +259,7 @@ fun NewReleasesScreen(bottomPadding: Dp) {
         (libraryAlbums.map { it.id } + libraryAlbums.mapNotNull { (it as? com.prism.music.data.model.AlbumItem)?.playlistId } + savedHere.map { it.id }).toSet()
     }
     SubPage(
-        com.prism.music.data.prefs.HomeSections.NEW_RELEASES_TITLE, bottomPadding, subtitle = tr(R.string.new_albums_singles_and_eps_from),
+        tr(R.string.section_new_from_your_artists), bottomPadding, subtitle = tr(R.string.new_albums_singles_and_eps_from),
         actions = { RoundAction(PrismIcons.Refresh, tr(R.string.look_now), glass = true, enabled = !running) { scope.launch { c.releaseRadar.refresh() } } },
     ) {
         if (running) item("running") {
@@ -298,8 +299,7 @@ fun NewReleasesScreen(bottomPadding: Dp) {
         }
         if (all.isEmpty() && !running) item("empty") {
             Text(
-                tr(R.string.nothing_new_from_your_artists_in) +
-                    tr(R.string.saved_and_play_most_the_first),
+                tr(R.string.nothing_new_from_your_artists_in_all),
                 style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),
             )
@@ -510,7 +510,7 @@ fun PickArtistsScreen(onboarding: Boolean, bottomPadding: Dp, onDone: () -> Unit
         }
         val count = favorites.size
         PrismButton({ finish() }, Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 12.dp)) {
-            Text(if (count == 0) tr(R.string.done) else tr(R.string.done_2, count, if (count == 1) "artist" else "artists"))
+            Text(if (count == 0) tr(R.string.done) else trp(R.plurals.done_n_artists, count))
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.prism.music.data
 
+import com.prism.music.R
+import com.prism.music.tr
 import com.prism.music.data.innertube.InnerTube
 import com.prism.music.data.model.AlbumItem
 import com.prism.music.data.model.PlaylistItem
@@ -22,7 +24,7 @@ data class PrismList(
     val createdAt: Long,
     val updatedAt: Long,
 ) {
-    fun item() = PlaylistItem(id, title, "Prism playlist · ${songCount(songs.size)}", songs.firstOrNull()?.thumbnail)
+    fun item() = PlaylistItem(id, title, tr(R.string.prism_playlist, songCount(songs.size)), songs.firstOrNull()?.thumbnail)
 }
 
 /** An album saved to the library on the phone (the bookmark on an album page, without an account). */
@@ -88,7 +90,7 @@ class PrismLibrary(private val dir: File) {
         val id = "folder:" + UUID.randomUUID().toString().replace("-", "").take(10)
         change { lib ->
             val out = lib.folders.map { f -> f.copy(playlists = f.playlists.filterNot { p -> playlistId != null && samePlaylist(p, playlistId) }) }
-            lib.copy(folders = out + PlaylistFolder(id, name.trim().ifBlank { "Folder" }, listOfNotNull(playlistId), System.currentTimeMillis()))
+            lib.copy(folders = out + PlaylistFolder(id, name.trim().ifBlank { tr(R.string.folder) }, listOfNotNull(playlistId), System.currentTimeMillis()))
         }
         return id
     }
@@ -123,7 +125,7 @@ class PrismLibrary(private val dir: File) {
     fun create(title: String, songs: List<Song> = emptyList(), description: String = ""): String {
         val now = System.currentTimeMillis()
         val id = PREFIX + UUID.randomUUID().toString().replace("-", "").take(12)
-        change { it.copy(lists = listOf(PrismList(id, title.trim().ifBlank { "My playlist" }, description, songs.distinctBy { s -> s.id }, now, now)) + it.lists) }
+        change { it.copy(lists = listOf(PrismList(id, title.trim().ifBlank { tr(R.string.my_playlist) }, description, songs.distinctBy { s -> s.id }, now, now)) + it.lists) }
         return id
     }
 

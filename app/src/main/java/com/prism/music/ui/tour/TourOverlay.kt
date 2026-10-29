@@ -2,6 +2,7 @@ package com.prism.music.ui.tour
 
 import com.prism.music.R
 import com.prism.music.tr
+import com.prism.music.trp
 import android.content.Context
 import com.prism.music.ui.components.tickWhileShown
 import android.os.Build
@@ -148,7 +149,7 @@ fun TourOverlay(plan: TourPlan, onOpen: (String) -> Unit, onDone: () -> Unit) {
 private fun Opening(plan: TourPlan) {
     val (title, body) = when {
         !plan.full -> tr(R.string.what_s_new_in_prism, BuildConfig.VERSION_NAME) to
-            tr(R.string.to_know_since_you_last_looked, plan.steps.size, if (plan.steps.size == 1) "thing" else "things")
+            trp(R.plurals.n_things_to_know, plan.steps.size)
         plan.freshInstall -> tr(R.string.welcome_to_prism) to tr(R.string.your_music_refracted_here_s_a)
         else -> tr(R.string.welcome_to_the_new_prism) to tr(R.string.prism_is_redrawn_from_the_ground, BuildConfig.VERSION_NAME)
     }

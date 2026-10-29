@@ -100,8 +100,7 @@ fun LikedPlaylistSheet(art: String?, onDismiss: () -> Unit) {
             )
             id == null -> Column(Modifier.padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
-                    tr(R.string.makes_a_youtube_music_playlist_of) +
-                        tr(R.string.prism_keeps_it_up_to_date),
+                    tr(R.string.makes_a_youtube_music_playlist_of_all),
                     style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant,
                 )
                 com.prism.music.ui.components.PrismTextField(name, { name = it.take(150) }, label = { Text(tr(R.string.name)) }, singleLine = true, modifier = Modifier.fillMaxWidth())

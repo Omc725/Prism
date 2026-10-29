@@ -1,5 +1,7 @@
 package com.prism.music.data
 
+import com.prism.music.R
+import com.prism.music.tr
 import com.prism.music.AppContainer
 import com.prism.music.data.db.toEntity
 import com.prism.music.data.model.AlbumItem
@@ -178,7 +180,7 @@ class LibraryRepository(private val c: AppContainer) {
             if (song.isLocal) return@launch
             if (liked && c.settings.current.downloadLikes) c.downloads.download(song)
             if (c.settings.current.isLoggedIn) {
-                runCatching { c.ytm.like(song.id, liked) }.onFailure { lastError.value = "Couldn't sync like: ${it.friendlyMessage()}" }
+                runCatching { c.ytm.like(song.id, liked) }.onFailure { lastError.value = tr(R.string.couldn_t_sync_like, it.friendlyMessage()) }
             }
         }
     }
@@ -375,7 +377,7 @@ class LibraryRepository(private val c: AppContainer) {
             artists.value = listOf(ArtistItem(artist.id, artist.name, "Artist", artist.thumbnail)) + artists.value
         }
         if (c.settings.current.isLoggedIn && channelId != null) c.scope.launch(Dispatchers.IO) {
-            runCatching { c.ytm.subscribe(channelId, on) }.onFailure { lastError.value = "Couldn't update ${artist.name} on YouTube Music: ${it.friendlyMessage()}" }
+            runCatching { c.ytm.subscribe(channelId, on) }.onFailure { lastError.value = tr(R.string.couldn_t_update_on_youtube_music, artist.name, it.friendlyMessage()) }
         }
     }
 

@@ -146,7 +146,7 @@ fun HeadphoneCorrection() {
  * search with. Generic names ("Wired headphones") start it empty.
  */
 internal fun modelOf(deviceName: String): String {
-    if (deviceName == "Wired headphones" || deviceName == "Headphones") return ""
+    if (deviceName == tr(R.string.wired_headphones) || deviceName == tr(R.string.headphones)) return ""
     return deviceName.replace(Regex("""^.{1,30}?['’]s\s+"""), "").replace(Regex("""\s*\(.*\)\s*$"""), "").trim()
 }
 

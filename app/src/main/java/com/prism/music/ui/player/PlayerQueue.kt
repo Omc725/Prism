@@ -2,6 +2,7 @@ package com.prism.music.ui.player
 
 import com.prism.music.R
 import com.prism.music.tr
+import com.prism.music.trp
 import androidx.compose.foundation.border
 import com.prism.music.ui.theme.PrismIcons
 import androidx.compose.foundation.background
@@ -170,7 +171,7 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
         if (selecting) {
             val n = selected.orEmpty().size
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(if (n == 1) tr(R.string.t_1_song_picked) else tr(R.string.songs_picked, n), style = MaterialTheme.typography.titleLarge, color = Color.White, modifier = Modifier.weight(1f))
+                Text(trp(R.plurals.n_songs_picked, n), style = MaterialTheme.typography.titleLarge, color = Color.White, modifier = Modifier.weight(1f))
                 QueueChip(tr(R.string.done), selected = true) { selected = null }
             }
             Spacer(Modifier.height(10.dp))

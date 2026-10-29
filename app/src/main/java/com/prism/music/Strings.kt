@@ -5,7 +5,7 @@ import androidx.annotation.StringRes
 
 /**
  * Prism's text in the listener's language (1.7.9). Every word on screen is in res/values/strings.xml (translated in
- * values-xx/ through Weblate) and read with [tr]: in a screen, a menu, a notification or a setting's label alike. Prism
+ * values-xx/, see [AppLanguage]) and read with [tr]: in a screen, a menu, a notification or a setting's label alike. Prism
  * restarts when its language changes, so text read once (a menu's labels) is never left in the old one.
  */
 object Strings {
@@ -16,6 +16,27 @@ object Strings {
 
     internal fun get(id: Int, args: Array<out Any?>): String =
         android()?.let { r -> runCatching { r.getString(id, *args) }.getOrNull() } ?: english(id).format(*args)
+
+    internal fun plural(id: Int, n: Int, args: Array<out Any?>): String {
+        val with = if (args.isEmpty()) arrayOf<Any?>(n) else args
+        return android()?.let { r -> runCatching { r.getQuantityString(id, n, *with) }.getOrNull() }
+            ?: englishPlural(id, n).format(*with)
+    }
+
+    /** The plain JVM's English plurals ([english]): "one" for 1, "other" for the rest, as English has it. */
+    private fun englishPlural(id: Int, n: Int): String {
+        val name = runCatching { Class.forName("com.prism.music.R\$plurals").fields.first { it.getInt(null) == id }.name }.getOrNull()
+        val forms = name?.let { englishPlurals[it] } ?: return "#$id"
+        return (if (n == 1) forms["one"] else null) ?: forms["other"] ?: forms.values.first()
+    }
+
+    private val englishPlurals: Map<String, Map<String, String>> by lazy {
+        val xml = stringsFile()?.readText() ?: return@lazy emptyMap<String, Map<String, String>>()
+        Regex("<plurals name=\"([^\"]+)\">(.*?)</plurals>", RegexOption.DOT_MATCHES_ALL).findAll(xml).associate { p ->
+            p.groupValues[1] to Regex("<item quantity=\"(\\w+)\">(.*?)</item>", RegexOption.DOT_MATCHES_ALL).findAll(p.groupValues[2])
+                .associate { it.groupValues[1] to unescape(it.groupValues[2]) }
+        }
+    }
 
     /** Prism's resources, or (tests on a plain Application) the process's app's, as Android itself keeps it. */
     private fun android(): Resources? = resources ?: runCatching {
@@ -33,14 +54,15 @@ object Strings {
 
     private val plainJvm = java.util.concurrent.ConcurrentHashMap<Int, String>()
 
+    private fun stringsFile() = listOf("src/main/res/values/strings.xml", "app/src/main/res/values/strings.xml").map { java.io.File(it) }.firstOrNull { it.isFile }
+
+    private fun unescape(s: String) = s.replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&")
+        .replace("\\'", "'").replace("\\\"", "\"").replace("\\n", "\n").replace("\\t", "\t").replace("\\@", "@").replace("\\?", "?")
+        .replace("\\\\", "\\")
+
     private val englishXml: Map<String, String> by lazy {
-        val file = listOf("src/main/res/values/strings.xml", "app/src/main/res/values/strings.xml").map { java.io.File(it) }.firstOrNull { it.isFile }
-            ?: return@lazy emptyMap<String, String>()
-        Regex("<string name=\"([^\"]+)\"[^>]*>(.*?)</string>", RegexOption.DOT_MATCHES_ALL).findAll(file.readText()).associate { m ->
-            m.groupValues[1] to m.groupValues[2].replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&")
-                .replace("\\'", "'").replace("\\\"", "\"").replace("\\n", "\n").replace("\\t", "\t").replace("\\@", "@").replace("\\?", "?")
-                .replace("\\\\", "\\")
-        }
+        val xml = stringsFile()?.readText() ?: return@lazy emptyMap<String, String>()
+        Regex("<string name=\"([^\"]+)\"[^>]*>(.*?)</string>", RegexOption.DOT_MATCHES_ALL).findAll(xml).associate { m -> m.groupValues[1] to unescape(m.groupValues[2]) }
     }
 }
 
@@ -49,3 +71,9 @@ fun tr(@StringRes id: Int): String = Strings.get(id)
 
 /** [id]'s text with [args] in its places (%1$s, %2$s…). */
 fun tr(@StringRes id: Int, vararg args: Any?): String = Strings.get(id, args)
+
+/**
+ * [id]'s form for [n] in the listener's language ("1 song", "5 songs"; Polish and Arabic have more forms than
+ * English), with [args] in its places, or [n] alone when there are none.
+ */
+fun trp(@androidx.annotation.PluralsRes id: Int, n: Int, vararg args: Any?): String = Strings.plural(id, n, args)

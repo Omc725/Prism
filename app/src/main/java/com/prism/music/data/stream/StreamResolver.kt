@@ -1,5 +1,7 @@
 package com.prism.music.data.stream
 
+import com.prism.music.R
+import com.prism.music.tr
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Uri
@@ -423,7 +425,7 @@ class StreamResolver(
             return try {
                 running.get()
             } catch (e: ExecutionException) {
-                throw (e.cause as? StreamException) ?: StreamException(e.cause?.message ?: "Couldn't load this track", e.cause)
+                throw (e.cause as? StreamException) ?: StreamException(e.cause?.message ?: tr(R.string.couldn_t_load_this_track), e.cause)
             }
         }
         try {
@@ -485,7 +487,7 @@ class StreamResolver(
         }
         if (videoId !in directRefused) directFormats(videoId, signedIn)?.let { return it }
         return try {
-            anonymousFormats(videoId).also { if (it.audio.isEmpty() && it.hlsUrl == null) throw StreamException("No playable audio stream was found") }
+            anonymousFormats(videoId).also { if (it.audio.isEmpty() && it.hlsUrl == null) throw StreamException(tr(R.string.no_playable_audio_stream_was_found)) }
         } catch (e: Exception) {
             val restricted = e is ContentNotAvailableException
             val blocked = e is SignInConfirmNotBotException || e is ReCaptchaException
@@ -493,7 +495,7 @@ class StreamResolver(
                 newPipeBlockedUntil = System.currentTimeMillis() + BLOCK_BACKOFF_MS
                 Log.w("StreamResolver", "YouTube is blocking anonymous web playback here; using other clients for a while: $e")
             }
-            val why = if (blocked) BLOCKED else e.message ?: "Couldn't load this track"
+            val why = if (blocked) BLOCKED else e.message ?: tr(R.string.couldn_t_load_this_track)
             when {
                 // Anything YouTube won't play (or NewPipe can't get) anonymously is asked for as the user.
                 signedIn -> try {
@@ -502,8 +504,8 @@ class StreamResolver(
                     Log.w("StreamResolver", "Signed-in playback of $videoId failed too: ${signed.message}")
                     throw if (restricted) signed else StreamException(why, e)
                 }
-                e is AgeRestrictedContentException -> throw StreamException("Sign in to play age-restricted songs", e)
-                e is YoutubeMusicPremiumContentException -> throw StreamException("This song needs YouTube Music Premium: sign in with a Premium account to play it", e)
+                e is AgeRestrictedContentException -> throw StreamException(tr(R.string.sign_in_to_play_age_restricted), e)
+                e is YoutubeMusicPremiumContentException -> throw StreamException(tr(R.string.this_song_needs_youtube_music_premium), e)
                 else -> throw StreamException(why, e)
             }
         }
@@ -609,7 +611,7 @@ class StreamResolver(
             noteClient(client, "OK but no audio links (${linkless(res)})")
         }
         liveWithoutHls?.let { return it }
-        throw StreamException(reason ?: "Couldn't load this track")
+        throw StreamException(reason ?: tr(R.string.couldn_t_load_this_track))
     }
 
     /**
@@ -666,8 +668,7 @@ class StreamResolver(
         /** YouTube Music Premium's 256 kbps audio: AAC (141) and Opus (774). */
         val PREMIUM_ITAGS = setOf(141, 774)
         private const val BLOCK_BACKOFF_MS = 30 * 60_000L
-        const val BLOCKED = "YouTube is limiting playback on this network right now. Try again in a while, switch networks " +
-            "(or turn off a VPN), or sign in."
+        val BLOCKED: String get() = com.prism.music.tr(com.prism.music.R.string.youtube_is_limiting_playback)
 
         /**
          * A stream's real average bitrate, from its size and length. YouTube's own figure is the format's nominal one
@@ -736,9 +737,9 @@ class StreamResolver(
         val anon = try {
             anonymousFormats(videoId)
         } catch (e: Exception) {
-            throw StreamException("This live stream can't be played", e)
+            throw StreamException(tr(R.string.this_live_stream_can_t_be), e)
         }
-        val url = anon.hlsUrl ?: throw StreamException("This live stream can't be played")
+        val url = anon.hlsUrl ?: throw StreamException(tr(R.string.this_live_stream_can_t_be))
         cache[videoId] = Formats(f.audio, f.videoOnly, f.muxed, f.durationSec, minOf(f.expiresAtMs, anon.expiresAtMs), live = true, hlsUrl = url)
         return url
     }
@@ -760,11 +761,11 @@ class StreamResolver(
             val url = q["url"]
             if (url == null || sig == null) {
                 Log.w("StreamResolver", "signatureCipher has keys ${q.keys}")
-                throw StreamException("Couldn't read this track's stream")
+                throw StreamException(tr(R.string.couldn_t_read_this_track_s))
             }
             url
         }
-        val url = base.toHttpUrlOrNull() ?: throw StreamException("Couldn't read this track's stream")
+        val url = base.toHttpUrlOrNull() ?: throw StreamException(tr(R.string.couldn_t_read_this_track_s))
         val n = url.queryParameter("n")
         if (sig == null && n == null) return base
         val solved = try {
@@ -772,10 +773,10 @@ class StreamResolver(
         } catch (e: Exception) {
             Log.w("StreamResolver", "Couldn't solve the stream URL: $e")
             if (sig == null) return base
-            throw e as? StreamException ?: StreamException("Couldn't unlock this track's stream", e)
+            throw e as? StreamException ?: StreamException(tr(R.string.couldn_t_unlock_this_track_s), e)
         }
         return url.newBuilder().apply {
-            if (sig != null) setQueryParameter(param, solved.first ?: throw StreamException("Couldn't unlock this track's stream"))
+            if (sig != null) setQueryParameter(param, solved.first ?: throw StreamException(tr(R.string.couldn_t_unlock_this_track_s)))
             if (n != null && solved.second != null) setQueryParameter("n", solved.second)
         }.build().toString()
     }
@@ -787,7 +788,7 @@ class StreamResolver(
         val f = formats(videoId)
         val usable = f.audio.filter { it.original }.ifEmpty { f.audio }
         val pick = usable.filter { it.mime.contains("mp4") }.minByOrNull { it.kbps }
-            ?: usable.minByOrNull { it.kbps } ?: throw StreamException("No audio stream")
+            ?: usable.minByOrNull { it.kbps } ?: throw StreamException(tr(R.string.no_audio_stream))
         return AnalysisStream(pick.url, pick.contentLength, f.durationSec)
     }
 
@@ -806,7 +807,7 @@ class StreamResolver(
         // A live stream's "file" is only its newest few seconds: the player has to take it as HLS instead.
         if (f.live) throw LiveStreamException(videoId)
         val audio = pickAudio(f.audio, currentQuality())
-            ?: throw StreamException("No playable audio stream was found")
+            ?: throw StreamException(tr(R.string.no_playable_audio_stream_was_found))
         // The account's link couldn't be unlocked (GitHub #179, 1.7.7.1: the player JS sandbox ran out of memory on a
         // OnePlus) for a song that went through the account only for Premium quality: it plays as everyone gets it,
         // at once, rather than failing and falling back to its music video's sound.

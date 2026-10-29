@@ -1,5 +1,7 @@
 package com.prism.music.connect
 
+import com.prism.music.R
+import com.prism.music.tr
 import android.app.Application
 import android.content.Context
 import android.net.nsd.NsdManager
@@ -84,7 +86,7 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
 
     private fun pairings(): List<Pair<String, String>> = prefs.all.keys.filter { it.startsWith("s:") }.map { k ->
         val id = k.removePrefix("s:")
-        id to (prefs.getString("n:$id", null) ?: "A Prism device")
+        id to (prefs.getString("n:$id", null) ?: tr(R.string.a_prism_device))
     }.sortedBy { it.second.lowercase() }
 
     override fun secretFor(device: String): String? = prefs.getString("s:$device", null)
@@ -111,8 +113,8 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
             runCatching { androidx.core.app.NotificationManagerCompat.from(app).cancel(Notifications.CONNECT, NOTIFY_ID) }
         } else {
             Notifications.post(
-                app, Notifications.CONNECT, NOTIFY_ID, "Pairing code: ${code.take(3)} ${code.drop(3)}",
-                "$from wants to play music on this device. Type this code on $from to pair them.", "prism://connect",
+                app, Notifications.CONNECT, NOTIFY_ID, tr(R.string.pairing_code_2, code.take(3), code.drop(3)),
+                tr(R.string.wants_to_play_music_on_this, from, from), "prism://connect",
             ) { it.setPriority(androidx.core.app.NotificationCompat.PRIORITY_HIGH).setTimeoutAfter(HandoffPeer.PAIR_WAIT_MS.toLong()) }
         }
     }
@@ -153,17 +155,17 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
         val canPlay = runBlocking(Dispatchers.Main) { onScreen() || c.player.isPlaying.value }
         if (s.playing && !canPlay) {
             Log.i(TAG, "turned down a move from $from: not on screen or playing here")
-            return "Open Prism on $name first: Android only lets it start playing there while it's open (or already playing)"
+            return tr(R.string.open_prism_on_first_android_only, name)
         }
         runBlocking(Dispatchers.Main) {
-            c.player.takeOver(s.songs, s.index, s.positionMs, s.playing, s.order.takeIf { s.shuffle }, s.repeat, s.title.ifBlank { "From $from" })
+            c.player.takeOver(s.songs, s.index, s.positionMs, s.playing, s.order.takeIf { s.shuffle }, s.repeat, s.title.ifBlank { tr(R.string.from, from) })
         }
         if (s.playing) {
             // Started for real (the speaker can still be refused): only then does the other device stop.
             val started = runBlocking { withTimeoutOrNull(START_WAIT_MS) { while (!c.player.isPlaying.value) delay(100); true } } == true
-            if (!started) return "$name couldn't start playing. Open Prism there and try again"
+            if (!started) return tr(R.string.couldn_t_start_playing_open_prism, name)
         }
-        _events.tryEmit("Playing here from $from")
+        _events.tryEmit(tr(R.string.playing_here_from, from))
         return null
     }
 
@@ -304,10 +306,10 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
     }
 
     /** What's playing here goes to [d]. */
-    fun moveTo(d: PrismDevice) = run(d, HandoffCommand.MOVE, "Moving to ${d.name}…")
+    fun moveTo(d: PrismDevice) = run(d, HandoffCommand.MOVE, tr(R.string.moving_to, d.name))
 
     /** What's playing on [d] comes here. */
-    fun bringFrom(d: PrismDevice) = run(d, HandoffCommand.PULL, "Bringing it over from ${d.name}…")
+    fun bringFrom(d: PrismDevice) = run(d, HandoffCommand.PULL, tr(R.string.bringing_it_over_from, d.name))
 
     private fun run(d: PrismDevice, command: HandoffCommand, label: String) {
         if (_busy.value != null) return
@@ -319,10 +321,10 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
                 if (result == HandoffResult.Unpaired) result = attempt(d, command)
                 when (result) {
                     is HandoffResult.Done -> _events.tryEmit(
-                        (if (command == HandoffCommand.MOVE) "Playing on ${d.name}" else "Playing here") + (result.note?.let { " · $it" } ?: "")
+                        (if (command == HandoffCommand.MOVE) tr(R.string.playing_on, d.name) else tr(R.string.playing_here)) + (result.note?.let { " · $it" } ?: "")
                     )
                     is HandoffResult.Failed -> _events.tryEmit(result.reason)
-                    HandoffResult.Unpaired -> _events.tryEmit("${d.name} didn't accept the pairing. Try again.")
+                    HandoffResult.Unpaired -> _events.tryEmit(tr(R.string.didn_t_accept_the_pairing_try, d.name))
                     HandoffResult.Cancelled -> Unit
                 }
             } finally {
@@ -334,7 +336,7 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
 
     private fun attempt(d: PrismDevice, command: HandoffCommand): HandoffResult {
         val socket = runCatching { Socket().apply { connect(InetSocketAddress(d.host, d.port), 5_000); tcpNoDelay = true } }.getOrNull()
-            ?: return HandoffResult.Failed("Couldn't reach ${d.name}. Is Prism open there, on the same Wi-Fi?")
+            ?: return HandoffResult.Failed(tr(R.string.couldn_t_reach_is_prism_open, d.name))
         return HLink(socket).use { link ->
             runCatching {
                 peer.call(link, command) { them ->
@@ -343,7 +345,7 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
                     _asking.value = them
                     try { runBlocking { withTimeoutOrNull(HandoffPeer.PAIR_WAIT_MS.toLong() - 5_000) { wait.await() } } } finally { _asking.value = null; code = null }
                 }
-            }.getOrElse { HandoffResult.Failed("Lost the connection to ${d.name}") }
+            }.getOrElse { HandoffResult.Failed(tr(R.string.lost_the_connection_to, d.name)) }
         }
     }
 

@@ -54,6 +54,8 @@ import com.prism.music.ui.theme.PrismTheme
  * microphone is only used while this card is on screen; leaving it stops listening.
  */
 class RecognizeActivity : ComponentActivity() {
+    // Prism's language, when picked in Prism (below Android 13; AppLanguage).
+    override fun attachBaseContext(base: android.content.Context) = super.attachBaseContext(com.prism.music.AppLanguage.wrap(base))
     private val c by lazy { container }
     private val denied = mutableStateOf(false)
     private val ask = registerForActivityResult(ActivityResultContracts.RequestPermission()) { ok ->

@@ -41,7 +41,7 @@ fun SoundSettings(onOpenEq: () -> Unit) {
     if (s.spatial) SliderSetting(tr(R.string.intensity), s.spatialAmount, 0.1f..1f, { "${(it * 100).toInt()}%" }) { c.settings.setSpatialAmount(it) }
     Item(
         tr(R.string.equalizer),
-        if (s.eq.enabled) tr(R.string.on, s.eq.preset) else tr(R.string.t_10_bands_your_presets_headphone_correction),
+        if (s.eq.enabled) tr(R.string.on, com.prism.music.playback.EqPresets.label(s.eq.preset)) else tr(R.string.t_10_bands_your_presets_headphone_correction),
         onClick = onOpenEq,
     ) { Chevron() }
 }

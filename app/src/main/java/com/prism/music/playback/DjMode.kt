@@ -2,6 +2,7 @@ package com.prism.music.playback
 
 import com.prism.music.R
 import com.prism.music.tr
+import com.prism.music.trp
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -69,10 +70,10 @@ object DjStatus {
             if (p.needNetwork > 0) tr(R.string.wait_for_wi_fi, reading, p.needNetwork) to true else reading to false
         }
         p.needNetwork > 0 && p.keyed < MIN_ORDERED ->
-            tr(R.string.dj_mode_keys_are_read_on, p.needNetwork, if (p.needNetwork == 1) "song" else "songs") to true
+            trp(R.plurals.dj_keys_wait_for_wifi, p.needNetwork) to true
         p.keyed < MIN_ORDERED -> tr(R.string.dj_mode_no_clear_keys_to) to false
         p.keyed < p.all ->
-            tr(R.string.dj_mode_of_songs_in_key, p.keyed, p.all) + (if (p.needNetwork > 0) tr(R.string.the_rest_wait_for_wi_fi) else tr(R.string.the_rest_stay_put)) to (p.needNetwork > 0)
+            trp(R.plurals.dj_n_of_songs_in_key, p.all, p.keyed, p.all) + (if (p.needNetwork > 0) tr(R.string.the_rest_wait_for_wi_fi) else tr(R.string.the_rest_stay_put)) to (p.needNetwork > 0)
         else -> tr(R.string.dj_mode_in_key_order_beat) to false
     }
 

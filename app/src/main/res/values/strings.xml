@@ -200,14 +200,10 @@
     <string name="wants_to_play_music_here_to">%1$s wants to play music here. To let it, type this code on %2$s:</string>
     <string name="it_goes_away_once_they_re">It goes away once they\'re paired, or after three minutes.</string>
     <string name="on_this_phone">On this phone</string>
-    <string name="lyrics_saved_into_the_file">Lyrics saved into the file</string>
-    <string name="lyrics_saved_into_files">Lyrics saved into %1$s files</string>
     <string name="couldn_t_save_the_lyrics_into">Couldn\'t save the lyrics into the files</string>
-    <string name="lyrics_saved_into_of_files">Lyrics saved into %1$s of %2$s files</string>
     <string name="nothing_was_changed">Nothing was changed</string>
     <string name="prism_needs_permission_to_change_your">Prism needs permission to change your music files</string>
     <string name="no_flac_mp3_or_m4a_files">No FLAC, MP3 or M4A files to save lyrics into</string>
-    <string name="getting_lyrics_for_files">Getting lyrics for %1$s files…</string>
     <string name="no_lyrics_found_for_this_song">No lyrics found for this song</string>
     <string name="no_lyrics_found_for_these_songs">No lyrics found for these songs</string>
     <string name="liked_songs">Liked songs</string>
@@ -274,15 +270,12 @@
     <string name="make_my_account">Make my account</string>
     <string name="skip_for_now">Skip for now</string>
     <string name="your_youtube_music_library">Your YouTube Music library</string>
-    <string name="copy_its_playlists_saved_albums_and">Copy its playlists, saved albums and artists into Prism, so they stay on this phone even signed out. </string>
-    <string name="your_account_isn_t_changed_copy">Your account isn\'t changed; copy again any time to bring Prism\'s copies up to date.</string>
     <string name="starting">Starting…</string>
     <string name="couldn_t_reach_youtube_music_try">Couldn\'t reach YouTube Music. Try again.</string>
-    <string name="copied_playlists_albums_and_artists">Copied %1$s playlists, %2$s albums and %3$s artists</string>
-    <string name="playlists_couldn_t_be_read"> (%1$s playlists couldn\'t be read)</string>
+    <string name="copied_playlists_albums_and_artists">Copied %1$s, %2$s and %3$s</string>
     <string name="copy_again">Copy again</string>
     <string name="copy_into_prism">Copy into Prism</string>
-    <string name="last_copied">Last copied </string>
+    <string name="last_copied">Last copied %1$s</string>
     <string name="remove_prism_account">Remove Prism Account</string>
     <string name="top_songs">%1$s: Top songs</string>
     <string name="top_songs_2">Top Songs</string>
@@ -319,7 +312,6 @@
     <string name="browse">Browse</string>
     <string name="newest">Newest</string>
     <string name="oldest">Oldest</string>
-    <string name="t_1_release">1 release</string>
     <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">Player background</string>
     <string name="backgrounds">Backgrounds</string>
@@ -353,8 +345,6 @@
     <string name="choose_where">Choose where</string>
     <string name="backing_up">Backing up…</string>
     <string name="restore_this_backup">Restore this backup?</string>
-    <string name="it_holds">It holds: </string>
-    <string name="those_are_replaced_with_the_backup">. Those are replaced with the backup\'s on this phone; the rest stays as it is. Then Prism restarts.</string>
     <string name="prism_s_library_history_and_settings">Prism\'s library, history and settings on this phone are replaced with the backup\'s, then Prism restarts.</string>
     <string name="couldn_t_restore">Couldn\'t restore: %1$s</string>
     <string name="restore">Restore</string>
@@ -366,8 +356,6 @@
     <string name="replaces_what_the_backup_holds_then">Replaces what the backup holds, then restarts</string>
     <string name="couldn_t_save_it">Couldn\'t save it: %1$s</string>
     <string name="moving_to_prism">Moving to Prism %1$s</string>
-    <string name="from_prism_is_signed_with_its">From %1$s, Prism is signed with its own key instead of a shared test key, so Android stops flagging it. </string>
-    <string name="android_can_t_update_across_that">Android can\'t update across that change, so this once Prism is reinstalled. Your things come with you:</string>
     <string name="save_a_backup_downloads_is_a">Save a backup (Downloads is a good place)</string>
     <string name="save_the_new_prism">Save the new Prism</string>
     <string name="keep_prism_apk_next_to_it">Keep Prism-%1$s.apk next to it</string>
@@ -401,12 +389,7 @@
     <string name="paste_a_code">Paste a code</string>
     <string name="hide_what_you_share">Hide what you share</string>
     <string name="what_you_share">What you share</string>
-    <string name="your_blend_name">Your Blend name: %1$s\n</string>
-    <string name="genres">Genres: %1$s\n</string>
-    <string name="and_a_random_id_for_this">And a random id for this phone, so a friend\'s phone knows which Blend a new code is for. Nothing else: no history, times or account. </string>
-    <string name="artists_you_don_t_play_and">Artists you don\'t play and songs and playlists left out of your taste are left out here too.</string>
     <string name="your_blends">Your Blends</string>
-    <string name="taste_match_songs">%1$s%% taste match · %2$s songs</string>
     <string name="blend_2">Blend · %1$s</string>
     <string name="taste_match">%1$s%% taste match</string>
     <string name="share_as_a_picture">Share as a picture</string>
@@ -500,7 +483,6 @@
     <string name="radio">%1$s Radio</string>
     <string name="couldn_t_start_the_radio">Couldn\'t start the radio</string>
     <string name="delete_the_of_from_this_phone">Delete the %1$s of %2$s from this phone? You can download them again.</string>
-    <string name="removed_downloads">Removed %1$s downloads</string>
     <string name="downloading">Downloading %1$s</string>
     <string name="removed_from">Removed from %1$s</string>
     <string name="couldn_t_remove_it">Couldn\'t remove it: %1$s</string>
@@ -510,7 +492,6 @@
     <string name="couldn_t_move_it_here_open">Couldn\'t move it here. Open the playlist again and retry</string>
     <string name="couldn_t_move_it">Couldn\'t move it: %1$s</string>
     <string name="mix_2">Mix</string>
-    <string name="you_re_offline_of_songs_are">You\'re offline · %1$s of %2$s songs are on this phone and play</string>
     <string name="as_it_was_when_you_last"> · as it was when you last opened it</string>
     <string name="search_in_album">Search in album</string>
     <string name="search_in">Search in %1$s</string>
@@ -556,15 +537,12 @@
     <string name="recently_added">Recently added</string>
     <string name="newest_first">Newest first</string>
     <string name="reverse_order">Reverse order</string>
-    <string name="song_on_this_phone">%1$s song%2$s · %3$s on this phone</string>
     <string name="with_videos"> (%1$s with videos)</string>
-    <string name="music_video">%1$s music video%2$s · %3$s</string>
     <string name="downloading_3"> · %1$s downloading</string>
     <string name="lossless_from_your_phone_s_music">%1$s lossless from your phone\'s music files</string>
     <string name="lyrics_for_karaoke">Lyrics for %1$s · %2$s karaoke</string>
     <string name="getting_more"> · getting more…</string>
     <string name="downloading_4">Downloading %1$s…</string>
-    <string name="cancel_downloads_that_haven_t_finished">Cancel %1$s downloads that haven\'t finished?</string>
     <string name="failed">Failed</string>
     <string name="waiting_for_wi_fi">Waiting for Wi-Fi</string>
     <string name="queued">Queued</string>
@@ -573,8 +551,6 @@
     <string name="starting_2">Starting</string>
     <string name="waiting_for_wi_fi_2">%1$s waiting for Wi-Fi</string>
     <string name="turn_off_wi_fi_only">Turn off Wi-Fi only</string>
-    <string name="t_1_download_failed">1 download failed</string>
-    <string name="downloads_failed">%1$s downloads failed</string>
     <string name="see_which">See which</string>
     <string name="prism_also_tries_them_again_by">Prism also tries them again by itself when the phone is back online.</string>
     <string name="unknown_song">Unknown song</string>
@@ -582,11 +558,8 @@
     <string name="and_more_2">and %1$s more</string>
     <string name="remove_all">Remove all</string>
     <string name="try_all_again">Try all again</string>
-    <string name="download_again_in_premium_quality_256">Download %1$s again in Premium quality (256 kbps)? Each one is </string>
-    <string name="fetched_whole_again_until_it_s">fetched whole again; until it\'s back, it plays from the internet rather than from the phone.</string>
     <string name="delete_the_smart_downloads_added_they">Delete the %1$s smart downloads added? They may come back later if smart downloads stays on.</string>
     <string name="delete_the_saved_music_videos_the">Delete the %1$s saved music videos? The songs stay downloaded.</string>
-    <string name="delete_all_downloads_this_frees_the">Delete all %1$s downloads (%2$s)? This frees the space straight away.</string>
     <string name="your_lossless_files_stay_on_the"> Your %1$s lossless files stay on the phone; they just leave Downloads.</string>
     <string name="light">Light</string>
     <string name="progress_and_play_the_playing_song">Progress and Play, the playing song, switches</string>
@@ -610,25 +583,12 @@
     <string name="each_group_s_says_everything_it">Each group\'s ⓘ says everything it changes in the app, and each choice shows what it looks like. Tap one and the preview above changes at once. Reset colors, at the bottom, puts everything back.</string>
     <string name="spectrum">Spectrum</string>
     <string name="the_light_the_colors_prism_lights">① The light: the colors Prism lights its highlights with.</string>
-    <string name="the_progress_bar_and_play_ring">The progress bar and Play ring in the player and mini player, the song that\'s playing in every list (and its </string>
-    <string name="bars_switches_the_tab_and_chip">bars), switches, the tab and chip you\'re on, Settings\' icons, Home\'s Replay card and Continue line, the Liked </string>
-    <string name="songs_cover_the_lyrics_progress_line">songs cover, the lyrics\' progress line and the Best part tag. Home-screen widgets keep Prism\'s own colors.</string>
-    <string name="lights_all_of_these_in_in">%1$s lights all of these in %2$s (%3$s in </string>
-    <string name="mode_it_also_turns_the_frosted">%1$s mode). It also turns the frosted backgrounds and Prism\'s own colored tiles </string>
-    <string name="moods_genres_the_replay_card_grey">(moods, genres, the Replay card) grey, and greys the home-screen widgets. Covers and photos keep their color, and </string>
-    <string name="your_accent_stays_on_its_own">your accent (②) stays on its own things.</string>
     <string name="bands">Bands</string>
     <string name="smooth">Smooth</string>
     <string name="stripes_of_each_color_like_the">Stripes of each color, like the logo</string>
     <string name="each_color_blends_into_the_next">Each color blends into the next</string>
     <string name="accent_color">Accent color</string>
     <string name="the_accent_a_second_color_for">② The accent: a second color, for details.</string>
-    <string name="artist_names_and_links_on_album">Artist names and links on album and playlist pages; the star, More and New release on artist pages; ticks and </string>
-    <string name="picked_rows_in_lists_and_menus">picked rows in lists and menus; Replay\'s top three and its bars; the text cursor; the Simple pattern backgrounds; </string>
-    <string name="and_the_page_tint_when_page">and the page tint when Page background is Accent tint. Song lists and the player\'s text don\'t use it (the </string>
-    <string name="player_only_does_with_its_theme">player only does with its Theme or Your background backgrounds, in Player settings).</string>
-    <string name="wallpaper_taken_from_your_phone_s">Wallpaper: taken from your phone\'s wallpaper, as other apps do, and it changes when you change the wallpaper. </string>
-    <string name="with_page_background_on_automatic_sheets">With Page background on Automatic, sheets and plain pages take the wallpaper\'s tint too.</string>
     <string name="album_playlist_and_artist_pages_use">Album, playlist and artist pages use their picture\'s color instead (Artist &amp; album pages, below)</string>
     <string name="use_mine">Use mine</string>
     <string name="song_s_cover">Song\'s cover</string>
@@ -662,11 +622,6 @@
     <string name="songs_from_the_same_album_keep">songs from the same album keep one color.</string>
     <string name="page_background">Page background</string>
     <string name="the_background_what_prism_s_own">③ The background: what Prism\'s own screens sit on.</string>
-    <string name="the_ambient_frost_behind_home_search">The Ambient frost behind Home, Search, Library, Replay and Settings (Automatic keeps the cover\'s colors in it, </string>
-    <string name="plain_makes_it_grey_a_tint">Plain makes it grey, a tint colors it), those pages when frosted glass is off, and sheets and dialogs. </string>
-    <string name="not_the_player_nor_album_artist">Not the player, nor album, artist and playlist pages, which take their picture\'s colors.</string>
-    <string name="home_has_the_background_glass_backgrounds">Home has the %1$s background (Glass &amp; backgrounds), drawn over this color, so it only shows a </string>
-    <string name="little_there_pick_ambient_there_to">little there. Pick Ambient there to see it fully</string>
     <string name="automatic_2">Automatic</string>
     <string name="plain">Plain</string>
     <string name="accent_tint">Accent tint</string>
@@ -681,15 +636,11 @@
     <string name="pure_black_under_theme_keeps_dark">Pure black (under Theme) keeps dark pages black; the tint then shows on cards and in light mode</string>
     <string name="text_contrast">Text contrast</string>
     <string name="how_strong_grey_text_and_lines">How strong grey text and lines are against the page.</string>
-    <string name="secondary_text_artists_times_notes_dividers">Secondary text (artists, times, notes), dividers and outlines on pages, sheets and menus. Medium and High also </string>
-    <string name="firm_up_the_accent_so_it">firm up the accent so it reads more easily. The player\'s own white text over the cover stays as it is.</string>
     <string name="soft_grey_text">Soft grey text</string>
     <string name="firmer">Firmer</string>
     <string name="strongest_easiest_to_read">Strongest, easiest to read</string>
     <string name="artist_album_pages">Artist &amp; album pages</string>
     <string name="their_accent_yours_as_everywhere_else">Their accent: yours (②), as everywhere else, or a color taken from each page\'s picture.</string>
-    <string name="the_accent_on_artist_album_and">The accent on artist, album and playlist pages, and in the menus you open from a song, album or artist (long </string>
-    <string name="press_or_their_frosted_backgrounds_take">press or ⋯). Their frosted backgrounds take the picture\'s colors either way (Glass &amp; backgrounds).</string>
     <string name="an_artist_s_page_can_also">An artist\'s page can also have a color of its own: ⋯ → Page color on their page.</string>
     <string name="picture_s_color">Picture\'s color</string>
     <string name="your_accent">Your accent</string>
@@ -718,10 +669,6 @@
     <string name="speakers_tvs">Speakers &amp; TVs</string>
     <string name="play_on_a_speaker_or_tv">Play on a speaker or TV</string>
     <string name="pick_it_from_the_device_line">Pick it from the device line on the player</string>
-    <string name="tap_the_line_under_the_player">Tap the line under the player\'s controls (it says which device is playing) and pick a speaker, TV or receiver. </string>
-    <string name="it_has_to_be_on_this">It has to be on this Wi-Fi with Google Cast (Chromecast, Google TV, speakers with Cast built in) or DLNA / UPnP </string>
-    <string name="sometimes_called_media_sharing_your_queue">(sometimes called media sharing). Your queue, lyrics and controls stay on the phone, and its volume keys set the </string>
-    <string name="speaker_s_volume_the_equalizer_crossfade">speaker\'s volume. The equalizer, Crossfade, Sing and videos are the phone\'s own, so they\'re off while casting.</string>
     <string name="control_from_a_browser">Control from a browser</string>
     <string name="from_a_computer_or_tablet_on">From a computer or tablet on this Wi-Fi</string>
     <string name="play_search_and_see_the_queue">Play, search, and see the queue and lyrics. Only browsers on this Wi-Fi that type a code shown here get in, and only while Prism is open or playing. Nothing goes through the internet.</string>
@@ -782,7 +729,7 @@
     <string name="pick_a_few_artists_you_like">Pick a few artists you like</string>
     <string name="your_mixes_and_new_releases_start">Your mixes and new releases start from them</string>
     <string name="made_on_your_phone_from_what">Made on your phone from what you play</string>
-    <string name="out">Out </string>
+    <string name="out">Out %1$s</string>
     <string name="eee_mmm_d">EEE, MMM d</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
@@ -791,8 +738,6 @@
     <string name="new_albums_singles_and_eps_from">New albums, singles and EPs from artists you listen to</string>
     <string name="looking_round_your_artists">Looking round your artists…</string>
     <string name="nothing_matches_these_filters_try_a">Nothing matches these filters. Try a longer time or another type.</string>
-    <string name="nothing_new_from_your_artists_in">Nothing new from your artists in the last three months. Prism looks every few days at the artists you\'ve starred, </string>
-    <string name="saved_and_play_most_the_first">saved and play most; the first look only learns what\'s already out, so new music shows up from the next one.</string>
     <string name="this_week">This week</string>
     <string name="this_month">This month</string>
     <string name="earlier">Earlier</string>
@@ -803,7 +748,6 @@
     <string name="pick_artists_you_like">Pick artists you like</string>
     <string name="they_shape_your_daily_mixes_and">They shape your Daily Mixes and Release Radar. They\'re starred on this phone; nothing is followed on YouTube.</string>
     <string name="search_for_an_artist">Search for an artist</string>
-    <string name="done_2">Done · %1$s %2$s</string>
     <string name="exclusions">Exclusions</string>
     <string name="what_prism_leaves_out_of_your">What Prism leaves out of your recommendations</string>
     <string name="bring_back">Bring back</string>
@@ -878,21 +822,14 @@
     <string name="from_your_liked_songs">From your liked songs</string>
     <string name="import_playlist">Import playlist</string>
     <string name="from_spotify_apple_music_and_more">From Spotify, Apple Music and more</string>
-    <string name="tunemymusic_copies_your_playlists_liked_songs">TuneMyMusic copies your playlists, Liked Songs included, into your YouTube Music account. </string>
-    <string name="it_s_the_same_service_youtube">It\'s the same service YouTube Music\'s own app uses for transfers.</string>
     <string name="from_spotify">From Spotify</string>
     <string name="from_apple_music">From Apple Music</string>
     <string name="from_another_service_or_a_file">From another service or a file</string>
     <string name="how_it_works">How it works</string>
-    <string name="t_1_sign_in_to_spotify_or">1. Sign in to Spotify or Apple Music on TuneMyMusic and pick the playlists.\n</string>
-    <string name="t_2_choose_youtube_music_as_the">2. Choose YouTube Music as the destination and sign in with the Google account you use in Prism</string>
     <string name="t_3_when_the_transfer_finishes_come">3. When the transfer finishes, come back here. Prism syncs your library and the playlists appear under Library → Playlists.</string>
     <string name="syncing">Syncing…</string>
     <string name="sync_library_now">Sync library now</string>
-    <string name="tunemymusic_is_a_separate_service_not">TuneMyMusic is a separate service, not part of Prism. It asks for access to the accounts you connect and sees the </string>
-    <string name="playlists_you_move_its_free_plan">playlists you move; its free plan has limits. Prism doesn\'t share anything with it.</string>
     <string name="folder">Folder</string>
-    <string name="t_1_playlist">1 playlist</string>
     <string name="rename_folder">Rename folder</string>
     <string name="new_folder">New folder</string>
     <string name="in_text">In \"%1$s\"</string>
@@ -916,11 +853,7 @@
     <string name="hold_and_drag_or_use_the">Hold and drag, or use the arrows</string>
     <string name="open_a_link">Open a link</string>
     <string name="rearrange">Rearrange</string>
-    <string name="folder_1_playlist">Folder · 1 playlist</string>
-    <string name="folder_playlists">Folder · %1$s playlists</string>
     <string name="search_liked_songs">Search liked songs</string>
-    <string name="t_1_album">1 album</string>
-    <string name="t_1_artist">1 artist</string>
     <string name="show_more">Show more</string>
     <string name="will_be_deleted_from_your_youtube_2">\"%1$s\" will be deleted from your YouTube Music account. If it\'s someone else\'s playlist, it\'s only removed from your library.</string>
     <string name="library_tiles">Library tiles</string>
@@ -1023,8 +956,6 @@
     <string name="liked_songs_playlist">Liked songs playlist</string>
     <string name="kept_up_to_date">Kept up to date</string>
     <string name="sign_in_to_youtube_music_to">Sign in to YouTube Music to turn Liked songs into a playlist of your own.</string>
-    <string name="makes_a_youtube_music_playlist_of">Makes a YouTube Music playlist of every song you\'ve liked, one you can share, pin or open in other apps. </string>
-    <string name="prism_keeps_it_up_to_date">Prism keeps it up to date: songs you like are added, songs you unlike are taken out.</string>
     <string name="made_with">Made \"%1$s\" with %2$s</string>
     <string name="couldn_t_make_the_playlist_2">Couldn\'t make the playlist: %1$s</string>
     <string name="making_it">Making it…</string>
@@ -1071,8 +1002,6 @@
     <string name="document_documentelement_innerhtml_length">document.documentElement.innerHTML.length</string>
     <string name="the_page_came_back_empty">The page came back empty</string>
     <string name="couldn_t_reach_discord">Couldn\'t reach Discord</string>
-    <string name="check_your_connection_some_networks_such">Check your connection. Some networks, such as work and school ones, block Discord: try another </string>
-    <string name="wi_fi_or_mobile_data">Wi-Fi or mobile data.</string>
     <string name="your_music_refracted">Your music, refracted.</string>
     <string name="make_a_prism_account">Make a Prism Account</string>
     <string name="kept_on_this_phone_no_email">Kept on this phone. No email, no password, no server.</string>
@@ -1324,7 +1253,6 @@
     <string name="the_30_days_before">the 30 days before</string>
     <string name="this_time_yesterday">this time yesterday</string>
     <string name="the_same_time_last_week">the same time last week</string>
-    <string name="the_days_before">the %1$s days before</string>
     <string name="rewind_2">Rewind · </string>
     <string name="replay_4">Replay · </string>
     <string name="rewind_3">Rewind</string>
@@ -1350,17 +1278,13 @@
     <string name="of_everything_you_played_was_them">%1$s%% of everything you played was them.</string>
     <string name="your_top_artists">YOUR TOP ARTISTS</string>
     <string name="your_1_song_2">YOUR #1 SONG</string>
-    <string name="you_played_it_for">You played it %1$s %2$s, for %3$s.</string>
     <string name="your_top_songs">YOUR TOP SONGS</string>
     <string name="when_you_listen">WHEN YOU LISTEN</string>
     <string name="prime_time">PRIME TIME</string>
     <string name="favorite_day">Favorite day</string>
     <string name="longest_streak">Longest streak</string>
-    <string name="days_in_a_row">%1$s days in a row</string>
     <string name="biggest_day">Biggest day</string>
     <string name="new_to_you">NEW TO YOU</string>
-    <string name="new_artist">NEW ARTIST</string>
-    <string name="new_artists">NEW ARTISTS</string>
     <string name="found_their_way_into_your_rotation">found their way into your rotation.</string>
     <string name="your_favorite_find_with">Your favorite find: %1$s, with %2$s.</string>
     <string name="your_listening_personality">YOUR LISTENING PERSONALITY</string>
@@ -1368,7 +1292,7 @@
     <string name="a_bit_of_everything">A bit of everything</string>
     <string name="on_repeat">On repeat: %1$s</string>
     <string name="your_top_album">YOUR TOP ALBUM</string>
-    <string name="of_its_songs_plays">%1$s of its songs, %2$s plays, %3$s.</string>
+    <string name="of_its_songs_plays">%1$s, %2$s, %3$s.</string>
     <string name="your_biggest_month">YOUR BIGGEST MONTH</string>
     <string name="that_month">%1$s that month.</string>
     <string name="where_it_started">WHERE IT STARTED</string>
@@ -1379,8 +1303,6 @@
     <string name="songs_in_dj_sets">Songs in DJ sets</string>
     <string name="smart_shuffle_finds_played">Smart Shuffle finds played</string>
     <string name="songs_recognized">Songs recognized</string>
-    <string name="blend_made">Blend made</string>
-    <string name="blends_made">Blends made</string>
     <string name="release_radar_finds">Release Radar finds</string>
     <string name="your_year_in_prism">YOUR YEAR IN PRISM</string>
     <string name="more_than_listening">MORE THAN\nLISTENING</string>
@@ -1959,7 +1881,6 @@
     <string name="devices_connections">Devices &amp; connections</string>
     <string name="backup_about">Backup &amp; about</string>
     <string name="looks_colors_fonts_the_player_and">Looks, colors, fonts, the player and lyrics, tabs, Home</string>
-    <string name="mini_player_2"> mini player</string>
     <string name="lossless">Lossless</string>
     <string name="normalized">Normalized</string>
     <string name="translated">Translated</string>
@@ -1997,8 +1918,6 @@
     <string name="gpl_3_0_or_later_and">GPL-3.0-or-later, and what it\'s built with</string>
     <string name="design_gallery">Design gallery</string>
     <string name="every_component_of_the_redesign_in">Every component of the redesign, in each state</string>
-    <string name="blur_and_frosted_glass_the_frost">Blur and frosted glass, the frost behind pages, moving and illustrated backgrounds, animated covers, the visualizer, </string>
-    <string name="a_drifting_player_background_focus_blur">a drifting player background, focus blur and glow in the lyrics, the picture at the top of Home, and animations</string>
     <string name="on_prism_is_drawn_lightly">On: Prism is drawn lightly</string>
     <string name="for_slower_phones_lighter_fewer_effects">For slower phones: lighter, fewer effects</string>
     <string name="pauses_every_feature_still_works_and">Pauses: %1$s. Every feature still works, and your own choices come back as they were when you turn it off.</string>
@@ -2023,13 +1942,13 @@
     <string name="couldn_t_reach_github_try_again">Couldn\'t reach GitHub · try again in a moment</string>
     <string name="sign_out_of_youtube_music">Sign out of YouTube Music?</string>
     <string name="keep_a_copy_of_its_playlists">Keep a copy of its playlists, saved albums and artists in your Prism Account first? Liked songs, downloads and Replay stay either way.</string>
-    <string name="signed_out_playlists_and_albums_kept">Signed out. %1$s playlists and %2$s albums kept in Prism</string>
+    <string name="signed_out_playlists_and_albums_kept">Signed out. %1$s and %2$s kept in Prism</string>
     <string name="signed_out">Signed out</string>
     <string name="keep_a_copy">Keep a copy</string>
     <string name="just_sign_out">Just sign out</string>
     <string name="prism_account_on_this_phone">Prism Account · on this phone</string>
     <string name="your_name_and_picture_kept_on">Your name and picture, kept on this phone. Nothing you have changes</string>
-    <string name="youtube_music">YouTube Music · </string>
+    <string name="youtube_music">YouTube Music · %1$s</string>
     <string name="signed_in">signed in</string>
     <string name="signed_in_2">Signed in</string>
     <string name="optional_your_library_history_and_recommendation">Optional: your library, history and recommendations</string>
@@ -2134,14 +2053,10 @@
     <string name="a_tap_still_changes_songs">A tap still changes songs</string>
     <string name="a_light_tap_on_buttons_and">A light tap on buttons and swipes</string>
     <string name="on_the_player_s_lower_half">On the player\'s lower half; down closes it again</string>
-    <string name="swipe_up_on_the_lower_half">Swipe up on the lower half of the player: from its right side for the queue, from its left side for the lyrics. </string>
-    <string name="swipe_down_on_the_lower_half">Swipe down on the lower half of the queue or the lyrics to close them. Easier one-handed than reaching for the top.</string>
     <string name="prism_stays_upright_when_the_phone">Prism stays upright when the phone turns</string>
     <string name="on_a_phone_prism_no_longer">On a phone, Prism no longer turns sideways. Tablets keep their own layouts, and a video in full screen still turns.</string>
     <string name="when_a_playing_music_video_floats">When a playing music video floats in a small window over other apps.</string>
     <string name="ready_to_type_when_search_opens">Ready to type when Search opens</string>
-    <string name="same_as_home_2">Same as Home (</string>
-    <string name="darkened">), darkened</string>
     <string name="darkened_2">, darkened</string>
     <string name="subtle">Subtle</string>
     <string name="balanced">Balanced</string>
@@ -2271,7 +2186,6 @@
     <string name="songs_you_ll_likely_play_ready">Songs you\'ll likely play, ready offline</string>
     <string name="one_space_for_music_on_your">One space for music on your phone: songs you stream stay, so replays start at once and use no data, and the songs you\'re most likely to play next are downloaded ahead, a little at a time. When it\'s full, the songs you\'re least likely to come back to make room. Learned on your phone from what you play, finish, skip and like. Off, it only keeps songs you\'ve played.</string>
     <string name="space_to_use_2">Space to use: %1$s</string>
-    <string name="about_songs_used_1f_gb_free">About %1$s songs · %2$s used · %%.1f GB free on the phone</string>
     <string name="it_stops_when_storage_runs_low"> (it stops when storage runs low)</string>
     <string name="your_own_downloads_stay">Your own downloads stay</string>
     <string name="removes_the_songs_it_downloaded_ahead">Removes the songs it downloaded ahead and the ones kept from streaming.</string>
@@ -2303,8 +2217,6 @@
     <string name="top_right_of_home">Top right of Home</string>
     <string name="at_the_end_of_home">At the end of Home</string>
     <string name="how_replay_looks_on_home_from">How Replay looks on Home, from the quietest to the most colorful. %1$s: %2$s</string>
-    <string name="sends_what_you_listen_to_scrobbles">Sends what you listen to (scrobbles) to your own Last.fm account: a song counts once you\'ve heard half of it or four </string>
-    <string name="minutes_you_connect_on_last_fm">minutes. You connect on Last.fm\'s own page, so Prism never sees your password. Podcast episodes aren\'t sent.</string>
     <string name="this_copy_of_prism_was_built">This copy of Prism was built without Last.fm.</string>
     <string name="opens_last_fm_to_let_prism">Opens Last.fm to let Prism scrobble</string>
     <string name="connected_as">Connected as %1$s</string>
@@ -2421,8 +2333,6 @@
     <string name="repeat_all">Repeat all</string>
     <string name="repeat_one">Repeat one</string>
     <string name="repeat_off">Repeat off</string>
-    <string name="ahead_seconds">Ahead %1$s seconds</string>
-    <string name="back_seconds">Back %1$s seconds</string>
     <string name="back_to_the_song">Back to the song</string>
     <string name="music_video_3">Music video</string>
     <string name="no_music_video_for_this_song">No music video for this song</string>
@@ -2486,8 +2396,6 @@
     <string name="pick">✦ Pick</string>
     <string name="saved_to">Saved %1$s to %2$s</string>
     <string name="couldn_t_save_the_queue">Couldn\'t save the queue</string>
-    <string name="t_1_song_picked">1 song picked</string>
-    <string name="songs_picked">%1$s songs picked</string>
     <string name="move_up_next">Move up next</string>
     <string name="move_to_the_end">Move to the end</string>
     <string name="queue">Queue</string>
@@ -2590,7 +2498,6 @@
     <string name="skip_tour">Skip tour</string>
     <string name="back">Back</string>
     <string name="what_s_new_in_prism">What\'s new in Prism %1$s</string>
-    <string name="to_know_since_you_last_looked">%1$s %2$s to know since you last looked, in about a minute.</string>
     <string name="welcome_to_prism">Welcome to Prism</string>
     <string name="your_music_refracted_here_s_a">Your music, refracted. Here\'s a minute\'s tour of what it can do: swipe, or tap Start.</string>
     <string name="welcome_to_the_new_prism">Welcome to the new Prism</string>
@@ -3009,9 +2916,7 @@
     <string name="mix_3">mix:%1$s|%2$s|%3$s</string>
     <string name="dj_mode_reading_keys_and_tempos">DJ mode: reading keys and tempos… %1$s of %2$s</string>
     <string name="wait_for_wi_fi">%1$s, %2$s wait for Wi-Fi</string>
-    <string name="dj_mode_keys_are_read_on">DJ mode: keys are read on Wi-Fi (%1$s %2$s waiting)</string>
     <string name="dj_mode_no_clear_keys_to">DJ mode: no clear keys to order these by</string>
-    <string name="dj_mode_of_songs_in_key">DJ mode: %1$s of %2$s songs in key order</string>
     <string name="the_rest_wait_for_wi_fi">, the rest wait for Wi-Fi</string>
     <string name="the_rest_stay_put">, the rest stay put</string>
     <string name="dj_mode_in_key_order_beat">DJ mode: in key order, beat-matched</string>
@@ -3043,25 +2948,15 @@
     <string name="couldn_t_get_this_song_ready">Couldn\'t get this song ready</string>
     <string name="isn_t_available_where_you_are">isn\'t available where you are</string>
     <string name="wouldn_t_play">wouldn\'t play</string>
-    <string name="liked_2">%1$s liked %2$s</string>
-    <string name="saved_3">%1$s saved %2$s</string>
-    <string name="starred">%1$s starred %2$s</string>
     <string name="min">%1$s min</string>
-    <string name="releases">%1$s releases</string>
-    <string name="artists_2">%1$s artists: %2$s\n</string>
-    <string name="songs_2">%1$s songs: %2$s\n</string>
     <string name="downloaded_2">%1$s downloaded</string>
     <string name="pages_2">%1$s pages: </string>
-    <string name="playlists_2">%1$s playlists</string>
-    <string name="albums_2">%1$s albums</string>
-    <string name="artists_3">%1$s artists</string>
     <string name="offline">%1$s offline</string>
     <string name="copy_2">%1$s copy</string>
     <string name="hr">%1$s hr</string>
     <string name="sec">%1$s sec</string>
     <string name="of">of %1$s</string>
     <string name="listened_2">%1$s listened</string>
-    <string name="tabs_2">%1$s tabs</string>
     <string name="first">%1$s first</string>
     <string name="light_2">%1$s light</string>
     <string name="on_3"> on %1$s %2$s</string>
@@ -3382,11 +3277,11 @@
     <string name="changed">Changed</string>
     <string name="their_own">Their own</string>
     <string name="colors_2">%1$s colors</string>
-    <string name="changes_your">Changes your</string>
+    <string name="changes_your">Changes your %1$s</string>
     <string name="and_more_4">%1$s and %2$s more</string>
     <string name="your_own_settings_back">Your own settings back</string>
     <string name="updated_2">Updated %1$s</string>
-    <string name="you_ve_changed_its">You\'ve changed its</string>
+    <string name="you_ve_changed_its">You\'ve changed its %1$s</string>
     <string name="look_2">Look → %1$s</string>
     <string name="your_own_settings_from_before_day">Your own settings from before Day and night switched to %1$s</string>
     <string name="your_own_settings_from_before_you">Your own settings from before you picked %1$s</string>
@@ -3509,7 +3404,7 @@
     <string name="deezer_answered_http">Deezer answered HTTP %1$s</string>
     <string name="your_mix">Your %1$s mix</string>
     <string name="mix_4">%1$s mix</string>
-    <string name="with_2">With </string>
+    <string name="with_2">With %1$s</string>
     <string name="a_mix_of_songs_already_on">A mix of songs already on your phone</string>
     <string name="monday">Monday</string>
     <string name="tuesday">Tuesday</string>
@@ -3523,7 +3418,6 @@
     <string name="the_loyalist">The Loyalist</string>
     <string name="you_know_what_you_love_your">You know what you love. Your top five artists made up %1$s%% of everything you played.</string>
     <string name="the_explorer">The Explorer</string>
-    <string name="always_on_the_hunt_of_the">Always on the hunt. %1$s of the %2$s artists you played were new to you.</string>
     <string name="the_replayer">The Replayer</string>
     <string name="when_a_song_hits_you_run">When a song hits, you run it back. %1$s</string>
     <string name="the_night_owl">The Night Owl</string>
@@ -3531,7 +3425,6 @@
     <string name="the_early_riser">The Early Riser</string>
     <string name="you_start_the_day_with_a">You start the day with a soundtrack: %1$s%% of your listening happened before 9 AM.</string>
     <string name="the_marathoner">The Marathoner</string>
-    <string name="on_the_days_you_listened_you">On the days you listened, you averaged %1$s minutes. That\'s commitment.</string>
     <string name="the_shapeshifter">The Shapeshifter</string>
     <string name="no_single_sound_could_hold_you">No single sound could hold you. You moved between genres all the time.</string>
     <string name="the_listener">The Listener</string>
@@ -3560,5 +3453,391 @@
     <string name="easy_to_read">Easy to read</string>
     <string name="ok_for_big_text">OK for big text</string>
     <string name="hard_to_read">Hard to read</string>
-    <string name="alone_got_plays">\"%1$s\" alone got %2$s plays.</string>
+    <!-- Counts (1.7.9): each language gives its own forms (Polish and Arabic have more than English). -->
+    <plurals name="n_songs">
+        <item quantity="one">%d song</item>
+        <item quantity="other">%d songs</item>
+    </plurals>
+    <plurals name="n_albums">
+        <item quantity="one">%d album</item>
+        <item quantity="other">%d albums</item>
+    </plurals>
+    <plurals name="n_artists">
+        <item quantity="one">%d artist</item>
+        <item quantity="other">%d artists</item>
+    </plurals>
+    <plurals name="n_playlists">
+        <item quantity="one">%d playlist</item>
+        <item quantity="other">%d playlists</item>
+    </plurals>
+    <plurals name="n_releases">
+        <item quantity="one">%d release</item>
+        <item quantity="other">%d releases</item>
+    </plurals>
+    <plurals name="n_plays">
+        <item quantity="one">%d play</item>
+        <item quantity="other">%d plays</item>
+    </plurals>
+    <plurals name="n_songs_picked">
+        <item quantity="one">%d song picked</item>
+        <item quantity="other">%d songs picked</item>
+    </plurals>
+    <plurals name="n_downloads_failed">
+        <item quantity="one">%d download failed</item>
+        <item quantity="other">%d downloads failed</item>
+    </plurals>
+    <plurals name="folder_n_playlists">
+        <item quantity="one">Folder · %d playlist</item>
+        <item quantity="other">Folder · %d playlists</item>
+    </plurals>
+    <plurals name="lyrics_saved_into_n_files">
+        <item quantity="one">Lyrics saved into the file</item>
+        <item quantity="other">Lyrics saved into %d files</item>
+    </plurals>
+    <plurals name="n_liked_songs">
+        <item quantity="one">%d liked song</item>
+        <item quantity="other">%d liked songs</item>
+    </plurals>
+    <plurals name="n_saved_albums">
+        <item quantity="one">%d saved album</item>
+        <item quantity="other">%d saved albums</item>
+    </plurals>
+    <plurals name="n_starred_artists">
+        <item quantity="one">%d starred artist</item>
+        <item quantity="other">%d starred artists</item>
+    </plurals>
+    <plurals name="dj_keys_wait_for_wifi">
+        <item quantity="one">DJ mode: keys are read on Wi-Fi (%d song waiting)</item>
+        <item quantity="other">DJ mode: keys are read on Wi-Fi (%d songs waiting)</item>
+    </plurals>
+    <plurals name="n_songs_on_this_phone">
+        <item quantity="one">%1$d song · %2$s on this phone</item>
+        <item quantity="other">%1$d songs · %2$s on this phone</item>
+    </plurals>
+    <plurals name="n_music_videos">
+        <item quantity="one">%1$d music video · %2$s</item>
+        <item quantity="other">%1$d music videos · %2$s</item>
+    </plurals>
+    <plurals name="done_n_artists">
+        <item quantity="one">Done · %d artist</item>
+        <item quantity="other">Done · %d artists</item>
+    </plurals>
+    <plurals name="played_it_n_times">
+        <item quantity="one">You played it %1$d time, for %2$s.</item>
+        <item quantity="other">You played it %1$d times, for %2$s.</item>
+    </plurals>
+    <plurals name="n_things_to_know">
+        <item quantity="one">%d thing to know since you last looked, in about a minute.</item>
+        <item quantity="other">%d things to know since you last looked, in about a minute.</item>
+    </plurals>
+    <plurals name="new_artists_title">
+        <item quantity="one">NEW ARTIST</item>
+        <item quantity="other">NEW ARTISTS</item>
+    </plurals>
+    <plurals name="blends_made">
+        <item quantity="one">Blend made</item>
+        <item quantity="other">Blends made</item>
+    </plurals>
+    <plurals name="plays_word">
+        <item quantity="one">play</item>
+        <item quantity="other">plays</item>
+    </plurals>
+    <plurals name="songs_word">
+        <item quantity="one">song</item>
+        <item quantity="other">songs</item>
+    </plurals>
+    <plurals name="artists_word">
+        <item quantity="one">artist</item>
+        <item quantity="other">artists</item>
+    </plurals>
+    <plurals name="days_word">
+        <item quantity="one">day</item>
+        <item quantity="other">days</item>
+    </plurals>
+    <plurals name="n_songs_stayed_behind">
+        <item quantity="one">%d song on this device stayed behind</item>
+        <item quantity="other">%d songs on this device stayed behind</item>
+    </plurals>
+    <plurals name="n_songs_stayed_on">
+        <item quantity="one">%1$d song stayed on %2$s</item>
+        <item quantity="other">%1$d songs stayed on %2$s</item>
+    </plurals>
+    <plurals name="lyrics_saved_n_of_files">
+        <item quantity="one">Lyrics saved into %1$s of %2$s file</item>
+        <item quantity="other">Lyrics saved into %1$s of %2$s files</item>
+    </plurals>
+    <plurals name="getting_lyrics_for_n_files">
+        <item quantity="one">Getting lyrics for %s file…</item>
+        <item quantity="other">Getting lyrics for %s files…</item>
+    </plurals>
+    <plurals name="n_playlists_couldn_t_be_read">
+        <item quantity="one"> (%s playlist couldn\'t be read)</item>
+        <item quantity="other"> (%s playlists couldn\'t be read)</item>
+    </plurals>
+    <plurals name="taste_match_n_songs">
+        <item quantity="one">%1$s%% taste match · %2$s song</item>
+        <item quantity="other">%1$s%% taste match · %2$s songs</item>
+    </plurals>
+    <plurals name="removed_n_downloads">
+        <item quantity="one">Removed %s download</item>
+        <item quantity="other">Removed %s downloads</item>
+    </plurals>
+    <plurals name="offline_n_of_songs">
+        <item quantity="one">You\'re offline · %1 of %2 song is on this phone and plays</item>
+        <item quantity="other">You\'re offline · %1 of %2 songs are on this phone and play</item>
+    </plurals>
+    <plurals name="cancel_n_downloads">
+        <item quantity="one">Cancel %s download that hasn\'t finished?</item>
+        <item quantity="other">Cancel %s downloads that haven\'t finished?</item>
+    </plurals>
+    <plurals name="delete_all_n_downloads">
+        <item quantity="one">Delete all %1$s download (%2$s)? This frees the space straight away.</item>
+        <item quantity="other">Delete all %1$s downloads (%2$s)? This frees the space straight away.</item>
+    </plurals>
+    <plurals name="the_n_days_before">
+        <item quantity="one">the day before</item>
+        <item quantity="other">the %s days before</item>
+    </plurals>
+    <plurals name="n_days_in_a_row">
+        <item quantity="one">%s day in a row</item>
+        <item quantity="other">%s days in a row</item>
+    </plurals>
+    <plurals name="n_of_its_songs">
+        <item quantity="one">%s of its songs</item>
+        <item quantity="other">%s of its songs</item>
+    </plurals>
+    <plurals name="about_n_songs_used">
+        <item quantity="one">About %1$s song · %2$s used · %%.1f GB free on the phone</item>
+        <item quantity="other">About %1$s songs · %2$s used · %%.1f GB free on the phone</item>
+    </plurals>
+    <plurals name="ahead_n_seconds">
+        <item quantity="one">Ahead %s second</item>
+        <item quantity="other">Ahead %s seconds</item>
+    </plurals>
+    <plurals name="back_n_seconds">
+        <item quantity="one">Back %s second</item>
+        <item quantity="other">Back %s seconds</item>
+    </plurals>
+    <plurals name="dj_n_of_songs_in_key">
+        <item quantity="one">DJ mode: %1$s of %2$s song in key order</item>
+        <item quantity="other">DJ mode: %1$s of %2$s songs in key order</item>
+    </plurals>
+    <plurals name="n_artists_list">
+        <item quantity="one">%1$s artist: %2$s\n</item>
+        <item quantity="other">%1$s artists: %2$s\n</item>
+    </plurals>
+    <plurals name="n_songs_list">
+        <item quantity="one">%1$s song: %2$s\n</item>
+        <item quantity="other">%1$s songs: %2$s\n</item>
+    </plurals>
+    <plurals name="explorer_n_of_artists">
+        <item quantity="one">Always on the hunt. %1$s of the %2$s artist you played was new to you.</item>
+        <item quantity="other">Always on the hunt. %1$s of the %2$s artists you played were new to you.</item>
+    </plurals>
+    <plurals name="marathon_n_minutes">
+        <item quantity="one">On the days you listened, you averaged %s minute. That\'s commitment.</item>
+        <item quantity="other">On the days you listened, you averaged %s minutes. That\'s commitment.</item>
+    </plurals>
+    <plurals name="alone_got_n_plays">
+        <item quantity="one">\"%1$s\" alone got %2$s play.</item>
+        <item quantity="other">\"%1$s\" alone got %2$s plays.</item>
+    </plurals>
+    <!-- Home's own sections, as they're called until the listener renames one (the stored title stays English). -->
+    <string name="section_replay_teaser">Replay teaser</string>
+    <string name="section_shortcut_tiles">Shortcut tiles</string>
+    <string name="section_new_from_your_artists">New from your artists</string>
+    <string name="section_speed_dial">Speed dial</string>
+    <string name="section_on_repeat">On repeat</string>
+    <string name="section_repeat_rewind">Repeat rewind</string>
+    <string name="section_forgotten_favorites">Forgotten favorites</string>
+    <!-- The equalizer's own presets (their stored names stay English). -->
+    <string name="eq_flat">Flat</string>
+    <string name="eq_bass_boost">Bass Boost</string>
+    <string name="eq_bass_reducer">Bass Reducer</string>
+    <string name="eq_treble_boost">Treble Boost</string>
+    <string name="eq_vocal">Vocal</string>
+    <string name="eq_pop">Pop</string>
+    <string name="eq_rock">Rock</string>
+    <string name="eq_hip_hop">Hip-Hop</string>
+    <string name="eq_electronic">Electronic</string>
+    <string name="eq_jazz">Jazz</string>
+    <string name="eq_classical">Classical</string>
+    <string name="eq_acoustic">Acoustic</string>
+    <string name="eq_late_night">Late Night</string>
+    <string name="eq_loudness">Loudness</string>
+    <string name="eq_custom">Custom</string>
+    <string name="audio_quality_x">%1$s quality</string>
+    <!-- A Look's areas, as listed in "Changes your theme, colors and icons". -->
+    <string name="area_theme">theme</string>
+    <string name="area_colors">colors</string>
+    <string name="area_type">type</string>
+    <string name="area_backgrounds">backgrounds</string>
+    <string name="area_layout">layout</string>
+    <string name="area_player">player</string>
+    <string name="area_lyrics">lyrics</string>
+    <string name="area_icons">icons</string>
+    <string name="area_look">look</string>
+    <!-- Lists: "a, b" for every item before the last, "a and b" for the last. -->
+    <string name="list_middle">%1$s, %2$s</string>
+    <string name="list_last">%1$s and %2$s</string>
+    <string name="couldn_t_resolve_stream">Couldn\'t resolve stream</string>
+    <string name="the_song_s_format_changed_part">The song\'s format changed part-way; starting the download over</string>
+    <string name="couldn_t_load_the_live_stream">Couldn\'t load the live stream</string>
+    <string name="casting_stopped">Casting stopped</string>
+    <string name="couldn_t_reach_make_sure_it">Couldn\'t reach %1$s. Make sure it\'s on and on the same Wi-Fi.</string>
+    <string name="sing_works_on_this_phone_not">Sing works on this phone, not while casting</string>
+    <string name="live_streams_play_on_this_phone">Live streams play on this phone; the next song goes back to %1$s</string>
+    <string name="isn_t_on_the_phone_any">%1$s isn\'t on the phone any more</string>
+    <string name="can_t_open">Can\'t open %1$s</string>
+    <string name="couldn_t_send_to">Couldn\'t send \"%1$s\" to %2$s: %3$s</string>
+    <string name="couldn_t_play_the_music_prism">%1$s couldn\'t play the music Prism sent</string>
+    <string name="is_playing_something_else_now">%1$s is playing something else now</string>
+    <string name="couldn_t_read_the_song_s">Couldn\'t read the song\'s format</string>
+    <string name="too_many_decoders_at_once">Too many decoders at once</string>
+    <string name="no_audio_in_the_song">No audio in the song</string>
+    <string name="has_no_address">%1$s has no address</string>
+    <string name="not_connected_to">Not connected to %1$s</string>
+    <string name="wouldn_t_open_its_player">%1$s wouldn\'t open its player (%2$s)</string>
+    <string name="didn_t_open_its_player">%1$s didn\'t open its player</string>
+    <string name="s_player_has_no_transport">%1$s\'s player has no transport</string>
+    <string name="has_no_song_loaded">%1$s has no song loaded</string>
+    <string name="failed_2">%1$s: %2$s failed (%3$s)</string>
+    <string name="couldn_t_load_the_song">%1$s couldn\'t load the song</string>
+    <string name="load_failed">%1$s: load failed (%2$s %3$s)</string>
+    <string name="one_song_at_a_time">%1$s: one song at a time</string>
+    <string name="a_prism_device">A Prism device</string>
+    <string name="pairing_code_2">Pairing code: %1$s %2$s</string>
+    <string name="wants_to_play_music_on_this">%1$s wants to play music on this device. Type this code on %2$s to pair them.</string>
+    <string name="open_prism_on_first_android_only">Open Prism on %1$s first: Android only lets it start playing there while it\'s open (or already playing)</string>
+    <string name="from">From %1$s</string>
+    <string name="couldn_t_start_playing_open_prism">%1$s couldn\'t start playing. Open Prism there and try again</string>
+    <string name="playing_here_from">Playing here from %1$s</string>
+    <string name="moving_to">Moving to %1$s…</string>
+    <string name="bringing_it_over_from">Bringing it over from %1$s…</string>
+    <string name="playing_here">Playing here</string>
+    <string name="didn_t_accept_the_pairing_try">%1$s didn\'t accept the pairing. Try again.</string>
+    <string name="couldn_t_reach_is_prism_open">Couldn\'t reach %1$s. Is Prism open there, on the same Wi-Fi?</string>
+    <string name="both_devices_need_the_latest_prism">Both devices need the latest Prism</string>
+    <string name="another_device">Another device</string>
+    <string name="isn_t_paired_with_any_more">%1$s isn\'t paired with %2$s any more</string>
+    <string name="too_many_pairing_tries_wait_a">Too many pairing tries. Wait a minute.</string>
+    <string name="that_code_didn_t_match_try">That code didn\'t match. Try again for a new one.</string>
+    <string name="what_s_playing_on_is_only">What\'s playing on %1$s is only on %2$s</string>
+    <string name="nothing_s_playing_on">Nothing\'s playing on %1$s</string>
+    <string name="couldn_t_reach_it">Couldn\'t reach it</string>
+    <string name="it_didn_t_answer">It didn\'t answer</string>
+    <string name="the_other_device">the other device</string>
+    <string name="nothing_s_playing_here">Nothing\'s playing here</string>
+    <string name="this_song_is_a_file_on">This song is a file on this device: it can\'t move</string>
+    <string name="didn_t_start_playing">%1$s didn\'t start playing</string>
+    <string name="isn_t_a_upnp_renderer">%1$s isn\'t a UPnP renderer</string>
+    <string name="failed_3">%1$s: %2$s failed (%3$s %4$s)</string>
+    <string name="failed_http">%1$s: %2$s failed (HTTP %3$s)</string>
+    <string name="a_friend">A friend</string>
+    <string name="a_prism_listener">A Prism listener</string>
+    <string name="your_friend">Your friend</string>
+    <string name="on_4">%1$s on %2$s</string>
+    <string name="autoeq_s_file_for_had_no">AutoEq\'s file for %1$s had no filters in it</string>
+    <string name="wired_headphones">Wired headphones</string>
+    <string name="last_fm">Last.fm: %1$s (%2$s)</string>
+    <string name="last_fm_answered_http">Last.fm answered HTTP %1$s</string>
+    <string name="couldn_t_sync_like">Couldn\'t sync like: %1$s</string>
+    <string name="couldn_t_update_on_youtube_music">Couldn\'t update %1$s on YouTube Music: %2$s</string>
+    <string name="every_song_liked_in_prism_kept">Every song liked in Prism, kept up to date.</string>
+    <string name="youtube_music_didn_t_make_the">YouTube Music didn\'t make the playlist</string>
+    <string name="couldn_t_update_the_playlist">Couldn\'t update the playlist</string>
+    <string name="google_translate_isn_t_answering_right">Google Translate isn\'t answering right now</string>
+    <string name="translate_returned_http">Translate returned HTTP %1$s</string>
+    <string name="no_romanization_in_the_answer">No romanization in the answer</string>
+    <string name="shared">Shared</string>
+    <string name="playlists_of">Playlists: %1$s of %2$s</string>
+    <string name="albums_and_artists">Albums and artists</string>
+    <string name="prism_playlist">Prism playlist · %1$s</string>
+    <string name="my_playlist">My playlist</string>
+    <string name="couldn_t_listen">Couldn\'t listen</string>
+    <string name="the_microphone_isn_t_available">The microphone isn\'t available</string>
+    <string name="found_it_2">Found it: %1$s</string>
+    <string name="shazam_answered_http">Shazam answered HTTP %1$s</string>
+    <string name="couldn_t_load_this_track">Couldn\'t load this track</string>
+    <string name="no_playable_audio_stream_was_found">No playable audio stream was found</string>
+    <string name="sign_in_to_play_age_restricted">Sign in to play age-restricted songs</string>
+    <string name="this_song_needs_youtube_music_premium">This song needs YouTube Music Premium: sign in with a Premium account to play it</string>
+    <string name="this_live_stream_can_t_be">This live stream can\'t be played</string>
+    <string name="couldn_t_read_this_track_s">Couldn\'t read this track\'s stream</string>
+    <string name="couldn_t_unlock_this_track_s">Couldn\'t unlock this track\'s stream</string>
+    <string name="no_audio_stream">No audio stream</string>
+    <string name="no_music_video_to_download_for">No music video to download for this song</string>
+    <string name="waiting_for_a_connection">Waiting for a connection</string>
+    <string name="getting_ready">Getting ready…</string>
+    <string name="steady">Steady</string>
+    <string name="build_up">Build up</string>
+    <string name="wind_down">Wind down</string>
+    <string name="couldn_t_reach_youtube_for_the">Couldn\'t reach YouTube for the music video. Tap to try again.</string>
+    <string name="sing_s_engine_isn_t_downloaded">Sing\'s engine isn\'t downloaded</string>
+    <string name="sing_s_engine_didn_t_start">Sing\'s engine didn\'t start on this phone</string>
+    <string name="sing_doesn_t_run_on_this_2">Sing doesn\'t run on this phone\'s processor</string>
+    <string name="waiting_for_wi_fi_to_get">Waiting for Wi-Fi to get this song ready</string>
+    <string name="this_song_isn_t_on_the">This song isn\'t on the phone yet</string>
+    <string name="the_song_didn_t_decode">The song didn\'t decode</string>
+    <string name="sing_was_switched_off">Sing was switched off</string>
+    <string name="youtube_is_limiting_playback">YouTube is limiting playback on this network right now. Try again in a while, switch networks (or turn off a VPN), or sign in.</string>
+    <plurals name="downloading_n_songs">
+        <item quantity="one">Downloading a song</item>
+        <item quantity="other">Downloading %s songs</item>
+    </plurals>
+    <!-- YouTube's kinds of item, first in a subtitle ("Album • Artist • 2024"). -->
+    <string name="kind_song">Song</string>
+    <string name="kind_video">Video</string>
+    <string name="kind_album">Album</string>
+    <string name="kind_single">Single</string>
+    <string name="kind_ep">EP</string>
+    <string name="kind_artist">Artist</string>
+    <string name="kind_playlist">Playlist</string>
+    <string name="kind_episode">Episode</string>
+    <string name="kind_podcast">Podcast</string>
+    <string name="kind_profile">Profile</string>
+    <string name="kind_station">Station</string>
+    <string name="copy_its_playlists_saved_albums_and_all">Copy its playlists, saved albums and artists into Prism, so they stay on this phone even signed out. Your account isn\'t changed; copy again any time to bring Prism\'s copies up to date.</string>
+    <string name="from_prism_is_signed_with_its_all">From %1$s, Prism is signed with its own key instead of a shared test key, so Android stops flagging it. Android can\'t update across that change, so this once Prism is reinstalled. Your things come with you:</string>
+    <string name="your_blend_name_all">Your Blend name: %1$s\nGenres: %2$s\n</string>
+    <string name="and_a_random_id_for_this_all">And a random id for this phone, so a friend\'s phone knows which Blend a new code is for. Nothing else: no history, times or account. Artists you don\'t play and songs and playlists left out of your taste are left out here too.</string>
+    <string name="download_again_in_premium_quality_256_all">Download %1$s again in Premium quality (256 kbps)? Each one is fetched whole again; until it\'s back, it plays from the internet rather than from the phone.</string>
+    <string name="the_progress_bar_and_play_ring_all">The progress bar and Play ring in the player and mini player, the song that\'s playing in every list (and its bars), switches, the tab and chip you\'re on, Settings\' icons, Home\'s Replay card and Continue line, the Liked songs cover, the lyrics\' progress line and the Best part tag. Home-screen widgets keep Prism\'s own colors.</string>
+    <string name="lights_all_of_these_in_in_all">%1$s lights all of these in %2$s (%3$s in %4$s mode). It also turns the frosted backgrounds and Prism\'s own colored tiles (moods, genres, the Replay card) grey, and greys the home-screen widgets. Covers and photos keep their color, and your accent (②) stays on its own things.</string>
+    <string name="artist_names_and_links_on_album_all">Artist names and links on album and playlist pages; the star, More and New release on artist pages; ticks and picked rows in lists and menus; Replay\'s top three and its bars; the text cursor; the Simple pattern backgrounds; and the page tint when Page background is Accent tint. Song lists and the player\'s text don\'t use it (the player only does with its Theme or Your background backgrounds, in Player settings).</string>
+    <string name="wallpaper_taken_from_your_phone_s_all">Wallpaper: taken from your phone\'s wallpaper, as other apps do, and it changes when you change the wallpaper. With Page background on Automatic, sheets and plain pages take the wallpaper\'s tint too.</string>
+    <string name="the_ambient_frost_behind_home_search_all">The Ambient frost behind Home, Search, Library, Replay and Settings (Automatic keeps the cover\'s colors in it, Plain makes it grey, a tint colors it), those pages when frosted glass is off, and sheets and dialogs. Not the player, nor album, artist and playlist pages, which take their picture\'s colors.</string>
+    <string name="home_has_the_background_glass_backgrounds_all">Home has the %1$s background (Glass &amp; backgrounds), drawn over this color, so it only shows a little there. Pick Ambient there to see it fully</string>
+    <string name="secondary_text_artists_times_notes_dividers_all">Secondary text (artists, times, notes), dividers and outlines on pages, sheets and menus. Medium and High also firm up the accent so it reads more easily. The player\'s own white text over the cover stays as it is.</string>
+    <string name="the_accent_on_artist_album_and_all">The accent on artist, album and playlist pages, and in the menus you open from a song, album or artist (long press or ⋯). Their frosted backgrounds take the picture\'s colors either way (Glass &amp; backgrounds).</string>
+    <string name="tap_the_line_under_the_player_all">Tap the line under the player\'s controls (it says which device is playing) and pick a speaker, TV or receiver. It has to be on this Wi-Fi with Google Cast (Chromecast, Google TV, speakers with Cast built in) or DLNA / UPnP (sometimes called media sharing). Your queue, lyrics and controls stay on the phone, and its volume keys set the speaker\'s volume. The equalizer, Crossfade, Sing and videos are the phone\'s own, so they\'re off while casting.</string>
+    <string name="nothing_new_from_your_artists_in_all">Nothing new from your artists in the last three months. Prism looks every few days at the artists you\'ve starred, saved and play most; the first look only learns what\'s already out, so new music shows up from the next one.</string>
+    <string name="tunemymusic_copies_your_playlists_liked_songs_all">TuneMyMusic copies your playlists, Liked Songs included, into your YouTube Music account. It\'s the same service YouTube Music\'s own app uses for transfers.</string>
+    <string name="t_1_sign_in_to_spotify_or_all">1. Sign in to Spotify or Apple Music on TuneMyMusic and pick the playlists.\n2. Choose YouTube Music as the destination and sign in with the Google account you use in Prism%1$s.</string>
+    <string name="tunemymusic_is_a_separate_service_not_all">TuneMyMusic is a separate service, not part of Prism. It asks for access to the accounts you connect and sees the playlists you move; its free plan has limits. Prism doesn\'t share anything with it.</string>
+    <string name="makes_a_youtube_music_playlist_of_all">Makes a YouTube Music playlist of every song you\'ve liked, one you can share, pin or open in other apps. Prism keeps it up to date: songs you like are added, songs you unlike are taken out.</string>
+    <string name="check_your_connection_some_networks_such_all">Check your connection. Some networks, such as work and school ones, block Discord: try another Wi-Fi or mobile data.</string>
+    <string name="blur_and_frosted_glass_the_frost_all">Blur and frosted glass, the frost behind pages, moving and illustrated backgrounds, animated covers, the visualizer, a drifting player background, focus blur and glow in the lyrics, the picture at the top of Home, and animations</string>
+    <string name="swipe_up_on_the_lower_half_all">Swipe up on the lower half of the player: from its right side for the queue, from its left side for the lyrics. Swipe down on the lower half of the queue or the lyrics to close them. Easier one-handed than reaching for the top.</string>
+    <string name="sends_what_you_listen_to_scrobbles_all">Sends what you listen to (scrobbles) to your own Last.fm account: a song counts once you\'ve heard half of it or four minutes. You connect on Last.fm\'s own page, so Prism never sees your password. Podcast episodes aren\'t sent.</string>
+    <string name="mode_light">light</string>
+    <string name="mode_dark">dark</string>
+    <string name="it_holds_parts">It holds: %1$s. Those are replaced with the backup\'s on this phone; the rest stays as it is. Then Prism restarts.</string>
+    <string name="same_as_home_darkened">Same as Home (%1$s), darkened</string>
+    <string name="accent_x">%1$s accent</string>
+    <string name="font_x">%1$s font</string>
+    <string name="nav_bar_x">%1$s bar</string>
+    <string name="mini_player_x">%1$s mini player</string>
+    <string name="player_layout_x">%1$s layout</string>
+    <plurals name="n_tabs">
+        <item quantity="one">%s tab</item>
+        <item quantity="other">%s tabs</item>
+    </plurals>
+    <string name="rewind_x">Rewind %1$s</string>
+    <string name="replay_x">Replay %1$s</string>
+    <string name="date_at_time">%1$s at %2$s</string>
+    <string name="language_info">Prism\'s translations were made by Claude, an AI, so a word here and there may read oddly: corrections are welcome on GitHub. Prism restarts in the language you pick.</string>
+    <string name="your_phone_s_language">Your phone\'s language</string>
+    <!-- Settings search: the Language page in every language Prism has (not translated: anyone can find it). -->
+    <string name="language_keywords" translatable="false">language translation translated English idioma idiomas langue Sprache lingua język язык dil bahasa भाषा 言語 언어 语言 لغة</string>
 </resources>

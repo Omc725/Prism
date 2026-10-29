@@ -515,7 +515,7 @@ private fun TopCard(item: BrowseItem, onClick: () -> Unit, onPlay: () -> Unit) {
     val scheme = MaterialTheme.colorScheme
     val kind = when (item) {
         is ArtistItem -> tr(R.string.artist)
-        is AlbumItem -> item.subtitle.substringBefore(" • ").takeIf { it in setOf("Album", "Single", "EP") } ?: tr(R.string.album)
+        is AlbumItem -> item.subtitle.substringBefore(" • ").takeIf { it in setOf("Album", "Single", "EP") }?.let { com.prism.music.data.model.kindName(it) } ?: tr(R.string.album)
         is PlaylistItem -> tr(R.string.playlist)
         is SongItem -> if (item.song.isLive) tr(R.string.live_2) else if (item.song.isVideo) tr(R.string.video) else tr(R.string.song)
         else -> ""

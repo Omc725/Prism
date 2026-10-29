@@ -328,7 +328,7 @@ private val GOOGLE_SIZE = Regex("=(w\\d+-h\\d+|s\\d+)[^/]*$")
 private val YTIMG_NAME = Regex("/[a-z0-9_]+default\\.jpg.*$")
 
 /** "1 song", "12 songs". */
-fun songCount(n: Int): String = if (n == 1) "1 song" else "$n songs"
+fun songCount(n: Int): String = com.prism.music.trp(com.prism.music.R.plurals.n_songs, n)
 
 fun formatDuration(sec: Int): String {
     if (sec <= 0) return ""
@@ -349,3 +349,28 @@ fun parseDuration(text: String?): Int {
     if (parts.isEmpty()) return 0
     return parts.fold(0) { acc, p -> acc * 60 + p }
 }
+
+/**
+ * YouTube's word for what an item is, first in its subtitle ("Album • Artist • 2024"): kept in English so code can read
+ * it ([com.prism.music.data.innertube.Parser] turns the listener's language back into it), shown in their language.
+ */
+fun shownKinds(subtitle: String): String {
+    val first = subtitle.substringBefore(" • ")
+    val name = kindName(first) ?: return subtitle
+    return name + subtitle.substring(first.length)
+}
+
+fun kindName(kind: String): String? = when (kind) {
+    "Song" -> com.prism.music.R.string.kind_song
+    "Video" -> com.prism.music.R.string.kind_video
+    "Album" -> com.prism.music.R.string.kind_album
+    "Single" -> com.prism.music.R.string.kind_single
+    "EP" -> com.prism.music.R.string.kind_ep
+    "Artist" -> com.prism.music.R.string.kind_artist
+    "Playlist" -> com.prism.music.R.string.kind_playlist
+    "Episode" -> com.prism.music.R.string.kind_episode
+    "Podcast" -> com.prism.music.R.string.kind_podcast
+    "Profile" -> com.prism.music.R.string.kind_profile
+    "Station" -> com.prism.music.R.string.kind_station
+    else -> null
+}?.let { com.prism.music.tr(it) }

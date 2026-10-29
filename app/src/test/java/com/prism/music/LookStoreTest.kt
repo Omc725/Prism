@@ -107,9 +107,13 @@ class LookStoreTest {
         withTimeout(5_000) { settings.lookValues.first { it.isEmpty() } }
         val looks = LookStore(app, settings, scope)
         looks.dismissKept()
+        // Own Looks other tests left in the shared store could match these settings, which then aren't "your own".
+        looks.mine.value.forEach { looks.delete(it.id) }
 
         settings.setCorners(Corners.EXTRA)
         withTimeout(5_000) { settings.lookValues.first { it["corners"] == "s:EXTRA" } }
+        // apply() reads the settings as Prism holds them, which can trail the store by a moment.
+        withTimeout(5_000) { settings.flow.first { it.corners == Corners.EXTRA } }
         val midnight = BuiltInLooks.of("midnight")!!
         looks.apply(midnight, "Midnight for the night", scheduled = true)
         assertEquals("Midnight", looks.keptBySchedule.value)

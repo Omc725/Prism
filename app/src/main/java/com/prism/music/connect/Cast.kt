@@ -1,5 +1,7 @@
 package com.prism.music.connect
 
+import com.prism.music.R
+import com.prism.music.tr
 import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -284,7 +286,7 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
 
     fun detach(p: ExoPlayer) {
         if (player !== p) return
-        if (session != null) disconnect("Casting stopped", keepPlaying = false)
+        if (session != null) disconnect(tr(R.string.casting_stopped), keepPlaying = false)
         p.removeListener(this)
         player = null
         hooks = null
@@ -362,7 +364,7 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
             if (!reachable || !withContext(Dispatchers.IO) { server.start() }) {
                 c.scope.launch(NonCancellable) { runCatching { ctl.close() } }
                 if (state.value == CastState.Connecting(r)) _state.value = CastState.Idle
-                _events.tryEmit("Couldn't reach ${r.name}. Make sure it's on and on the same Wi-Fi.")
+                _events.tryEmit(tr(R.string.couldn_t_reach_make_sure_it, r.name))
                 return@launch
             }
             if (state.value != CastState.Connecting(r)) { c.scope.launch(NonCancellable) { runCatching { ctl.close() } }; return@launch }
@@ -379,7 +381,7 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
             Log.i(TAG, "casting to ${r.name} (${r.manufacturer} ${r.model}) from $host:${server.port}, plays ${sink.sorted()}")
             // Sing is the phone's own sound: switched on while casting, it goes back off.
             singJob = scope.launch {
-                c.sing.on.collect { on -> if (on && session === s) { c.sing.setOn(false); _events.tryEmit("Sing works on this phone, not while casting") } }
+                c.sing.on.collect { on -> if (on && session === s) { c.sing.setOn(false); _events.tryEmit(tr(R.string.sing_works_on_this_phone_not)) } }
             }
             val p = player
             if (p == null) {
@@ -483,7 +485,7 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
         loadGen++
         applyLocalMode()
         scope.launch { runCatching { onWire { s.ctl.stop() } } }
-        _events.tryEmit("Live streams play on this phone; the next song goes back to ${s.renderer.name}")
+        _events.tryEmit(tr(R.string.live_streams_play_on_this_phone, s.renderer.name))
     }
 
     // ------------------------------------------------------------ Sending songs
@@ -498,14 +500,14 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
         val body: CastBody
         val format: CastFormat
         if (song.isLocal) {
-            val uri = c.localMusic.uriFor(song.id) ?: throw IOException("${song.title} isn't on the phone any more")
+            val uri = c.localMusic.uriFor(song.id) ?: throw IOException(tr(R.string.isn_t_on_the_phone_any, song.title))
             val mime = app.contentResolver.getType(uri)
             val (fmt, announce) = ProtocolInfo.choose(s.sink, mime, decodedFallback = CastFormat.ORIGINAL in s.refused)
             val length = if (fmt == CastFormat.ORIGINAL) runCatching { app.contentResolver.openAssetFileDescriptor(uri, "r")?.use { it.length } }.getOrNull() ?: -1L else -1L
             if (fmt == CastFormat.ORIGINAL && length > 0) {
                 format = fmt
                 body = FileBody(announce, length) { pos ->
-                    val pfd = app.contentResolver.openFileDescriptor(uri, "r") ?: throw IOException("Can't open ${song.title}")
+                    val pfd = app.contentResolver.openFileDescriptor(uri, "r") ?: throw IOException(tr(R.string.can_t_open, song.title))
                     android.os.ParcelFileDescriptor.AutoCloseInputStream(pfd).also { it.channel.position(pos) }
                 }
             } else {
@@ -579,7 +581,7 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
                 Log.w(TAG, "couldn't get ${song.id} ready to cast", e)
                 if (gen == loadGen && session === s) {
                     publish(s, loading = false)
-                    _events.tryEmit("Couldn't send \"${song.title}\" to ${s.renderer.name}: ${e.message ?: "it didn't load"}")
+                    _events.tryEmit(tr(R.string.couldn_t_send_to, song.title, s.renderer.name, e.message ?: "it didn't load"))
                 }
                 return@launch
             }
@@ -615,7 +617,7 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
         s.refused += l.format
         val left = listOf(CastFormat.WAV, CastFormat.L16).filterNot { it in s.refused }
         if (left.isEmpty()) {
-            disconnect("${s.renderer.name} couldn't play the music Prism sent", keepPlaying = false)
+            disconnect(tr(R.string.couldn_t_play_the_music_prism, s.renderer.name), keepPlaying = false)
             return
         }
         val p = player ?: return
@@ -663,7 +665,7 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
                 }.onFailure { e ->
                     if (e is CancellationException) throw e
                     if (++s.failures >= MAX_FAILURES) {
-                        disconnect("Lost the connection to ${s.renderer.name}", keepPlaying = false)
+                        disconnect(tr(R.string.lost_the_connection_to, s.renderer.name), keepPlaying = false)
                         return@launch
                     }
                 }
@@ -716,7 +718,7 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
         if (key != null && key != cur.key) {
             // Someone else's music on it now (another app, the TV's own menu): after a while, that's the end of casting.
             if (key == FOREIGN && now - cur.loadedAt > 8_000) {
-                if (++s.foreign >= 4) disconnect("${s.renderer.name} is playing something else now", keepPlaying = false)
+                if (++s.foreign >= 4) disconnect(tr(R.string.is_playing_something_else_now, s.renderer.name), keepPlaying = false)
             }
             return
         }

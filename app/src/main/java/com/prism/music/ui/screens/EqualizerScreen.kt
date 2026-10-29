@@ -72,14 +72,14 @@ fun EqualizerScreen(bottomPadding: Dp) {
 
     com.prism.music.ui.components.SubPage(
         tr(R.string.equalizer), bottomPadding,
-        subtitle = if (eq.enabled) tr(R.string.on, eq.preset) else tr(R.string.off),
+        subtitle = if (eq.enabled) tr(R.string.on, EqPresets.label(eq.preset)) else tr(R.string.off),
         horizontalPadding = 16.dp, spacing = 22.dp,
         actions = { PrismSwitch(eq.enabled, { update(eq.copy(enabled = it)) }) },
     ) {
             // Correction for the headphones themselves comes first (it's applied first, and it's on its own switch).
             item { HeadphoneCorrection() }
             item {
-                Group(tr(R.string.t_10_band_equalizer, eq.preset)) {
+                Group(tr(R.string.t_10_band_equalizer, EqPresets.label(eq.preset))) {
                     EqGraph(eq, Modifier.fillMaxWidth().height(240.dp).padding(horizontal = 8.dp)) { band, db ->
                         update(eq.copy(enabled = true, preset = tr(R.string.custom), bands = eq.bands.toMutableList().also { it[band] = db }))
                     }
@@ -87,7 +87,7 @@ fun EqualizerScreen(bottomPadding: Dp) {
                         EqPresets.labels.forEach { Text(it, Modifier.weight(1f), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = androidx.compose.ui.text.style.TextAlign.Center) }
                     }
                     com.prism.music.ui.components.ChoiceFlow(
-                        EqPresets.presets.toList(), { it.first == eq.preset }, { it.first }, Modifier.padding(12.dp),
+                        EqPresets.presets.toList(), { it.first == eq.preset }, { EqPresets.label(it.first) }, Modifier.padding(12.dp),
                     ) { (name, bands) -> update(eq.copy(enabled = true, preset = name, bands = bands)) }
                 }
             }

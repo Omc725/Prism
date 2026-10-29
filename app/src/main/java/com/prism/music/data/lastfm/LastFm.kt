@@ -1,5 +1,7 @@
 package com.prism.music.data.lastfm
 
+import com.prism.music.R
+import com.prism.music.tr
 import android.content.Context
 import com.prism.music.BuildConfig
 import com.prism.music.data.model.Song
@@ -187,7 +189,7 @@ class LastFm(private val context: Context, private val http: OkHttpClient, priva
 
     // ---- The API
 
-    class LastFmError(val code: Int, message: String) : IOException("Last.fm: $message ($code)")
+    class LastFmError(val code: Int, message: String) : IOException(tr(R.string.last_fm, message, code))
 
     /** One request to Last.fm's API (POST, JSON answer). Signed calls carry the session and the signature. */
     private suspend fun call(params: Map<String, String>, signed: Boolean = true): JsonObject = withContext(Dispatchers.IO) {
@@ -202,7 +204,7 @@ class LastFm(private val context: Context, private val http: OkHttpClient, priva
         }.build()
         val req = Request.Builder().url(API).post(form).header("User-Agent", "Prism/${BuildConfig.VERSION_NAME}").build()
         http.newCall(req).execute().use { r ->
-            val obj = runCatching { json.parseToJsonElement(r.body.string()).jsonObject }.getOrNull() ?: throw IOException("Last.fm answered HTTP ${r.code}")
+            val obj = runCatching { json.parseToJsonElement(r.body.string()).jsonObject }.getOrNull() ?: throw IOException(tr(R.string.last_fm_answered_http, r.code))
             obj["error"]?.jsonPrimitive?.intOrNull?.let { code ->
                 // The listener took Prism's access back on Last.fm: signed out here too.
                 if (code == ERROR_INVALID_SESSION) signOut()

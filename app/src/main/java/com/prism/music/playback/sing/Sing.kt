@@ -139,7 +139,7 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
 
     private fun sessions(): Pair<OrtSession, OrtSession> {
         sessions?.let { return it }
-        val runtime = ModelStore.Model.singRuntime() ?: throw IOException("Sing doesn't run on this phone's processor")
+        val runtime = ModelStore.Model.singRuntime() ?: throw IOException(tr(R.string.sing_doesn_t_run_on_this_2))
         val e = OrtLoader.environment(c.models.dir(runtime))
         val opts = OrtSession.SessionOptions().apply {
             setIntraOpNumThreads(minOf(4, Runtime.getRuntime().availableProcessors()).coerceAtLeast(1))
@@ -176,12 +176,12 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
         if (!song.isLocal) c.warmUp(id, whole = true, cellular = c.settings.current.singOnCellular)
         val scratch = File(c.app.cacheDir, "sing_${id.replace(Regex("[^A-Za-z0-9_-]"), "_")}.part")
         val uri = c.audioOnPhone(id, scratch)
-            ?: throw IOException(if (c.network.metered.value && !c.settings.current.singOnCellular) "Waiting for Wi-Fi to get this song ready" else "This song isn't on the phone yet")
+            ?: throw IOException(if (c.network.metered.value && !c.settings.current.singOnCellular) tr(R.string.waiting_for_wi_fi_to_get) else tr(R.string.this_song_isn_t_on_the))
         val (vocals, accompaniment) = sessions()
         com.prism.music.playback.AudioDiagnostics.log("background", "Sing separation of $id started")
         try {
             PcmDecoder(c.app, uri).use { dec ->
-                val first = dec.read() ?: throw IOException("The song didn't decode")
+                val first = dec.read() ?: throw IOException(tr(R.string.the_song_didn_t_decode))
                 val rate = dec.sampleRate
                 val total = dec.totalFrames.coerceAtLeast(1)
                 store.pcm(id).delete()
@@ -210,7 +210,7 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
                     }
                     try {
                         while (true) {
-                            if (!working) throw IOException("Sing was switched off")
+                            if (!working) throw IOException(tr(R.string.sing_was_switched_off))
                             val in44 = reader.next() ?: break
                             val vocalsNow = back.push(spleeter.feed(in44))
                             if (vocalsNow.isNotEmpty()) {

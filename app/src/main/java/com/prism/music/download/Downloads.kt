@@ -1,5 +1,6 @@
 package com.prism.music.download
 
+import com.prism.music.tr
 import android.app.Notification
 import android.content.Context
 import android.content.Intent
@@ -524,7 +525,7 @@ class DownloadRepository(private val context: Context, private val c: AppContain
         c.scope.launch {
             val videoId = if (song.isVideo) song.id else c.queue.counterparts[song.id]
                 ?: runCatching { kotlinx.coroutines.withContext(Dispatchers.IO) { c.ytm.findMusicVideo(song) } }.getOrNull()?.also { c.queue.counterparts[song.id] = it }
-            if (videoId == null) { c.player.reportError("No music video to download for this song"); return@launch }
+            if (videoId == null) { c.player.reportError(tr(R.string.no_music_video_to_download_for)); return@launch }
             val data = InnerTube.json.encodeToString(VideoPart.serializer(), VideoPart(song, videoId)).toByteArray()
             val picture = DownloadRequest.Builder(VIDEO_PICTURE + song.id, android.net.Uri.parse("prism://video/$videoId"))
                 .setCustomCacheKey("video:$videoId").setData(data).build()
@@ -664,8 +665,8 @@ class PrismDownloadService : DownloadService(
         val percent = if (known.isEmpty()) -1 else known.average().roundToInt()
         val waiting = when {
             notMetRequirements == 0 -> null
-            notMetRequirements and androidx.media3.exoplayer.scheduler.Requirements.NETWORK_UNMETERED != 0 -> "Waiting for Wi-Fi"
-            else -> "Waiting for a connection"
+            notMetRequirements and androidx.media3.exoplayer.scheduler.Requirements.NETWORK_UNMETERED != 0 -> tr(R.string.waiting_for_wi_fi)
+            else -> tr(R.string.waiting_for_a_connection)
         }
         val cancel = android.app.PendingIntent.getBroadcast(
             this, 0, Intent(this, CancelDownloadsReceiver::class.java),
@@ -676,15 +677,15 @@ class PrismDownloadService : DownloadService(
         }
         return androidx.core.app.NotificationCompat.Builder(this, DOWNLOAD_CHANNEL)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle(if (active.size <= 1) "Downloading a song" else "Downloading ${active.size} songs")
-            .setContentText(waiting ?: title ?: "Getting ready…")
+            .setContentTitle(com.prism.music.trp(R.plurals.downloading_n_songs, active.size.coerceAtLeast(1)))
+            .setContentText(waiting ?: title ?: tr(R.string.getting_ready))
             .setProgress(100, percent.coerceAtLeast(0), percent < 0 && waiting == null)
             .setOngoing(true)
             .setOnlyAlertOnce(true)
             .setShowWhen(false)
             .setSilent(true)
             .apply { if (open != null) setContentIntent(open) }
-            .addAction(0, "Cancel", cancel)
+            .addAction(0, tr(R.string.cancel), cancel)
             .build()
     }
 }

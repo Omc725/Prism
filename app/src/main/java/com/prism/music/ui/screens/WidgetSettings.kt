@@ -58,6 +58,8 @@ import com.prism.music.widget.Widgets
  * from Prism. The preview at the top is the widget itself, drawn from the same views the home screen gets.
  */
 class WidgetConfigActivity : ComponentActivity() {
+    // Prism's language, when picked in Prism (below Android 13; AppLanguage).
+    override fun attachBaseContext(base: android.content.Context) = super.attachBaseContext(com.prism.music.AppLanguage.wrap(base))
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val id = intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)

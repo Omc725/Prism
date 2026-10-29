@@ -2,6 +2,7 @@ package com.prism.music.ui.screens
 
 import com.prism.music.R
 import com.prism.music.tr
+import com.prism.music.trp
 import com.prism.music.ui.components.tabTint
 import com.prism.music.ui.components.PrismOutlinedButton
 import com.prism.music.ui.components.PrismSlider
@@ -122,6 +123,7 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
     LIBRARY("library", tr(R.string.recommendations_replay), PrismIcons.Library),
     DOWNLOADS("downloads", tr(R.string.downloads_storage_data), PrismIcons.DownloadCircle),
     DEVICES("devices", tr(R.string.devices_connections), PrismIcons.Car),
+    LANGUAGE("language", tr(R.string.language), PrismIcons.Globe),
     ABOUT("about", tr(R.string.backup_about), PrismIcons.Info),
     /** Not on the hub: Devices & connections' own pages. */
     CONNECT("connect", tr(R.string.speakers_tvs_browser), PrismIcons.Cast),
@@ -142,9 +144,9 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
 
     fun summary(s: AppSettings, dark: Boolean = true): String = when (this) {
         APPEARANCE -> tr(R.string.looks_colors_fonts_the_player_and)
-        INTERFACE -> listOf(s.navStyle.label + " bar", tr(R.string.tabs_2, s.navTabs.size), s.miniPlayerStyle.label + tr(R.string.mini_player_2)).joinToString(" · ")
-        PLAYER -> listOfNotNull(s.playerLayout.label + " layout", s.playerBackground.label, if (s.canvasEnabled) tr(R.string.animated_covers) else null).joinToString(" · ")
-        SOUND -> listOfNotNull(if (s.lossless) tr(R.string.lossless) else s.audioQuality.label + " quality", if (s.mix) tr(R.string.crossfade) else null, if (s.normalize) tr(R.string.normalized) else null, if (s.spatial) tr(R.string.prism_spatial) else null, if (s.eq.enabled) "EQ ${s.eq.preset}" else null).joinToString(" · ")
+        INTERFACE -> listOf(tr(R.string.nav_bar_x, s.navStyle.label), com.prism.music.trp(R.plurals.n_tabs, s.navTabs.size), tr(R.string.mini_player_x, s.miniPlayerStyle.label)).joinToString(" · ")
+        PLAYER -> listOfNotNull(tr(R.string.player_layout_x, s.playerLayout.label), s.playerBackground.label, if (s.canvasEnabled) tr(R.string.animated_covers) else null).joinToString(" · ")
+        SOUND -> listOfNotNull(if (s.lossless) tr(R.string.lossless) else tr(R.string.audio_quality_x, s.audioQuality.label), if (s.mix) tr(R.string.crossfade) else null, if (s.normalize) tr(R.string.normalized) else null, if (s.spatial) tr(R.string.prism_spatial) else null, if (s.eq.enabled) "EQ ${com.prism.music.playback.EqPresets.label(s.eq.preset)}" else null).joinToString(" · ")
         LYRICS -> listOfNotNull(tr(R.string.first, s.lyricsSources.first().label), if (s.lyricsTranslate) tr(R.string.translated) else null, tr(R.string.sing)).joinToString(" · ")
         LYRICS_LOOK -> tr(R.string.style_2, s.lyricsStyle.label, s.lyricsPosition.label)
         CONTROLS -> tr(R.string.swipes_and_taps_on_the_player)
@@ -155,15 +157,16 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
         LIBRARY -> listOfNotNull(tr(R.string.your_artists_new_releases), if (s.contentCountry.isNotBlank()) countryName(s.contentCountry) else null, tr(R.string.replay_2)).joinToString(" · ")
         DISCORD -> if (s.discordPresence) tr(R.string.showing_what_you_play_on_your) else tr(R.string.show_what_you_re_playing_on)
         LASTFM -> tr(R.string.scrobble_what_you_play_to_your)
+        LANGUAGE -> java.util.Locale.getDefault().let { it.getDisplayName(it) }.replaceFirstChar { it.titlecase() }
         ABOUT -> tr(R.string.prism_backup_updates_diagnostics, com.prism.music.BuildConfig.VERSION_NAME)
         LICENSES -> tr(R.string.gpl_3_0_or_later)
         COLOR -> listOfNotNull(
             // The light's name (White shows as Black in light mode).
-            if (s.lightStyle == com.prism.music.data.prefs.LightStyle.WHITE) whiteName(dark) + " light"
+            if (s.lightStyle == com.prism.music.data.prefs.LightStyle.WHITE) tr(R.string.light_2, whiteName(dark))
             else com.prism.music.ui.theme.SpectrumPresets.label(s.spectrumPreset).let { if (it == com.prism.music.ui.theme.SpectrumPresets.COVER_LABEL) tr(R.string.light_from_the_cover) else tr(R.string.light_2, it) },
-            when (s.colorSource) { ColorSource.CUSTOM -> com.prism.music.ui.theme.ColorMath.toHex(s.accent) + " accent"; ColorSource.ARTWORK -> tr(R.string.accent_from_the_cover); ColorSource.DYNAMIC -> tr(R.string.accent_from_the_wallpaper) },
+            when (s.colorSource) { ColorSource.CUSTOM -> tr(R.string.accent_x, com.prism.music.ui.theme.ColorMath.toHex(s.accent)); ColorSource.ARTWORK -> tr(R.string.accent_from_the_cover); ColorSource.DYNAMIC -> tr(R.string.accent_from_the_wallpaper) },
         ).joinToString(" · ")
-        TEXT -> listOfNotNull(s.fontChoice.label + " font", if (s.textScale != 1f) tr(R.string.size_2, (s.textScale * 100).roundToInt()) else null).joinToString(" · ")
+        TEXT -> listOfNotNull(tr(R.string.font_x, s.fontChoice.label), if (s.textScale != 1f) tr(R.string.size_2, (s.textScale * 100).roundToInt()) else null).joinToString(" · ")
         ICONS -> tr(R.string.icon_pack_and_weight_app_icon)
         GLASS -> listOfNotNull(when { s.liquidGlass -> tr(R.string.liquid_glass); s.frostedGlass -> tr(R.string.frosted_glass); else -> tr(R.string.solid_bars) }, if (s.backdrops.screensOnly.isEmpty()) null else tr(R.string.backgrounds), if (s.reduceMotion) tr(R.string.reduced_motion) else null).joinToString(" · ")
         LOOKS -> tr(R.string.save_switch_and_share_whole_looks)
@@ -211,7 +214,7 @@ private val hubGroups = listOf(
     tr(R.string.listening) to listOf(SettingsSection.SOUND, SettingsSection.LYRICS, SettingsSection.CONTROLS),
     tr(R.string.your_music) to listOf(SettingsSection.LIBRARY, SettingsSection.DOWNLOADS),
     tr(R.string.devices) to listOf(SettingsSection.DEVICES),
-    "" to listOf(SettingsSection.ABOUT),
+    "" to listOf(SettingsSection.LANGUAGE, SettingsSection.ABOUT),
 )
 
 /** Customize Prism's pages, as its page lists them: the look as a whole, then each part of Prism. */
@@ -362,6 +365,7 @@ private fun SettingsPage(
             SettingsSection.LIBRARY -> item { RecommendationsPage() }
             SettingsSection.DISCORD -> item { DiscordGroup() }
             SettingsSection.LASTFM -> item { LastFmGroup() }
+            SettingsSection.LANGUAGE -> item { LanguageSettings() }
             SettingsSection.ABOUT -> item {
                 Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
                 BackupGroup()
@@ -390,8 +394,7 @@ private fun SettingsPage(
 
 /** What Performance mode pauses, in plain words (its ⓘ and the pages' notice). */
 internal val PERFORMANCE_PAUSES =
-    tr(R.string.blur_and_frosted_glass_the_frost) +
-        tr(R.string.a_drifting_player_background_focus_blur)
+    tr(R.string.blur_and_frosted_glass_the_frost_all)
 
 /**
  * Performance mode (1.7.6): one switch for slower phones, Prism drawn about as lightly as 1.6 was. Nothing is removed and
@@ -591,7 +594,7 @@ private fun AccountCard() {
                     val r = runCatching { c.account.bringOver() }.getOrNull()
                     kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
                         signOut()
-                        android.widget.Toast.makeText(context, if (r != null) tr(R.string.signed_out_playlists_and_albums_kept, r.playlists, r.albums) else tr(R.string.signed_out), android.widget.Toast.LENGTH_LONG).show()
+                        android.widget.Toast.makeText(context, if (r != null) tr(R.string.signed_out_playlists_and_albums_kept, trp(R.plurals.n_playlists, r.playlists), trp(R.plurals.n_albums, r.albums)) else tr(R.string.signed_out), android.widget.Toast.LENGTH_LONG).show()
                     }
                 }
             }) { Text(tr(R.string.keep_a_copy)) }
@@ -637,7 +640,7 @@ private fun AccountCard() {
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f)) {
             Text(
-                if (s.isLoggedIn) tr(R.string.youtube_music) + s.accountName.ifBlank { tr(R.string.signed_in) } else tr(R.string.sign_in_to_youtube_music),
+                if (s.isLoggedIn) tr(R.string.youtube_music, s.accountName.ifBlank { tr(R.string.signed_in) }) else tr(R.string.sign_in_to_youtube_music),
                 style = MaterialTheme.typography.bodyMedium, color = ink, maxLines = 1, overflow = TextOverflow.Ellipsis,
             )
             Text(
@@ -1629,8 +1632,7 @@ private fun ControlsPage() {
             Toggle(tr(R.string.haptics), tr(R.string.a_light_tap_on_buttons_and), s.haptics) { prefs.setHaptics(it) }
             Toggle(
                 tr(R.string.swipe_up_for_the_queue), tr(R.string.on_the_player_s_lower_half), s.behavior.panelSwipes,
-                info = tr(R.string.swipe_up_on_the_lower_half) +
-                    tr(R.string.swipe_down_on_the_lower_half),
+                info = tr(R.string.swipe_up_on_the_lower_half_all),
             ) { prefs.setPanelSwipes(it) }
         }
         Group(tr(R.string.screen)) {
@@ -1660,7 +1662,7 @@ private fun PlayerLookGroup() {
             val own = s.backdrops[com.prism.music.ui.theme.PLAYER_BACKDROP]
             Item(
                 tr(R.string.which_background),
-                if (own == null) tr(R.string.same_as_home_2) + com.prism.music.ui.theme.Backdrop.parse(s.backdrops[com.prism.music.ui.theme.BackdropScreen.HOME.name]).first.label + tr(R.string.darkened)
+                if (own == null) tr(R.string.same_as_home_darkened, com.prism.music.ui.theme.Backdrop.parse(s.backdrops[com.prism.music.ui.theme.BackdropScreen.HOME.name]).first.label)
                 else com.prism.music.ui.theme.Backdrop.parse(own).first.label + tr(R.string.darkened_2),
                 onClick = { nav.go(Routes.BACKGROUNDS + "?player=true") },
             ) { Chevron() }
@@ -2213,7 +2215,7 @@ private fun DownloadSettings() {
             val used = pickBytes + cacheBytes
             val usedText = if (used < 1_073_741_824L) "${used / 1_048_576} MB" else tr(R.string.t_1f_gb).format(used / 1_073_741_824.0)
             Note(
-                tr(R.string.about_songs_used_1f_gb_free, smartSongEstimate(gb, s.audioQuality), usedText).format(freeGb) +
+                smartSongEstimate(gb, s.audioQuality).let { n -> trp(R.plurals.about_n_songs_used, n.toInt(), n, usedText) }.format(freeGb) +
                     if (gb > freeGb) tr(R.string.it_stops_when_storage_runs_low) else ""
             )
             PrismSlider(
@@ -2326,8 +2328,7 @@ private fun LastFmGroup() {
     val waiting by lastFm.waiting.collectAsState()
     Group(
         "Last.fm",
-        info = tr(R.string.sends_what_you_listen_to_scrobbles) +
-            tr(R.string.minutes_you_connect_on_last_fm),
+        info = tr(R.string.sends_what_you_listen_to_scrobbles_all),
     ) {
         if (!lastFm.available) {
             Note(tr(R.string.this_copy_of_prism_was_built))

@@ -1,5 +1,7 @@
 package com.prism.music.data.prefs
 
+import com.prism.music.R
+import com.prism.music.tr
 import android.content.Context
 import android.util.Base64
 import com.prism.music.playback.EqPresets
@@ -91,7 +93,7 @@ class EqPresetStore(context: Context) {
             val raw = runCatching { codeJson.decodeFromString<SavedEq>(String(Base64.decode(body, Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING))) }
                 .getOrNull() ?: return null
             if (raw.bands.size != 10 || raw.bands.any { it.isNaN() }) return null
-            val name = raw.name.filter { !it.isISOControl() }.trim().take(SavedEq.MAX_NAME).ifBlank { "Shared" }
+            val name = raw.name.filter { !it.isISOControl() }.trim().take(SavedEq.MAX_NAME).ifBlank { tr(R.string.shared) }
             return SavedEq(
                 name, raw.bands.map { it.coerceIn(-12f, 12f) }, raw.preampDb.takeIf { !it.isNaN() }?.coerceIn(-12f, 6f) ?: 0f,
                 raw.bassBoost.coerceIn(0, 1000), raw.loudnessGainMb.coerceIn(0, 1500),

@@ -202,14 +202,9 @@ private fun ColorSettings() {
             tr(R.string.spectrum),
             info = changes(
                 tr(R.string.the_light_the_colors_prism_lights),
-                tr(R.string.the_progress_bar_and_play_ring) +
-                    tr(R.string.bars_switches_the_tab_and_chip) +
-                    tr(R.string.songs_cover_the_lyrics_progress_line),
+                tr(R.string.the_progress_bar_and_play_ring_all),
                 also = if (!white) null else
-                    tr(R.string.lights_all_of_these_in_in, whiteName(dark), whiteName(dark).lowercase(), whiteName(!dark).lowercase()) +
-                        tr(R.string.mode_it_also_turns_the_frosted, if (dark) "light" else "dark") +
-                        tr(R.string.moods_genres_the_replay_card_grey) +
-                        tr(R.string.your_accent_stays_on_its_own),
+                    tr(R.string.lights_all_of_these_in_in_all, whiteName(dark), whiteName(dark).lowercase(), whiteName(!dark).lowercase(), if (dark) tr(R.string.mode_light) else tr(R.string.mode_dark)),
             ),
         ) {
             LightPresets(s, dark) { key ->
@@ -241,13 +236,9 @@ private fun ColorSettings() {
             tr(R.string.accent_color),
             info = changes(
                 tr(R.string.the_accent_a_second_color_for),
-                tr(R.string.artist_names_and_links_on_album) +
-                    tr(R.string.picked_rows_in_lists_and_menus) +
-                    tr(R.string.and_the_page_tint_when_page) +
-                    tr(R.string.player_only_does_with_its_theme),
+                tr(R.string.artist_names_and_links_on_album_all),
                 also = if (s.colorSource != ColorSource.DYNAMIC) null else
-                    tr(R.string.wallpaper_taken_from_your_phone_s) +
-                        tr(R.string.with_page_background_on_automatic_sheets),
+                    tr(R.string.wallpaper_taken_from_your_phone_s_all),
             ),
         ) {
             // Picture's color takes over the accent on exactly the pages it shows most on: say so here, where it's missed.
@@ -327,15 +318,12 @@ private fun ColorSettings() {
             tr(R.string.page_background),
             info = changes(
                 tr(R.string.the_background_what_prism_s_own),
-                tr(R.string.the_ambient_frost_behind_home_search) +
-                    tr(R.string.plain_makes_it_grey_a_tint) +
-                    tr(R.string.not_the_player_nor_album_artist),
+                tr(R.string.the_ambient_frost_behind_home_search_all),
             ),
         ) {
             val homeBackdrop = com.prism.music.ui.theme.Backdrop.parse(s.backdrops[com.prism.music.ui.theme.BackdropScreen.HOME.name]).first
             if (homeBackdrop != com.prism.music.ui.theme.Backdrop.DEFAULT) Note(
-                tr(R.string.home_has_the_background_glass_backgrounds, homeBackdrop.label) +
-                    tr(R.string.little_there_pick_ambient_there_to)
+                tr(R.string.home_has_the_background_glass_backgrounds_all, homeBackdrop.label)
             )
             // In White light, Automatic is already plain grey: Plain would be the same choice twice.
             val tints = SurfaceTint.entries.filter { !(white && it == SurfaceTint.NEUTRAL && s.surfaceTint != SurfaceTint.NEUTRAL) }
@@ -361,8 +349,7 @@ private fun ColorSettings() {
             tr(R.string.text_contrast),
             info = changes(
                 tr(R.string.how_strong_grey_text_and_lines),
-                tr(R.string.secondary_text_artists_times_notes_dividers) +
-                    tr(R.string.firm_up_the_accent_so_it),
+                tr(R.string.secondary_text_artists_times_notes_dividers_all),
             ),
         ) {
             ChoiceCards(
@@ -378,8 +365,7 @@ private fun ColorSettings() {
             tr(R.string.artist_album_pages),
             info = changes(
                 tr(R.string.their_accent_yours_as_everywhere_else),
-                tr(R.string.the_accent_on_artist_album_and) +
-                    tr(R.string.press_or_their_frosted_backgrounds_take),
+                tr(R.string.the_accent_on_artist_album_and_all),
                 also = tr(R.string.an_artist_s_page_can_also),
             ),
         ) {

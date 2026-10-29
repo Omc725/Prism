@@ -621,6 +621,31 @@ object HomeSections {
     /** Release Radar's section: not "New releases", which is YouTube's own shelf on Home too. */
     const val NEW_RELEASES_TITLE = "New from your artists"
 
+    /**
+     * Prism's own sections by their title in the listener's language (1.7.9). The stored title is the English default
+     * (a rename is [HomeSectionConfig.name]), so it's swapped as the layout is read and saved back unchanged in meaning.
+     */
+    fun inYourLanguage(s: HomeSectionConfig): HomeSectionConfig {
+        val id = when (s.key) {
+            REPLAY -> com.prism.music.R.string.section_replay_teaser
+            GREETING -> com.prism.music.R.string.section_shortcut_tiles
+            QUICK_PICKS -> com.prism.music.R.string.quick_picks
+            MADE_FOR_YOU -> com.prism.music.R.string.made_for_you
+            NEW_RELEASES -> com.prism.music.R.string.section_new_from_your_artists
+            RECENT -> com.prism.music.R.string.recently_played
+            GENRES -> com.prism.music.R.string.your_top_genres
+            MOODS -> com.prism.music.R.string.moods_genres
+            LIKED -> com.prism.music.R.string.liked_songs
+            DOWNLOADS -> com.prism.music.R.string.downloads
+            SPEED_DIAL -> com.prism.music.R.string.section_speed_dial
+            ON_REPEAT -> com.prism.music.R.string.section_on_repeat
+            REPEAT_REWIND -> com.prism.music.R.string.section_repeat_rewind
+            FORGOTTEN -> com.prism.music.R.string.section_forgotten_favorites
+            else -> return s
+        }
+        return s.copy(title = com.prism.music.tr(id))
+    }
+
     /** An album, playlist, artist or mix pinned to Home as a section of its own (1.7.6): "pin:album:<id>". */
     const val PIN_PREFIX = "pin:"
     fun pinKey(kind: String, id: String) = "$PIN_PREFIX$kind:$id"
@@ -1740,7 +1765,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                     ?.map { s -> if (s.key == HomeSections.GREETING) s.copy(title = HomeSections.TILES_TITLE) else s }
                     // Release Radar's section was "New releases", the same name as YouTube's own shelf beside it.
                     ?.map { s -> if (s.key == HomeSections.NEW_RELEASES && s.title == "New releases") s.copy(title = HomeSections.NEW_RELEASES_TITLE) else s }
-            } ?: d.homeLayout,
+            }.let { it ?: d.homeLayout }.map(HomeSections::inYourLanguage),
             autoAddSections = p[K.autoAddSections] ?: d.autoAddSections,
             homeHideKinds = p[K.homeHideKinds]?.split(',')?.filter { it.isNotBlank() }?.toSet() ?: d.homeHideKinds,
             searchSections = p[K.searchSections]?.let { SearchSection.parse(it) } ?: d.searchSections,

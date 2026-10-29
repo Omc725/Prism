@@ -75,6 +75,8 @@ class PrismApp : Application(), coil3.SingletonImageLoader.Factory {
             }
             .build()
 
+    override fun attachBaseContext(base: android.content.Context) = super.attachBaseContext(AppLanguage.wrap(base))
+
     override fun onCreate() {
         super.onCreate()
         // Before anything shows a word: Prism's text in the listener's language (Strings.kt).
@@ -538,7 +540,7 @@ class AppContainer(val app: Application) {
         val s = try {
             streams.resolve(id)
         } catch (e: Exception) {
-            throw IOException(e.message ?: "Couldn't resolve stream", e)
+            throw IOException(e.message ?: tr(R.string.couldn_t_resolve_stream), e)
         }
         // The song's start was saved ahead from another format (the network changed since, so another quality
         // was picked): bytes of two formats can't be stitched together, so that start goes.
@@ -564,7 +566,7 @@ class AppContainer(val app: Application) {
             runCatching { downloadCache.removeResource(id) }
             downloadFormats.edit().putInt(id, itag).apply()
             com.prism.music.playback.AudioDiagnostics.log("download", "$id came as format $itag, not $before as before: starting it over")
-            throw IOException("The song's format changed part-way; starting the download over")
+            throw IOException(tr(R.string.the_song_s_format_changed_part))
         }
         if (before != itag) downloadFormats.edit().putInt(id, itag).apply()
     }
@@ -704,7 +706,7 @@ class AppContainer(val app: Application) {
         ResolvingDataSource.Factory(OkHttpDataSource.Factory(http).setUserAgent(com.prism.music.data.stream.DESKTOP_UA)) { spec ->
             val id = spec.uri.lastPathSegment
             if (spec.uri.scheme != "prism" || id == null) spec else {
-                val url = try { streams.liveManifest(id) } catch (e: Exception) { throw IOException(e.message ?: "Couldn't load the live stream", e) }
+                val url = try { streams.liveManifest(id) } catch (e: Exception) { throw IOException(e.message ?: tr(R.string.couldn_t_load_the_live_stream), e) }
                 streamDetails[id] = "Live" to streamDetails[id]?.second
                 onStreamResolved?.invoke(id)
                 spec.buildUpon().setUri(url).build()

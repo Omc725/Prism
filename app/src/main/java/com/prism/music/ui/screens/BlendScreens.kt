@@ -2,6 +2,7 @@ package com.prism.music.ui.screens
 
 import com.prism.music.R
 import com.prism.music.tr
+import com.prism.music.trp
 import com.prism.music.ui.components.PrismButton
 import com.prism.music.ui.components.PrismOutlinedButton
 import com.prism.music.ui.components.PrismTextButton
@@ -251,12 +252,10 @@ fun BlendsScreen(bottomPadding: Dp) {
                 mine?.takeIf { showShared }?.let { m ->
                     val sent = remember(code) { code?.let(BlendCode::decode) ?: m }
                     Text(
-                        tr(R.string.your_blend_name, sent.name) +
-                            tr(R.string.genres, sent.genres.entries.joinToString { "${it.key} ${it.value}%" }.ifEmpty { tr(R.string.none_yet_2) }) +
-                            tr(R.string.artists_2, sent.artists.size, sent.artists.joinToString { it.name }) +
-                            tr(R.string.songs_2, sent.songs.size, sent.songs.joinToString { "${it.title} (${it.artist})" }) +
-                            tr(R.string.and_a_random_id_for_this) +
-                            tr(R.string.artists_you_don_t_play_and),
+                        tr(R.string.your_blend_name_all, sent.name, sent.genres.entries.joinToString { "${it.key} ${it.value}%" }.ifEmpty { tr(R.string.none_yet_2) }) +
+                            trp(R.plurals.n_artists_list, sent.artists.size, sent.artists.size, sent.artists.joinToString { it.name }) +
+                            trp(R.plurals.n_songs_list, sent.songs.size, sent.songs.size, sent.songs.joinToString { "${it.title} (${it.artist})" }) +
+                            tr(R.string.and_a_random_id_for_this_all),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
@@ -274,7 +273,7 @@ fun BlendsScreen(bottomPadding: Dp) {
                 Spacer(Modifier.width(14.dp))
                 Column(Modifier.weight(1f)) {
                     Text("${c.blends.myName.ifBlank { "You" }} + ${e.friendName}", style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    Text(tr(R.string.taste_match_songs, b?.match ?: 0, b?.songs?.size ?: 0), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(trp(R.plurals.taste_match_n_songs, b?.songs?.size ?: 0, b?.match ?: 0, b?.songs?.size ?: 0), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         }

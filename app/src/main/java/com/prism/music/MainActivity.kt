@@ -156,6 +156,8 @@ private const val VOLUME_KEY_STEP = 4
 private const val LOOK_MIME = "application/zip"
 
 open class MainActivity : ComponentActivity() {
+    // Prism's language, when picked in Prism (below Android 13; AppLanguage).
+    override fun attachBaseContext(base: android.content.Context) = super.attachBaseContext(com.prism.music.AppLanguage.wrap(base))
     private val deepLink = MutableStateFlow<Uri?>(null)
 
     private val notificationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {}

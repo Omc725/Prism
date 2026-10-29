@@ -318,7 +318,7 @@ fun ItemCard(item: BrowseItem, modifier: Modifier = Modifier, width: Dp = Dp.Uns
                     modifier = if (round) Modifier.align(Alignment.CenterHorizontally) else Modifier,
                 )
                 if (item.subtitle.isNotBlank()) Text(
-                    item.subtitle, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    com.prism.music.data.model.shownKinds(item.subtitle), maxLines = 1, overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = if (round) Modifier.align(Alignment.CenterHorizontally) else Modifier,
                 )

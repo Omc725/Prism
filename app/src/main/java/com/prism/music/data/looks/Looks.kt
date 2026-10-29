@@ -411,14 +411,33 @@ object LookLabels {
      * What a switch would change, in a line ("Changes your theme, colors and icons"), from the settings that differ
      * ([keys]) and whether the icon style does; null when nothing would.
      */
-    fun summary(keys: Collection<String>, icons: Boolean, lead: String = tr(R.string.changes_your)): String? {
+    fun summary(keys: Collection<String>, icons: Boolean, lead: Int = R.string.changes_your): String? {
         val parts = areaOf.filter { (_, set) -> keys.any { it in set } }.map { it.first }.toMutableList()
         // Anything not in a part above (a setting added later) still counts as the look.
         if (keys.any { k -> areaOf.none { k in it.second } } && parts.isEmpty()) parts += "look"
         if (icons) parts += "icons"
         if (parts.isEmpty()) return null
-        val list = if (parts.size == 1) parts[0] else parts.dropLast(1).joinToString(", ") + " and " + parts.last()
-        return "$lead $list"
+        return tr(lead, listed(parts.map(::areaName)))
+    }
+
+    /** An area's name in the listener's language ([areaOf]'s keys stay English). */
+    private fun areaName(area: String): String = when (area) {
+        "theme" -> tr(R.string.area_theme)
+        "colors" -> tr(R.string.area_colors)
+        "type" -> tr(R.string.area_type)
+        "backgrounds" -> tr(R.string.area_backgrounds)
+        "layout" -> tr(R.string.area_layout)
+        "player" -> tr(R.string.area_player)
+        "lyrics" -> tr(R.string.area_lyrics)
+        "icons" -> tr(R.string.area_icons)
+        else -> tr(R.string.area_look)
+    }
+
+    /** "a", "a and b", "a, b and c" in the listener's language. */
+    fun listed(parts: List<String>): String = when (parts.size) {
+        0 -> ""
+        1 -> parts[0]
+        else -> tr(R.string.list_last, parts.dropLast(1).reduce { a, b -> tr(R.string.list_middle, a, b) }, parts.last())
     }
 
     /** One change as it reads: "Corners → Sharp", or "Corners → Sharp and 2 more". */

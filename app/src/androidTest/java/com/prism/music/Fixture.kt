@@ -28,6 +28,39 @@ object Fixture {
         withTimeout(10_000) { while (!container.settings.current.onboarded) kotlinx.coroutines.delay(20) }
     }
 
+    /** Songs that exist only in tests (ids no service knows), with a length and an artist like real ones. */
+    fun songs(n: Int, prefix: String = "Test song") = (1..n).map { i ->
+        com.prism.music.data.model.Song(
+            id = "tst${i.toString().padStart(8, '0')}", title = "$prefix $i",
+            artists = listOf(com.prism.music.data.model.ArtistRef("Test Artist", null)), durationSec = 180 + i,
+        )
+    }
+
+    /** A Prism playlist (no account needed) holding [songs]; its id. */
+    fun prismPlaylist(title: String, songs: List<com.prism.music.data.model.Song>): String = container.prismLibrary.create(title, songs)
+
+    /**
+     * [songs] as finished downloads, written into Media3's download index before Prism's downloads start (call it
+     * before [launch]): pages and Downloads show them as downloaded, with no file behind them.
+     */
+    @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
+    fun downloaded(songs: List<com.prism.music.data.model.Song>) {
+        val index = androidx.media3.exoplayer.offline.DefaultDownloadIndex(container.databaseProvider)
+        val now = System.currentTimeMillis()
+        for (s in songs) {
+            val request = androidx.media3.exoplayer.offline.DownloadRequest.Builder(s.id, android.net.Uri.parse("prism://audio/${s.id}"))
+                .setCustomCacheKey(s.id)
+                .setData(com.prism.music.data.innertube.InnerTube.json.encodeToString(com.prism.music.data.model.Song.serializer(), s).toByteArray())
+                .build()
+            index.putDownload(
+                androidx.media3.exoplayer.offline.Download(
+                    request, androidx.media3.exoplayer.offline.Download.STATE_COMPLETED, now, now, 3_000_000L,
+                    androidx.media3.exoplayer.offline.Download.STOP_REASON_NONE, androidx.media3.exoplayer.offline.Download.FAILURE_REASON_NONE,
+                ),
+            )
+        }
+    }
+
     /**
      * The screen as it is, to /sdcard/prism-tests/<name>.png (outside Prism's data, which the next test clears), for
      * a failure's report and the release check's screenshot tours.

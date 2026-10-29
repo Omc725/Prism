@@ -89,7 +89,9 @@ fun androidx.compose.ui.test.junit4.ComposeTestRule.clickWhenFound(matcher: Sema
         waitForIdle()
     }
     // Its click itself, not a touch at its middle: the floating tab bar can cover a card's lower half.
-    onAllNodes(matcher).onFirst().performScrollTo().performSemanticsAction(SemanticsActions.OnClick)
+    val node = onAllNodes(matcher).onFirst()
+    runCatching { node.performScrollTo() } // not in a list (a top bar): already where it is
+    node.performSemanticsAction(SemanticsActions.OnClick)
 }
 
 /** A node whose tap is labelled [label] (what TalkBack says: "Use Midnight"). */

@@ -447,10 +447,17 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
         }
     }
     val allDownloaded = downloadedCount == page.songs.size && page.songs.isNotEmpty()
+    // "Delete downloads": what's about to go, and Delete to go ahead.
+    var confirm by remember { mutableStateOf<Pair<String, () -> Unit>?>(null) }
     val toggleDownloads: () -> Unit = {
         if (allDownloaded) {
-            c.downloads.removeMany(page.songs.map { it.id })
-            Toast.makeText(context, "Removed ${page.songs.size} downloads", Toast.LENGTH_SHORT).show()
+            // The same button downloads and removes, so removing asks first (#212: a whole playlist's downloads went
+            // with one tap).
+            val n = page.songs.size
+            confirm = "Delete the ${com.prism.music.data.model.songCount(n)} of ${page.title} from this phone? You can download them again." to {
+                c.downloads.removeMany(page.songs.map { it.id })
+                Toast.makeText(context, "Removed $n downloads", Toast.LENGTH_SHORT).show()
+            }
         } else {
             c.downloads.downloadAll(page.songs)
             Toast.makeText(context, "Downloading ${com.prism.music.data.model.songCount(page.songs.size - downloadedCount)}", Toast.LENGTH_SHORT).show()
@@ -480,7 +487,6 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
         })
     }
 
-    var confirm by remember { mutableStateOf<Pair<String, () -> Unit>?>(null) }
     confirm?.let { (text, action) ->
         AlertDialog(
             onDismissRequest = { confirm = null },
@@ -946,7 +952,8 @@ private fun CollectionTopBar(
                         Box(Modifier.fillMaxSize().clickable(onClickLabel = "Downloading", onClick = onDownload), contentAlignment = Alignment.Center) {
                             CircularProgressIndicator(Modifier.size(20.dp), color = ink, strokeWidth = 2.dp)
                         }
-                    } else com.prism.music.ui.components.RoundAction(downloadIcon, if (downloadIcon == PrismIcons.DownloadDone) "Downloaded" else "Download all", glass = true, onClick = onDownload)
+                    // Named for what a tap does (it removes once everything's downloaded, #212), not for the state it shows.
+                    } else com.prism.music.ui.components.RoundAction(downloadIcon, if (downloadIcon == PrismIcons.DownloadDone) "Remove downloads" else "Download all", glass = true, onClick = onDownload)
                 }
                 com.prism.music.ui.components.RoundAction(PrismIcons.Share, "Share", glass = true, onClick = onShare)
                 com.prism.music.ui.components.RoundAction(PrismIcons.More, "More", glass = true, onClick = onMore)

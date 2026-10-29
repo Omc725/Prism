@@ -2,6 +2,15 @@
 
 What changed in each release. Older releases are described on the [Releases page](https://github.com/Yigder/Prism/releases).
 
+## 1.7.9 (unreleased)
+
+### Fixes
+
+- **The accent from the cover is the cover's color** (Reddit): a few pixels of another color no longer decide it (a deep
+  blue night with two pink lights gave a pink accent). A color now has to fill a real part of the picture.
+- **Removing a playlist's downloads asks first** (#212): the download button on a playlist or album whose songs are
+  all downloaded removes them, so it now says how many and waits for Delete. TalkBack names it "Remove downloads".
+
 ## 1.7.8
 
 ### Sound, your way

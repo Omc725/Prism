@@ -229,7 +229,11 @@ class AppContainer(val app: Application) {
         .build()
 
     val innerTube = InnerTube(http, { settings.current }, settings::setVisitorData)
-    val ytm = YouTubeMusic(innerTube) { settings.current.let { it.radioSongsOnly && it.songsEverywhere } }
+    val ytm = YouTubeMusic(
+        innerTube,
+        songsEverywhere = { settings.current.let { it.radioSongsOnly && it.songsEverywhere } },
+        onPairs = { queue.counterparts.putAll(it) },
+    )
     val db = PrismDatabase.build(app)
     val streams by lazy { StreamResolver(app, http, settings, innerTube) }
     val translator = com.prism.music.data.lyrics.LyricsTranslator(http)
@@ -380,6 +384,15 @@ class AppContainer(val app: Application) {
             (played + mine.keys).filter { it.isNotBlank() }.distinct().forEach { meta.refineLater(it, mine[it].orEmpty()) }
             migrations.edit().putBoolean("genres_itunes_1", true).apply()
         }
+        // GitHub #182: bringing the library over had starred every library song's artist; those come off once, unless the
+        // account follows them. Retried on a later launch when the account's follows couldn't be asked for.
+        scope.launch(Dispatchers.IO) {
+            kotlinx.coroutines.delay(12_000)
+            if (artistPrefs.starsRepaired) return@launch
+            val signedIn = settings.current.isLoggedIn
+            val followed = if (signedIn) runCatching { ytm.librarySubscriptions().map { it.id }.toSet() }.getOrNull() else null
+            artistPrefs.repairBroughtStars(followed, signedIn)
+        }
     }
     val downloads by lazy { DownloadRepository(app, this, scope) }
     val covers by lazy { com.prism.music.data.PlaylistCovers(app) }
@@ -452,7 +465,8 @@ class AppContainer(val app: Application) {
         }
         // White light / Spectrum: the home-screen widgets are drawn again to match.
         scope.launch {
-            settings.flow.map { it.lightStyle }.distinctUntilChanged().drop(1).collect {
+            // Your light too (1.7.7): the widgets take its colors on Android 12+.
+            settings.flow.map { listOf(it.lightStyle, it.spectrumPreset, it.spectrumStops, it.spectrumBands) }.distinctUntilChanged().drop(1).collect {
                 com.prism.music.widget.Widgets.refresh(app)
                 com.prism.music.widget.RecognizeWidgets.refresh(app)
             }
@@ -510,10 +524,34 @@ class AppContainer(val app: Application) {
         // The song's start was saved ahead from another format (the network changed since, so another quality
         // was picked): bytes of two formats can't be stitched together, so that start goes.
         prebuffered.remove(id)?.let { itag -> if (itag != s.itag) runCatching { playerCache.removeResource(id) } }
+        if (!useCaches) downloadFormat(id, s.itag, spec.position)
         streamDetails[song] = (if (useCaches) "Streaming" else "Downloading") to s
         if (useCaches) onStreamResolved?.invoke(song)
         return spec.buildUpon().setUri(s.audioUrl).setKey(id).build()
     }
+
+    /** The format (itag) each download's bytes are in so far, kept so a later part never comes from another one. */
+    private val downloadFormats = app.getSharedPreferences("download_formats", android.content.Context.MODE_PRIVATE)
+
+    /**
+     * A download that stopped part-way and starts again later can be given another format (the account's link was
+     * refused and the next came from elsewhere, or the network changed the quality). Its two parts were stitched
+     * into one file nothing could read: GitHub #183, "Skipping atom with length > 2147483647" from Downloads while the
+     * song streamed fine. When the format changed, what was saved goes and the download starts over.
+     */
+    private fun downloadFormat(id: String, itag: Int, position: Long) {
+        val before = downloadFormats.getInt(id, 0)
+        if (before != 0 && before != itag && (position > 0 || downloadCache.getCachedBytes(id, 0, Long.MAX_VALUE) > 0)) {
+            runCatching { downloadCache.removeResource(id) }
+            downloadFormats.edit().putInt(id, itag).apply()
+            com.prism.music.playback.AudioDiagnostics.log("download", "$id came as format $itag, not $before as before: starting it over")
+            throw IOException("The song's format changed part-way; starting the download over")
+        }
+        if (before != itag) downloadFormats.edit().putInt(id, itag).apply()
+    }
+
+    /** A download was removed (or is being fetched again): its format no longer binds the next one. */
+    fun forgetDownloadFormat(id: String) = downloadFormats.edit().remove(id).apply()
 
     /** Songs whose first seconds [warmUp] saved into the song cache, and the stream (itag) they came from. */
     private val prebuffered = ConcurrentHashMap<String, Int>()

@@ -529,7 +529,7 @@ private fun Spotlight(item: AlbumItem, onOpen: () -> Unit) {
     val thisYear = remember { java.util.Calendar.getInstance().get(java.util.Calendar.YEAR) }
     FrostedPanel(Modifier.padding(start = 16.dp, end = 16.dp, top = 20.dp).fillMaxWidth(), onClick = onOpen) {
         Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-            Artwork(item.thumbnail, Modifier.size(112.dp), LocalUi.current.art, size = 544)
+            Artwork(item.thumbnail, Modifier.size(112.dp), LocalUi.current.albumArt, size = 544)
             Spacer(Modifier.width(16.dp))
             Column(Modifier.weight(1f)) {
                 Eyebrow(if (year == thisYear) "New release" else "Latest release", color = MaterialTheme.colorScheme.primary)
@@ -587,7 +587,7 @@ private fun TopSongsGrid(songs: List<Song>, title: String) {
                             .padding(vertical = 6.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Artwork(s.thumbnail, Modifier.size(48.dp), LocalUi.current.smallArt, size = 226)
+                        Artwork(s.thumbnail, Modifier.size(48.dp), LocalUi.current.songArt, size = 226)
                         Spacer(Modifier.width(12.dp))
                         Column(Modifier.weight(1f)) {
                             Text(
@@ -626,7 +626,7 @@ private fun CardRow(items: List<BrowseItem>, width: Dp, aspect: Float = 1f, roun
             ) {
                 Artwork(
                     LocalContainer.current.covers.art(item), Modifier.fillMaxWidth().aspectRatio(aspect),
-                    if (round) CircleShape else ui.art,
+                    if (round) ui.artistArt else ui.albumArt,
                     size = if (aspect > 1f) 720 else 544,
                     placeholderIcon = if (item is ArtistItem) PrismIcons.Person else PrismIcons.Play,
                 )
@@ -785,7 +785,15 @@ fun BrowseScreen(id: String, params: String?, title: String, bottomPadding: Dp) 
     val nav = LocalNavigator.current
     // Genre and mood pages, minus regional shelves and playlists (Prism keeps to mostly English-language music).
     val load = rememberLoad("browse:$id:$params") {
-        c.ytm.browseShelves(id, params).filter { !com.prism.music.data.meta.Genres.isRegional(it.title) }.map { sh ->
+        // A Home shelf's own page can be refused for the account and signed out alike (GitHub #171: New releases →
+        // "Requested entity was not found"); the shelf it was opened from still has its items, so those show.
+        val shelves = try {
+            c.ytm.browseShelves(id, params)
+        } catch (e: Exception) {
+            if (e is kotlinx.coroutines.CancellationException) throw e
+            ShelfPages.opened[id]?.let { listOf(it) } ?: throw e
+        }
+        shelves.filter { !com.prism.music.data.meta.Genres.isRegional(it.title) }.map { sh ->
             sh.copy(items = sh.items.filter { i ->
                 (i !is com.prism.music.data.model.MoodItem && i !is com.prism.music.data.model.PlaylistItem) || !com.prism.music.data.meta.Genres.isRegional(i.title)
             })
@@ -811,6 +819,11 @@ fun BrowseScreen(id: String, params: String?, title: String, bottomPadding: Dp) 
             }
         }
     }
+}
+
+/** The shelves whose "See all" pages were opened this session, by page id: what [BrowseScreen] shows if the page fails. */
+object ShelfPages {
+    val opened = java.util.concurrent.ConcurrentHashMap<String, Shelf>()
 }
 
 private enum class ReleaseSort(val label: String) { NEWEST("Newest"), OLDEST("Oldest"), TITLE("A–Z") }
@@ -877,7 +890,7 @@ private fun ReleaseCard(item: BrowseItem, modifier: Modifier, open: (BrowseItem)
             .combinedClickable(onClick = { open(item) }, onLongClick = item.playable()?.let { p -> { menu(p) } }),
     ) {
         Artwork(
-            LocalContainer.current.covers.art(item), Modifier.fillMaxWidth().aspectRatio(1f), ui.art,
+            LocalContainer.current.covers.art(item), Modifier.fillMaxWidth().aspectRatio(1f), ui.albumArt,
             size = 720, placeholderIcon = PrismIcons.Play,
         )
         Spacer(Modifier.height(8.dp))

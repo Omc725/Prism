@@ -1,5 +1,7 @@
 package com.prism.music.data.foryou
 
+import com.prism.music.R
+import com.prism.music.tr
 import com.prism.music.AppContainer
 import com.prism.music.data.db.PlayEventEntity
 import com.prism.music.data.model.Song
@@ -146,7 +148,7 @@ class YourMusic(private val c: AppContainer) {
         byGenre.entries.sortedByDescending { (_, songs) -> songs.sumOf { score[it.id] ?: 0.0 } }.take(3).forEach { (genre, songs) ->
             if (songs.size < MIN_MIX) return@forEach
             val list = spread(songs.sortedByDescending { score[it.id] ?: 0.0 }.take(MIX_SIZE))
-            out += Mix("lib:genre:$genre", "Your ${genre!!.substringBefore(" & ")} mix", MadeForYou.namesLine(artists(list)), artists(list).take(4), color(genre), s.at, list)
+            out += Mix("lib:genre:$genre", tr(R.string.your_mix, genre!!.substringBefore(" & ")), MadeForYou.namesLine(artists(list)), artists(list).take(4), color(genre), s.at, list)
         }
 
         val artistPlays = s.events.groupingBy { s.songs[it.songId]?.primaryArtist.orEmpty() }.eachCount().filterKeys { it.isNotBlank() }
@@ -160,12 +162,12 @@ class YourMusic(private val c: AppContainer) {
             ).filter { it.related }.map { it.song }
             val list = MadeForYou.interleave(theirs.take(20), around, MIX_SIZE) { it.primaryArtist.lowercase() }
             if (list.size < MIN_MIX) return@forEach
-            out += Mix("lib:artist:$artist", "$artist mix", "With " + MadeForYou.namesLine(artists(list).filterNot { it.equals(artist, true) }.ifEmpty { listOf(artist) }), listOf(artist), color(artist), s.at, list)
+            out += Mix("lib:artist:$artist", tr(R.string.mix_4, artist), tr(R.string.with_2) + MadeForYou.namesLine(artists(list).filterNot { it.equals(artist, true) }.ifEmpty { listOf(artist) }), listOf(artist), color(artist), s.at, list)
         }
 
         // What plays with no connection at all: downloads, songs kept whole in the cache, files on the phone.
         val ready = known.filter { c.availableOffline(it.id) }.sortedByDescending { score[it.id] ?: 0.0 }
-        if (ready.size >= MIN_MIX) out += Mix(OFFLINE_MIX, "Ready offline", "A mix of songs already on your phone", artists(ready).take(4), 0xFF37474F.toInt(), s.at, spread(ready.take(MIX_SIZE)))
+        if (ready.size >= MIN_MIX) out += Mix(OFFLINE_MIX, tr(R.string.ready_offline), tr(R.string.a_mix_of_songs_already_on), artists(ready).take(4), 0xFF37474F.toInt(), s.at, spread(ready.take(MIX_SIZE)))
         return out
     }
 

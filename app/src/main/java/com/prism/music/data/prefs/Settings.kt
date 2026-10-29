@@ -1,5 +1,7 @@
 package com.prism.music.data.prefs
 
+import com.prism.music.R
+import com.prism.music.tr
 import android.content.Context
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
@@ -24,48 +26,48 @@ import kotlinx.serialization.json.Json
 
 private val Context.dataStore by preferencesDataStore("prism_settings")
 
-enum class ThemeMode(val label: String) { SYSTEM("System"), LIGHT("Light"), DARK("Dark") }
-enum class ColorSource(val label: String) { ARTWORK("Now playing"), DYNAMIC("Wallpaper"), CUSTOM("Custom") }
-enum class GlassKind(val label: String) { REGULAR("Regular"), CLEAR("Clear") }
+enum class ThemeMode(val label: String) { SYSTEM(tr(R.string.system)), LIGHT(tr(R.string.light)), DARK(tr(R.string.dark)) }
+enum class ColorSource(val label: String) { ARTWORK(tr(R.string.widget_now_playing)), DYNAMIC(tr(R.string.wallpaper)), CUSTOM(tr(R.string.custom)) }
+enum class GlassKind(val label: String) { REGULAR(tr(R.string.regular)), CLEAR(tr(R.string.clear)) }
 /** Appearance → Color → Spectrum: the split light through the app, or white light (neutral greys and ink, no accent). */
-enum class LightStyle(val label: String) { SPECTRUM("Spectrum"), WHITE("White light") }
+enum class LightStyle(val label: String) { SPECTRUM(tr(R.string.spectrum)), WHITE(tr(R.string.white_light)) }
 /** Appearance → Color → Background (1.7.2): how much color the page itself carries. */
 enum class SurfaceTint(val label: String) {
     /** As Prism always did: a hint of the accent in Spectrum, neutral in White light. */
-    AUTO("Automatic"), NEUTRAL("Neutral"), ACCENT("Accent"), CUSTOM("Your color")
+    AUTO(tr(R.string.automatic_2)), NEUTRAL(tr(R.string.neutral)), ACCENT(tr(R.string.accent)), CUSTOM(tr(R.string.your_color))
 }
 /** Appearance → Color → Contrast (1.7.2): how firm secondary text, lines and the accent are. */
-enum class ContrastLevel(val label: String, val minRatio: Float) { STANDARD("Standard", 4.5f), MEDIUM("Medium", 6f), HIGH("High", 7.5f) }
+enum class ContrastLevel(val label: String, val minRatio: Float) { STANDARD(tr(R.string.standard), 4.5f), MEDIUM(tr(R.string.medium), 6f), HIGH(tr(R.string.high), 7.5f) }
 /** Which of the cover's colors "Now playing" takes. */
-enum class ArtworkSwatch(val label: String) { VIBRANT("Vibrant"), MUTED("Muted"), DOMINANT("Main color") }
+enum class ArtworkSwatch(val label: String) { VIBRANT(tr(R.string.vibrant)), MUTED(tr(R.string.muted)), DOMINANT(tr(R.string.main_color)) }
 /** How the "Now playing" color moves between songs. */
-enum class ArtworkChange(val label: String, val ms: Int) { INSTANT("At once", 0), FADE("Fade", 900), SLOW("Slow fade", 2400), ALBUM("New albums only", 900) }
-enum class AudioQuality(val label: String) { HIGH("High"), NORMAL("Normal"), LOW("Low") }
+enum class ArtworkChange(val label: String, val ms: Int) { INSTANT(tr(R.string.at_once), 0), FADE(tr(R.string.fade), 900), SLOW(tr(R.string.slow_fade), 2400), ALBUM(tr(R.string.new_albums_only), 900) }
+enum class AudioQuality(val label: String) { HIGH(tr(R.string.high)), NORMAL(tr(R.string.normal)), LOW(tr(R.string.low)) }
 /** How lyrics show on Android Auto's player. */
 enum class CarLyricsStyle(val label: String, val detail: String) {
-    KARAOKE("Karaoke", "The line on the cover art, lighting up word by word, and as the title (unless the title's kept)"),
-    LINES("Line by line", "The current and next line on the cover art, and as the title (unless the title's kept)"),
-    TEXT("Title only", "The current line in place of the song title; the cover stays as it is"),
+    KARAOKE(tr(R.string.karaoke_2), tr(R.string.the_line_on_the_cover_art)),
+    LINES(tr(R.string.line_by_line), tr(R.string.the_current_and_next_line_on)),
+    TEXT(tr(R.string.title_only), tr(R.string.the_current_line_in_place_of)),
 }
 
 /** Where lyrics come from; [detail] says what each is good for, in Settings → Lyrics → Sources (#51). */
 enum class LyricsSource(val label: String, val detail: String) {
-    APPLE("Better Lyrics", "Apple Music's lyrics · word by word"),
-    LYRICSPLUS("LyricsPlus", "Apple Music, Musixmatch and Spotify's · word by word"),
-    BINI("Bini", "Apple Music's lyrics · word by word"),
-    QQ("QQ · Portato", "QQ Music · word by word, the most Chinese songs"),
-    LRCLIB("LRCLIB", "Open lyrics database · line by line"),
-    NETEASE("NetEase", "NetEase Cloud Music · word by word"),
-    KUGOU("KuGou", "KuGou · word by word, many Asian songs"),
-    UNISON("Unison", "Lyrics listeners submit · few songs so far"),
-    YTMUSIC("Prism Music", "LyricFind · lines or plain"),
-    GENIUS("Genius", "Plain text · also fills in starred-out words"),
+    APPLE(tr(R.string.better_lyrics), tr(R.string.apple_music_s_lyrics_word_by)),
+    LYRICSPLUS(tr(R.string.lyricsplus), tr(R.string.apple_music_musixmatch_and_spotify_s)),
+    BINI(tr(R.string.bini), tr(R.string.apple_music_s_lyrics_word_by)),
+    QQ(tr(R.string.qq_portato), tr(R.string.qq_music_word_by_word_the)),
+    LRCLIB("LRCLIB", tr(R.string.open_lyrics_database_line_by_line)),
+    NETEASE(tr(R.string.netease), tr(R.string.netease_cloud_music_word_by_word)),
+    KUGOU(tr(R.string.kugou), tr(R.string.kugou_word_by_word_many_asian)),
+    UNISON(tr(R.string.unison), tr(R.string.lyrics_listeners_submit_few_songs_so)),
+    YTMUSIC(tr(R.string.prism_music), tr(R.string.lyricfind_lines_or_plain)),
+    GENIUS(tr(R.string.genius), tr(R.string.plain_text_also_fills_in_starred)),
 }
 
 /** Tiles in Home's greeting section. */
 enum class HomeShortcut(val label: String) {
-    LIKED("Liked songs"), DOWNLOADS("Downloads"), REPLAY("Replay"), LIBRARY("Library"),
-    MOODS("Moods & genres"), SEARCH("Search"), EQUALIZER("Equalizer"), TOGETHER("Listen together"),
+    LIKED(tr(R.string.liked_songs)), DOWNLOADS(tr(R.string.downloads)), REPLAY(tr(R.string.replay_2)), LIBRARY(tr(R.string.library)),
+    MOODS(tr(R.string.moods_genres)), SEARCH(tr(R.string.search)), EQUALIZER(tr(R.string.equalizer)), TOGETHER(tr(R.string.listen_together)),
 }
 
 /** A playlist pinned to Home's greeting tiles. */
@@ -73,9 +75,9 @@ enum class HomeShortcut(val label: String) {
 data class PinnedPlaylist(val id: String, val title: String, val thumbnail: String? = null)
 
 /** Where Autoplay finds what to play next. */
-enum class AutoplaySource(val label: String) { MIXED("Both"), YOURS("Your music"), YOUTUBE("Prism Music") }
+enum class AutoplaySource(val label: String) { MIXED(tr(R.string.both)), YOURS(tr(R.string.your_music)), YOUTUBE(tr(R.string.prism_music)) }
 
-enum class SectionStyle(val label: String) { CAROUSEL("Carousel"), GRID("Grid"), LIST("List"), HERO("Spotlight") }
+enum class SectionStyle(val label: String) { CAROUSEL(tr(R.string.carousel)), GRID(tr(R.string.grid)), LIST(tr(R.string.list)), HERO(tr(R.string.spotlight)) }
 
 // ---------------------------------------------------------------- Look & layout
 
@@ -88,15 +90,15 @@ enum class SectionStyle(val label: String) { CAROUSEL("Carousel"), GRID("Grid"),
  * looks the same on every phone; [face] is the typeface's own name. SERIF and MONO keep their stored names.
  */
 enum class FontChoice(val label: String, val face: String? = null) {
-    PRISM("Prism", "Outfit"), CLEAN("Clean", "Manrope"), GEOMETRIC("Geometric", "Plus Jakarta Sans"), AIRY("Airy", "Urbanist"),
-    ROUNDED("Rounded", "Nunito"), SERIF("Editorial", "Fraunces"), MONO("Mono", "Geist Mono"),
+    PRISM(tr(R.string.app_name), tr(R.string.outfit)), CLEAN(tr(R.string.clean), tr(R.string.manrope)), GEOMETRIC(tr(R.string.geometric), tr(R.string.plus_jakarta_sans)), AIRY(tr(R.string.airy), tr(R.string.urbanist)),
+    ROUNDED(tr(R.string.rounded), tr(R.string.nunito)), SERIF(tr(R.string.editorial), tr(R.string.fraunces)), MONO(tr(R.string.mono), tr(R.string.geist_mono)),
     /** Made to be told apart at a glance: low vision (1.7.7). */
-    LEGIBLE("Legible", "Atkinson Hyperlegible"),
+    LEGIBLE(tr(R.string.legible), tr(R.string.atkinson_hyperlegible)),
     /** Weighted letters that don't flip or swap: dyslexia (1.7.7). Two weights, not variable. */
-    DYSLEXIC("Dyslexia-friendly", "OpenDyslexic"),
-    SYSTEM("System"),
+    DYSLEXIC(tr(R.string.dyslexia_friendly), tr(R.string.opendyslexic)),
+    SYSTEM(tr(R.string.system)),
     /** A .ttf / .otf the listener imported (#12; `AppFonts.FontSlot`). */
-    CUSTOM("Your font");
+    CUSTOM(tr(R.string.your_font_2));
 
     companion object {
         /**
@@ -108,13 +110,13 @@ enum class FontChoice(val label: String, val face: String? = null) {
 }
 
 /** How round cards, tiles and artwork are. */
-enum class Corners(val label: String, val scale: Float) { SHARP("Sharp", 0.2f), SUBTLE("Subtle", 0.6f), ROUND("Round", 1f), EXTRA("Extra", 1.5f) }
+enum class Corners(val label: String, val scale: Float) { SHARP(tr(R.string.sharp), 0.2f), SUBTLE(tr(R.string.subtle), 0.6f), ROUND(tr(R.string.round), 1f), EXTRA(tr(R.string.extra), 1.5f) }
 /** A cover's shape (1.7.7): drawn by Prism ([com.prism.music.ui.theme.CoverShapes]), no library. */
 enum class CoverShape(val label: String) {
-    ROUNDED("Rounded"), SQUARE("Square"), CIRCLE("Circle"), SQUIRCLE("Squircle"), FLOWER("Flower"), COOKIE("Cookie"), ARCH("Arch"), SLANTED("Slanted"),
+    ROUNDED(tr(R.string.rounded)), SQUARE(tr(R.string.square)), CIRCLE(tr(R.string.circle)), SQUIRCLE(tr(R.string.squircle)), FLOWER(tr(R.string.flower)), COOKIE(tr(R.string.cookie)), ARCH(tr(R.string.arch)), SLANTED(tr(R.string.slanted)),
 }
 /** Prism's buttons (Play, Shuffle, dialogs' buttons), 1.7.7. */
-enum class ButtonShape(val label: String) { PILL("Pill"), ROUNDED("Rounded"), SQUARE("Square") }
+enum class ButtonShape(val label: String) { PILL(tr(R.string.pill)), ROUNDED(tr(R.string.rounded)), SQUARE(tr(R.string.square)) }
 
 /** Lyrics, your way (1.7.5). Every default draws the lyrics as 1.7.4 did. Nested since 1.7.7 (see [ShapeLook]). */
 data class LyricsLookPrefs(
@@ -154,12 +156,12 @@ data class LyricsLookPrefs(
 )
 
 /** An instrumental break on the lyrics page (1.7.8, #158). */
-enum class LyricsGapMark(val label: String) { DOTS("Three dots"), NOTE("Music note") }
+enum class LyricsGapMark(val label: String) { DOTS(tr(R.string.three_dots)), NOTE(tr(R.string.music_note)) }
 
 /** How heavy all of Prism's text is, against its own weights (1.7.7). */
-enum class TypeWeight(val label: String, val shift: Int) { LIGHT("Light", -100), REGULAR("Regular", 0), BOLD("Bold", 100) }
+enum class TypeWeight(val label: String, val shift: Int) { LIGHT(tr(R.string.light), -100), REGULAR(tr(R.string.regular), 0), BOLD(tr(R.string.bold), 100) }
 /** How far apart letters sit (1.7.7), in em added to each style's own. */
-enum class TypeSpacing(val label: String, val em: Float) { TIGHT("Tight", -0.015f), NORMAL("Normal", 0f), WIDE("Wide", 0.03f) }
+enum class TypeSpacing(val label: String, val em: Float) { TIGHT(tr(R.string.tight), -0.015f), NORMAL(tr(R.string.normal), 0f), WIDE(tr(R.string.wide), 0.03f) }
 
 /** Customize Prism → Text (1.7.7): weight, spacing, and a font of its own for titles. Nested (see [ShapeLook]). */
 data class TypeLook(
@@ -178,9 +180,9 @@ data class TypeLook(
  * others set the title outright, and Bold makes the artist's name heavier too.
  */
 enum class PlayerTitleWeight(val label: String, val title: androidx.compose.ui.text.font.FontWeight?, val artist: androidx.compose.ui.text.font.FontWeight?) {
-    LIGHT("Light", null, null),
-    REGULAR("Regular", androidx.compose.ui.text.font.FontWeight.Normal, null),
-    BOLD("Bold", androidx.compose.ui.text.font.FontWeight.Bold, androidx.compose.ui.text.font.FontWeight.SemiBold),
+    LIGHT(tr(R.string.light), null, null),
+    REGULAR(tr(R.string.regular), androidx.compose.ui.text.font.FontWeight.Normal, null),
+    BOLD(tr(R.string.bold), androidx.compose.ui.text.font.FontWeight.Bold, androidx.compose.ui.text.font.FontWeight.SemiBold),
 }
 
 /** Customize Prism → Icons & shapes (1.7.7). */
@@ -202,7 +204,7 @@ data class ShapeLook(
 )
 
 /** The current tab's icon color (1.7.7). */
-enum class TabTint(val label: String) { INK("Ink"), ACCENT("Accent"), LIGHT("The light") }
+enum class TabTint(val label: String) { INK(tr(R.string.ink)), ACCENT(tr(R.string.accent)), LIGHT(tr(R.string.the_light)) }
 
 /**
  * How Prism behaves, added in 1.7.8 (not part of a Look). Nested (see [ShapeLook]). Every default keeps 1.7.7's way.
@@ -228,10 +230,10 @@ data class BehaviorPrefs(
 )
 
 /** Picture-in-picture for a playing video (1.7.8, #167). */
-enum class PipMode(val label: String) { AUTO("When you leave Prism"), MENU("Only with its button") }
+enum class PipMode(val label: String) { AUTO(tr(R.string.when_you_leave_prism)), MENU(tr(R.string.only_with_its_button)) }
 
 /** What Home's Recently played lists (1.7.8, #196). */
-enum class RecentShows(val label: String) { SONGS("Songs"), COLLECTIONS("Albums & playlists") }
+enum class RecentShows(val label: String) { SONGS(tr(R.string.songs)), COLLECTIONS(tr(R.string.albums_playlists)) }
 
 /** The player's look, added in 1.7.8 (part of a Look). Nested (see [ShapeLook]). Every default keeps 1.7.7's look. */
 data class ViewLook(
@@ -282,10 +284,10 @@ data class SoundPrefs(
 
 /** How a crossfade's two volumes cross (1.7.8, A1). */
 enum class CrossfadeCurve(val label: String, val detail: String) {
-    EQUAL_POWER("Smooth", "Equal power: the loudness holds all the way through (as before)"),
-    LINEAR("Straight", "One goes down as the other comes up, evenly: a slight dip in the middle"),
-    S_CURVE("Gentle", "Slow at both ends, quicker in the middle"),
-    DJ_CUT("DJ cut", "Both play at full, then a quick swap halfway through");
+    EQUAL_POWER(tr(R.string.smooth), tr(R.string.equal_power_the_loudness_holds_all)),
+    LINEAR(tr(R.string.straight), tr(R.string.one_goes_down_as_the_other)),
+    S_CURVE(tr(R.string.gentle), tr(R.string.slow_at_both_ends_quicker_in)),
+    DJ_CUT(tr(R.string.dj_cut), tr(R.string.both_play_at_full_then_a));
 
     /** The (incoming, outgoing) volumes at [p] (0 … 1) of the way through the blend. */
     fun gains(p: Float): Pair<Float, Float> {
@@ -302,29 +304,29 @@ enum class CrossfadeCurve(val label: String, val detail: String) {
 }
 
 /** Normalize volume's levels (A2): the loudness each one brings songs to. */
-val NORMALIZE_TARGETS = listOf(-8 to "Loud", -11 to "Louder", -14 to "Standard", -16 to "Quieter", -23 to "Broadcast")
+val NORMALIZE_TARGETS = listOf(-8 to tr(R.string.loud), -11 to tr(R.string.louder), -14 to tr(R.string.standard), -16 to tr(R.string.quieter), -23 to tr(R.string.broadcast))
 
 /** The player's controls over the lyrics and the queue (1.7.8). */
 enum class PanelPlayer(val label: String, val detail: String) {
-    AUTO_HIDE("Hide after a moment", "As now: they come back when you tap or stop scrolling"),
-    ALWAYS("Always shown", "The controls stay under the lyrics and the queue"),
-    HIDDEN("Full screen", "Lyrics and the queue get the whole screen; swipe up or tap for the controls"),
+    AUTO_HIDE(tr(R.string.hide_after_a_moment), tr(R.string.as_now_they_come_back_when)),
+    ALWAYS(tr(R.string.always_shown), tr(R.string.the_controls_stay_under_the_lyrics)),
+    HIDDEN(tr(R.string.full_screen), tr(R.string.lyrics_and_the_queue_get_the)),
 }
 
 /** Full-bleed artwork's fit (1.7.8, #175). */
-enum class BleedFit(val label: String) { FILL("Fill the screen"), FIT("Whole cover") }
+enum class BleedFit(val label: String) { FILL(tr(R.string.fill_the_screen)), FIT(tr(R.string.whole_cover)) }
 
 /** How much room rows and sections get. */
-enum class UiDensity(val label: String, val scale: Float) { COMPACT("Compact", 0.7f), COMFORTABLE("Comfortable", 1f), ROOMY("Roomy", 1.3f) }
+enum class UiDensity(val label: String, val scale: Float) { COMPACT(tr(R.string.compact), 0.7f), COMFORTABLE(tr(R.string.comfortable), 1f), ROOMY(tr(R.string.roomy), 1.3f) }
 
 /** The big page titles (Library, Replay, Settings…). */
-enum class TitleSize(val label: String) { LARGE("Large"), MEDIUM("Medium"), SMALL("Small") }
+enum class TitleSize(val label: String) { LARGE(tr(R.string.large)), MEDIUM(tr(R.string.medium)), SMALL(tr(R.string.small)) }
 
 /** Width of album / playlist cards in carousels. */
-enum class CardSize(val label: String, val widthDp: Int) { SMALL("Small", 124), MEDIUM("Medium", 152), LARGE("Large", 184) }
+enum class CardSize(val label: String, val widthDp: Int) { SMALL(tr(R.string.small), 124), MEDIUM(tr(R.string.medium), 152), LARGE(tr(R.string.large), 184) }
 
-enum class NavBarStyle(val label: String) { FLOATING("Floating"), DOCKED("Docked"), MINIMAL("Minimal") }
-enum class NavLabels(val label: String) { ALWAYS("Always"), SELECTED("Selected"), NEVER("Never"), WORDS("Words only") }
+enum class NavBarStyle(val label: String) { FLOATING(tr(R.string.floating)), DOCKED(tr(R.string.docked)), MINIMAL(tr(R.string.minimal)) }
+enum class NavLabels(val label: String) { ALWAYS(tr(R.string.always)), SELECTED(tr(R.string.selected)), NEVER(tr(R.string.never)), WORDS(tr(R.string.words_only)) }
 
 /** A tab's own name as kept: one line, no separators, short enough for the bar. */
 fun cleanTabName(name: String) = name.replace(Regex("[|=\\n\\r]"), " ").trim().take(18)
@@ -336,22 +338,22 @@ fun parseTabNames(v: String): Map<NavTab, String> = v.split('|').mapNotNull { pa
 }.toMap()
 /** The tab bar's height (1.7.6): its floating, docked and minimal heights. */
 enum class NavBarSize(val label: String, val floating: Int, val docked: Int, val minimal: Int) {
-    COMPACT("Compact", 56, 54, 48), STANDARD("Standard", 64, 60, 54), TALL("Tall", 72, 68, 60),
+    COMPACT(tr(R.string.compact), 56, 54, 48), STANDARD(tr(R.string.standard), 64, 60, 54), TALL(tr(R.string.tall), 72, 68, 60),
 }
 /** What's behind the tabs (1.7.6): the glass as it is, lighter so the page shows through, or solid. */
-enum class NavBarFill(val label: String) { GLASS("As the glass"), LIGHT("See-through"), SOLID("Solid") }
+enum class NavBarFill(val label: String) { GLASS(tr(R.string.as_the_glass)), LIGHT(tr(R.string.see_through)), SOLID(tr(R.string.solid)) }
 
 /** Tabs the bottom bar can hold. */
 /** The sections along the top of Local files, in the order the listener picked (#29). */
 enum class LocalSection(val label: String) {
-    SONGS("Songs"), FAVOURITES("Favorites"), ARTISTS("Artists"), ALBUMS("Albums"),
-    ADDED_SONGS("Recently added"), ADDED_ALBUMS("Added albums"), DOWNLOADS("Downloads"),
+    SONGS(tr(R.string.songs)), FAVOURITES(tr(R.string.favorites)), ARTISTS(tr(R.string.artists)), ALBUMS(tr(R.string.albums)),
+    ADDED_SONGS(tr(R.string.recently_added)), ADDED_ALBUMS(tr(R.string.added_albums)), DOWNLOADS(tr(R.string.downloads)),
 }
 
 enum class NavTab(val label: String) {
-    HOME("Home"), SEARCH("Search"), LIBRARY("Library"), REPLAY("Replay"), SETTINGS("Settings"), LOCAL("Local files"),
+    HOME(tr(R.string.home)), SEARCH(tr(R.string.search)), LIBRARY(tr(R.string.library)), REPLAY(tr(R.string.replay_2)), SETTINGS(tr(R.string.settings)), LOCAL(tr(R.string.local_files)),
     // 1.7.6: any of these pages as a tab too.
-    DOWNLOADS("Downloads"), LIKED("Liked songs"), PODCASTS("Podcasts");
+    DOWNLOADS(tr(R.string.downloads)), LIKED(tr(R.string.liked_songs)), PODCASTS(tr(R.string.podcasts));
 
     companion object {
         /** The most tabs the bar holds (labels still fit on a phone). */
@@ -359,66 +361,66 @@ enum class NavTab(val label: String) {
     }
 }
 
-enum class MiniPlayerStyle(val label: String) { CARD("Card"), SLIM("Slim"), PILL("Pill") }
-enum class MiniProgress(val label: String) { LINE("Line"), FILL("Fill"), NONE("None") }
+enum class MiniPlayerStyle(val label: String) { CARD(tr(R.string.card)), SLIM(tr(R.string.slim)), PILL(tr(R.string.pill)) }
+enum class MiniProgress(val label: String) { LINE(tr(R.string.line)), FILL(tr(R.string.fill)), NONE(tr(R.string.none)) }
 
 /** What's behind the full player. */
 enum class PlayerBackground(val label: String) {
-    MESH("Color mesh"), BLUR("Blurred cover"),
+    MESH(tr(R.string.color_mesh)), BLUR(tr(R.string.blurred_cover)),
     /** The background picked for Home in Appearance → Backgrounds, in its dark version. */
-    APPEARANCE("Your background"),
-    THEME("Theme"), BLACK("Black"),
+    APPEARANCE(tr(R.string.your_background)),
+    THEME(tr(R.string.theme)), BLACK(tr(R.string.black)),
 }
-enum class TransportStyle(val label: String) { GLYPHS("Classic"), BUTTON("Play button"), OUTLINE("Rings") }
+enum class TransportStyle(val label: String) { GLYPHS(tr(R.string.classic)), BUTTON(tr(R.string.play_button)), OUTLINE(tr(R.string.rings)) }
 /** How wide the player's cover is: [extra] is how far it reaches into each side margin. */
-enum class CoverSize(val label: String, val extra: Float) { STANDARD("Standard", 0f), LARGE("Large", 18f), FULL("Full width", 30f) }
+enum class CoverSize(val label: String, val extra: Float) { STANDARD(tr(R.string.standard), 0f), LARGE(tr(R.string.large), 18f), FULL(tr(R.string.full_width), 30f) }
 /** Immersive mode's cover: [zoom] 1 fills the screen (its sides cut off), 0 shows all of it across the width. */
 /** How much of the queue is loaded ahead while a song plays: the next song's first seconds, or whole songs. */
-enum class Preload(val label: String, val songs: Int) { START("Next song's start", 0), NEXT("Next song", 1), NEXT3("Next 3 songs", 3) }
+enum class Preload(val label: String, val songs: Int) { START(tr(R.string.next_song_s_start), 0), NEXT(tr(R.string.next_song), 1), NEXT3(tr(R.string.next_3_songs), 3) }
 
 /** Where immersive mode's lyrics go: a line at a time high, in the middle or low on the screen, or all of them over it. */
-enum class ImmersiveLyrics(val label: String) { HIGH("High"), MIDDLE("Middle"), LOW("Low"), FULL("Full screen") }
-enum class ImmersiveArt(val label: String, val zoom: Float) { FILL("Fill the screen", 1f), ZOOMED("Zoomed out", 0.4f), WHOLE("Whole cover", 0f) }
+enum class ImmersiveLyrics(val label: String) { HIGH(tr(R.string.high)), MIDDLE(tr(R.string.middle)), LOW(tr(R.string.low)), FULL(tr(R.string.full_screen)) }
+enum class ImmersiveArt(val label: String, val zoom: Float) { FILL(tr(R.string.fill_the_screen), 1f), ZOOMED(tr(R.string.zoomed_out), 0.4f), WHOLE(tr(R.string.whole_cover), 0f) }
 /** [WAVE] (1.7.4): the song's own loudness, drawn from its scan, as the bar (a plain line until the song's been scanned). */
 enum class ScrubberStyle(val label: String) {
-    HAIRLINE("Hairline"), BOLD("Bold"), THUMB("Thumb"), WAVE("Waveform"),
+    HAIRLINE(tr(R.string.hairline)), BOLD(tr(R.string.bold)), THUMB(tr(R.string.thumb)), WAVE(tr(R.string.waveform)),
     /** A filled bar and knob with thin strands flowing over the played part (#151, after One UI's; 1.7.7). */
-    RIBBONS("Ribbons"),
+    RIBBONS(tr(R.string.ribbons)),
 }
 
 // ---------------------------------------------------------------------------- The player, your way (1.7.4)
 
 /** How the player is laid out: presets that reuse the same pieces (cover, deck, lyrics), each still tweakable. */
 enum class PlayerLayout(val label: String, val note: String) {
-    STANDARD("Standard", "The cover, then everything under it"),
-    COVER("Cover", "A big cover; tap it for the controls"),
-    LYRICS("Lyrics", "Opens on the lyrics, a small cover beside the title"),
-    MINIMAL("Minimal", "The title and play; gestures do the rest"),
-    VINYL("Vinyl", "The cover as a record's label, turning as it plays"),
-    CASSETTE("Cassette", "The cover on a tape whose reels turn as it plays"),
+    STANDARD(tr(R.string.standard), tr(R.string.the_cover_then_everything_under_it)),
+    COVER(tr(R.string.cover), tr(R.string.a_big_cover_tap_it_for)),
+    LYRICS(tr(R.string.lyrics), tr(R.string.opens_on_the_lyrics_a_small)),
+    MINIMAL(tr(R.string.minimal), tr(R.string.the_title_and_play_gestures_do)),
+    VINYL(tr(R.string.vinyl), tr(R.string.the_cover_as_a_record_s)),
+    CASSETTE(tr(R.string.cassette), tr(R.string.the_cover_on_a_tape_whose)),
 }
 
 /** The knob at the progress bar's playhead ([AUTO]: a dot with the Thumb style, none with the others). */
-enum class ScrubberThumb(val label: String) { AUTO("With the style"), NONE("None"), DOT("Dot"), LINE("Line"), RING("Ring") }
+enum class ScrubberThumb(val label: String) { AUTO(tr(R.string.with_the_style)), NONE(tr(R.string.none)), DOT(tr(R.string.dot)), LINE(tr(R.string.line)), RING(tr(R.string.ring)) }
 
 /** How the visualizer moves with the music (1.7.4). */
 enum class VisualizerStyle(val label: String, val note: String) {
-    OFF("Off", "Nothing moves with the music"),
-    BARS("Bars", "Along the bottom of the player"),
-    WAVE("Wave", "A soft wave behind the title"),
-    RING("Ring", "Around the cover"),
-    PULSE("Pulse", "The progress bar pulses with the beat"),
-    GLOW("Glow", "The background breathes with the music"),
+    OFF(tr(R.string.off), tr(R.string.nothing_moves_with_the_music)),
+    BARS(tr(R.string.bars), tr(R.string.along_the_bottom_of_the_player)),
+    WAVE(tr(R.string.wave), tr(R.string.a_soft_wave_behind_the_title)),
+    RING(tr(R.string.ring), tr(R.string.around_the_cover)),
+    PULSE(tr(R.string.pulse), tr(R.string.the_progress_bar_pulses_with_the)),
+    GLOW(tr(R.string.glow), tr(R.string.the_background_breathes_with_the_music)),
 }
 
 /** The parts under the player's title, in the order the listener arranged them. */
-enum class DeckPart(val label: String) { STRIP("Current lyric"), SCRUBBER("Progress bar"), TRANSPORT("Controls"), VOLUME("Volume"), BUTTONS("Buttons") }
+enum class DeckPart(val label: String) { STRIP(tr(R.string.current_lyric)), SCRUBBER(tr(R.string.progress_bar)), TRANSPORT(tr(R.string.controls)), VOLUME(tr(R.string.volume)), BUTTONS(tr(R.string.buttons)) }
 
 /** What a button in the player's bottom row does: the listener picks three to six, in order. */
 enum class PlayerButton(val label: String) {
-    LYRICS("Lyrics"), VIDEO("Video"), QUEUE("Up next"), OUTPUT("Play on"), SLEEP("Sleep timer"), LIKE("Like"),
-    DISLIKE("Not for me"), ADD_TO_PLAYLIST("Add to playlist"), SHARE("Share"), SING("Sing"), DJ("DJ mode"),
-    EQUALIZER("Equalizer"), DOWNLOAD("Download"), RADIO("Start radio"), SPEED("Speed");
+    LYRICS(tr(R.string.lyrics)), VIDEO(tr(R.string.video)), QUEUE(tr(R.string.up_next)), OUTPUT(tr(R.string.play_on)), SLEEP(tr(R.string.sleep_timer)), LIKE(tr(R.string.widget_like)),
+    DISLIKE(tr(R.string.not_for_me)), ADD_TO_PLAYLIST(tr(R.string.add_to_playlist)), SHARE(tr(R.string.share)), SING(tr(R.string.sing)), DJ(tr(R.string.dj_mode)),
+    EQUALIZER(tr(R.string.equalizer)), DOWNLOAD(tr(R.string.download)), RADIO(tr(R.string.start_radio)), SPEED(tr(R.string.speed));
 
     companion object {
         /** As 1.7 had it: lyrics, the music video and the queue. */
@@ -433,8 +435,8 @@ enum class PlayerButton(val label: String) {
  * show the first two, Android Auto and other controllers show them all.
  */
 enum class SessionButton(val label: String) {
-    LIKE("Like"), SHUFFLE("Shuffle"), REPEAT("Repeat"), CAR_LYRICS("Lyrics in the car"), RADIO("Start radio"),
-    DISLIKE("Not for me"), BACK_10("Back 10 s"), AHEAD_30("Ahead 30 s");
+    LIKE(tr(R.string.widget_like)), SHUFFLE(tr(R.string.shuffle)), REPEAT(tr(R.string.repeat)), CAR_LYRICS(tr(R.string.lyrics_in_the_car)), RADIO(tr(R.string.start_radio)),
+    DISLIKE(tr(R.string.not_for_me)), BACK_10(tr(R.string.back_10_s)), AHEAD_30(tr(R.string.ahead_30_s));
 
     companion object {
         /** As 1.7 had them (like and shuffle beside play on the phone). */
@@ -443,69 +445,69 @@ enum class SessionButton(val label: String) {
 }
 
 /** The progress bar's color. */
-enum class ScrubberColor(val label: String) { SPECTRUM("Your light"), ACCENT("Accent"), WHITE("White"), COVER("From the cover") }
+enum class ScrubberColor(val label: String) { SPECTRUM(tr(R.string.your_light)), ACCENT(tr(R.string.accent)), WHITE(tr(R.string.white)), COVER(tr(R.string.from_the_cover)) }
 
 // ---------------------------------------------------------------------------- Lyrics, your way (1.7.5)
 
 /** How the line being sung is drawn. [PRISM] is the lyrics as 1.7 drew them. */
 enum class LyricsStyle(val label: String, val note: String) {
-    PRISM("Prism", "Each word grows bolder as it's sung"),
-    KARAOKE("Classic karaoke", "Color fills the words as they're sung"),
-    CARD("Bold card", "Big bold lines on the cover's color"),
-    GLOW("Glow", "The sung words glow"),
-    TYPEWRITER("Typewriter", "Words appear as they're sung"),
-    CALM("Calm", "No animation: the line simply brightens"),
+    PRISM(tr(R.string.app_name), tr(R.string.each_word_grows_bolder_as_it)),
+    KARAOKE(tr(R.string.classic_karaoke), tr(R.string.color_fills_the_words_as_they)),
+    CARD(tr(R.string.bold_card), tr(R.string.big_bold_lines_on_the_cover)),
+    GLOW(tr(R.string.glow), tr(R.string.the_sung_words_glow)),
+    TYPEWRITER(tr(R.string.typewriter), tr(R.string.words_appear_as_they_re_sung)),
+    CALM(tr(R.string.calm), tr(R.string.no_animation_the_line_simply_brightens)),
 }
 
 /** What the player's volume slider changes (#116): the phone's media volume (as before), or Prism's own. */
-enum class VolumeControl(val label: String) { PHONE("The phone's volume"), PRISM("Prism's own volume") }
+enum class VolumeControl(val label: String) { PHONE(tr(R.string.the_phone_s_volume)), PRISM(tr(R.string.prism_s_own_volume)) }
 
 /** A color for lyrics: white, your light, the accent, the cover's, or one of your own. */
-enum class LyricsColor(val label: String) { WHITE("White"), SPECTRUM("Your light"), ACCENT("Accent"), COVER("From the cover"), CUSTOM("Your color") }
+enum class LyricsColor(val label: String) { WHITE(tr(R.string.white)), SPECTRUM(tr(R.string.your_light)), ACCENT(tr(R.string.accent)), COVER(tr(R.string.from_the_cover)), CUSTOM(tr(R.string.your_color)) }
 
 /** How heavy the lyrics are; the sung word grows two steps bolder (Prism and Bold card). [LIGHT] as 1.7. */
-enum class LyricsWeight(val label: String, val weight: Int) { THIN("Thin", 200), LIGHT("Light", 300), REGULAR("Regular", 400), MEDIUM("Medium", 500), BOLD("Bold", 700) }
+enum class LyricsWeight(val label: String, val weight: Int) { THIN(tr(R.string.thin), 200), LIGHT(tr(R.string.light), 300), REGULAR(tr(R.string.regular), 400), MEDIUM(tr(R.string.medium), 500), BOLD(tr(R.string.bold), 700) }
 
 /** Where the line being sung settles on the lyrics page ([fraction] of the way down). [TOP] as 1.7. */
 enum class LyricsPosition(val label: String, val note: String, val fraction: Float) {
-    TOP("Near the top", "The most lines ahead show", 0f),
-    THIRD("A third down", "A few sung lines stay in view", 0.28f),
-    MIDDLE("In the middle", "Centered, as on a lyric sheet", 0.42f),
+    TOP(tr(R.string.near_the_top), tr(R.string.the_most_lines_ahead_show), 0f),
+    THIRD(tr(R.string.a_third_down), tr(R.string.a_few_sung_lines_stay_in), 0.28f),
+    MIDDLE(tr(R.string.in_the_middle), tr(R.string.centered_as_on_a_lyric_sheet), 0.42f),
 }
 
 /** How many of the lines to come show on the lyrics page. [ALL] as 1.7. */
-enum class LyricsAhead(val label: String, val lines: Int) { ALL("All", Int.MAX_VALUE), THREE("Three", 3), ONE("One", 1), NONE("None", 0) }
+enum class LyricsAhead(val label: String, val lines: Int) { ALL(tr(R.string.all), Int.MAX_VALUE), THREE(tr(R.string.three), 3), ONE(tr(R.string.one), 1), NONE(tr(R.string.none), 0) }
 
 /** Where a translation or romanized line goes. */
-enum class LyricsExtraPlace(val label: String) { BELOW("Under the line"), ABOVE("Over the line") }
+enum class LyricsExtraPlace(val label: String) { BELOW(tr(R.string.under_the_line)), ABOVE(tr(R.string.over_the_line)) }
 
 /**
  * What's behind the lyrics: on the lyrics page [PLAYER] is the player's own background (as 1.7), in immersive mode it's
  * the cover filling the screen (as 1.7).
  */
 enum class LyricsBackground(val label: String, val note: String) {
-    PLAYER("As now", "The player's background, or the cover in immersive mode"),
-    DARK("Plain dark", "Nothing but the words"),
-    BLUR("Blurred cover", "The cover, soft and dimmed"),
-    CANVAS("Animated cover", "The song's moving cover when it has one"),
-    COVER_COLOR("The cover's color", "One color taken from the cover"),
-    COLOR("Your colors", "A color, or two as a gradient"),
+    PLAYER(tr(R.string.as_now), tr(R.string.the_player_s_background_or_the)),
+    DARK(tr(R.string.plain_dark), tr(R.string.nothing_but_the_words)),
+    BLUR(tr(R.string.blurred_cover), tr(R.string.the_cover_soft_and_dimmed)),
+    CANVAS(tr(R.string.animated_cover), tr(R.string.the_song_s_moving_cover_when)),
+    COVER_COLOR(tr(R.string.the_cover_s_color), tr(R.string.one_color_taken_from_the_cover)),
+    COLOR(tr(R.string.your_colors), tr(R.string.a_color_or_two_as_a)),
 }
-enum class PlayerTitleAlign(val label: String) { START("Left"), CENTER("Centered") }
-enum class PlayerTitleSize(val label: String, val scale: Float) { SMALL("Small", 0.82f), MEDIUM("Medium", 1f), LARGE("Large", 1.2f) }
+enum class PlayerTitleAlign(val label: String) { START(tr(R.string.left)), CENTER(tr(R.string.centered)) }
+enum class PlayerTitleSize(val label: String, val scale: Float) { SMALL(tr(R.string.small), 0.82f), MEDIUM(tr(R.string.medium), 1f), LARGE(tr(R.string.large), 1.2f) }
 /** The times under the progress bar. */
-enum class PlayerTimes(val label: String) { BOTH("Both"), ELAPSED("Elapsed"), LEFT("Time left"), NONE("None") }
+enum class PlayerTimes(val label: String) { BOTH(tr(R.string.both)), ELAPSED(tr(R.string.elapsed)), LEFT(tr(R.string.time_left)), NONE(tr(R.string.none)) }
 
 /** What a gesture on the player's cover (or the mini player) does. */
 enum class PlayerGesture(val label: String) {
-    NEXT("Next song"), PREVIOUS("Previous song"), SEEK_BACK("Back 10 s"), SEEK_AHEAD("Ahead 10 s"),
+    NEXT(tr(R.string.next_song)), PREVIOUS(tr(R.string.previous_song)), SEEK_BACK(tr(R.string.back_10_s)), SEEK_AHEAD(tr(R.string.ahead_10_s)),
     /** Double tap only: the cover's left half goes back, its right half ahead (#79). */
-    SEEK_SIDES("Seek by side"),
-    PLAY_PAUSE("Play / pause"), LIKE("Like"), QUEUE("Up next"), LYRICS("Lyrics"), SLEEP("Sleep timer"), VIDEO("Video"),
-    SING("Sing"), MENU("Song menu"), STOP("Stop"),
+    SEEK_SIDES(tr(R.string.seek_by_side)),
+    PLAY_PAUSE(tr(R.string.play_pause_2)), LIKE(tr(R.string.widget_like)), QUEUE(tr(R.string.up_next)), LYRICS(tr(R.string.lyrics)), SLEEP(tr(R.string.sleep_timer)), VIDEO(tr(R.string.video)),
+    SING(tr(R.string.sing)), MENU(tr(R.string.song_menu)), STOP(tr(R.string.stop)),
     /** Mini player only (#149, 1.7.7): what a tap does, for swiping up. */
-    OPEN("Open the player"),
-    NONE("Nothing");
+    OPEN(tr(R.string.open_the_player)),
+    NONE(tr(R.string.nothing));
 
     companion object {
         /** The choices offered for a gesture ([double]: double tap, which also has [SEEK_SIDES]; [mini]: the mini player). */
@@ -519,24 +521,24 @@ enum class PlayerGesture(val label: String) {
         }
     }
 }
-enum class LyricsAlign(val label: String) { START("Left"), CENTER("Center") }
+enum class LyricsAlign(val label: String) { START(tr(R.string.left)), CENTER(tr(R.string.center)) }
 /** Lyrics in a script the listener can't read, in Latin letters too: under each line, or in its place. */
-enum class RomanizeMode(val label: String) { OFF("Off"), UNDER("Under each line"), INSTEAD("Instead") }
-enum class LibraryView(val label: String) { GRID("Grid"), LIST("List") }
+enum class RomanizeMode(val label: String) { OFF(tr(R.string.off)), UNDER(tr(R.string.under_each_line)), INSTEAD(tr(R.string.instead)) }
+enum class LibraryView(val label: String) { GRID(tr(R.string.grid)), LIST(tr(R.string.list)) }
 /** The top of Home (1.7.6): the greeting as before, only its buttons, or the greeting over a picture. */
 enum class HomeHeader(val label: String, val note: String) {
-    GREETING("Greeting", "The date and a hello, as now"),
-    NONE("Just the buttons", "No greeting: Home starts with its sections"),
-    PICTURE("A picture", "Your photo or a design behind the greeting"),
-    NOW_PLAYING("Now playing", "The playing cover, frosted, behind it"),
+    GREETING(tr(R.string.greeting), tr(R.string.the_date_and_a_hello_as)),
+    NONE(tr(R.string.just_the_buttons), tr(R.string.no_greeting_home_starts_with_its)),
+    PICTURE(tr(R.string.a_picture), tr(R.string.your_photo_or_a_design_behind)),
+    NOW_PLAYING(tr(R.string.widget_now_playing), tr(R.string.the_playing_cover_frosted_behind_it)),
 }
-enum class HomeHeaderHeight(val label: String, val dp: Int) { SHORT("Short", 200), MEDIUM("Medium", 260), TALL("Tall", 340) }
+enum class HomeHeaderHeight(val label: String, val dp: Int) { SHORT(tr(R.string.short_text), 200), MEDIUM(tr(R.string.medium), 260), TALL(tr(R.string.tall), 340) }
 
 /** What Search shows before you type (1.7.6), in the listener's order; the ones left out are hidden. */
 enum class SearchSection(val label: String) {
     // The shortcut tiles (Recognize, Find by lyrics, Podcasts, Your files) went before release: the search box has
     // Recognize, a line of lyrics finds its song, and podcasts and your files are searched with everything else.
-    RECENT("Recent"), ARTISTS("Your artists"), MOODS("Moods & genres");
+    RECENT(tr(R.string.recent)), ARTISTS(tr(R.string.your_artists)), MOODS(tr(R.string.moods_genres));
 
     companion object {
         fun parse(v: String?): List<SearchSection> =
@@ -545,7 +547,7 @@ enum class SearchSection(val label: String) {
 }
 
 /** Covers across Library's grid: Auto fits as many as the width allows (as before 1.7.6). */
-enum class LibraryColumns(val label: String, val count: Int) { AUTO("Auto", 0), TWO("2", 2), THREE("3", 3), FOUR("4", 4) }
+enum class LibraryColumns(val label: String, val count: Int) { AUTO(tr(R.string.auto), 0), TWO("2", 2), THREE("3", 3), FOUR("4", 4) }
 
 /** "PLAYLISTS=GRID|ALBUMS=LIST": Library tabs shown their own way. */
 fun parseLibraryViews(v: String): Map<String, LibraryView> = v.split('|').mapNotNull { part ->
@@ -554,10 +556,10 @@ fun parseLibraryViews(v: String): Map<String, LibraryView> = v.split('|').mapNot
 }.toMap()
 /** The tiles at the top of Library's Playlists tab (Reddit 1.7: "let me reorder or hide them"); shown in the order kept. */
 enum class LibraryTile(val label: String) {
-    LIKED("Liked songs"), DOWNLOADS("Downloads"), LOCAL("Local files"), REPLAY("Replay"),
+    LIKED(tr(R.string.liked_songs)), DOWNLOADS(tr(R.string.downloads)), LOCAL(tr(R.string.local_files)), REPLAY(tr(R.string.replay_2)),
     /** Library's own History tab as a tile (#136, 1.7.7); not shown until ticked. */
-    HISTORY("History"), PODCASTS("Podcasts"),
-    TOGETHER("Listen together"), BLEND("Blend"), RECOGNIZED("Recognized"), NEW_PLAYLIST("New playlist"), IMPORT("Import playlists");
+    HISTORY(tr(R.string.history)), PODCASTS(tr(R.string.podcasts)),
+    TOGETHER(tr(R.string.listen_together)), BLEND(tr(R.string.blend)), RECOGNIZED(tr(R.string.recognized)), NEW_PLAYLIST(tr(R.string.new_playlist)), IMPORT(tr(R.string.import_playlists));
 
     companion object {
         /** A new install's tiles: all but those added later, so nobody's Library changes on its own. */

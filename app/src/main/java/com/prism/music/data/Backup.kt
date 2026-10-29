@@ -1,5 +1,7 @@
 package com.prism.music.data
 
+import com.prism.music.R
+import com.prism.music.tr
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -19,11 +21,11 @@ import java.util.zip.ZipOutputStream
 
 /** The parts a backup can hold (1.7.8, #149: settings can be shared without your listening or your sign-in). */
 enum class BackupPart(val label: String, val detail: String) {
-    SETTINGS("Settings & Looks", "Everything you've set, your Looks, fonts and backgrounds"),
-    LIBRARY("Library", "Prism playlists, folders and pins, starred artists, your covers, Blends, which songs are downloaded"),
-    HISTORY("Listening history & Replay", "What you've played, likes, Replay and Rewind, saved lyrics, recent searches"),
-    ACCOUNTS("Accounts", "Your YouTube Music sign-in and your Prism Account"),
-    DOWNLOADS("Downloaded songs", "The audio itself (otherwise they're fetched again after restoring)"),
+    SETTINGS(tr(R.string.settings_looks), tr(R.string.everything_you_ve_set_your_looks)),
+    LIBRARY(tr(R.string.library), tr(R.string.prism_playlists_folders_and_pins_starred)),
+    HISTORY(tr(R.string.listening_history_replay), tr(R.string.what_you_ve_played_likes_replay)),
+    ACCOUNTS(tr(R.string.accounts), tr(R.string.your_youtube_music_sign_in_and)),
+    DOWNLOADS(tr(R.string.downloaded_songs), tr(R.string.the_audio_itself_otherwise_they_re)),
 }
 
 /** What's written first in every backup. */
@@ -70,7 +72,7 @@ class Backup(private val c: AppContainer) {
             parts = parts.map { it.name },
         )
         val settings = c.settings.forBackup(settings = BackupPart.SETTINGS in parts, accounts = BackupPart.ACCOUNTS in parts)
-        val out = ctx.contentResolver.openOutputStream(uri, "wt") ?: error("Couldn't open that file")
+        val out = ctx.contentResolver.openOutputStream(uri, "wt") ?: error(tr(R.string.couldn_t_open_that_file))
         ZipOutputStream(out.buffered()).use { zip ->
             zip.putNextEntry(ZipEntry(MANIFEST))
             zip.write(InnerTube.json.encodeToString(BackupManifest.serializer(), manifest).toByteArray())
@@ -131,7 +133,7 @@ class Backup(private val c: AppContainer) {
         staging.mkdirs()
         var manifest: BackupManifest? = null
         try {
-            val input = ctx.contentResolver.openInputStream(uri) ?: error("Couldn't open that file")
+            val input = ctx.contentResolver.openInputStream(uri) ?: error(tr(R.string.couldn_t_open_that_file))
             ZipInputStream(input.buffered()).use { zip ->
                 while (true) {
                     val e = zip.nextEntry ?: break
@@ -148,9 +150,9 @@ class Backup(private val c: AppContainer) {
                     target.outputStream().use { zip.copyTo(it) }
                 }
             }
-            val m = manifest ?: error("That file isn't a Prism backup")
-            if (!fromPrism(m)) error("That file isn't a Prism backup")
-            if (m.format > FORMAT) error("That backup is from a newer Prism; update first")
+            val m = manifest ?: error(tr(R.string.that_file_isn_t_a_prism_2))
+            if (!fromPrism(m)) error(tr(R.string.that_file_isn_t_a_prism_2))
+            if (m.format > FORMAT) error(tr(R.string.that_backup_is_from_a_newer))
             File(staging, MANIFEST).writeText(InnerTube.json.encodeToString(BackupManifest.serializer(), m))
         } catch (e: Throwable) {
             staging.deleteRecursively()

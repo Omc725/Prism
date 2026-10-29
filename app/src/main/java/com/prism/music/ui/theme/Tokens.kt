@@ -1,5 +1,7 @@
 package com.prism.music.ui.theme
 
+import com.prism.music.R
+import com.prism.music.tr
 import android.graphics.Typeface
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes
@@ -221,19 +223,19 @@ object AppFonts {
         val target = File(context.filesDir, "fonts").apply { mkdirs() }
         val tmp = File(target, slot.fileName + ".new")
         context.contentResolver.openInputStream(uri)?.use { input -> tmp.outputStream().use { input.copyTo(it) } }
-            ?: error("Couldn't open that file")
+            ?: error(tr(R.string.couldn_t_open_that_file))
         val ok = runCatching {
             if (android.os.Build.VERSION.SDK_INT >= 29) { android.graphics.fonts.Font.Builder(tmp).build(); true }
             else Typeface.createFromFile(tmp) != null
         }.getOrDefault(false)
-        if (!ok || tmp.length() < 1024) { tmp.delete(); error("That isn't a font file Android can use (pick a .ttf or .otf)") }
+        if (!ok || tmp.length() < 1024) { tmp.delete(); error(tr(R.string.that_isn_t_a_font_file)) }
         val out = File(target, slot.fileName)
         out.delete()
-        if (!tmp.renameTo(out)) { tmp.delete(); error("Couldn't save the font") }
+        if (!tmp.renameTo(out)) { tmp.delete(); error(tr(R.string.couldn_t_save_the_font)) }
         val name = context.contentResolver.query(uri, arrayOf(android.provider.OpenableColumns.DISPLAY_NAME), null, null, null)?.use { c ->
             if (c.moveToFirst()) c.getString(0) else null
         }
-        return name?.substringBeforeLast('.')?.takeIf { it.isNotBlank() } ?: "Your font"
+        return name?.substringBeforeLast('.')?.takeIf { it.isNotBlank() } ?: tr(R.string.your_font_2)
     }
 
     fun remove(slot: FontSlot) {

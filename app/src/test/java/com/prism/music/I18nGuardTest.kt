@@ -27,6 +27,11 @@ class I18nGuardTest {
             "ui/components", "ui/screens", "ui/player", "ui/tour",
             "MainActivity.kt", "widget", "playback/MediaTree.kt", "playback/DjMode.kt", "playback/together/Together.kt",
             "playback/PlayTileService.kt",
+            "data/prefs/Settings.kt", "data/looks", "data/Errors.kt", "data/Notifications.kt", "data/Updates.kt", "data/Backup.kt",
+            "download/DownloadFailures.kt", "data/ModelStore.kt", "ui/theme/Backdrops.kt", "ui/theme/ArtistType.kt",
+            "ui/theme/AppIcons.kt", "ui/theme/Spectrum.kt", "ui/theme/PrismAvatars.kt", "AppShortcuts.kt", "data/foryou",
+            "data/ReplayStats.kt", "data/Rewind.kt", "data/Rewinds.kt", "ui/theme/PrismIcons.kt", "ui/theme/Tokens.kt",
+            "ui/theme/ColorMath.kt",
             // (The player service, its connection, Sing and car lyrics mix diagnostics in: only what they show moved.)
         )
     }

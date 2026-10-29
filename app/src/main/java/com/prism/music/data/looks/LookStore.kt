@@ -1,5 +1,7 @@
 package com.prism.music.data.looks
 
+import com.prism.music.R
+import com.prism.music.tr
 import android.content.Context
 import com.prism.music.data.prefs.FontChoice
 import com.prism.music.data.prefs.LookValue
@@ -101,7 +103,7 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
     /** The listener's own settings that Day and night put aside ("Before <Look>") go back on. */
     suspend fun bringBackKept() {
         dismissKept()
-        find(BEFORE_ID)?.let { apply(it, "Your own settings back") }
+        find(BEFORE_ID)?.let { apply(it, tr(R.string.your_own_settings_back)) }
     }
 
     private val iconsVersion = MutableStateFlow(0)
@@ -166,7 +168,7 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
         if (font == null) { v.remove(Look.APP_FONT_NAME); if (custom) v.remove(Look.FONT_CHOICE) }
         // The lyrics' own font file stays outside Looks.
         if (LookValue.text(v[Look.LYRICS_FONT]) == "CUSTOM") v.remove(Look.LYRICS_FONT)
-        val look = Look(id, name.trim().take(Look.MAX_NAME).ifBlank { "My Look" }, v, currentIcons(), font, created, note = note)
+        val look = Look(id, name.trim().take(Look.MAX_NAME).ifBlank { tr(R.string.my_look) }, v, currentIcons(), font, created, note = note)
         write(look)
         if (repoint) setBasis(id)
         // The backgrounds now point at the kept photos (not a change to the look: no Undo for it).
@@ -193,7 +195,7 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
         val before = _mine.value.firstOrNull { it.id == look.id } ?: look
         // "Before <Look>"'s note ("from before you picked …") stops being true once it's updated.
         val saved = saveCurrent(before.name, before.id, if (before.id == BEFORE_ID) "" else before.note, created = before.created)
-        _notes.tryEmit(UndoNote("Updated ${before.name}", ++noteId, undo = { scope.launch(Dispatchers.IO) { write(before) } }))
+        _notes.tryEmit(UndoNote(tr(R.string.updated_2, before.name), ++noteId, undo = { scope.launch(Dispatchers.IO) { write(before) } }))
         return saved
     }
 
@@ -201,7 +203,7 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
     fun edits(look: Look): String? {
         val now = settings.lookValues.value
         val saved = settings.lookAfter(resolved(look))
-        return LookLabels.summary((now.keys + saved.keys).filter { now[it] != saved[it] }, look.icons != currentIcons(), lead = "You've changed its")
+        return LookLabels.summary((now.keys + saved.keys).filter { now[it] != saved[it] }, look.icons != currentIcons(), lead = tr(R.string.you_ve_changed_its))
     }
 
     fun rename(id: String, name: String) {
@@ -276,11 +278,11 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
      * as "Before <Look>" in Your Looks ([BEFORE_ID], one, replaced each time), so they're a tap away however many changes
      * later: History only goes back ten.
      */
-    suspend fun apply(look: Look, label: String = "Look → ${look.name}", scheduled: Boolean = false) = withContext(Dispatchers.IO) {
+    suspend fun apply(look: Look, label: String = tr(R.string.look_2, look.name), scheduled: Boolean = false) = withContext(Dispatchers.IO) {
         if (look.id != BEFORE_ID && lookNow(settings.current) == null) runCatching {
-            val note = if (scheduled) "Your own settings from before Day and night switched to ${look.name}"
-            else "Your own settings from before you picked ${look.name}"
-            saveCurrent("Before ${look.name}", BEFORE_ID, note, repoint = false)
+            val note = if (scheduled) tr(R.string.your_own_settings_from_before_day, look.name)
+            else tr(R.string.your_own_settings_from_before_you, look.name)
+            saveCurrent(tr(R.string.before, look.name), BEFORE_ID, note, repoint = false)
             // GitHub #174: the schedule's turn put customizations out of sight, and it looked as if Prism had reset
             // them. They're kept (as above); the next time Prism is open, it says so and where.
             if (scheduled) noteKept(look.name)
@@ -388,7 +390,7 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
             while (true) {
                 val e = zip.nextEntry ?: break
                 if (e.isDirectory) continue
-                val bytes = readCapped(zip, MAX_FILE + 64 * 1024 - total) ?: error("That Look file is too big")
+                val bytes = readCapped(zip, MAX_FILE + 64 * 1024 - total) ?: error(tr(R.string.that_look_file_is_too_big))
                 total += bytes.size
                 when {
                     e.name == FILE_CODE -> look = decode(bytes.decodeToString())
@@ -396,7 +398,7 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
                 }
             }
         }
-        val l = look ?: error("That file isn't a Prism Look")
+        val l = look ?: error(tr(R.string.that_file_isn_t_a_prism))
         val wanted = (l.photoAssets + listOfNotNull(l.font)).toSet()
         files.filterKeys { it in wanted }.forEach { (h, bytes) ->
             if (sha1(bytes) == h) { assetDir.mkdirs(); File(assetDir, h).writeBytes(bytes) }
@@ -519,7 +521,7 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
                 val id = if (last.to == SunClock.Part.DAY) s.day else s.night
                 val key = "${last.to}@${last.at.epochSecond / 60}|$id"
                 if (key != prefs.getString(LAST_TURN, null)) {
-                    find(id)?.let { apply(it, "${it.name} for the ${if (last.to == SunClock.Part.DAY) "day" else "night"}", scheduled = true) }
+                    find(id)?.let { apply(it, tr(R.string.for_the, it.name, if (last.to == SunClock.Part.DAY) "day" else "night"), scheduled = true) }
                     prefs.edit().putString(LAST_TURN, key).apply()
                 }
                 // Looked at again by the turn, and at least every 15 minutes (the clock or time zone may change).

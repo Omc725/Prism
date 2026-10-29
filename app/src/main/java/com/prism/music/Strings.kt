@@ -9,20 +9,43 @@ import androidx.annotation.StringRes
  * restarts when its language changes, so text read once (a menu's labels) is never left in the old one.
  */
 object Strings {
-    /** Set first thing in PrismApp.onCreate (the language's resources); tests without Prism's app find their own. */
+    /** Set first thing in PrismApp.onCreate (the language's resources). */
     @Volatile var resources: Resources? = null
 
-    internal val res: Resources
-        get() = resources ?: fallback().also { resources = it }
+    internal fun get(id: Int): String = android()?.let { r -> runCatching { r.getString(id) }.getOrNull() } ?: english(id)
 
-    /** Only for tests that run with a plain Application: the process's app, as Android itself keeps it. */
-    private fun fallback(): Resources = runCatching {
+    internal fun get(id: Int, args: Array<out Any?>): String =
+        android()?.let { r -> runCatching { r.getString(id, *args) }.getOrNull() } ?: english(id).format(*args)
+
+    /** Prism's resources, or (tests on a plain Application) the process's app's, as Android itself keeps it. */
+    private fun android(): Resources? = resources ?: runCatching {
         (Class.forName("android.app.ActivityThread").getMethod("currentApplication").invoke(null) as android.app.Application).resources
-    }.getOrElse { Resources.getSystem() }
+    }.getOrNull()?.also { resources = it }
+
+    /**
+     * Only where there's no Android at all (unit tests on the plain JVM, which build settings and parse YouTube without
+     * an app): the English text straight from strings.xml, by the resource's name. Never on a phone.
+     */
+    private fun english(id: Int): String = plainJvm.getOrPut(id) {
+        val name = runCatching { Class.forName("com.prism.music.R\$string").fields.first { it.getInt(null) == id }.name }.getOrNull()
+        name?.let { englishXml[it] } ?: "#$id"
+    }
+
+    private val plainJvm = java.util.concurrent.ConcurrentHashMap<Int, String>()
+
+    private val englishXml: Map<String, String> by lazy {
+        val file = listOf("src/main/res/values/strings.xml", "app/src/main/res/values/strings.xml").map { java.io.File(it) }.firstOrNull { it.isFile }
+            ?: return@lazy emptyMap<String, String>()
+        Regex("<string name=\"([^\"]+)\"[^>]*>(.*?)</string>", RegexOption.DOT_MATCHES_ALL).findAll(file.readText()).associate { m ->
+            m.groupValues[1] to m.groupValues[2].replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&")
+                .replace("\\'", "'").replace("\\\"", "\"").replace("\\n", "\n").replace("\\t", "\t").replace("\\@", "@").replace("\\?", "?")
+                .replace("\\\\", "\\")
+        }
+    }
 }
 
 /** [id]'s text in the listener's language. */
-fun tr(@StringRes id: Int): String = Strings.res.getString(id)
+fun tr(@StringRes id: Int): String = Strings.get(id)
 
 /** [id]'s text with [args] in its places (%1$s, %2$s…). */
-fun tr(@StringRes id: Int, vararg args: Any?): String = Strings.res.getString(id, *args)
+fun tr(@StringRes id: Int, vararg args: Any?): String = Strings.get(id, args)

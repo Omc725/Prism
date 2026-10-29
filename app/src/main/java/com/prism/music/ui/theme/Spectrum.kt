@@ -1,5 +1,7 @@
 package com.prism.music.ui.theme
 
+import com.prism.music.R
+import com.prism.music.tr
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -179,19 +181,19 @@ object SpectrumPresets {
     )
 
     val all = listOf(
-        Preset("PRISM", "Prism", PRISM_LIGHT.colors.map { it.second }),
-        Preset("SUNSET", "Sunset", c(0xFFD4418E, 0xFFFF5F6D, 0xFFFF9966, 0xFFFFC371)),
-        Preset("OCEAN", "Ocean", c(0xFF2B59FF, 0xFF2FA8FF, 0xFF2BD9E8, 0xFF7CF5C8)),
-        Preset("AURORA", "Aurora", c(0xFF3DDC97, 0xFF36E2D2, 0xFF5A8BFF, 0xFFB15CFF)),
-        Preset("FOREST", "Forest", c(0xFFB8E986, 0xFF5FD38D, 0xFF2BB673, 0xFF1D9A8A)),
-        Preset("EMBER", "Ember", c(0xFFFF3D3D, 0xFFFF6D00, 0xFFFFAB00, 0xFFFFD54F)),
-        Preset("CANDY", "Candy", c(0xFFFF7EB3, 0xFFFFB86B, 0xFF7CE0FF, 0xFFB79CFF)),
-        Preset("NEON", "Neon", c(0xFFFF2E93, 0xFFFFE600, 0xFF00FFA3, 0xFF00D1FF, 0xFFB026FF)),
-        Preset("ICE", "Ice", c(0xFFE0F7FF, 0xFF9BE3FF, 0xFF5AB8FF, 0xFF8C9EFF)),
-        Preset("GOLD", "Gold", c(0xFFFFE29F, 0xFFFFC75F, 0xFFE8A33D, 0xFFFFD98E)),
-        Preset("SILVER", "Silver", c(0xFFF5F5F7, 0xFFB8B8C0, 0xFF8E8E96, 0xFFD6D6DC)),
+        Preset("PRISM", tr(R.string.app_name), PRISM_LIGHT.colors.map { it.second }),
+        Preset("SUNSET", tr(R.string.sunset), c(0xFFD4418E, 0xFFFF5F6D, 0xFFFF9966, 0xFFFFC371)),
+        Preset("OCEAN", tr(R.string.ocean), c(0xFF2B59FF, 0xFF2FA8FF, 0xFF2BD9E8, 0xFF7CF5C8)),
+        Preset("AURORA", tr(R.string.aurora), c(0xFF3DDC97, 0xFF36E2D2, 0xFF5A8BFF, 0xFFB15CFF)),
+        Preset("FOREST", tr(R.string.forest), c(0xFFB8E986, 0xFF5FD38D, 0xFF2BB673, 0xFF1D9A8A)),
+        Preset("EMBER", tr(R.string.ember), c(0xFFFF3D3D, 0xFFFF6D00, 0xFFFFAB00, 0xFFFFD54F)),
+        Preset("CANDY", tr(R.string.candy), c(0xFFFF7EB3, 0xFFFFB86B, 0xFF7CE0FF, 0xFFB79CFF)),
+        Preset("NEON", tr(R.string.neon), c(0xFFFF2E93, 0xFFFFE600, 0xFF00FFA3, 0xFF00D1FF, 0xFFB026FF)),
+        Preset("ICE", tr(R.string.ice), c(0xFFE0F7FF, 0xFF9BE3FF, 0xFF5AB8FF, 0xFF8C9EFF)),
+        Preset("GOLD", tr(R.string.gold), c(0xFFFFE29F, 0xFFFFC75F, 0xFFE8A33D, 0xFFFFD98E)),
+        Preset("SILVER", tr(R.string.silver), c(0xFFF5F5F7, 0xFFB8B8C0, 0xFF8E8E96, 0xFFD6D6DC)),
         // Okabe & Ito's palette: hues that stay apart for every common kind of color blindness.
-        Preset("CLEAR", "Color-blind safe", c(0xFFF0E442, 0xFFE69F00, 0xFFD55E00, 0xFFCC79A7, 0xFF0072B2, 0xFF56B4E9, 0xFF009E73)),
+        Preset("CLEAR", tr(R.string.color_blind_safe), c(0xFFF0E442, 0xFFE69F00, 0xFFD55E00, 0xFFCC79A7, 0xFF0072B2, 0xFF56B4E9, 0xFF009E73)),
     )
 
     fun preset(key: String): Preset? = all.firstOrNull { it.key == key }
@@ -209,8 +211,8 @@ object SpectrumPresets {
     /** A preset's name, ours included ("From the cover", "Your own"). */
     fun label(key: String): String = when (key) {
         COVER -> COVER_LABEL
-        "CUSTOM" -> "Your own"
-        else -> preset(key)?.label ?: "Prism"
+        "CUSTOM" -> tr(R.string.your_own)
+        else -> preset(key)?.label ?: tr(R.string.app_name)
     }
 
     /**

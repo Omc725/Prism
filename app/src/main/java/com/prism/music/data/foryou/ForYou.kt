@@ -1,5 +1,7 @@
 package com.prism.music.data.foryou
 
+import com.prism.music.R
+import com.prism.music.tr
 import android.content.Context
 import android.util.Log
 import com.prism.music.AppContainer
@@ -151,7 +153,7 @@ class ForYou(private val c: AppContainer) {
             val fresh = discover(own.take(3), data, members, day, exclude = own.map { it.id }.toSet())
             val songs = MadeForYou.interleave(own, fresh, 50) { it.primaryArtist.lowercase() }
             if (songs.size < 10) continue
-            saveMix(MadeForYou.daily(n), "Daily Mix $n", MadeForYou.namesLine(cl.artists), cl.artists.take(4), COLORS[(n - 1) % COLORS.size], songs)
+            saveMix(MadeForYou.daily(n), tr(R.string.daily_mix, n), MadeForYou.namesLine(cl.artists), cl.artists.take(4), COLORS[(n - 1) % COLORS.size], songs)
             made += MadeForYou.daily(n)
         }
         // Mixes from a day with more groups than today's go.

@@ -1,5 +1,7 @@
 package com.prism.music.ui.theme
 
+import com.prism.music.R
+import com.prism.music.tr
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.SolidColor
@@ -22,7 +24,7 @@ import kotlin.math.sin
  * `IconRenderTest` draws them all onto app/build/icon-previews/ for a look.
  */
 /** How heavy Prism's line icons are drawn (#19). */
-enum class IconWeight(val label: String, val scale: Float) { THIN("Thin", 0.64f), REGULAR("Regular", 1f), BOLD("Bold", 1.45f) }
+enum class IconWeight(val label: String, val scale: Float) { THIN(tr(R.string.thin), 0.64f), REGULAR(tr(R.string.regular), 1f), BOLD(tr(R.string.bold), 1.45f) }
 
 /**
  * The icon style picked in Settings → Appearance → Icons (#19): line weight, and rounded or square ends and corners.
@@ -31,21 +33,21 @@ enum class IconWeight(val label: String, val scale: Float) { THIN("Thin", 0.64f)
  */
 /** Sets of icons to pick from (Settings → Appearance → Icons): Prism's own, or Cupertino, drawn after Apple's style. */
 enum class IconPack(val label: String, val detail: String) {
-    PRISM("Prism", "Prism's own icons"),
-    CUPERTINO("Cupertino", "In the style of Apple's apps: filled tabs, a chevron for Back"),
+    PRISM(tr(R.string.app_name), tr(R.string.prism_s_own_icons)),
+    CUPERTINO(tr(R.string.cupertino), tr(R.string.in_the_style_of_apple_s)),
     /** Every icon with its curves cut into straight facets and sharp corners (1.7.7, generated from Prism's drawings). */
-    FACET("Facet", "Straight lines and sharp corners: every curve cut into facets"),
+    FACET(tr(R.string.facet), tr(R.string.straight_lines_and_sharp_corners_every)),
     /** Every icon in dots, like a dot-matrix display (1.7.7, generated from Prism's drawings). */
-    DOTS("Dots", "Drawn in dots, like a dot-matrix display"),
+    DOTS(tr(R.string.dots), tr(R.string.drawn_in_dots_like_a_dot)),
     /** Prism 1.6's hand-drawn icons, a heavier line (1.7.8, #155; [ClassicIcons]). */
-    CLASSIC("Classic", "Prism 1.6's icons: a heavier line, as they were"),
+    CLASSIC(tr(R.string.classic), tr(R.string.prism_1_6_s_icons_a)),
 }
 
 /** How Prism's icons are filled (1.7.7): lines, a light second tone inside, or solid. */
 enum class IconFill(val label: String, val detail: String) {
-    OUTLINE("Outline", "Lines, filled in when picked"),
-    DUOTONE("Duotone", "Lines with a light tone inside"),
-    FILLED("Filled", "Solid shapes"),
+    OUTLINE(tr(R.string.outline), tr(R.string.lines_filled_in_when_picked)),
+    DUOTONE(tr(R.string.duotone), tr(R.string.lines_with_a_light_tone_inside)),
+    FILLED(tr(R.string.filled), tr(R.string.solid_shapes)),
 }
 
 object IconStyle {

@@ -1,5 +1,7 @@
 package com.prism.music.data.foryou
 
+import com.prism.music.R
+import com.prism.music.tr
 import kotlin.math.exp
 
 /**
@@ -124,9 +126,9 @@ object MadeForYou {
     fun namesLine(names: List<String>): String = when {
         names.isEmpty() -> ""
         names.size == 1 -> names[0]
-        names.size == 2 -> "${names[0]} and ${names[1]}"
-        names.size == 3 -> "${names[0]}, ${names[1]} and ${names[2]}"
-        else -> "${names[0]}, ${names[1]}, ${names[2]} and more"
+        names.size == 2 -> tr(R.string.and, names[0], names[1])
+        names.size == 3 -> tr(R.string.and_2, names[0], names[1], names[2])
+        else -> tr(R.string.and_more_5, names[0], names[1], names[2])
     }
 
     /** The parts of the day the time-of-day mix follows. */
@@ -146,7 +148,7 @@ object MadeForYou {
 
     /** "Your Tuesday late-night hip-hop" (or "… mix" without a clear genre). */
     fun timeTitle(weekday: String, bucket: TimeBucket, genre: String?): String =
-        "Your $weekday ${bucket.label} ${genre?.lowercase()?.takeIf { it.isNotBlank() } ?: "mix"}"
+        tr(R.string.your, weekday, bucket.label, genre?.lowercase()?.takeIf { it.isNotBlank() } ?: "mix")
 
     /**
      * What a mix can be called by: the genre of more than half its songs whose genre is known, with at least half its

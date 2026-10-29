@@ -24,6 +24,12 @@ class I18nConvert {
         val res = Resources.load(stringsXml)
         val report = StringBuilder()
         var moved = 0
+        // PRISM_I18N_DRY=1: only says what would move, per file, into build/i18n/dry.txt.
+        if (System.getenv("PRISM_I18N_DRY") == "1") {
+            File("build/i18n").mkdirs()
+            File("build/i18n/dry.txt").writeText(files.mapNotNull { f -> pending(f.readText()).takeIf { it.isNotEmpty() }?.let { "== ${f.relativeTo(src)} (${it.size})\n" + it.joinToString("\n") { l -> "  $l" } } }.joinToString("\n"))
+            return
+        }
         for (f in files) {
             val text = f.readText()
             val (out, n, kept) = convertFile(text, res)
@@ -126,8 +132,12 @@ class I18nConvert {
         val t = s.replace("{}", "").trim()
         if (!Regex("\\p{L}{2,}").containsMatchIn(t)) return false
         if (t.contains("://") || t.startsWith("www.") || t.startsWith("prism:") || t.startsWith("http")) return false
-        if (Regex("^[a-z0-9_.:/#=?&{}-]+$").matches(s.trim())) return false // keys, routes ("blend/{who}"), ids
+        if (Regex("^[a-z0-9_.:/#=?&{}%-]+$").matches(s.trim())) return false // keys, routes ("blend/{who}"), ids, SQL patterns
+        if (Regex("^(PRAGMA|SELECT|INSERT|UPDATE|DELETE|CREATE|DROP|ALTER) ").containsMatchIn(t)) return false // SQL
+        if (t.contains('|') && !t.contains(' ')) return false // stored values ("PHOTO|asset:…")
+        if (Regex("^\\{\\}\\p{L}").containsMatchIn(s)) return false // names built from a value ("${name}Filled")
         if (Regex("^[A-Z0-9_]+$").matches(t)) return false // CONSTANT_NAMES and codes ("PRISM", "LIGHT")
+        if (Regex("^[sbif]:").containsMatchIn(t)) return false // a Look's tagged values ("s:DARK", "b:1")
         if (Regex("^[a-z]+[A-Z]\\w*$").matches(t)) return false // camelCase identifiers
         if (Regex("^\\w+\\.\\w+").matches(t) && !t.contains(' ')) return false // dotted names
         return t.contains(' ') || Regex("^\\p{Lu}\\p{Ll}").containsMatchIn(t) || t.contains('…') || t.length >= 2 && t.first().isLetter()
@@ -144,6 +154,9 @@ class I18nConvert {
         "Uri.parse(" to "address", "mimeType" to "key", "setType(" to "key", "MIME" to "key",
         "Font(" to "key", "assets" to "key", "File(" to "path",
         "Thread(" to "thread name", "SimpleDateFormat(" to "pattern", "ofPattern(" to "pattern", "DateTimeFormatter" to "pattern",
+        // Stored as the listener's own: Home's section titles (renamable), the equalizer's preset name.
+        "HomeSectionConfig(" to "stored title", "copy(key =" to "stored title", "val preset: String" to "stored name",
+        "header(" to "protocol", "getInstance(" to "algorithm", "\"single\" ->" to "YouTube kind",
         // Icons are looked up by their drawing's name (not their descriptions: Icon(PrismIcons.Share, "Share") is text).
         "drawn(" to "icon name", "icon(" to "icon name", "PrismIcons.preview(" to "icon name",
     )

@@ -7,7 +7,9 @@ What changed in each release. Older releases are described on the [Releases page
 ### Fixes
 
 - **The accent from the cover is the cover's color** (Reddit): a few pixels of another color no longer decide it (a deep
-  blue night with two pink lights gave a pink accent). A color now has to fill a real part of the picture.
+  blue night with two pink lights gave a pink accent). A color now has to fill a real part of the picture. A
+  black-and-white cover gives a grey accent, as it looks (its slight tint used to turn into a color); "Always colorful"
+  still gives one a color.
 - **Removing a playlist's downloads asks first** (#212): the download button on a playlist or album whose songs are
   all downloaded removes them, so it now says how many and waits for Delete. TalkBack names it "Remove downloads".
 - **Update from Settings** (#201): Settings → Backup & about → Check for updates shows the new version right there,

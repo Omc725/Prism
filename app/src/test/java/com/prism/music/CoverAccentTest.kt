@@ -37,4 +37,21 @@ class CoverAccentTest {
             assertTrue("vivid=$vivid picked #%06X (hue $hue), not the night's blue".format(picked and 0xFFFFFF), hue in 190f..250f)
         }
     }
+
+    /** A black-and-white photo (a little warm, as photos are) gives a grey accent, unless "Always colorful" is on. */
+    @Test
+    fun aBlackAndWhiteCoverGivesGrey() {
+        val bmp = Bitmap.createBitmap(160, 160, Bitmap.Config.ARGB_8888)
+        for (y in 0 until 160) for (x in 0 until 160) {
+            val l = 0.15f + 0.7f * ((x + y) % 160) / 160f
+            bmp.setPixel(x, y, ColorMath.fromHsl(30f, 0.1f, l))
+        }
+        val p = Palette.from(bmp).generate()
+        for (sw in ArtworkSwatch.entries) {
+            val grey = pickSwatch(p, sw, vivid = false) ?: continue
+            assertTrue("$sw: #%06X is neutral".format(grey and 0xFFFFFF), com.prism.music.ui.theme.isNeutralSeed(grey))
+            val colorful = pickSwatch(p, sw, vivid = true) ?: continue
+            assertTrue("$sw with Always colorful: #%06X is a color".format(colorful and 0xFFFFFF), !com.prism.music.ui.theme.isNeutralSeed(colorful))
+        }
+    }
 }

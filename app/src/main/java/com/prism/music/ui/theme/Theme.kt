@@ -447,8 +447,18 @@ fun pickSwatch(p: androidx.palette.graphics.Palette, swatch: com.prism.music.dat
         com.prism.music.data.prefs.ArtworkSwatch.DOMINANT -> p.dominantSwatch ?: p.vibrantSwatch ?: p.mutedSwatch
     }?.rgb ?: return null
     val opaque = picked or (0xFF shl 24)
-    return if (!vivid) opaque else ColorMath.toHsl(opaque).let { h -> ColorMath.fromHsl(h[0], h[1].coerceAtLeast(0.55f), h[2].coerceIn(0.35f, 0.7f)) }
+    val hsl = ColorMath.toHsl(opaque)
+    return when {
+        vivid -> ColorMath.fromHsl(hsl[0], hsl[1].coerceAtLeast(0.55f), hsl[2].coerceIn(0.35f, 0.7f))
+        // A black-and-white cover's grey is a little tinted (a photo, the JPEG): made a true grey, it reads as neutral,
+        // so the accent goes grey as the cover is (Reddit, 1.7.9), instead of the tint pushed up into a color.
+        hsl[1] < GREY_COVER_SATURATION -> ColorMath.fromHsl(0f, 0f, hsl[2])
+        else -> opaque
+    }
 }
+
+/** A cover's color this pale is its grey ("Always colorful" off keeps it grey). */
+private const val GREY_COVER_SATURATION = 0.15f
 
 /** The least of a cover's swatched pixels a swatch needs to be its accent (see [pickSwatch]). */
 private const val MIN_SWATCH_SHARE = 0.02f

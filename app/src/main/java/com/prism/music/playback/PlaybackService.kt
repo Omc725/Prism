@@ -1397,12 +1397,15 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         if (player.playbackState == Player.STATE_IDLE) player.prepare()
         videoWatchdog?.cancel()
         if (vid != null) {
+            val switchedAt = android.os.SystemClock.elapsedRealtime()
             if (known == null && vid != song.id && now > 1_500) scope.launch {
                 val lag = c.videoSync.lagMs(song.id, vid) ?: return@launch
                 val current = player.currentMediaItem
-                // Only if the listener is still on this video and hasn't moved far since switching.
+                // Only if the listener is still on this video, and only right after switching: later, it's a jump in
+                // the middle of the video (#203: the measure took 14 s and moved it 7.9 s on). The lyrics follow the
+                // video by the same measure either way (PlayerConnection's video sync).
                 if (kotlin.math.abs(lag) >= 1_000 && current?.mediaId == song.id && current.videoModeId == vid &&
-                    kotlin.math.abs(player.currentPosition - pos) < 20_000
+                    android.os.SystemClock.elapsedRealtime() - switchedAt < LATE_VIDEO_SEEK_MS
                 ) player.seekTo(player.currentPosition + lag)
             }
             watchVideo(song.id)
@@ -2358,6 +2361,11 @@ private const val SETTLE_MS = 2_000L
 private const val MIN_MIDSONG_CHANGE_DB = 1.5f
 /** Queued songs are got ready once the playing one has played this long (not as it starts: that slowed its loading). */
 private const val UNDER_WAY_MS = 5_000L
+/**
+ * How long after switching to a music video its measured offset may still move it to the matching moment (#203);
+ * later the video stays where it is and only the lyrics follow the offset.
+ */
+private const val LATE_VIDEO_SEEK_MS = 3_000L
 /** How many songs ahead DJ mode scans and orders (a quick scan each: three stretches of the song, a few at once). */
 private const val DJ_WINDOW = 40
 /** How long DJ mode waits for more scans before putting the queue in order again. */

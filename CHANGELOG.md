@@ -19,6 +19,9 @@ What changed in each release. Older releases are described on the [Releases page
   that over, so the old song stayed up for a while. The title changes straight away; the cover follows.
 - **Backups move between Prism copies** (#204): a backup restores into any Prism, whatever its app id (the test copy,
   or a copy renamed so a phone's media island shows it). It used to say it was "from a different app".
+- **A music video no longer jumps ahead** (#203): switching to the video before Prism knew how far it's shifted from
+  the song, the video was moved to the matching moment once that was worked out, even half a minute later, which
+  sounded like a skip. Now that only happens right after switching; later the video plays on and the lyrics follow it.
 - **Sliders show their number** (#209): the ones that only said a word ("Balanced", "Airy") now say both
   ("Airy · 140%"), and Backgrounds' Softness shows one too, so you can come back to exactly the same place.
 

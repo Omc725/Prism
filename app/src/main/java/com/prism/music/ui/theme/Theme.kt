@@ -437,14 +437,21 @@ fun themeColors(s: AppSettings, dark: Boolean, seed: Color, dynamic: ((Boolean) 
  * grey cover still gives a color. Null when the cover has none to give.
  */
 fun pickSwatch(p: androidx.palette.graphics.Palette, swatch: com.prism.music.data.prefs.ArtworkSwatch, vivid: Boolean): Int? {
+    // A swatch from a speck of the picture isn't its color (Reddit, 2026-10: Jaze's "Desconectado", a deep blue night,
+    // gave a pink accent from two tail lights, 7 of its 25,600 pixels): those fall through to the next choice.
+    val total = p.swatches.sumOf { it.population }.coerceAtLeast(1)
+    fun androidx.palette.graphics.Palette.Swatch?.big() = this?.takeIf { it.population >= total * MIN_SWATCH_SHARE }
     val picked = when (swatch) {
-        com.prism.music.data.prefs.ArtworkSwatch.VIBRANT -> p.vibrantSwatch ?: p.lightVibrantSwatch ?: p.dominantSwatch ?: p.mutedSwatch
-        com.prism.music.data.prefs.ArtworkSwatch.MUTED -> p.mutedSwatch ?: p.lightMutedSwatch ?: p.darkMutedSwatch ?: p.dominantSwatch
+        com.prism.music.data.prefs.ArtworkSwatch.VIBRANT -> p.vibrantSwatch.big() ?: p.lightVibrantSwatch.big() ?: p.dominantSwatch ?: p.mutedSwatch
+        com.prism.music.data.prefs.ArtworkSwatch.MUTED -> p.mutedSwatch.big() ?: p.lightMutedSwatch.big() ?: p.darkMutedSwatch.big() ?: p.dominantSwatch
         com.prism.music.data.prefs.ArtworkSwatch.DOMINANT -> p.dominantSwatch ?: p.vibrantSwatch ?: p.mutedSwatch
     }?.rgb ?: return null
     val opaque = picked or (0xFF shl 24)
     return if (!vivid) opaque else ColorMath.toHsl(opaque).let { h -> ColorMath.fromHsl(h[0], h[1].coerceAtLeast(0.55f), h[2].coerceIn(0.35f, 0.7f)) }
 }
+
+/** The least of a cover's swatched pixels a swatch needs to be its accent (see [pickSwatch]). */
+private const val MIN_SWATCH_SHARE = 0.02f
 
 @Composable
 fun PrismTheme(settings: AppSettings, artworkColor: Color?, content: @Composable () -> Unit) {

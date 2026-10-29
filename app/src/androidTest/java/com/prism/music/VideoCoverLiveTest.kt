@@ -18,6 +18,7 @@ import org.junit.runner.RunWith
  * playing as a song takes its song's album cover (Reddit 1.7.9, "Carl Sagan" by Night Moves showed a video frame), and
  * the swap doesn't stop or restart the music.
  */
+@Live
 @RunWith(AndroidJUnit4::class)
 class VideoCoverLiveTest {
     @Test fun aMusicVideoPlayingAsASongShowsItsSongsCover() = runBlocking {

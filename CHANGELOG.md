@@ -15,6 +15,8 @@ What changed in each release. Older releases are described on the [Releases page
 - **Scrolling up the lyrics can leave the controls away** (#214): Settings → Player → Lyrics and the queue →
   "Scrolling up shows the controls" (on, as before). Off, going back to an earlier chorus keeps the whole screen; a tap
   or the bar at the bottom brings them. With "Full screen" a scroll never brings them.
+- **Widgets show the new song at once** (#217): they waited for its cover to load, and every update meanwhile started
+  that over, so the old song stayed up for a while. The title changes straight away; the cover follows.
 
 ## 1.7.8
 

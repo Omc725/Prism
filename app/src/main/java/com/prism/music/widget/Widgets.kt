@@ -35,6 +35,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -143,6 +144,8 @@ object Widgets {
     @Volatile private var state: State? = null
     @Volatile private var art: Art? = null
     private var job: Job? = null
+    /** The cover being loaded, by its address: a refresh while it loads waits for the same load, never starts over. */
+    private var artLoad: Pair<String, kotlinx.coroutines.Deferred<Art?>>? = null
 
     private fun placed(context: Context): Map<WidgetStyle, IntArray> {
         val manager = AppWidgetManager.getInstance(context) ?: return emptyMap()
@@ -175,15 +178,24 @@ object Widgets {
             lock.withLock {
                 val s = state ?: State(lastSong(app), playing = false, liked = false, 0L, 0L)
                 val url = s.song?.thumbnail
-                // Offline with a cover Coil hasn't kept: the widget shows Prism's mark instead.
-                if (art?.url != url) art = url?.let { loadArt(app, it) }
                 val manager = AppWidgetManager.getInstance(app) ?: return@withLock
-                placed(app).forEach { (style, ids) ->
+                fun draw(a: Art?) = placed(app).forEach { (style, ids) ->
                     // Widgets left as designed share one update; each with settings of its own (1.7.7) gets its own.
                     val (plain, own) = ids.partition { WidgetOptionsStore.get(app, it).isDefault }
-                    if (plain.isNotEmpty()) runCatching { manager.updateAppWidget(plain.toIntArray(), views(app, style, s, art)) }
-                    own.forEach { id -> runCatching { manager.updateAppWidget(id, views(app, style, s, art, WidgetOptionsStore.get(app, id))) } }
+                    if (plain.isNotEmpty()) runCatching { manager.updateAppWidget(plain.toIntArray(), views(app, style, s, a)) }
+                    own.forEach { id -> runCatching { manager.updateAppWidget(id, views(app, style, s, a, WidgetOptionsStore.get(app, id))) } }
                 }
+                if (art?.url != url) {
+                    // A new song shows at once, its cover once it's loaded (#217: the widget waited for the cover, and
+                    // each update meanwhile started that load over, so the new song showed seconds late).
+                    draw(null)
+                    // Offline with a cover Coil hasn't kept: the widget keeps Prism's mark.
+                    art = url?.let { u ->
+                        val load = artLoad?.takeIf { it.first == u }?.second ?: scope.async { loadArt(app, u) }.also { artLoad = u to it }
+                        load.await()
+                    }
+                }
+                draw(art)
             }
         }
     }

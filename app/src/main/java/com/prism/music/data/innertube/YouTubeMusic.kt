@@ -57,8 +57,13 @@ class YouTubeMusic(
         private val SONG_FOR_VIDEO_BRACKETS = Regex("\\(.*?\\)|\\[.*?]")
         /** How far a video's length may be from its song's (an intro or outro on the video). */
         internal const val SONG_FOR_VIDEO_SLACK_SEC = 8
-        /** How much longer than its song an artist's own music video may run (intros and endings), 1.7.7. */
-        internal const val LONGER_VIDEO_SEC = 60
+        /**
+         * How much longer than its song an artist's own music video may run (intros and endings), 1.7.7; 90 s since
+         * 1.7.9 (#202: "Punk Rocky"'s video runs 62 s past the song).
+         */
+        internal const val LONGER_VIDEO_SEC = 90
+        /** A song's name in quotes in a video's title ('Artist - "Song" Label'), any kind of double quotes. */
+        private val QUOTED_TITLE = Regex("[\"“”]([^\"“”]+)[\"“”]")
 
         /** An album page's track title and its playlist's are the same title (case, punctuation and spacing aside). */
         internal fun sameTrackTitle(a: String, b: String): Boolean {
@@ -524,15 +529,24 @@ class YouTubeMusic(
             .replace(Regex("\\b(${VIDEO_WORDS.joinToString("|")})\\b"), " ")
             .replace(Regex("[^\\p{L}\\p{N}]"), "")
         // "Artist - Title (Live at …)" videos put the artist in the title.
-        val artist = norm(video.primaryArtist)
+        val channel = norm(video.primaryArtist)
         val head = video.title.substringBefore(" - ", "")
-        val rawTitle = if (head.isNotEmpty() && norm(head).let { a -> artist.isBlank() || a.contains(artist) || artist.contains(a) })
-            video.title.substringAfter(" - ") else video.title
+        val headIsChannel = head.isNotEmpty() && norm(head).let { a -> channel.isBlank() || a.contains(channel) || channel.contains(a) }
+        // A label's or a music channel's upload (#202: 'Meg & Dia - "Monster" Doghouse Records' by BlankTV): the artist
+        // before the dash, the song's name in quotes, the rest the label's.
+        val quoted = if (head.isNotEmpty() && !headIsChannel) QUOTED_TITLE.find(video.title.substringAfter(" - "))?.groupValues?.get(1)?.trim() else null
+        val artistName = if (quoted != null) head.trim() else video.primaryArtist
+        val artist = norm(artistName)
+        val rawTitle = when {
+            quoted != null -> quoted
+            headIsChannel -> video.title.substringAfter(" - ")
+            else -> video.title
+        }
         val title = norm(rawTitle)
         if (title.isBlank()) return null
-        val query = "${rawTitle.replace(Regex("\\(.*?\\)|\\[.*?]"), " ").trim()} ${video.primaryArtist}".trim()
+        val query = "${rawTitle.replace(Regex("\\(.*?\\)|\\[.*?]"), " ").trim()} $artistName".trim()
         // An artist's own music video often runs longer than the song (an intro, a scene after it: "bad guy", 206 s for a
-        // 194 s song), so it may be up to a minute longer, never much shorter. A live or acoustic take is told apart by
+        // 194 s song), so it may be up to a minute and a half longer, never much shorter. A live or acoustic take is told apart by
         // its title, so the lengths only matter beyond that.
         val ownTake = !MusicVideoMatch.otherTake(video.title)
         fun lengthFits(s: Song): Boolean {

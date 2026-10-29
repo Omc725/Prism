@@ -12,6 +12,7 @@ import androidx.media3.datasource.ResolvingDataSource
 import androidx.media3.datasource.cache.Cache
 import androidx.media3.datasource.cache.CacheDataSource
 import androidx.media3.datasource.cache.ContentMetadata
+import androidx.media3.datasource.cache.ContentMetadataMutations
 import androidx.media3.datasource.cache.NoOpCacheEvictor
 import androidx.media3.datasource.cache.SimpleCache
 import androidx.media3.datasource.okhttp.OkHttpDataSource
@@ -596,6 +597,18 @@ class AppContainer(val app: Application) {
     /** The format (itag) a download came down in, when it's known (recorded since 1.7.7.1). */
     fun downloadedItag(id: String): Int? = downloadFormats.getInt(id, 0).takeIf { it != 0 }
 
+    companion object {
+        /**
+         * Records [id]'s full length in [cache] once all of it is saved there. The cache only learns a length from a
+         * request without one (a song played through); Load ahead's request names its length, so a song it saved whole
+         * didn't count as whole, and offline Prism asked the network for it and skipped it (#213).
+         */
+        fun markWhole(cache: Cache, id: String, length: Long) {
+            if (length <= 0 || !cache.isCached(id, 0, length)) return
+            runCatching { cache.applyContentMetadataMutations(id, ContentMetadataMutations().also { ContentMetadataMutations.setContentLength(it, length) }) }
+        }
+    }
+
     /** Songs whose first seconds [warmUp] saved into the song cache, and the stream (itag) they came from. */
     private val prebuffered = ConcurrentHashMap<String, Int>()
 
@@ -620,7 +633,11 @@ class AppContainer(val app: Application) {
         val spec = DataSpec.Builder().setUri(s.audioUrl).setKey(id).setPosition(0).setLength(bytes).build()
         val source = CacheDataSource(playerCache, OkHttpDataSource.Factory(streamHttp).createDataSource())
         runCatching { androidx.media3.datasource.cache.CacheWriter(source, spec, null, null).cache() }
-            .onSuccess { prebuffered[id] = s.itag }
+            .onSuccess {
+                prebuffered[id] = s.itag
+                // Saved whole: say so, so it plays from here offline too (#213).
+                if (whole) markWhole(playerCache, id, s.contentLength)
+            }
             .onFailure { android.util.Log.w("PrismStream", "Couldn't save the start of $id ahead: $it") }
     }
 

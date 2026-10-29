@@ -25,6 +25,11 @@ What changed in each release. Older releases are described on the [Releases page
 - **Music videos show their album cover** (Reddit): a music video playing as a song showed a still from the video as
   its cover. It now takes its song's album cover (the same title by the same artist, even when the video is an edit of
   a different length), on the player, the notification, widgets and in the car, without the music pausing.
+- **Songs loaded ahead play offline** (#213): with Load ahead on, the next songs were saved whole but not marked as
+  whole, so going offline Prism still asked the network for them and they didn't play. They're marked now.
+- **"Songs, not videos → Everywhere" finds more songs** (#202): an artist's video may now run a minute and a half past
+  its song (A$AP Rocky's "Punk Rocky" runs 62 s over), and a label channel's 'Artist - "Song" Label' upload finds the
+  artist's song. A video of two songs still plays as it is.
 - **Sliders show their number** (#209): the ones that only said a word ("Balanced", "Airy") now say both
   ("Airy · 140%"), and Backgrounds' Softness shows one too, so you can come back to exactly the same place.
 

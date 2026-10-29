@@ -22,6 +22,9 @@ What changed in each release. Older releases are described on the [Releases page
 - **A music video no longer jumps ahead** (#203): switching to the video before Prism knew how far it's shifted from
   the song, the video was moved to the matching moment once that was worked out, even half a minute later, which
   sounded like a skip. Now that only happens right after switching; later the video plays on and the lyrics follow it.
+- **Music videos show their album cover** (Reddit): a music video playing as a song showed a still from the video as
+  its cover. It now takes its song's album cover (the same title by the same artist, even when the video is an edit of
+  a different length), on the player, the notification, widgets and in the car, without the music pausing.
 - **Sliders show their number** (#209): the ones that only said a word ("Balanced", "Airy") now say both
   ("Airy · 140%"), and Backgrounds' Softness shows one too, so you can come back to exactly the same place.
 

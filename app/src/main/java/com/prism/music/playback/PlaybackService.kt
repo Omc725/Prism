@@ -602,6 +602,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         continueVideo()
         maybeAutoplay()
         prefetchNext()
+        songCoverForVideo(song)
         updateButtons()
         PlayTileService.update(this)
         carLyrics.refresh()
@@ -1414,6 +1415,33 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     }
 
     private var videoWatchdog: Job? = null
+
+    /**
+     * A music video playing as a song shows its song's album cover, not a frame of the video (Reddit, 2026-10: "Carl
+     * Sagan" by Night Moves played with a still from its video), when its song can be found (YouTube's pairing, or a
+     * search for the same title by the same artist, once per video). Only the cover changes: the item keeps its address (and
+     * its video mode), so Media3 swaps it without a pause, and the video and its sound play on as they were.
+     */
+    private fun songCoverForVideo(song: Song) {
+        if (!song.isVideo || song.isLive || song.isLocal || song.isEpisode || song.isUpload) return
+        val item = player.currentMediaItem ?: return
+        // A video found as a song's video already shows its song's cover; a video with no song found when it was
+        // tapped (PlayerConnection.playQueue waits 4 s for it) is the item itself, shown as its video or, after Song, as its sound.
+        if (item.videoModeId != null && item.videoModeId != song.id) return
+        scope.launch {
+            // Its song if one was found to play (the session's), else the same title by the same artist at any length:
+            // only for the cover, so it's never kept as the song to play in its place.
+            val found = c.player.songFor(song) ?: runCatching { withContext(Dispatchers.IO) { c.ytm.songForVideo(song, anyLength = true) } }.getOrNull()
+            android.util.Log.i("PrismVideo", "cover for video ${song.id} \"${song.title}\": song ${found?.id} ${found?.thumbnail}")
+            val cover = found?.thumbnail?.takeIf { it != song.thumbnail } ?: return@launch
+            val idx = player.currentMediaItemIndex
+            val now = player.currentMediaItem
+            // Still this video; its picture or sound goes on as it is (the same address: same video mode).
+            if (now?.mediaId != song.id) return@launch
+            val current = now.toSong() ?: return@launch
+            swapInPlace(idx, current.copy(thumbnail = cover).toMediaItem(now.videoModeId))
+        }
+    }
 
     /** No picture after a fair wait: fall back to the song (the button stays usable). */
     private fun watchVideo(songId: String) {

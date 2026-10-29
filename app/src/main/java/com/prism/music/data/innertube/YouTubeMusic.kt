@@ -510,7 +510,7 @@ class YouTubeMusic(
      * their audio track in the watch queue; anything else (live sets, performances) is matched
      * by a song search on the cleaned-up title and artist, with the duration as a tie-breaker.
      */
-    suspend fun songForVideo(video: Song): Song? {
+    suspend fun songForVideo(video: Song, anyLength: Boolean = false): Song? {
         pairing(video.id)?.let { r ->
             r.counterpartSongs[video.id]?.takeIf { !it.isVideo }?.let { return it }
             r.songs.firstOrNull { !it.isVideo && r.counterparts[it.id] == video.id }?.let { return it }
@@ -536,7 +536,9 @@ class YouTubeMusic(
         // its title, so the lengths only matter beyond that.
         val ownTake = !MusicVideoMatch.otherTake(video.title)
         fun lengthFits(s: Song): Boolean {
-            if (video.durationSec <= 0 || s.durationSec <= 0) return true
+            // [anyLength]: only its cover is wanted (Reddit 1.7.9: "Carl Sagan"'s video is a 3:29 edit of the 3:53 song),
+            // never its sound, so another length of the same title by the same artist is the same release.
+            if (anyLength || video.durationSec <= 0 || s.durationSec <= 0) return true
             val longer = video.durationSec - s.durationSec
             return if (ownTake) longer in -SONG_FOR_VIDEO_SLACK_SEC..LONGER_VIDEO_SEC else kotlin.math.abs(longer) <= SONG_FOR_VIDEO_SLACK_SEC
         }

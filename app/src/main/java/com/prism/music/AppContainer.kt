@@ -77,6 +77,8 @@ class PrismApp : Application(), coil3.SingletonImageLoader.Factory {
 
     override fun onCreate() {
         super.onCreate()
+        // Before anything shows a word: Prism's text in the listener's language (Strings.kt).
+        Strings.resources = resources
         // A crash's details kept on the phone (Settings → About → Diagnostics), from the very start.
         CrashLog.install(this)
         // A restore from a backup goes in before anything opens the files it replaces.

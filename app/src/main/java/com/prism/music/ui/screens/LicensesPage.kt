@@ -38,7 +38,7 @@ private val libraries = listOf(
     Library("jsoup", tr(R.string.jonathan_hedley), "MIT", "jsoup", "https://jsoup.org"),
     Library(tr(R.string.androidx_compose_material_3_media3_room), tr(R.string.the_android_open_source_project), tr(R.string.apache_2_0), "apache-2.0", "https://developer.android.com/jetpack/androidx"),
     Library(tr(R.string.kotlin_kotlinx_coroutines_kotlinx_serialization), tr(R.string.jetbrains), tr(R.string.apache_2_0), "apache-2.0", "https://kotlinlang.org"),
-    Library(tr(R.string.okhttp_okio), tr(R.string.square), tr(R.string.apache_2_0), "apache-2.0", "https://square.github.io/okhttp"),
+    Library(tr(R.string.okhttp_okio), tr(R.string.licensor_square), tr(R.string.apache_2_0), "apache-2.0", "https://square.github.io/okhttp"),
     Library(tr(R.string.coil), tr(R.string.coil_contributors), tr(R.string.apache_2_0), "apache-2.0", "https://coil-kt.github.io/coil"),
     Library(tr(R.string.haze), tr(R.string.chris_banes), tr(R.string.apache_2_0), "apache-2.0", "https://github.com/chrisbanes/haze"),
     Library(tr(R.string.accompanist), tr(R.string.google), tr(R.string.apache_2_0), "apache-2.0", "https://github.com/google/accompanist"),

@@ -230,7 +230,7 @@ class ForYou(private val c: AppContainer) {
             val missing = songs.filter { it.id !in known }.map { it.primaryArtist }.filter { it.isNotBlank() }.distinct()
             coroutineScope { missing.map { a -> async { runCatching { c.meta.artistGenre(a) } } }.awaitAll() }
         }
-        val weekday = LocalDate.now().dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ENGLISH)
+        val weekday = LocalDate.now().dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault())
         val artists = mix.familiar.map { it.primaryArtist }.distinct()
         saveMix(MadeForYou.TIME, MadeForYou.timeTitle(weekday, bucket, timeGenre(songs)), MadeForYou.namesLine(artists),
             artists.take(4), TIME_COLORS.getValue(bucket), songs)
@@ -238,7 +238,7 @@ class ForYou(private val c: AppContainer) {
     /** The genre word in the time-of-day mix's name ("indie", "hip-hop"), or null for "mix". */
     private suspend fun timeGenre(songs: List<Song>): String? {
         val g = c.meta.cachedGenres(songs)
-        return MadeForYou.mainGenre(songs.map { g[it.id] })?.substringBefore(" & ")
+        return MadeForYou.mainGenre(songs.map { g[it.id] })
     }
 
     /**
@@ -251,7 +251,7 @@ class ForYou(private val c: AppContainer) {
         val e = c.db.mixes().get(MadeForYou.TIME) ?: return
         val made = java.time.Instant.ofEpochMilli(e.createdAt).atZone(java.time.ZoneId.systemDefault())
         val bucket = MadeForYou.TimeBucket.of(made.hour)
-        val title = MadeForYou.timeTitle(made.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ENGLISH), bucket, timeGenre(toMix(e).songs))
+        val title = MadeForYou.timeTitle(made.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault()), bucket, timeGenre(toMix(e).songs))
         if (title != e.title) {
             c.db.mixes().put(e.copy(title = title))
             Log.i(TAG, "time mix renamed: ${e.title} -> $title")

@@ -24,7 +24,8 @@ fun LanguageSettings() {
         Item(tr(R.string.your_phone_s_language), phone, onClick = { AppLanguage.pick(context, AppLanguage.PHONE) }) {
             if (picked == AppLanguage.PHONE) Icon(PrismIcons.Check, null, tint = MaterialTheme.colorScheme.primary)
         }
-        AppLanguage.available.forEach { tag ->
+        // By each language's own name, as the phone's own language list does ("Deutsch", "Español", "日本語"…).
+        AppLanguage.available.sortedWith(compareBy(java.text.Collator.getInstance(java.util.Locale.ROOT)) { AppLanguage.nativeName(it) }).forEach { tag ->
             // Each in its own words, with the name in the language Prism is in now beneath it when that differs.
             val own = AppLanguage.nativeName(tag)
             val here = java.util.Locale.forLanguageTag(tag).getDisplayName(java.util.Locale.getDefault()).replaceFirstChar { it.titlecase() }

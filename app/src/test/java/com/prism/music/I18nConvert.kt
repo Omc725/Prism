@@ -162,6 +162,7 @@ class I18nConvert {
         "Uri.parse(" to "address", "mimeType" to "key", "setType(" to "key", "MIME" to "key",
         "Font(" to "key", "assets" to "key", "File(" to "path",
         "Thread(" to "thread name", "SimpleDateFormat(" to "pattern", "ofPattern(" to "pattern", "DateTimeFormatter" to "pattern",
+        "localDates(" to "pattern",
         // Stored as the listener's own: Home's section titles (renamable), the equalizer's preset name.
         "HomeSectionConfig(" to "stored title", "copy(key =" to "stored title", "val preset: String" to "stored name",
         "header(" to "protocol", "getInstance(" to "algorithm", "\"single\" ->" to "YouTube kind",

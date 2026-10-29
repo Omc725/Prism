@@ -331,7 +331,7 @@ class GoogleCastLink(
         app = findApp(status)
         if (app == null) {
             status = request(CastNs.RECEIVER, CastNs.PLATFORM, timeoutMs = 20_000) { put("type", "LAUNCH"); put("appId", CastNs.DEFAULT_RECEIVER) }
-            if (status.str("type") == "LAUNCH_ERROR") throw IOException(tr(R.string.wouldn_t_open_its_player, renderer.name, status.str("reason") ?: "error"))
+            if (status.str("type") == "LAUNCH_ERROR") throw IOException(tr(R.string.wouldn_t_open_its_player, renderer.name, status.str("reason") ?: tr(R.string.error_word)))
             app = findApp(status)
             // Some devices answer the launch before the app is up: asked again for a few seconds.
             var tries = 0

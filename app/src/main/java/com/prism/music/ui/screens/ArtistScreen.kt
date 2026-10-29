@@ -653,7 +653,7 @@ private fun CardRow(items: List<BrowseItem>, width: Dp, aspect: Float = 1f, roun
 }
 
 private fun facts(page: ArtistPage, genre: String?) = listOfNotNull(
-    genre?.let { tr(R.string.genre) to it },
+    genre?.let { tr(R.string.genre) to com.prism.music.data.meta.Genres.shown(it) },
     page.subscribers?.let { tr(R.string.listeners) to it.replace(" monthly audience", " monthly") },
     page.views?.let { tr(R.string.views_on_youtube) to it.removeSuffix(" views") },
 )

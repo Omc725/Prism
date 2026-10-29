@@ -339,11 +339,11 @@ fun classicTypography(family: FontFamily, titleFamily: FontFamily = family, weig
 /** The app's type for [s]: its font, titles in their own font if one's picked, the weight and spacing (1.7.7). */
 fun appTypography(s: AppSettings): Typography {
     val family = AppFonts.family(s.fontChoice)
-    if (s.type.classic) return classicTypography(family, s.type.titleFont?.let { AppFonts.family(it) } ?: family, s.type.weight.shift, s.type.spacing.em)
+    if (s.type.classic) return classicTypography(family, s.type.titleFont?.let { AppFonts.family(it) } ?: family, s.type.weight.shift, s.type.spacing.em).hyphenated()
     return prismTypography(
         family, s.type.titleFont?.let { AppFonts.family(it) } ?: family,
         weightShift = s.type.weight.shift, tracking = s.type.spacing.em,
-    )
+    ).hyphenated()
 }
 
 val MonoStyle = TextStyle(fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace, fontSize = 11.sp, lineHeight = 15.sp)
@@ -511,4 +511,19 @@ fun PrismTheme(settings: AppSettings, artworkColor: Color?, content: @Composable
             CompositionLocalProvider(LocalContentColor provides scheme.onBackground, content = content)
         }
     }
+}
+
+/**
+ * Long words broken with a hyphen where they must break, in the language's own rules (1.7.9): a narrow tile split
+ * German's "Lieblingssongs" as "Lieblingssong / s" without it. Android hyphenates only where a word doesn't fit.
+ */
+private fun Typography.hyphenated(): Typography {
+    fun TextStyle.h() = copy(hyphens = androidx.compose.ui.text.style.Hyphens.Auto)
+    return copy(
+        displayLarge = displayLarge.h(), displayMedium = displayMedium.h(), displaySmall = displaySmall.h(),
+        headlineLarge = headlineLarge.h(), headlineMedium = headlineMedium.h(), headlineSmall = headlineSmall.h(),
+        titleLarge = titleLarge.h(), titleMedium = titleMedium.h(), titleSmall = titleSmall.h(),
+        bodyLarge = bodyLarge.h(), bodyMedium = bodyMedium.h(), bodySmall = bodySmall.h(),
+        labelLarge = labelLarge.h(), labelMedium = labelMedium.h(), labelSmall = labelSmall.h(),
+    )
 }

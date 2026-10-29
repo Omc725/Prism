@@ -345,7 +345,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     // The page's own id goes with the queue: exclusions ("leave this playlist out of my taste") and Smart Shuffle's
     // "Add to this playlist" know which playlist is playing.
     val source = QueueSource(
-        if (type == CollectionType.ALBUM) QueueKind.ALBUM else QueueKind.PLAYLIST, page.title + (genreFilter?.let { " · $it" } ?: ""),
+        if (type == CollectionType.ALBUM) QueueKind.ALBUM else QueueKind.PLAYLIST, page.title + (genreFilter?.let { " · ${com.prism.music.data.meta.Genres.shown(it)}" } ?: ""),
         originId = page.playlistId ?: page.id.removePrefix("VL").takeIf { type == CollectionType.PLAYLIST || type == CollectionType.MIX } ?: page.id,
         page = when (type) {
             CollectionType.ALBUM -> com.prism.music.data.model.AlbumItem(page.id, page.title, page.subtitle, page.thumbnail, page.playlistId)
@@ -679,13 +679,13 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                     LazyRow(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         item { com.prism.music.ui.components.PrismChip(genreFilter == null, { genreFilter = null }, tr(R.string.all), idle = frosted) }
                         items(genreCounts) { (g, n) ->
-                            com.prism.music.ui.components.PrismChip(genreFilter == g, { genreFilter = if (genreFilter == g) null else g }, "$g · $n", idle = frosted)
+                            com.prism.music.ui.components.PrismChip(genreFilter == g, { genreFilter = if (genreFilter == g) null else g }, "${com.prism.music.data.meta.Genres.shown(g)} · $n", idle = frosted)
                         }
                     }
                 }
                 if (visible.isEmpty()) item {
                     if (query.isNotBlank()) EmptyState(PrismIcons.Search, tr(R.string.no_matches), tr(R.string.nothing_in_matches, title, query.trim()) + if (loadingMore) tr(R.string.yet_more_songs_are_still_loading) else ".")
-                    else EmptyState(when (type) { CollectionType.LIKED -> PrismIcons.HeartFilled; CollectionType.DOWNLOADS -> PrismIcons.DownloadDone; else -> PrismIcons.Song }, if (genreFilter != null) tr(R.string.no_songs, genreFilter) else tr(R.string.nothing_here_yet),
+                    else EmptyState(when (type) { CollectionType.LIKED -> PrismIcons.HeartFilled; CollectionType.DOWNLOADS -> PrismIcons.DownloadDone; else -> PrismIcons.Song }, genreFilter?.let { tr(R.string.no_songs, com.prism.music.data.meta.Genres.shown(it)) } ?: tr(R.string.nothing_here_yet),
                         when (type) {
                             CollectionType.LIKED -> tr(R.string.like_songs_from_the_player_and)
                             CollectionType.PRISM -> tr(R.string.add_songs_from_any_song_s)
@@ -718,7 +718,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                                 index = if (type == CollectionType.ALBUM) i + 1 else null,
                                 starred = s.id in popular,
                                 playing = current?.id == s.id,
-                                trailingInfo = if (type == CollectionType.ALBUM) formatDuration(s.durationSec) else genreVersion.let { genres[s.id] }?.takeIf { sort == SortMode.GENRE || genreFilter == null && showGenres }?.let { g -> listOfNotNull(s.album?.title, g).joinToString(" • ") },
+                                trailingInfo = if (type == CollectionType.ALBUM) formatDuration(s.durationSec) else genreVersion.let { genres[s.id] }?.takeIf { sort == SortMode.GENRE || genreFilter == null && showGenres }?.let { g -> listOfNotNull(s.album?.title, com.prism.music.data.meta.Genres.shown(g)).joinToString(" • ") },
                                 extraActions = removeAction(s),
                             ) { playFrom(visible, s, source) }
                         }

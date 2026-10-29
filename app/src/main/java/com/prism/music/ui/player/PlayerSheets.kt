@@ -150,7 +150,7 @@ fun LyricsTimingSheet(onDismiss: () -> Unit) {
             )
             Spacer(Modifier.height(20.dp))
             Text(
-                if (offset == 0L) tr(R.string.in_sync) else tr(R.string.lyrics_2, fmt(offset), if (offset > 0) "earlier" else "later"),
+                if (offset == 0L) tr(R.string.in_sync) else tr(if (offset > 0) R.string.lyrics_earlier else R.string.lyrics_later, fmt(offset)),
                 style = MaterialTheme.typography.headlineSmall, modifier = Modifier.align(Alignment.CenterHorizontally),
             )
             Spacer(Modifier.height(14.dp))

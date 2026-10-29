@@ -673,7 +673,7 @@ private fun Genres(s: ReplayStory, modifier: Modifier) {
     val total = s.genres.sumOf { it.second }.coerceAtLeast(1)
     Column(modifier, verticalArrangement = Arrangement.Center) {
         Text(tr(R.string.your_top_genre), style = kicker(), modifier = Modifier.reveal(100))
-        Text(s.genres.first().first.uppercase(), style = display(72.sp), modifier = Modifier.reveal(300))
+        Text(com.prism.music.data.meta.Genres.shown(s.genres.first().first).uppercase(), style = display(72.sp), modifier = Modifier.reveal(300))
         Spacer(Modifier.height(30.dp))
         s.genres.forEachIndexed { i, (g, ms) ->
             val share = ms.toFloat() / total
@@ -915,7 +915,7 @@ private fun Seasons(s: ReplayStory, modifier: Modifier) {
                     .clip(RoundedCornerShape(18.dp)).background(Color.White.copy(alpha = 0.12f)).padding(horizontal = 18.dp, vertical = 14.dp),
             ) {
                 Text(q.label.uppercase(), style = kicker(11.sp).copy(color = Color.White.copy(alpha = 0.75f)))
-                Text(q.genre ?: tr(R.string.a_bit_of_everything), style = display(34.sp), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(q.genre?.let { com.prism.music.data.meta.Genres.shown(it) } ?: tr(R.string.a_bit_of_everything), style = display(34.sp), maxLines = 1, overflow = TextOverflow.Ellipsis)
                 q.topSong?.let { Text(tr(R.string.on_repeat, it), style = body.copy(fontSize = 15.sp, color = Color.White.copy(alpha = 0.8f)), maxLines = 1, overflow = TextOverflow.Ellipsis) }
             }
         }

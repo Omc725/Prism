@@ -581,7 +581,7 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
                 Log.w(TAG, "couldn't get ${song.id} ready to cast", e)
                 if (gen == loadGen && session === s) {
                     publish(s, loading = false)
-                    _events.tryEmit(tr(R.string.couldn_t_send_to, song.title, s.renderer.name, e.message ?: "it didn't load"))
+                    _events.tryEmit(tr(R.string.couldn_t_send_to, song.title, s.renderer.name, e.message ?: tr(R.string.it_didn_t_load)))
                 }
                 return@launch
             }

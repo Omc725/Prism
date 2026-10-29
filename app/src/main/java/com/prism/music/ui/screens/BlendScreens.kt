@@ -252,7 +252,7 @@ fun BlendsScreen(bottomPadding: Dp) {
                 mine?.takeIf { showShared }?.let { m ->
                     val sent = remember(code) { code?.let(BlendCode::decode) ?: m }
                     Text(
-                        tr(R.string.your_blend_name_all, sent.name, sent.genres.entries.joinToString { "${it.key} ${it.value}%" }.ifEmpty { tr(R.string.none_yet_2) }) +
+                        tr(R.string.your_blend_name_all, sent.name, sent.genres.entries.joinToString { "${com.prism.music.data.meta.Genres.shown(it.key)} ${it.value}%" }.ifEmpty { tr(R.string.none_yet_2) }) +
                             trp(R.plurals.n_artists_list, sent.artists.size, sent.artists.size, sent.artists.joinToString { it.name }) +
                             trp(R.plurals.n_songs_list, sent.songs.size, sent.songs.size, sent.songs.joinToString { "${it.title} (${it.artist})" }) +
                             tr(R.string.and_a_random_id_for_this_all),
@@ -437,7 +437,7 @@ fun BlendScreen(who: String, bottomPadding: Dp) {
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 if (blend.sharedGenres.isNotEmpty()) Text(
-                    tr(R.string.shared_genres, blend.sharedGenres.take(4).joinToString(", ")), style = MaterialTheme.typography.bodySmall,
+                    tr(R.string.shared_genres, blend.sharedGenres.take(4).joinToString(", ") { com.prism.music.data.meta.Genres.shown(it) }), style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(

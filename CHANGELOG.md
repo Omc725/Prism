@@ -4,6 +4,21 @@ What changed in each release. Older releases are described on the [Releases page
 
 ## 1.7.9 (unreleased)
 
+### Prism in 31 languages
+
+All of Prism (every screen, setting, menu, notification, widget and the car) is now in Spanish, Portuguese (Brazil
+and Portugal), French, German, Italian, Dutch, Swedish, Polish, Czech, Romanian, Hungarian, Greek, Russian, Ukrainian,
+Turkish, Arabic, Persian, Hebrew, Hindi, Bengali, Urdu, Indonesian, Malay, Vietnamese, Thai, Filipino, Japanese,
+Korean and Chinese (Simplified and Traditional), as well as English.
+
+- **It follows your phone's language**, or pick one in Settings → Language (on Android 13 and up also in the phone's
+  Settings → Apps → Prism → Language). Prism restarts in the language you pick.
+- **Right to left:** in Arabic, Persian, Hebrew and Urdu the whole of Prism is laid out mirrored.
+- **Dates, times, counts and genres** follow the language too ("3 nov.", "1 canción / 5 canciones", Arabic's six
+  plural forms), and long words break with a hyphen instead of mid-word.
+- The translations were made by Claude, an AI, so a word here and there may read oddly: corrections are very
+  welcome on GitHub (CONTRIBUTING.md → Translations explains how).
+
 ### Recommendations that keep changing
 
 Reddit: "the radio always plays the same music", "the Daily Mixes play the same songs". Mixes, radio and Quick picks

@@ -156,6 +156,9 @@ object MadeForYou {
 
         operator fun contains(hour: Int) = hour in hours
 
+        /** The part of the day in the listener's language, for the mix's name. */
+        val shown: String get() = tr(when (this) { MORNING -> R.string.time_morning; AFTERNOON -> R.string.time_afternoon; EVENING -> R.string.time_evening; NIGHT -> R.string.time_night; LATE -> R.string.time_late })
+
         companion object {
             fun of(hour: Int): TimeBucket = entries.first { hour in it.hours }
         }
@@ -163,7 +166,7 @@ object MadeForYou {
 
     /** "Your Tuesday late-night hip-hop" (or "… mix" without a clear genre). */
     fun timeTitle(weekday: String, bucket: TimeBucket, genre: String?): String =
-        tr(R.string.your, weekday, bucket.label, genre?.lowercase()?.takeIf { it.isNotBlank() } ?: "mix")
+        tr(R.string.your, weekday, bucket.shown, genre?.takeIf { it.isNotBlank() }?.let { com.prism.music.data.meta.Genres.word(it) } ?: tr(R.string.mix_word))
 
     /**
      * What a mix can be called by: the genre of more than half its songs whose genre is known, with at least half its

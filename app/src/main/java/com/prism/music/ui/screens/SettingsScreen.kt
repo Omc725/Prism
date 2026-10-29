@@ -681,9 +681,9 @@ private fun DiscordGroup() {
             tr(R.string.show_what_you_re_playing),
             when {
                 !c.discord.signedIn -> tr(R.string.listening_to_prism_on_your_profile)
-                state == com.prism.music.playback.DiscordPresence.State.CONNECTED -> tr(R.string.on_as, user ?: "you")
+                state == com.prism.music.playback.DiscordPresence.State.CONNECTED -> (user?.let { tr(R.string.on_as, it) } ?: tr(R.string.on_2))
                 state == com.prism.music.playback.DiscordPresence.State.CONNECTING -> tr(R.string.connecting_to_discord)
-                else -> tr(R.string.on_discord_as, user ?: "you")
+                else -> (user?.let { tr(R.string.on_discord_as, it) } ?: tr(R.string.on_discord))
             },
             s.discordPresence && c.discord.signedIn,
             info = tr(R.string.your_profile_shows_the_song_and),
@@ -831,7 +831,7 @@ private fun GlassSettings() {
                     Item(
                         tr(R.string.screen_backgrounds),
                         if (count == 0) tr(R.string.designs_or_your_own_photo)
-                        else screens.values.map { com.prism.music.ui.theme.Backdrop.parse(it).first.label }.distinct().joinToString(" · ") + tr(R.string.on_3, count, if (count == 1) "screen" else "screens"),
+                        else screens.values.map { com.prism.music.ui.theme.Backdrop.parse(it).first.label }.distinct().joinToString(" · ") + com.prism.music.trp(R.plurals.on_n_screens, count),
                         onClick = { nav.go(Routes.BACKGROUNDS) },
                     ) { Chevron() }
                 }

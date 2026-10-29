@@ -521,7 +521,7 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
                 val id = if (last.to == SunClock.Part.DAY) s.day else s.night
                 val key = "${last.to}@${last.at.epochSecond / 60}|$id"
                 if (key != prefs.getString(LAST_TURN, null)) {
-                    find(id)?.let { apply(it, tr(R.string.for_the, it.name, if (last.to == SunClock.Part.DAY) "day" else "night"), scheduled = true) }
+                    find(id)?.let { apply(it, tr(if (last.to == SunClock.Part.DAY) R.string.look_for_the_day else R.string.look_for_the_night, it.name), scheduled = true) }
                     prefs.edit().putString(LAST_TURN, key).apply()
                 }
                 // Looked at again by the turn, and at least every 15 minutes (the clock or time zone may change).

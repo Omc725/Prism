@@ -77,10 +77,21 @@ class PrismApp : Application(), coil3.SingletonImageLoader.Factory {
 
     override fun attachBaseContext(base: android.content.Context) = super.attachBaseContext(AppLanguage.wrap(base))
 
+    /** The language Prism started in: a change of it from outside Prism restarts Prism ([onConfigurationChanged]). */
+    private var language = ""
+
+    override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
+        super.onConfigurationChanged(newConfig)
+        // Menus' labels and other text read once would stay in the old language (seen after a change in the phone's
+        // Settings → Apps → Prism → Language): Prism starts again in the new one, as its own Language page does.
+        if (AppLanguage.changed(this, language, newConfig)) AppLanguage.restart(this)
+    }
+
     override fun onCreate() {
         super.onCreate()
         // Before anything shows a word: Prism's text in the listener's language (Strings.kt).
         Strings.resources = resources
+        language = AppLanguage.shown(this)
         // A crash's details kept on the phone (Settings → About → Diagnostics), from the very start.
         CrashLog.install(this)
         // A restore from a backup goes in before anything opens the files it replaces.

@@ -387,9 +387,9 @@ fun ReplayScreen(bottomPadding: Dp) {
                         Box(Modifier.fillMaxWidth(anim.value).height(40.dp).background(Brush.horizontalGradient(listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.tertiary))))
                         // The labels twice: in the page's ink, then in the bar's ink clipped to the bar, so a name
                         // that runs past the end of a short bar changes color where the bar stops.
-                        GenreLabels(g, listenTime(ms), Color.Unspecified, Color.Unspecified, Modifier)
+                        GenreLabels(com.prism.music.data.meta.Genres.shown(g), listenTime(ms), Color.Unspecified, Color.Unspecified, Modifier)
                         GenreLabels(
-                            g, listenTime(ms), barInk, endInk,
+                            com.prism.music.data.meta.Genres.shown(g), listenTime(ms), barInk, endInk,
                             Modifier.drawWithContent { clipRect(right = size.width * anim.value) { this@drawWithContent.drawContent() } },
                         )
                     }

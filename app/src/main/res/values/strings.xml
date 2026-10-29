@@ -2382,7 +2382,7 @@
     <string name="looking_up">Looking up \"%1$s\"</string>
     <string name="when_the_lyrics_are_listed_under">When the lyrics are listed under a different name</string>
     <string name="use_the_song_s_own">Use the song\'s own</string>
-    <string name="the_listener_heard_a_stutter_in">the listener heard a stutter in %1$s – %2$s (%3$s) at %%d:%%02d</string>
+    <string name="the_listener_heard_a_stutter_in" translatable="false">the listener heard a stutter in %1$s – %2$s (%3$s) at %%d:%%02d</string>
     <string name="marked_at_d_02d" formatted="false">Marked at %d:%02d</string>
     <string name="saving_animated_covers_for_this_album">Saving animated covers for this album</string>
     <string name="got_it_prism_will_steer_clear">Got it — Prism will steer clear of this song</string>
@@ -2432,7 +2432,6 @@
     <string name="for_this_song_s_music_video">For this song\'s music video</string>
     <string name="for_this_song">For this song</string>
     <string name="in_sync">In sync</string>
-    <string name="lyrics_2">%1$s · lyrics %2$s</string>
     <string name="lyrics_seconds">Lyrics %1$s seconds</string>
     <string name="later">Later</string>
     <string name="kept_on_this_phone_for_this">Kept on this phone, for this song only</string>
@@ -2954,7 +2953,6 @@
     <string name="listened_2">%1$s listened</string>
     <string name="first">%1$s first</string>
     <string name="light_2">%1$s light</string>
-    <string name="on_3"> on %1$s %2$s</string>
     <string name="dp">%1$s dp</string>
     <string name="kbps">%1$s %2$s kbps</string>
     <string name="by"> by %1$s</string>
@@ -3282,7 +3280,6 @@
     <string name="your_own_settings_from_before_you">Your own settings from before you picked %1$s</string>
     <string name="before">Before %1$s</string>
     <string name="that_look_file_is_too_big">That Look file is too big</string>
-    <string name="for_the">%1$s for the %2$s</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="you_re_offline_check_your_connection">You\'re offline. Check your connection and try again.</string>
     <string name="prism_music_took_too_long_to">Prism Music took too long to answer. Try again.</string>
@@ -3578,8 +3575,8 @@
         <item quantity="other">Removed %s downloads</item>
     </plurals>
     <plurals name="offline_n_of_songs">
-        <item quantity="one">You\'re offline · %1 of %2 song is on this phone and plays</item>
-        <item quantity="other">You\'re offline · %1 of %2 songs are on this phone and play</item>
+        <item quantity="one">You\'re offline · %1$s of %2$s song is on this phone and plays</item>
+        <item quantity="other">You\'re offline · %1$s of %2$s songs are on this phone and play</item>
     </plurals>
     <plurals name="cancel_n_downloads">
         <item quantity="one">Cancel %s download that hasn\'t finished?</item>
@@ -3840,4 +3837,57 @@
     <string name="forget_skipped_suggestions_info">A song from a mix, radio or autoplay that you skip within its first moments isn\'t suggested again for two months (one you know, after two skips). Prism also rests what it suggested in the last few days, so tomorrow\'s mixes aren\'t today\'s. This forgets both.</string>
     <string name="suggestions_start_fresh">Suggestions start fresh</string>
     <string name="skipped_suggestions_keywords">recommendations repeat same songs reset skips variety radio daily mix</string>
+    <!-- Prism's genres, shown (genre_*) and as one word in a mix's name (genre_word_*). -->
+    <string name="genre_reggae">Reggae &amp; Caribbean</string>
+    <string name="genre_word_reggae">reggae</string>
+    <string name="genre_christian">Christian &amp; gospel</string>
+    <string name="genre_word_christian">gospel</string>
+    <string name="genre_soundtracks">Soundtracks &amp; musicals</string>
+    <string name="genre_word_soundtracks">soundtrack</string>
+    <string name="genre_family">Family</string>
+    <string name="genre_word_family">family</string>
+    <string name="genre_hip_hop">Hip-hop</string>
+    <string name="genre_word_hip_hop">hip-hop</string>
+    <string name="genre_metal">Metal</string>
+    <string name="genre_word_metal">metal</string>
+    <string name="genre_rnb">R&amp;B &amp; soul</string>
+    <string name="genre_word_rnb">R&amp;B</string>
+    <string name="genre_indie">Indie &amp; alternative</string>
+    <string name="genre_word_indie">indie</string>
+    <string name="genre_dance">Dance &amp; electronic</string>
+    <string name="genre_word_dance">dance</string>
+    <string name="genre_country">Country &amp; Americana</string>
+    <string name="genre_word_country">country</string>
+    <string name="genre_folk">Folk &amp; acoustic</string>
+    <string name="genre_word_folk">folk</string>
+    <string name="genre_jazz">Jazz</string>
+    <string name="genre_word_jazz">jazz</string>
+    <string name="genre_blues">Blues</string>
+    <string name="genre_word_blues">blues</string>
+    <string name="genre_classical">Classical</string>
+    <string name="genre_word_classical">classical</string>
+    <string name="genre_rock">Rock</string>
+    <string name="genre_word_rock">rock</string>
+    <string name="genre_pop">Pop</string>
+    <string name="genre_word_pop">pop</string>
+    <!-- The parts of the day in the time-of-day mix's name ("Your Tuesday evening rock"). -->
+    <string name="time_morning">morning</string>
+    <string name="time_afternoon">afternoon</string>
+    <string name="time_evening">evening</string>
+    <string name="time_night">night</string>
+    <string name="time_late">late-night</string>
+    <string name="mix_word">mix</string>
+    <string name="look_for_the_day">%1$s for the day</string>
+    <string name="look_for_the_night">%1$s for the night</string>
+    <string name="lyrics_earlier">%1$s · lyrics earlier</string>
+    <string name="lyrics_later">%1$s · lyrics later</string>
+    <plurals name="on_n_screens">
+        <item quantity="one"> on %s screen</item>
+        <item quantity="other"> on %s screens</item>
+    </plurals>
+    <string name="on_discord">On Discord</string>
+    <string name="it_didn_t_load">it didn\'t load</string>
+    <string name="error_word">error</string>
+    <!-- The company behind OkHttp, on the licenses page (a name: never translated). -->
+    <string name="licensor_square" translatable="false">Square</string>
 </resources>

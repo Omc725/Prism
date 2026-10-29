@@ -159,7 +159,7 @@ class YourMusic(private val c: AppContainer) {
         byGenre.entries.sortedByDescending { (_, songs) -> songs.sumOf { score[it.id] ?: 0.0 } }.take(3).forEach { (genre, songs) ->
             if (songs.size < MIN_MIX) return@forEach
             val list = spread(draw(songs, genre!!))
-            out += Mix("lib:genre:$genre", tr(R.string.your_mix, genre.substringBefore(" & ")), MadeForYou.namesLine(artists(list)), artists(list).take(4), color(genre), s.at, list)
+            out += Mix("lib:genre:$genre", tr(R.string.your_mix, com.prism.music.data.meta.Genres.word(genre)), MadeForYou.namesLine(artists(list)), artists(list).take(4), color(genre), s.at, list)
         }
 
         val artistPlays = s.events.groupingBy { s.songs[it.songId]?.primaryArtist.orEmpty() }.eachCount().filterKeys { it.isNotBlank() }

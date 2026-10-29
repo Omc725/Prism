@@ -437,6 +437,8 @@ class AppContainer(val app: Application) {
     val dj = com.prism.music.playback.DjMode()
     val exclusions by lazy { com.prism.music.data.foryou.Exclusions(app) }
     val forYou by lazy { com.prism.music.data.foryou.ForYou(this) }
+    /** What the listener made of Prism's recommendations: served, skipped, heard through (1.7.9). */
+    val recFeedback by lazy { com.prism.music.data.foryou.RecFeedback(app) }
     val releaseRadar by lazy { com.prism.music.data.foryou.ReleaseRadar(this) }
     val blends by lazy { com.prism.music.data.blend.Blends(this) }
     /** Prism's radio and Home's lists and mixes, from the listener's own music on the phone. */

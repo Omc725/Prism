@@ -268,6 +268,8 @@ data class NextResult(
     val counterparts: Map<String, String>,
     /** The other half of each pairing (the song for a music video, and the reverse), by the panel item's id. */
     val counterpartSongs: Map<String, Song> = emptyMap(),
+    /** The song's "Related" tab (you might also like, similar artists), to read with [com.prism.music.data.innertube.YouTubeMusic.related]. */
+    val relatedBrowseId: String? = null,
 ) {
     /**
      * The queue as songs (#39): a music video that YouTube pairs with its song is swapped for the song (the video stays
@@ -374,3 +376,6 @@ fun kindName(kind: String): String? = when (kind) {
     "Station" -> com.prism.music.R.string.kind_station
     else -> null
 }?.let { com.prism.music.tr(it) }
+
+/** A song's Related tab (1.7.9): songs YouTube Music puts beside it, and artists like its own. */
+data class Related(val songs: List<Song>, val artists: List<ArtistItem>)

@@ -9,6 +9,7 @@ import com.prism.music.data.model.CollectionPage
 import com.prism.music.data.model.HomeFeed
 import com.prism.music.data.model.NextResult
 import com.prism.music.data.model.PlayerExtras
+import com.prism.music.data.model.Related
 import com.prism.music.data.model.SearchResult
 import com.prism.music.data.model.Shelf
 import com.prism.music.data.model.Song
@@ -501,9 +502,35 @@ class YouTubeMusic(
         }
         val cont = panel.findFirst("playlistPanelRenderer")?.let { Parser.continuation(it.arr("continuations")) }
             ?: Parser.continuation(panel.obj("continuationContents"))
-        return NextResult(songs, cont, lyricsId, counterparts, counterpartSongs)
+        val relatedId = tabs.firstNotNullOfOrNull { t ->
+            t.str("tabRenderer", "endpoint", "browseEndpoint", "browseId")?.takeIf { it.startsWith("MPTR") }
+        }
+        return NextResult(songs, cont, lyricsId, counterparts, counterpartSongs, relatedId)
     }
 
+    /**
+     * What YouTube Music puts beside [videoId] on its Related tab (1.7.9): "You might also like" songs and "Similar
+     * artists", for Prism's mixes and radio to find new music with. The tab also lists other performances of the same
+     * song (covers, live takes): those are left out, by title. Found by kind of item, not by the shelves' names.
+     */
+    suspend fun related(videoId: String, title: String? = null): Related {
+        val id = next(videoId, queue = false).relatedBrowseId ?: return Related(emptyList(), emptyList())
+        val shelves = Parser.shelves(browse(id))
+        fun core(t: String) = t.lowercase().replace(Regex("""\s*[(\[][^)\]]*[)\]]"""), "").trim()
+        val own = (title ?: shelves.flatMap { it.items }.filterIsInstance<SongItem>().firstOrNull { it.song.id == videoId }?.song?.title)?.let(::core)
+        val songs = shelves.filter { s -> s.items.isNotEmpty() && s.items.all { it is SongItem } }
+            // "Other performances" is the same song again: a shelf mostly of its title.
+            .filterNot { s -> own != null && s.items.count { core(it.title) == own } * 2 >= s.items.size }
+            .flatMap { it.items }.filterIsInstance<SongItem>().map { it.song }
+            .filter { it.id != videoId && (own == null || core(it.title) != own) }
+        val artists = shelves.firstOrNull { s -> s.items.isNotEmpty() && s.items.all { it is ArtistItem } }?.items.orEmpty().filterIsInstance<ArtistItem>()
+        return Related(songs.distinctBy { it.id }, artists)
+    }
+
+    /** An artist's top songs (the first shelf of songs on their page that aren't videos), for discovery. */
+    suspend fun artistTopSongs(browseId: String): List<Song> =
+        artist(browseId).shelves.firstOrNull { s -> s.items.any { it is SongItem && !it.song.isVideo } }
+            ?.items.orEmpty().filterIsInstance<SongItem>().map { it.song }.filter { !it.isVideo && !it.isEpisode }
     /**
      * YouTube's own song ↔ video pairing for one item, if it still gives one. Signed out it stopped (2026-10-25: no
      * counterparts in `next`, not even in the queue it loads after), so then nothing's asked and Prism matches by search.

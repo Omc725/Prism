@@ -527,7 +527,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             scheduleSave()
             return
         }
-        flushPlayTime()
+        // Next pressed (or a song picked) before this one had its say: a skip, for recommendations' sake.
+        flushPlayTime(skipped = reason == Player.MEDIA_ITEM_TRANSITION_REASON_SEEK)
         applyLiveVideo()
         val song = mediaItem?.toSong() ?: return
         // Disliked songs are passed over when the queue reaches them on its own (tapping one still plays it), and so are
@@ -552,6 +553,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         }
         trackedSong = song
         trackedSource = sourceOf(mediaItem)
+        trackedRecommended = picked || mediaItem.mediaId in c.queue.smartPicks.value ||
+            c.queue.source.value.originId?.let { com.prism.music.data.foryou.ForYou.isMixId(it) } == true
         c.lastFm.started(song)
         trackedExcluded = c.exclusions.outOfTaste(song, c.queue.source.value.originId)
         // Podcast episodes pick up where they were left, and play at the speed picked for episodes.
@@ -1122,18 +1125,27 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             // Dropped if the queue was replaced, or Autoplay was switched off, while loading.
             if ((r == null && mine.isEmpty()) || c.queue.source.value !== src || (!c.settings.current.autoplay && !radio)) return@launch
             if (r != null) c.queue.autoplayContinuation = r.continuation
-            val theirs = r?.songs.orEmpty()
-            val songs = when {
-                radio || mine.isEmpty() -> theirs
-                theirs.isEmpty() -> mine
-                // Both: mostly your own music, with two of YouTube's in every five.
-                else -> com.prism.music.data.foryou.MadeForYou.interleave(mine, theirs, 20) { it.primaryArtist.lowercase() }
+            // Not what was heard in the last few hours, nor what the listener turned down (skipped at once when a
+            // suggestion): YouTube's radio for a favourite brings the same songs back day after day otherwise.
+            val heardLately = withContext(Dispatchers.IO) {
+                runCatching { c.db.plays().eventsSince(System.currentTimeMillis() - RADIO_REST_MS).map { it.songId }.toSet() }.getOrDefault(emptySet())
             }
+            val fb = c.recFeedback
+            val theirs = r?.songs.orEmpty().filter { it.id !in heardLately && !fb.turnedDown(it.id, known = false) }
+            val freshShare = when {
+                radio || mine.isEmpty() -> 1.0
+                theirs.isEmpty() -> 0.0
+                // Both: YouTube's radio leads, your own songs that belong with it in between (about two in five).
+                else -> 0.6
+            }
+            // An artist a few times a batch at most, never twice running.
+            val songs = com.prism.music.data.foryou.Variety.arrange(mine, theirs, 25, freshShare, perArtist = 3) { it.primaryArtist.lowercase() }
             android.util.Log.i("PrismRadio", "autoplay after $seed: ${mine.size} of yours, ${theirs.size} from YouTube ($mode${if (offline) ", offline" else ""})")
             val add = songs.distinctBy { it.id }.filter { it.id !in existing && !c.library.isDisliked(it.id) && !c.exclusions.blocks(it) }
             if (add.isNotEmpty()) {
                 if (c.queue.autoplayStart.value < 0) c.queue.autoplayStart.value = player.mediaItemCount
                 player.addMediaItems(add.map { it.toMediaItem() })
+                fb.served(add.map { it.id })
             }
         }
     }
@@ -1495,7 +1507,10 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         c.player.reportError(tr(R.string.the_music_video_didn_t_load))
     }
 
-    private fun flushPlayTime() {
+    /** Whether the song being heard was Prism's or YouTube's suggestion (radio, autoplay, a mix, Smart Shuffle). */
+    private var trackedRecommended = false
+
+    private fun flushPlayTime(skipped: Boolean = false) {
         val now = SystemClock.elapsedRealtime()
         if (playStartedAt > 0) accumulatedMs += now - playStartedAt
         playStartedAt = if (::player.isInitialized && player.isPlaying) now else 0
@@ -1506,6 +1521,15 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         accumulatedMs = 0
         // Last.fm counts every stretch heard (#133); it scrobbles once the play is long enough.
         if (song != null && ms > 0) c.lastFm.heard(song, ms)
+        // What the listener made of a suggestion (1.7.9): skipped within its first moments, it's left out of them for a while;
+        // heard through, it's welcome. Under ten seconds a play isn't kept at all, so this is the only trace of a quick skip.
+        if (song != null && trackedRecommended && !song.isEpisode && !song.isLive) {
+            val length = song.durationSec * 1000L
+            when {
+                skipped && ms < minOf(30_000L, if (length > 0) length * 3 / 10 else 30_000L) -> c.recFeedback.skipped(song.id, song.primaryArtist)
+                length > 0 && ms >= length * 7 / 10 -> c.recFeedback.heard(song.id, song.primaryArtist)
+            }
+        }
         // Replay, smart downloads and search taste are about music: episodes aren't counted.
         if (song != null && ms >= 10_000 && !song.isEpisode) {
             scope.launch(Dispatchers.IO) {
@@ -1596,8 +1620,11 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             val r = runCatching { withContext(Dispatchers.IO) { c.radio(seed.id, "RDAMVM${seed.id}") } }.getOrNull() ?: continue
             r.songs.filter { s ->
                 s.id !in inQueue && s.id !in recent && !s.isVideo && !s.isLive && !c.library.isDisliked(s.id) && !c.exclusions.blocks(s) &&
-                    smartPool.none { it.id == s.id }
+                    smartPool.none { it.id == s.id } && !c.recFeedback.turnedDown(s.id, known = false) &&
+                    // One offered in the last day or two (and not taken up) waits its turn.
+                    (c.recFeedback.servedDaysAgo(s.id) ?: 99) > 1
             }.shuffled().take(6).forEach { smartPool += it }
+        c.recFeedback.served(smartPool.map { it.id })
         }
     }
 
@@ -2397,6 +2424,9 @@ private const val UNDER_WAY_MS = 5_000L
  * later the video stays where it is and only the lyrics follow the offset.
  */
 private const val LATE_VIDEO_SEEK_MS = 3_000L
+
+/** Songs heard this recently aren't added by radio or autoplay again (1.7.9, Reddit: "the same songs over and over"). */
+private const val RADIO_REST_MS = 4 * 3_600_000L
 /** How many songs ahead DJ mode scans and orders (a quick scan each: three stretches of the song, a few at once). */
 private const val DJ_WINDOW = 40
 /** How long DJ mode waits for more scans before putting the queue in order again. */

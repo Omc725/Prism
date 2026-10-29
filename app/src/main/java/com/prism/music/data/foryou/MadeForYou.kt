@@ -15,6 +15,21 @@ object MadeForYou {
     fun daily(n: Int) = "daily:$n"
     const val MAX_DAILY = 6
 
+    /**
+     * A Daily Mix (1.7.9): 50 songs, half of them new to the listener, found from three of the day's familiar picks.
+     * A mix of few artists lets each of them more songs (a one-artist mix is mostly that artist, with new ones like
+     * them), a mix of many keeps each to a handful.
+     */
+    fun dailyRecipe(id: String, artists: Int): MixMaker.Recipe {
+        val size = 50
+        val share = 0.5
+        val perArtist = maxOf(4, kotlin.math.ceil(size * (1 - share) / artists.coerceAtLeast(1)).toInt() + 2)
+        return MixMaker.Recipe(id, size, share, seeds = 3, perArtist = perArtist)
+    }
+
+    /** The time-of-day mix: 30 songs, mostly what's played at this time, with new ones like them. */
+    val timeRecipe = MixMaker.Recipe(TIME, size = 30, freshShare = 0.4, seeds = 2, perArtist = 4)
+
     /** A play, as the mixes see it. */
     data class Play(val songId: String, val artist: String, val at: Long, val weight: Double = 1.0)
 

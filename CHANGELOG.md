@@ -4,6 +4,31 @@ What changed in each release. Older releases are described on the [Releases page
 
 ## 1.7.9 (unreleased)
 
+### Recommendations that keep changing
+
+Reddit: "the radio always plays the same music", "the Daily Mixes play the same songs". Mixes, radio and Quick picks
+were rebuilt so they keep finding music around what you play, and stop going round in circles.
+
+- **Daily Mixes change every day.** Each mix is now half songs you know and half new ones (it was mostly the same
+  favourites). The songs you know are drawn from everything that fits the mix, not the same top 30 each time, and
+  what was in the last few days' mixes, or what you've had on repeat this week, rests for a while. In a simulated week
+  of listening, tested against the old way: what's left from the day before went from 100% to under 5%, and a week
+  brings five times as many different songs.
+- **New music from more places.** New songs come from a few of the day's songs, a different few each day, through
+  YouTube Music's radio of them, their Related tab ("You might also like") and their similar artists' top songs. A song
+  several of them agree on comes first. Nothing you've played in the last 90 days counts as new.
+- **No artist takes over.** A mix takes its artists in turn, never plays one twice in a row, and keeps each to a few
+  songs (a one-artist mix gives that artist more).
+- **Skips count.** A suggestion (from a mix, radio, autoplay or Smart Shuffle) skipped within its first moments isn't
+  suggested again for two months (one you know, after two skips); heard through, it's welcome again. An artist whose
+  suggestions you keep skipping comes up less. Settings → Recommendations & Replay → "Forget skipped suggestions"
+  starts over.
+- **Radio sounds like radio.** With Autoplay from "Both", Prism Music's radio now leads, and only your own songs that
+  belong with what's playing come in between (your favourites with nothing to do with it no longer do: rock or opera
+  no longer brings NSYNC). Nothing heard in the last four hours is added again, and each batch spreads its artists.
+- **Quick picks, the time-of-day mix and the mixes from your music** rotate the same way, with Quick picks' new songs
+  coming from three of your main artists that change day to day.
+
 ### Fixes
 
 - **The accent from the cover is the cover's color** (Reddit): a few pixels of another color no longer decide it (a deep

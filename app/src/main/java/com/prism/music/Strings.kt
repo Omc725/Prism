@@ -77,3 +77,14 @@ fun tr(@StringRes id: Int, vararg args: Any?): String = Strings.get(id, args)
  * English), with [args] in its places, or [n] alone when there are none.
  */
 fun trp(@androidx.annotation.PluralsRes id: Int, n: Int, vararg args: Any?): String = Strings.plural(id, n, args)
+
+/**
+ * A date or time format in the listener's language from a [skeleton] of what to show ("MMMd": month and day), in that
+ * language's own order and words ("Nov 3", "3 nov.", "11月3日"); "j" is the hour as the language writes it (12 or 24).
+ */
+fun localDates(skeleton: String): java.time.format.DateTimeFormatter {
+    val locale = java.util.Locale.getDefault()
+    val pattern = runCatching { android.text.format.DateFormat.getBestDateTimePattern(locale, skeleton) }.getOrNull()
+        ?: skeleton.replace("j", "h")
+    return java.time.format.DateTimeFormatter.ofPattern(pattern, locale)
+}

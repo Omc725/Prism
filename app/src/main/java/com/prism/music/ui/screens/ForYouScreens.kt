@@ -212,11 +212,11 @@ private fun ReleaseEntity.dateText(today: LocalDate): String {
     val date = releaseDate?.let { runCatching { LocalDate.parse(it) }.getOrNull() } ?: return year.toString()
     val days = ChronoUnit.DAYS.between(date, today)
     return when {
-        days < 0 -> tr(R.string.out, date.format(DateTimeFormatter.ofPattern(tr(R.string.eee_mmm_d), Locale.getDefault())))
+        days < 0 -> tr(R.string.out, date.format(com.prism.music.localDates("EEEMMMd")))
         days == 0L -> tr(R.string.today)
         days == 1L -> tr(R.string.yesterday)
         days < 7 -> date.format(DateTimeFormatter.ofPattern("EEEE", Locale.getDefault()))
-        else -> date.format(DateTimeFormatter.ofPattern(tr(R.string.mmm_d), Locale.getDefault()))
+        else -> date.format(com.prism.music.localDates("MMMd"))
     }
 }
 

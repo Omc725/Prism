@@ -76,8 +76,14 @@ class TranslationsTest {
 
     /** Settings → Language offers exactly the languages there are translations for. */
     @Test fun thePickerListsEveryTranslation() {
-        // A tag's folder: "pt-BR" → values-pt-rBR; Indonesian is "in" to Android's resources.
-        fun folder(tag: String) = "values-" + tag.split('-').let { p -> (if (p[0] == "id") "in" else p[0]) + p.drop(1).joinToString("") { "-r$it" } }
+        // A tag's folder: "pt-BR" → values-pt-rBR; Android's resources know Indonesian as "in" and Hebrew as "iw", and a
+        // three-letter language (Filipino) only in the BCP 47 form, values-b+fil.
+        fun folder(tag: String) = "values-" + tag.split('-').let { p ->
+            when {
+                p[0].length == 3 -> "b+" + p.joinToString("+")
+                else -> (when (p[0]) { "id" -> "in"; "he" -> "iw"; else -> p[0] }) + p.drop(1).joinToString("") { "-r$it" }
+            }
+        }
         val listed = AppLanguage.available.filter { it != "en" }.map(::folder).toSet()
         val there = languages.map { it.name }.toSet()
         assertTrue("in the picker, no translation: ${listed - there}; translated, not in the picker: ${there - listed}", listed == there)

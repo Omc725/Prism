@@ -834,7 +834,7 @@ private fun HabitsSlide(h: Habits, modifier: Modifier) {
             }
         }
         Spacer(Modifier.height(26.dp))
-        val fmtDay = DateTimeFormatter.ofPattern(tr(R.string.mmm_d))
+        val fmtDay = com.prism.music.localDates("MMMd")
         Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Fact(tr(R.string.favorite_day), ReplayStats.weekdays[h.topWeekday], 1_200)
             if (h.longestStreak > 1) Fact(tr(R.string.longest_streak), trp(R.plurals.n_days_in_a_row, h.longestStreak), 1_450)
@@ -1000,7 +1000,7 @@ private fun FirstSong(s: ReplayStory, modifier: Modifier) {
         Text(f.title.uppercase(), style = display(44.sp), textAlign = TextAlign.Center, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.reveal(800).padding(top = 6.dp))
         Text(f.artistName, style = body.copy(fontSize = 20.sp), modifier = Modifier.reveal(1_000).padding(top = 4.dp))
         Text(
-            tr(R.string.date_at_time, at.format(DateTimeFormatter.ofPattern(tr(R.string.mmmm_d))), at.format(DateTimeFormatter.ofPattern(tr(R.string.h_mm_a)))),
+            tr(R.string.date_at_time, at.format(com.prism.music.localDates("MMMMd")), at.format(com.prism.music.localDates("jmm"))),
             style = body.copy(fontSize = 15.sp, color = Color.White.copy(alpha = 0.75f)), modifier = Modifier.reveal(1_400).padding(top = 12.dp),
         )
     }

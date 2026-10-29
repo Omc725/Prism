@@ -2366,6 +2366,11 @@ private fun RecommendationsPage() {
                 android.widget.Toast.makeText(context, tr(R.string.making_your_mixes), android.widget.Toast.LENGTH_SHORT).show()
             })
             Item(tr(R.string.exclusions), tr(R.string.what_s_kept_out_of_your), info = tr(R.string.artists_not_to_play_and_playlists), onClick = { nav.go(Routes.EXCLUSIONS) }) { Chevron() }
+            // Suggestions skipped at once stay out of mixes and radio for a while (1.7.9): this lets them all back.
+            Item(tr(R.string.forget_skipped_suggestions), tr(R.string.let_every_song_be_suggested_again), info = tr(R.string.forget_skipped_suggestions_info), onClick = {
+                c.recFeedback.clear()
+                android.widget.Toast.makeText(context, tr(R.string.suggestions_start_fresh), android.widget.Toast.LENGTH_SHORT).show()
+            })
         }
         Group(tr(R.string.liked_songs)) {
             Toggle(

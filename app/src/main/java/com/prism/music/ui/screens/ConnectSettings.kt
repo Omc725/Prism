@@ -108,6 +108,6 @@ private fun day(ms: Long): String {
     return when (d) {
         today -> "today"
         today.minusDays(1) -> "yesterday"
-        else -> java.time.format.DateTimeFormatter.ofPattern(tr(R.string.d_mmm)).format(d)
+        else -> com.prism.music.localDates("dMMM").format(d)
     }
 }

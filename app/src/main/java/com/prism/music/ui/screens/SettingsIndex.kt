@@ -394,6 +394,7 @@ object SettingsIndex {
         SettingEntry(LB, tr(R.string.replay_2), tr(R.string.use_theme_colors), tr(R.string.colors_stats)),
         SettingEntry(LB, tr(R.string.replay_2), tr(R.string.rewind_notification), tr(R.string.rewind_wrapped_year_in_review_december)),
         SettingEntry(LB, tr(R.string.made_for_you), tr(R.string.exclusions), tr(R.string.taste_profile_exclude_artist_playlist_don)),
+        SettingEntry(LB, tr(R.string.made_for_you), tr(R.string.forget_skipped_suggestions), tr(R.string.skipped_suggestions_keywords)),
         // About
         SettingEntry(B, tr(R.string.backup), tr(R.string.back_up), tr(R.string.backup_export_save_move_new_phone)),
         SettingEntry(B, tr(R.string.backup), tr(R.string.restore_from_a_backup), tr(R.string.import_move_new_phone)),

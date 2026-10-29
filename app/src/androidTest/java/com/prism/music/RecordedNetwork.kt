@@ -15,14 +15,13 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
 import okio.Buffer
-import java.io.File
 import java.security.MessageDigest
 
 /**
  * Prism's network in the in-app tests: every request is answered from a recording in the test APK's assets
  * (`recorded/<key>.json`), the same on every run. A request with no recording gets a 503 ("offline"), logged under
  * PrismTestNet with its key, and is never sent. With [record] the requests go out for real and their answers are kept in
- * Prism's files/recorded/ (audio and pictures aren't: tests play local files and don't look at covers).
+ * [RECORDED] (audio and pictures aren't: tests play local files and don't look at covers).
  *
  * A request's key is its method, host and path, plus what picks the answer out: the query string without the API key,
  * or for YouTube's JSON requests the fields that name what's asked for (browseId, query, videoId, params, continuation,
@@ -64,14 +63,22 @@ class RecordedNetwork(private val record: Boolean) : Interceptor {
         if (bytes.size >= MAX_RECORDING) return
         val text = type?.charset() != null || kind.contains("json") || kind.startsWith("text/") || kind.contains("xml") || kind.contains("javascript")
         val rec = Recording(response.code, type?.toString(), if (text) bytes.decodeToString() else Base64.encodeToString(bytes, Base64.NO_WRAP), !text)
-        val dir = File(instrumentation.targetContext.filesDir, "recorded").apply { mkdirs() }
-        File(dir, "$key.json").writeText(json.encodeToString(Recording.serializer(), rec))
+        // To /sdcard through the test's shell (Prism's own files are cleared before the next test); tools/record.ps1
+        // pulls them into src/androidTest/assets/recorded/.
+        val ui = instrumentation.uiAutomation
+        ui.executeShellCommand("mkdir -p $RECORDED").close()
+        // One word after -c (the shell splits on spaces), and nothing echoed back: `tee` echoed, and with nobody reading
+        // that while the answer was written, both ends waited on a full pipe.
+        val (out, input) = ui.executeShellCommandRw("sh -c cat>$RECORDED/$key.json")
+        android.os.ParcelFileDescriptor.AutoCloseOutputStream(input).use { it.write(json.encodeToString(Recording.serializer(), rec).encodeToByteArray()) }
+        android.os.ParcelFileDescriptor.AutoCloseInputStream(out).use { it.readBytes() }
         Log.i(TAG, "recorded: $key")
     }
 
     companion object {
         private const val TAG = "PrismTestNet"
         private const val MAX_RECORDING = 4L * 1024 * 1024
+        const val RECORDED = "/sdcard/prism-tests/recorded"
         private val NAMING = listOf("browseId", "query", "videoId", "params", "continuation", "playlistId", "input")
 
         fun keyOf(request: Request): String {

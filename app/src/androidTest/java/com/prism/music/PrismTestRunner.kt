@@ -6,7 +6,7 @@ import androidx.test.runner.AndroidJUnitRunner
 /**
  * Runs Prism's in-app tests. Before Prism starts it puts [RecordedNetwork] in front of every request, so a test never
  * depends on YouTube or a lyrics site that day. `-Pandroid.testInstrumentationRunnerArguments.record=true` records the
- * answers the tests need instead (live), into the app's files/recorded/ for tools/record.ps1 to pull into
+ * answers the tests need instead (live), into /sdcard/prism-tests/recorded/ for tools/record.ps1 to pull into
  * src/androidTest/assets/recorded/.
  */
 class PrismTestRunner : AndroidJUnitRunner() {

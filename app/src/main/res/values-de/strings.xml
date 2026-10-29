@@ -3870,4 +3870,18 @@
     <string name="on_discord">Bei Discord</string>
     <string name="it_didn_t_load">Laden fehlgeschlagen</string>
     <string name="error_word">Fehler</string>
+    <string name="show_genres">Genres zeigen</string>
+    <string name="scroll_through_the_songs">Durch die Songs scrollen</string>
+    <string name="genres_on_playlists">Genres in Playlists</string>
+    <string name="genres_on_playlists_detail">Genre-Chips, das Genre jedes Songs und Nach Genre gruppieren</string>
+    <string name="genres_on_playlists_keywords">Genre Chips Kategorien gruppieren Reihenfolge Playlist</string>
+    <string name="play_a_different_version">Andere Version spielen</string>
+    <string name="the_one_you_pick_plays_for">Die gewählte spielt ab jetzt für diesen Song</string>
+    <string name="version_original">Original</string>
+    <string name="couldn_t_look_for_other_versions">Andere Versionen konnten nicht gesucht werden. Prüfe deine Verbindung.</string>
+    <string name="youtube_has_no_other_version_of">YouTube hat keine andere Version dieses Songs.</string>
+    <string name="plays_as_this_version_from_now">Spielt ab jetzt in dieser Version</string>
+    <string name="plays_as_itself_again">Spielt wieder das Original</string>
+    <string name="playing_this_one">Diese läuft gerade</string>
+    <string name="another_upload">Weiterer Upload</string>
 </resources>

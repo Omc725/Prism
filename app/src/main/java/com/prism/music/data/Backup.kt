@@ -206,7 +206,7 @@ class Backup(private val c: AppContainer) {
 
         /** Saved preferences by part; anything not named here counts as Settings. Some never go in a backup (null). */
         private val PREFS_PARTS: Map<String, BackupPart?> = buildMap {
-            listOf("artist_prefs", "artist_thumbs", "playlist_covers", "library_order", "blend", "liked_playlist", "recent_collections")
+            listOf("artist_prefs", "artist_thumbs", "playlist_covers", "library_order", "blend", "liked_playlist", "recent_collections", "song_versions")
                 .forEach { put(it, BackupPart.LIBRARY) }
             listOf(
                 "dislikes", "exclusions", "for_you", "release_radar", "search", "episode_progress", "episode_played", "best_part_mine",

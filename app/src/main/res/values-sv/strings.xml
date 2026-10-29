@@ -3870,4 +3870,18 @@
     <string name="on_discord">På Discord</string>
     <string name="it_didn_t_load">inläsningen misslyckades</string>
     <string name="error_word">fel</string>
+    <string name="show_genres">Visa genrer</string>
+    <string name="scroll_through_the_songs">Bläddra genom låtarna</string>
+    <string name="genres_on_playlists">Genrer i spellistor</string>
+    <string name="genres_on_playlists_detail">Genrechips, varje låts genre och Gruppera efter genre</string>
+    <string name="genres_on_playlists_keywords">genre chips kategorier gruppera ordning spellista</string>
+    <string name="play_a_different_version">Spela en annan version</string>
+    <string name="the_one_you_pick_plays_for">Den du väljer spelas för den här låten från och med nu</string>
+    <string name="version_original">Original</string>
+    <string name="couldn_t_look_for_other_versions">Det gick inte att söka efter andra versioner. Kontrollera anslutningen.</string>
+    <string name="youtube_has_no_other_version_of">YouTube har ingen annan version av den här låten.</string>
+    <string name="plays_as_this_version_from_now">Spelas i den här versionen från och med nu</string>
+    <string name="plays_as_itself_again">Originalet spelas igen</string>
+    <string name="playing_this_one">Den här spelas</string>
+    <string name="another_upload">En annan uppladdning</string>
 </resources>

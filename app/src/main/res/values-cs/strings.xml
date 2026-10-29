@@ -3970,4 +3970,18 @@
     <string name="on_discord">Na Discordu</string>
     <string name="it_didn_t_load">nenačetlo se</string>
     <string name="error_word">chyba</string>
+    <string name="show_genres">Zobrazit žánry</string>
+    <string name="scroll_through_the_songs">Procházet skladby</string>
+    <string name="genres_on_playlists">Žánry v playlistech</string>
+    <string name="genres_on_playlists_detail">Štítky žánrů, žánr každé skladby a Seskupit podle žánru</string>
+    <string name="genres_on_playlists_keywords">žánr štítky kategorie seskupit pořadí playlist</string>
+    <string name="play_a_different_version">Přehrát jinou verzi</string>
+    <string name="the_one_you_pick_plays_for">Ta, kterou vybereš, se bude u této skladby přehrávat od teď</string>
+    <string name="version_original">Originál</string>
+    <string name="couldn_t_look_for_other_versions">Jiné verze se nepodařilo vyhledat. Zkontroluj připojení.</string>
+    <string name="youtube_has_no_other_version_of">YouTube nemá jinou verzi této skladby.</string>
+    <string name="plays_as_this_version_from_now">Od teď se přehrává tato verze</string>
+    <string name="plays_as_itself_again">Znovu se přehrává originál</string>
+    <string name="playing_this_one">Tahle se přehrává</string>
+    <string name="another_upload">Další nahrání</string>
 </resources>

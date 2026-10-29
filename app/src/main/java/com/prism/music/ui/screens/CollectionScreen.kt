@@ -291,7 +291,11 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     }
     var sortMenu by remember { mutableStateOf(false) }
     var query by rememberSaveable(page.id) { mutableStateOf("") }
-    val showGenres = type != CollectionType.ALBUM && songs.size > 1
+    // Sorting is there for any list of songs; genres (chips, each song's genre, Group by genre) only while the listener
+    // wants them (1.7.9, Reddit: "some people want that same order of the playlist").
+    val sortable = type != CollectionType.ALBUM && songs.size > 1
+    val showGenres = sortable && settings.behavior.playlistGenres
+    LaunchedEffect(showGenres) { if (!showGenres) { genreFilter = null; if (groupByGenre) toggleGenreGroups() } }
     val showSearch = type != CollectionType.ALBUM || songs.size > 12
 
     // Starting a song waits on its stream (a few seconds through NewPipe), so on Wi-Fi the first track's is fetched
@@ -652,13 +656,13 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                     rearrangeSongs(reorder, onDone = { rearranging = false }, onReorder = ::reorderTo)
                     return@LazyColumn
                 }
-                if (showSearch || showGenres) item(key = "search") {
+                if (showSearch || sortable) item(key = "search") {
                     Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp, top = 4.dp, bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
                         if (showSearch) com.prism.music.ui.components.SearchField(
                             query, if (type == CollectionType.ALBUM) tr(R.string.search_in_album) else tr(R.string.search_in, title), { query = it }, Modifier.weight(1f),
                             container = frosted,
                         ) else Spacer(Modifier.weight(1f))
-                        if (showGenres) Box {
+                        if (sortable) Box {
                             IconButton(onClick = { sortMenu = true }) {
                                 Icon(
                                     PrismIcons.Sort, tr(R.string.sort),
@@ -666,11 +670,12 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                                 )
                             }
                             DropdownMenu(sortMenu, { sortMenu = false }) {
-                                SortMode.entries.filter { it != SortMode.OLDEST || type in REVERSIBLE }.forEach { m ->
+                                SortMode.entries.filter { (it != SortMode.OLDEST || type in REVERSIBLE) && (it != SortMode.GENRE || showGenres) }.forEach { m ->
                                     DropdownMenuItem({ Text(sortLabel(m, type, page.owned)) }, { pickSort(m); sortMenu = false }, trailingIcon = { if (m == sort) Icon(PrismIcons.Check, null) })
                                 }
                                 HorizontalDivider()
-                                DropdownMenuItem({ Text(tr(R.string.group_by_genre)) }, { toggleGenreGroups(); sortMenu = false }, trailingIcon = { if (groupByGenre) Icon(PrismIcons.Check, null) })
+                                if (showGenres) DropdownMenuItem({ Text(tr(R.string.group_by_genre)) }, { toggleGenreGroups(); sortMenu = false }, trailingIcon = { if (groupByGenre) Icon(PrismIcons.Check, null) })
+                                DropdownMenuItem({ Text(tr(R.string.show_genres)) }, { c.settings.setPlaylistGenres(!showGenres); sortMenu = false }, trailingIcon = { if (showGenres) Icon(PrismIcons.Check, null) })
                             }
                         }
                     }
@@ -697,7 +702,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                     visible.flatMap { s -> genresOf(s.id).ifEmpty { listOf(tr(R.string.sorting)) }.map { it to s } }
                         .groupBy({ it.first }, { it.second }).toList().sortedByDescending { it.second.size }.forEach { (g, songs) ->
                             item(key = "h:$g") {
-                                Text(g, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary,
+                                Text(com.prism.music.data.meta.Genres.shown(g), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary,
                                     modifier = Modifier.padding(start = 20.dp, top = 18.dp, bottom = 4.dp))
                             }
                             itemsIndexed(songs, key = { i, s -> "g:$g:${s.id}:$i" }) { _, s ->
@@ -743,6 +748,12 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                     live.page.artists.firstOrNull { it.id != null }?.let { a -> item("moreby") { MoreBy(a.name, a.id!!, page.id) } }
                 }
             }
+
+            // Long playlists get a slider on the right to jump through them (1.7.9, Reddit), saying which song it's at.
+            if (!rearranging && !groupByGenre) com.prism.music.ui.components.FastScroller(
+                listState, Modifier.align(Alignment.CenterEnd).padding(top = statusTop + 60.dp, bottom = bottomPadding),
+                description = tr(R.string.scroll_through_the_songs),
+            ) { f -> visible.takeIf { it.isNotEmpty() }?.let { v -> (f * (v.size - 1)).toInt().coerceIn(0, v.size - 1) + 1 }?.toString() }
 
             // Content melts away under the bar into the page's own frost.
             ScrollEdge({ solid }, statusTop + 60.dp + 34.dp, pageHeight) { m ->

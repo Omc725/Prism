@@ -65,6 +65,9 @@ fun PlayerOptionsSheet(
     var outputs by remember { mutableStateOf(false) }
     var credits by remember { mutableStateOf(false) }
     if (credits) { com.prism.music.ui.components.SongCreditsSheet(song) { credits = false; onDismiss() }; return }
+    var versions by remember { mutableStateOf(false) }
+    val picks by c.versions.picks.collectAsState()
+    if (versions) { com.prism.music.ui.components.SongVersionsSheet(song) { versions = false; onDismiss() }; return }
     if (pickPlaylist) { PlaylistPicker(song) { pickPlaylist = false; onDismiss() }; return }
     // Speakers and TVs, from the menu too (Reddit 1.7: "where's the cast button?").
     if (outputs) {
@@ -181,6 +184,9 @@ fun PlayerOptionsSheet(
         song.album?.id?.let { id -> ActionItem(PrismIcons.Album, tr(R.string.go_to_album)) { onCollapse(); nav.go(Routes.album(id)) } },
     ) + com.prism.music.ui.components.goToArtists(song) { route -> onCollapse(); nav.go(route) } + listOfNotNull(
         if (song.isEpisode || song.isLocal || song.isLive) null else ActionItem(PrismIcons.Info, tr(R.string.song_credits), keepOpen = true) { credits = true },
+        // Another recording in its place (Reddit 1.7.9: an album song played as someone's cover).
+        if (song.isEpisode || song.isLocal || song.isLive || together is com.prism.music.playback.together.TogetherState.Guest) null
+        else ActionItem(PrismIcons.SwapVertical, tr(R.string.play_a_different_version), active = song.id in picks, keepOpen = true) { versions = true },
         if (song.id in disliked) ActionItem(PrismIcons.ThumbDownFilled, tr(R.string.not_for_me), active = true, keepOpen = true) { c.library.setDisliked(song, false) }
         else ActionItem(PrismIcons.ThumbDown, tr(R.string.not_for_me)) {
             c.library.setDisliked(song, true)

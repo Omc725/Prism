@@ -94,7 +94,7 @@ object SearchRank {
     )
 
     /** Such words in [title]'s brackets or " - …" tail that the query [q] (normalised) doesn't ask for. */
-    private fun knockoffMarks(title: String, q: String): List<String> {
+    internal fun knockoffMarks(title: String, q: String): List<String> {
         val tails = Regex("[(\\[]([^)\\]]*)[)\\]]|\\s-\\s(.*)$").findAll(title).map { norm(it.value) }.joinToString(" ")
         val asked = q.split(" ").toSet()
         return knockoff.findAll(tails).map { it.value }.filter { m -> m.split(" ").any { it !in asked } }.toList()

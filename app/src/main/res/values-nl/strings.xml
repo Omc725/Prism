@@ -3870,4 +3870,18 @@
     <string name="on_discord">Op Discord</string>
     <string name="it_didn_t_load">laden mislukt</string>
     <string name="error_word">fout</string>
+    <string name="show_genres">Genres tonen</string>
+    <string name="scroll_through_the_songs">Door de nummers scrollen</string>
+    <string name="genres_on_playlists">Genres in playlists</string>
+    <string name="genres_on_playlists_detail">Genrechips, het genre van elk nummer en Groeperen op genre</string>
+    <string name="genres_on_playlists_keywords">genre chips categorieën groeperen volgorde playlist</string>
+    <string name="play_a_different_version">Een andere versie afspelen</string>
+    <string name="the_one_you_pick_plays_for">Degene die je kiest, speelt vanaf nu voor dit nummer</string>
+    <string name="version_original">Origineel</string>
+    <string name="couldn_t_look_for_other_versions">Kan niet naar andere versies zoeken. Controleer je verbinding.</string>
+    <string name="youtube_has_no_other_version_of">YouTube heeft geen andere versie van dit nummer.</string>
+    <string name="plays_as_this_version_from_now">Speelt vanaf nu in deze versie</string>
+    <string name="plays_as_itself_again">Speelt weer het origineel</string>
+    <string name="playing_this_one">Deze speelt nu</string>
+    <string name="another_upload">Andere upload</string>
 </resources>

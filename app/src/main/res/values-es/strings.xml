@@ -3920,4 +3920,18 @@
     <string name="on_discord">En Discord</string>
     <string name="it_didn_t_load">no se cargó</string>
     <string name="error_word">error</string>
+    <string name="show_genres">Mostrar géneros</string>
+    <string name="scroll_through_the_songs">Desplazarse por las canciones</string>
+    <string name="genres_on_playlists">Géneros en las playlists</string>
+    <string name="genres_on_playlists_detail">Chips de género, el género de cada canción y Agrupar por género</string>
+    <string name="genres_on_playlists_keywords">género chips categorías agrupar orden playlist</string>
+    <string name="play_a_different_version">Reproducir otra versión</string>
+    <string name="the_one_you_pick_plays_for">La que elijas sonará para esta canción a partir de ahora</string>
+    <string name="version_original">Original</string>
+    <string name="couldn_t_look_for_other_versions">No se pudieron buscar otras versiones. Revisa tu conexión.</string>
+    <string name="youtube_has_no_other_version_of">YouTube no tiene otra versión de esta canción.</string>
+    <string name="plays_as_this_version_from_now">Sonará en esta versión a partir de ahora</string>
+    <string name="plays_as_itself_again">Vuelve a sonar la original</string>
+    <string name="playing_this_one">Esta es la que suena</string>
+    <string name="another_upload">Otra subida</string>
 </resources>

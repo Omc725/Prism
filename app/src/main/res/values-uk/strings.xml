@@ -3970,4 +3970,18 @@
     <string name="on_discord">У Discord</string>
     <string name="it_didn_t_load">не завантажилося</string>
     <string name="error_word">помилка</string>
+    <string name="show_genres">Показувати жанри</string>
+    <string name="scroll_through_the_songs">Прокручування пісень</string>
+    <string name="genres_on_playlists">Жанри в плейлистах</string>
+    <string name="genres_on_playlists_detail">Мітки жанрів, жанр кожної пісні й групування за жанром</string>
+    <string name="genres_on_playlists_keywords">жанр мітки категорії групування порядок плейлист</string>
+    <string name="play_a_different_version">Увімкнути іншу версію</string>
+    <string name="the_one_you_pick_plays_for">Вибрана версія звучатиме для цієї пісні відтепер</string>
+    <string name="version_original">Оригінал</string>
+    <string name="couldn_t_look_for_other_versions">Не вдалося знайти інші версії. Перевір з’єднання.</string>
+    <string name="youtube_has_no_other_version_of">На YouTube немає іншої версії цієї пісні.</string>
+    <string name="plays_as_this_version_from_now">Відтепер звучить ця версія</string>
+    <string name="plays_as_itself_again">Знову звучить оригінал</string>
+    <string name="playing_this_one">Звучить ця</string>
+    <string name="another_upload">Інше завантаження</string>
 </resources>

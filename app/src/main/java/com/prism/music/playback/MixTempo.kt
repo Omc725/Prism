@@ -313,6 +313,11 @@ class MixTempo(
     /** One song at a time: decoding a whole song is the heaviest thing Prism does in the background. */
     private val lock = Mutex()
 
+    /** Forgets what was measured of [id] (another version of it plays now), so it's measured again. */
+    fun forget(id: String) {
+        for (p in listOf(prefs, loudPrefs, keyPrefs, quickPrefs)) p.edit().remove(id).apply()
+    }
+
     fun cached(id: String): Tempo? = prefs.getString(id, null)?.let(Tempo::decode)
 
     /** The song's measured loudness (integrated LUFS), once it's been scanned. */

@@ -3920,4 +3920,18 @@
     <string name="on_discord">מופעל ב-Discord</string>
     <string name="it_didn_t_load">זה לא נטען</string>
     <string name="error_word">שגיאה</string>
+    <string name="show_genres">הצגת ז׳אנרים</string>
+    <string name="scroll_through_the_songs">גלילה בין השירים</string>
+    <string name="genres_on_playlists">ז׳אנרים בפלייליסטים</string>
+    <string name="genres_on_playlists_detail">תגיות ז׳אנר, הז׳אנר של כל שיר וקיבוץ לפי ז׳אנר</string>
+    <string name="genres_on_playlists_keywords">ז׳אנר תגיות קטגוריות קיבוץ סדר פלייליסט</string>
+    <string name="play_a_different_version">השמעת גרסה אחרת</string>
+    <string name="the_one_you_pick_plays_for">הגרסה שתבחר תושמע לשיר הזה מעכשיו</string>
+    <string name="version_original">מקור</string>
+    <string name="couldn_t_look_for_other_versions">לא ניתן לחפש גרסאות אחרות. בדוק את החיבור.</string>
+    <string name="youtube_has_no_other_version_of">ל-YouTube אין גרסה אחרת של השיר הזה.</string>
+    <string name="plays_as_this_version_from_now">מעכשיו מושמעת הגרסה הזאת</string>
+    <string name="plays_as_itself_again">המקור מושמע שוב</string>
+    <string name="playing_this_one">זו הגרסה שמושמעת</string>
+    <string name="another_upload">העלאה נוספת</string>
 </resources>

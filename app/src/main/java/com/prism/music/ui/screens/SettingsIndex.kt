@@ -389,6 +389,7 @@ object SettingsIndex {
         SettingEntry(H, tr(R.string.library), tr(R.string.details_under_each_one), tr(R.string.subtitles_counts_song_count_owner_year)),
         SettingEntry(H, tr(R.string.library), tr(R.string.open_library_on), tr(R.string.start_tab)),
         SettingEntry(H, tr(R.string.library), tr(R.string.full_width_playlist_pictures)),
+        SettingEntry(H, tr(R.string.library), tr(R.string.genres_on_playlists), tr(R.string.genres_on_playlists_keywords)),
         SettingEntry(H, tr(R.string.library), tr(R.string.library_tiles), tr(R.string.liked_downloads_local_files_replay_podcasts)),
         SettingEntry(LB, tr(R.string.replay_2), tr(R.string.show_time_in_hours), tr(R.string.stats_minutes)),
         SettingEntry(LB, tr(R.string.replay_2), tr(R.string.use_theme_colors), tr(R.string.colors_stats)),

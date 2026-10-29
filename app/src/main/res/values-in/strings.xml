@@ -3820,4 +3820,18 @@
     <string name="on_discord">Aktif di Discord</string>
     <string name="it_didn_t_load">tidak dimuat</string>
     <string name="error_word">error</string>
+    <string name="show_genres">Tampilkan genre</string>
+    <string name="scroll_through_the_songs">Gulir lagu</string>
+    <string name="genres_on_playlists">Genre di playlist</string>
+    <string name="genres_on_playlists_detail">Chip genre, genre tiap lagu, dan Kelompokkan menurut genre</string>
+    <string name="genres_on_playlists_keywords">genre chip kategori kelompok urutan playlist</string>
+    <string name="play_a_different_version">Putar versi lain</string>
+    <string name="the_one_you_pick_plays_for">Yang kamu pilih akan diputar untuk lagu ini mulai sekarang</string>
+    <string name="version_original">Asli</string>
+    <string name="couldn_t_look_for_other_versions">Tidak dapat mencari versi lain. Periksa koneksimu.</string>
+    <string name="youtube_has_no_other_version_of">YouTube tidak punya versi lain dari lagu ini.</string>
+    <string name="plays_as_this_version_from_now">Mulai sekarang diputar dalam versi ini</string>
+    <string name="plays_as_itself_again">Versi asli diputar lagi</string>
+    <string name="playing_this_one">Ini yang sedang diputar</string>
+    <string name="another_upload">Unggahan lain</string>
 </resources>

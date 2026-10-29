@@ -3820,4 +3820,18 @@
     <string name="on_discord">อยู่บน Discord</string>
     <string name="it_didn_t_load">โหลดไม่ได้</string>
     <string name="error_word">ข้อผิดพลาด</string>
+    <string name="show_genres">แสดงแนวเพลง</string>
+    <string name="scroll_through_the_songs">เลื่อนดูเพลง</string>
+    <string name="genres_on_playlists">แนวเพลงในเพลย์ลิสต์</string>
+    <string name="genres_on_playlists_detail">ป้ายแนวเพลง แนวของแต่ละเพลง และจัดกลุ่มตามแนวเพลง</string>
+    <string name="genres_on_playlists_keywords">แนวเพลง ป้าย หมวดหมู่ จัดกลุ่ม ลำดับ เพลย์ลิสต์</string>
+    <string name="play_a_different_version">เล่นเวอร์ชันอื่น</string>
+    <string name="the_one_you_pick_plays_for">เวอร์ชันที่คุณเลือกจะเล่นแทนเพลงนี้นับจากนี้</string>
+    <string name="version_original">ต้นฉบับ</string>
+    <string name="couldn_t_look_for_other_versions">ค้นหาเวอร์ชันอื่นไม่ได้ ตรวจสอบการเชื่อมต่อ</string>
+    <string name="youtube_has_no_other_version_of">YouTube ไม่มีเวอร์ชันอื่นของเพลงนี้</string>
+    <string name="plays_as_this_version_from_now">นับจากนี้จะเล่นเวอร์ชันนี้</string>
+    <string name="plays_as_itself_again">กลับไปเล่นต้นฉบับแล้ว</string>
+    <string name="playing_this_one">กำลังเล่นเวอร์ชันนี้</string>
+    <string name="another_upload">อัปโหลดอีกครั้ง</string>
 </resources>

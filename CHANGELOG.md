@@ -44,6 +44,17 @@ were rebuilt so they keep finding music around what you play, and stop going rou
 - **Quick picks, the time-of-day mix and the mixes from your music** rotate the same way, with Quick picks' new songs
   coming from three of your main artists that change day to day.
 
+### Playlists and versions (Reddit)
+
+- **Play a different version.** A song playing as the wrong recording (someone's cover in place of the album track)
+  can be swapped: a song's menu and the player's ⋯ → "Play a different version" lists the other recordings YouTube has
+  of that title, with album and length (slowed and sped-up edits last). The one you pick plays for that song from then
+  on, everywhere, downloads included; the song keeps its own lyrics, likes and history. "Original" goes back.
+- **A slider on long playlists.** Scrolling a playlist of 60 songs or more shows a slider on the right edge: drag it to
+  jump through the playlist, with the song's number beside your finger.
+- **Genres can be turned off on playlists**: the sort menu's "Show genres", or Settings → Customize Prism → Home & Library →
+  "Genres on playlists". Off, a playlist has no genre chips or genre labels and keeps its own order.
+
 ### Fixes
 
 - **The accent from the cover is the cover's color** (Reddit): a few pixels of another color no longer decide it (a deep

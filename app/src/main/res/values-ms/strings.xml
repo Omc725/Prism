@@ -3820,4 +3820,18 @@
     <string name="on_discord">Di Discord</string>
     <string name="it_didn_t_load">ia tidak dimuatkan</string>
     <string name="error_word">ralat</string>
+    <string name="show_genres">Tunjukkan genre</string>
+    <string name="scroll_through_the_songs">Tatal lagu</string>
+    <string name="genres_on_playlists">Genre dalam senarai main</string>
+    <string name="genres_on_playlists_detail">Cip genre, genre setiap lagu dan Kumpulkan mengikut genre</string>
+    <string name="genres_on_playlists_keywords">genre cip kategori kumpulan susunan senarai main</string>
+    <string name="play_a_different_version">Main versi lain</string>
+    <string name="the_one_you_pick_plays_for">Versi yang anda pilih akan dimainkan untuk lagu ini mulai sekarang</string>
+    <string name="version_original">Asal</string>
+    <string name="couldn_t_look_for_other_versions">Tidak dapat mencari versi lain. Semak sambungan anda.</string>
+    <string name="youtube_has_no_other_version_of">YouTube tiada versi lain bagi lagu ini.</string>
+    <string name="plays_as_this_version_from_now">Mulai sekarang versi ini dimainkan</string>
+    <string name="plays_as_itself_again">Versi asal dimainkan semula</string>
+    <string name="playing_this_one">Ini yang sedang dimainkan</string>
+    <string name="another_upload">Muat naik lain</string>
 </resources>

@@ -3820,4 +3820,18 @@
     <string name="on_discord">Discord에서 사용 중</string>
     <string name="it_didn_t_load">불러오지 못했어요</string>
     <string name="error_word">오류</string>
+    <string name="show_genres">장르 표시</string>
+    <string name="scroll_through_the_songs">노래 스크롤</string>
+    <string name="genres_on_playlists">재생목록의 장르</string>
+    <string name="genres_on_playlists_detail">장르 칩, 각 곡의 장르, 장르별로 묶기</string>
+    <string name="genres_on_playlists_keywords">장르 칩 카테고리 묶기 순서 재생목록</string>
+    <string name="play_a_different_version">다른 버전 재생</string>
+    <string name="the_one_you_pick_plays_for">고른 버전이 이제부터 이 곡에서 재생돼요</string>
+    <string name="version_original">원곡</string>
+    <string name="couldn_t_look_for_other_versions">다른 버전을 찾을 수 없어요. 연결을 확인하세요.</string>
+    <string name="youtube_has_no_other_version_of">YouTube에 이 곡의 다른 버전이 없어요.</string>
+    <string name="plays_as_this_version_from_now">이제부터 이 버전으로 재생돼요</string>
+    <string name="plays_as_itself_again">다시 원곡으로 재생돼요</string>
+    <string name="playing_this_one">재생 중인 버전</string>
+    <string name="another_upload">다른 업로드</string>
 </resources>

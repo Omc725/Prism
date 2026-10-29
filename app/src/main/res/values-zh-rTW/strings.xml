@@ -3820,4 +3820,18 @@
     <string name="on_discord">已連上 Discord</string>
     <string name="it_didn_t_load">無法載入</string>
     <string name="error_word">錯誤</string>
+    <string name="show_genres">顯示類型</string>
+    <string name="scroll_through_the_songs">捲動瀏覽歌曲</string>
+    <string name="genres_on_playlists">播放清單中的類型</string>
+    <string name="genres_on_playlists_detail">類型標籤、每首歌的類型和依類型分組</string>
+    <string name="genres_on_playlists_keywords">類型 標籤 類別 分組 順序 播放清單</string>
+    <string name="play_a_different_version">播放其他版本</string>
+    <string name="the_one_you_pick_plays_for">從現在起，這首歌會播放你選的版本</string>
+    <string name="version_original">原版</string>
+    <string name="couldn_t_look_for_other_versions">無法搜尋其他版本。請檢查網路連線。</string>
+    <string name="youtube_has_no_other_version_of">YouTube 上沒有這首歌的其他版本。</string>
+    <string name="plays_as_this_version_from_now">從現在起播放這個版本</string>
+    <string name="plays_as_itself_again">已改回播放原版</string>
+    <string name="playing_this_one">正在播放這個版本</string>
+    <string name="another_upload">另一個上傳版本</string>
 </resources>

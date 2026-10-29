@@ -259,7 +259,9 @@ class AppContainer(val app: Application) {
         onPairs = { queue.counterparts.putAll(it) },
     )
     val db = PrismDatabase.build(app)
-    val streams by lazy { StreamResolver(app, http, settings, innerTube) }
+    /** Versions of songs the listener picked to hear instead (1.7.9, "Play a different version"). */
+    val versions = com.prism.music.data.SongVersions(app.getSharedPreferences("song_versions", android.content.Context.MODE_PRIVATE))
+    val streams by lazy { StreamResolver(app, http, settings, innerTube).apply { versionOf = versions::of } }
     val translator = com.prism.music.data.lyrics.LyricsTranslator(http, File(app.filesDir, "translations"))
     val network = com.prism.music.data.NetworkState(app)
     /** Covers kept on the phone for downloads and the library, so they show offline. */
@@ -527,6 +529,29 @@ class AppContainer(val app: Application) {
      * video was allowed when its song wasn't). Set by the player when a song fails as unavailable; for this run only.
      */
     val soundFrom = ConcurrentHashMap<String, String>()
+
+    /**
+     * Plays [pick] in [song]'s place from now on (null: its own sound again). What was kept of the version before goes:
+     * its cached bytes and measurements, and a download comes down again as the new one. Playing now, the song starts
+     * again where it was.
+     */
+    fun pickVersion(song: com.prism.music.data.model.Song, pick: com.prism.music.data.SongVersions.Pick?) {
+        if (versions.of(song.id) == pick?.id?.takeIf { it != song.id }) return
+        versions.set(song.id, pick)
+        soundFrom.remove(song.id)
+        com.prism.music.playback.AudioDiagnostics.log("song", "${song.id} plays as ${pick?.id ?: "itself"} from now on (picked by the listener)")
+        scope.launch(Dispatchers.Main) {
+            player.reloadIfCurrent(song.id) {
+                kotlinx.coroutines.withContext(Dispatchers.IO) {
+                    prebuffered.remove(song.id)
+                    runCatching { playerCache.removeResource(song.id) }
+                    mixTempo.forget(song.id)
+                    waves.forget(song.id)
+                    downloads.redownload(song.id)
+                }
+            }
+        }
+    }
 
     private fun resolveAudio(spec: DataSpec, useCaches: Boolean): DataSpec {
         val uri = spec.uri

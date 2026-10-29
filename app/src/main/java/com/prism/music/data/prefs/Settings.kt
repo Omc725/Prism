@@ -227,6 +227,8 @@ data class BehaviorPrefs(
      * or the bar at the bottom does (#214: scrolling up to an earlier chorus kept bringing them over the lyrics).
      */
     val scrollShowsControls: Boolean = true,
+    /** Playlists' genre chips, each song's genre and Group by genre (1.7.9, Reddit); off, a playlist is just its songs in order. */
+    val playlistGenres: Boolean = true,
 )
 
 /** Picture-in-picture for a playing video (1.7.8, #167). */
@@ -1485,6 +1487,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val recentShows = stringPreferencesKey("recent_shows")
         val queueLocked = booleanPreferencesKey("queue_locked")
         val scrollShowsControls = booleanPreferencesKey("scroll_shows_controls")
+        val playlistGenres = booleanPreferencesKey("playlist_genres")
         val crossfadeMark = booleanPreferencesKey("crossfade_mark")
         val blendCovers = booleanPreferencesKey("blend_covers")
         val buttonsPill = booleanPreferencesKey("player_buttons_pill")
@@ -1580,7 +1583,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 "session_buttons", "cover_swipe_left", "cover_swipe_right", "cover_swipe_up", "cover_double_tap", "cover_long_press",
                 "mini_swipe_left", "mini_swipe_right", "mini_swipe_down", "mini_swipe_up",
                 // 1.7.8 ([BehaviorPrefs]).
-                "lock_portrait", "pause_on_mute", "pip_mode", "panel_swipes", "recent_shows", "queue_locked", "scroll_shows_controls",
+                "lock_portrait", "pause_on_mute", "pip_mode", "panel_swipes", "recent_shows", "queue_locked", "scroll_shows_controls", "playlist_genres",
                 // 1.7.8 ([SoundPrefs]).
                 "crossfade_curve", "normalize_target", "normalize_albums", "music_speed", "music_pitch",
                 "skip_silence_episodes", "sleep_fade", "pause_fade",
@@ -1842,6 +1845,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 recentShows = p.enum(K.recentShows, d.behavior.recentShows),
                 queueLocked = p[K.queueLocked] ?: d.behavior.queueLocked,
                 scrollShowsControls = p[K.scrollShowsControls] ?: d.behavior.scrollShowsControls,
+                playlistGenres = p[K.playlistGenres] ?: d.behavior.playlistGenres,
             ),
             uiDensity = p.enum(K.uiDensity, d.uiDensity),
             titleSize = p.enum(K.titleSize, d.titleSize),
@@ -2335,6 +2339,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setRecentShows(v: RecentShows) = edit { it[K.recentShows] = v.name }
     fun setQueueLocked(v: Boolean) = edit { it[K.queueLocked] = v }
     fun setScrollShowsControls(v: Boolean) = edit { it[K.scrollShowsControls] = v }
+    fun setPlaylistGenres(v: Boolean) = edit { it[K.playlistGenres] = v }
     fun setCrossfadeMark(v: Boolean) = edit { it[K.crossfadeMark] = v }
     fun setBlendCovers(v: Boolean) = edit { it[K.blendCovers] = v }
     fun setButtonsPill(v: Boolean) = edit { it[K.buttonsPill] = v }

@@ -3920,4 +3920,18 @@
     <string name="on_discord">Pe Discord</string>
     <string name="it_didn_t_load">nu s-a încărcat</string>
     <string name="error_word">eroare</string>
+    <string name="show_genres">Arată genurile</string>
+    <string name="scroll_through_the_songs">Derulează prin melodii</string>
+    <string name="genres_on_playlists">Genuri în playlisturi</string>
+    <string name="genres_on_playlists_detail">Etichete de gen, genul fiecărei melodii și Grupează după gen</string>
+    <string name="genres_on_playlists_keywords">gen etichete categorii grupează ordine playlist</string>
+    <string name="play_a_different_version">Redă altă versiune</string>
+    <string name="the_one_you_pick_plays_for">Cea pe care o alegi va fi redată pentru această melodie de acum înainte</string>
+    <string name="version_original">Original</string>
+    <string name="couldn_t_look_for_other_versions">Nu s-au putut căuta alte versiuni. Verifică-ți conexiunea.</string>
+    <string name="youtube_has_no_other_version_of">YouTube nu are altă versiune a acestei melodii.</string>
+    <string name="plays_as_this_version_from_now">De acum se redă această versiune</string>
+    <string name="plays_as_itself_again">Se redă din nou originalul</string>
+    <string name="playing_this_one">Aceasta se redă</string>
+    <string name="another_upload">Altă încărcare</string>
 </resources>

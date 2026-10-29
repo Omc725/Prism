@@ -3870,4 +3870,18 @@
     <string name="on_discord">A Discordon</string>
     <string name="it_didn_t_load">nem töltődött be</string>
     <string name="error_word">hiba</string>
+    <string name="show_genres">Műfajok mutatása</string>
+    <string name="scroll_through_the_songs">Görgetés a dalok között</string>
+    <string name="genres_on_playlists">Műfajok a lejátszási listákon</string>
+    <string name="genres_on_playlists_detail">Műfajcímkék, minden dal műfaja és Csoportosítás műfaj szerint</string>
+    <string name="genres_on_playlists_keywords">műfaj címkék kategóriák csoportosítás sorrend lejátszási lista</string>
+    <string name="play_a_different_version">Másik verzió lejátszása</string>
+    <string name="the_one_you_pick_plays_for">Mostantól a kiválasztott szól ennél a dalnál</string>
+    <string name="version_original">Eredeti</string>
+    <string name="couldn_t_look_for_other_versions">Nem sikerült más verziókat keresni. Ellenőrizd a kapcsolatot.</string>
+    <string name="youtube_has_no_other_version_of">A YouTube-on nincs más verziója ennek a dalnak.</string>
+    <string name="plays_as_this_version_from_now">Mostantól ez a verzió szól</string>
+    <string name="plays_as_itself_again">Újra az eredeti szól</string>
+    <string name="playing_this_one">Ez szól most</string>
+    <string name="another_upload">Másik feltöltés</string>
 </resources>

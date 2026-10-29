@@ -377,7 +377,8 @@ class StreamResolver(
      * lookup doesn't take the direct answer again (on the phone, "Beat It" `kOn-HdEg6AQ` signed in got 403s on every
      * direct link, so it failed twice and was skipped); it goes through NewPipe, as before the direct lookup.
      */
-    fun invalidate(videoId: String, refused: Boolean = false) {
+    fun invalidate(songId: String, refused: Boolean = false) {
+        val videoId = versionOf(songId) ?: songId
         val was = cache.remove(videoId)
         // The account's own link was the one turned away (its web client's links stop after the first megabyte without
         // a PO token, GitHub #188 #192): asking as the account again gets the same, so the other ways are tried first
@@ -414,7 +415,7 @@ class StreamResolver(
 
     /** Resolves a song ahead of time (e.g. the next one in the queue) so it starts straight away. */
     fun prefetch(videoId: String) {
-        runCatching { formats(videoId) }
+        runCatching { formats(versionOf(videoId) ?: videoId) }
     }
 
     private fun formats(videoId: String): Formats {
@@ -722,7 +723,7 @@ class StreamResolver(
     }
 
     /** [videoId]'s length in seconds as YouTube gives it (resolving it if it hasn't been), 0 when unknown. Blocking. */
-    fun durationSec(videoId: String): Long = formats(videoId).durationSec
+    fun durationSec(videoId: String): Long = formats(versionOf(videoId) ?: videoId).durationSec
 
     /** Whether [videoId] is a live stream (resolving it if it hasn't been). Blocking. */
     fun isLive(videoId: String): Boolean = formats(videoId).live
@@ -785,7 +786,7 @@ class StreamResolver(
 
     /** The smallest audio stream (AAC preferred, which decodes from a partial file), for analysis. */
     fun analysisAudio(videoId: String): AnalysisStream {
-        val f = formats(videoId)
+        val f = formats(versionOf(videoId) ?: videoId)
         val usable = f.audio.filter { it.original }.ifEmpty { f.audio }
         val pick = usable.filter { it.mime.contains("mp4") }.minByOrNull { it.kbps }
             ?: usable.minByOrNull { it.kbps } ?: throw StreamException(tr(R.string.no_audio_stream))
@@ -802,7 +803,12 @@ class StreamResolver(
     }
 
     /** Blocking; called from ExoPlayer loader threads. */
-    fun resolve(videoId: String, withVideo: Boolean = false): ResolvedStream {
+    /** The version the listener picked to hear for a song ([com.prism.music.data.SongVersions]), or null for its own. */
+    @Volatile var versionOf: (String) -> String? = { null }
+
+    fun resolve(songId: String, withVideo: Boolean = false): ResolvedStream {
+        // A picked version's sound plays under the song's own key (a song's video keeps its own picture).
+        val videoId = if (withVideo) songId else versionOf(songId) ?: songId
         val f = formats(videoId)
         // A live stream's "file" is only its newest few seconds: the player has to take it as HLS instead.
         if (f.live) throw LiveStreamException(videoId)

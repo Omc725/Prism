@@ -3820,4 +3820,18 @@
     <string name="on_discord">Discord 已开启</string>
     <string name="it_didn_t_load">未能加载</string>
     <string name="error_word">错误</string>
+    <string name="show_genres">显示流派</string>
+    <string name="scroll_through_the_songs">滚动浏览歌曲</string>
+    <string name="genres_on_playlists">播放列表中的流派</string>
+    <string name="genres_on_playlists_detail">流派标签、每首歌的流派和按流派分组</string>
+    <string name="genres_on_playlists_keywords">流派 标签 类别 分组 顺序 播放列表</string>
+    <string name="play_a_different_version">播放其他版本</string>
+    <string name="the_one_you_pick_plays_for">从现在起，这首歌会播放你选的版本</string>
+    <string name="version_original">原版</string>
+    <string name="couldn_t_look_for_other_versions">无法查找其他版本。请检查网络连接。</string>
+    <string name="youtube_has_no_other_version_of">YouTube 上没有这首歌的其他版本。</string>
+    <string name="plays_as_this_version_from_now">从现在起播放这个版本</string>
+    <string name="plays_as_itself_again">已改回播放原版</string>
+    <string name="playing_this_one">正在播放这个版本</string>
+    <string name="another_upload">另一个上传版本</string>
 </resources>

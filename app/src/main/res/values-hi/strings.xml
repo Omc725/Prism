@@ -3870,4 +3870,18 @@
     <string name="on_discord">Discord पर चालू</string>
     <string name="it_didn_t_load">यह लोड नहीं हुआ</string>
     <string name="error_word">त्रुटि</string>
+    <string name="show_genres">शैलियां दिखाएं</string>
+    <string name="scroll_through_the_songs">गानों में स्क्रॉल करें</string>
+    <string name="genres_on_playlists">प्लेलिस्ट में शैलियां</string>
+    <string name="genres_on_playlists_detail">शैली चिप्स, हर गाने की शैली और शैली के हिसाब से समूह</string>
+    <string name="genres_on_playlists_keywords">शैली चिप्स श्रेणियां समूह क्रम प्लेलिस्ट</string>
+    <string name="play_a_different_version">कोई दूसरा वर्शन चलाएं</string>
+    <string name="the_one_you_pick_plays_for">आप जो चुनेंगे, वही अब से इस गाने के लिए चलेगा</string>
+    <string name="version_original">मूल</string>
+    <string name="couldn_t_look_for_other_versions">दूसरे वर्शन नहीं खोजे जा सके। अपना कनेक्शन जांचें।</string>
+    <string name="youtube_has_no_other_version_of">YouTube पर इस गाने का कोई दूसरा वर्शन नहीं है।</string>
+    <string name="plays_as_this_version_from_now">अब से यही वर्शन चलेगा</string>
+    <string name="plays_as_itself_again">फिर से मूल चल रहा है</string>
+    <string name="playing_this_one">यही चल रहा है</string>
+    <string name="another_upload">दूसरा अपलोड</string>
 </resources>

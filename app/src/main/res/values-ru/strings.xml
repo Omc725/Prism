@@ -3970,4 +3970,18 @@
     <string name="on_discord">В Discord</string>
     <string name="it_didn_t_load">не загрузилось</string>
     <string name="error_word">ошибка</string>
+    <string name="show_genres">Показывать жанры</string>
+    <string name="scroll_through_the_songs">Прокрутка песен</string>
+    <string name="genres_on_playlists">Жанры в плейлистах</string>
+    <string name="genres_on_playlists_detail">Метки жанров, жанр каждой песни и группировка по жанрам</string>
+    <string name="genres_on_playlists_keywords">жанр метки категории группировка порядок плейлист</string>
+    <string name="play_a_different_version">Включить другую версию</string>
+    <string name="the_one_you_pick_plays_for">Выбранная версия будет звучать для этой песни с этого момента</string>
+    <string name="version_original">Оригинал</string>
+    <string name="couldn_t_look_for_other_versions">Не удалось найти другие версии. Проверь подключение.</string>
+    <string name="youtube_has_no_other_version_of">На YouTube нет другой версии этой песни.</string>
+    <string name="plays_as_this_version_from_now">Теперь звучит эта версия</string>
+    <string name="plays_as_itself_again">Снова звучит оригинал</string>
+    <string name="playing_this_one">Звучит эта</string>
+    <string name="another_upload">Другая загрузка</string>
 </resources>

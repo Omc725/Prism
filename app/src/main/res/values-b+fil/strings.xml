@@ -3870,4 +3870,18 @@
     <string name="on_discord">Nasa Discord</string>
     <string name="it_didn_t_load">hindi ito nag-load</string>
     <string name="error_word">error</string>
+    <string name="show_genres">Ipakita ang mga genre</string>
+    <string name="scroll_through_the_songs">Mag-scroll sa mga kanta</string>
+    <string name="genres_on_playlists">Mga genre sa mga playlist</string>
+    <string name="genres_on_playlists_detail">Mga genre chip, genre ng bawat kanta at I-grupo ayon sa genre</string>
+    <string name="genres_on_playlists_keywords">genre chip kategorya grupo pagkakasunod playlist</string>
+    <string name="play_a_different_version">Mag-play ng ibang bersyon</string>
+    <string name="the_one_you_pick_plays_for">Ang pipiliin mo ang ipe-play para sa kantang ito mula ngayon</string>
+    <string name="version_original">Orihinal</string>
+    <string name="couldn_t_look_for_other_versions">Hindi makahanap ng ibang bersyon. Tingnan ang koneksyon mo.</string>
+    <string name="youtube_has_no_other_version_of">Walang ibang bersyon ng kantang ito sa YouTube.</string>
+    <string name="plays_as_this_version_from_now">Ipe-play na sa bersyong ito mula ngayon</string>
+    <string name="plays_as_itself_again">Ang orihinal na ulit ang ipe-play</string>
+    <string name="playing_this_one">Ito ang nagpe-play</string>
+    <string name="another_upload">Ibang upload</string>
 </resources>

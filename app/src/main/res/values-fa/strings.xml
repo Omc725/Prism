@@ -3870,4 +3870,18 @@
     <string name="on_discord">روشن در Discord</string>
     <string name="it_didn_t_load">بارگیری نشد</string>
     <string name="error_word">خطا</string>
+    <string name="show_genres">نمایش ژانرها</string>
+    <string name="scroll_through_the_songs">پیمایش آهنگ‌ها</string>
+    <string name="genres_on_playlists">ژانرها در فهرست‌های پخش</string>
+    <string name="genres_on_playlists_detail">برچسب‌های ژانر، ژانر هر آهنگ و گروه‌بندی بر اساس ژانر</string>
+    <string name="genres_on_playlists_keywords">ژانر برچسب دسته گروه‌بندی ترتیب فهرست پخش</string>
+    <string name="play_a_different_version">پخش نسخه‌ای دیگر</string>
+    <string name="the_one_you_pick_plays_for">نسخه‌ای که انتخاب کنید از این پس برای این آهنگ پخش می‌شود</string>
+    <string name="version_original">اصلی</string>
+    <string name="couldn_t_look_for_other_versions">جست‌وجوی نسخه‌های دیگر ممکن نشد. اتصالتان را بررسی کنید.</string>
+    <string name="youtube_has_no_other_version_of">YouTube نسخهٔ دیگری از این آهنگ ندارد.</string>
+    <string name="plays_as_this_version_from_now">از این پس این نسخه پخش می‌شود</string>
+    <string name="plays_as_itself_again">دوباره نسخهٔ اصلی پخش می‌شود</string>
+    <string name="playing_this_one">این نسخه در حال پخش است</string>
+    <string name="another_upload">بارگذاری دیگر</string>
 </resources>

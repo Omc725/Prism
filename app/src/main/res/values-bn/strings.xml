@@ -3870,4 +3870,18 @@
     <string name="on_discord">Discord-এ চালু</string>
     <string name="it_didn_t_load">লোড হয়নি</string>
     <string name="error_word">ত্রুটি</string>
+    <string name="show_genres">ঘরানা দেখান</string>
+    <string name="scroll_through_the_songs">গানগুলোর মধ্যে স্ক্রল করুন</string>
+    <string name="genres_on_playlists">প্লেলিস্টে ঘরানা</string>
+    <string name="genres_on_playlists_detail">ঘরানার চিপ, প্রতিটি গানের ঘরানা আর ঘরানা অনুযায়ী সাজান</string>
+    <string name="genres_on_playlists_keywords">ঘরানা চিপ বিভাগ সাজান ক্রম প্লেলিস্ট</string>
+    <string name="play_a_different_version">অন্য একটি ভার্সন চালান</string>
+    <string name="the_one_you_pick_plays_for">আপনি যেটি বাছবেন, এখন থেকে এই গানে সেটিই চলবে</string>
+    <string name="version_original">মূল</string>
+    <string name="couldn_t_look_for_other_versions">অন্য ভার্সন খোঁজা যায়নি। আপনার কানেকশন দেখুন।</string>
+    <string name="youtube_has_no_other_version_of">YouTube-এ এই গানের অন্য কোনো ভার্সন নেই।</string>
+    <string name="plays_as_this_version_from_now">এখন থেকে এই ভার্সনটি চলবে</string>
+    <string name="plays_as_itself_again">আবার মূলটি চলছে</string>
+    <string name="playing_this_one">এটিই চলছে</string>
+    <string name="another_upload">অন্য একটি আপলোড</string>
 </resources>

@@ -566,6 +566,8 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
     var pickPlaylist by remember { mutableStateOf(false) }
     var sharing by remember { mutableStateOf(false) }
     var credits by remember { mutableStateOf(false) }
+    var versions by remember { mutableStateOf(false) }
+    val picks by c.versions.picks.collectAsState()
     val isLiked = song.id in liked
     val dl = downloads[song.id]
     val downloaded = dl?.state == androidx.media3.exoplayer.offline.Download.STATE_COMPLETED
@@ -579,6 +581,7 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
     if (pickPlaylist) { PlaylistPicker(song) { pickPlaylist = false; onDismiss() }; return }
     if (sharing) { ShareSheet(song.shareTarget()) { sharing = false; onDismiss() }; return }
     if (credits) { SongCreditsSheet(song) { credits = false; onDismiss() }; return }
+    if (versions) { SongVersionsSheet(song) { versions = false; onDismiss() }; return }
 
     // In someone's Listen Together session, songs go into their queue.
     val quick = listOf(
@@ -609,6 +612,9 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
     val more = extra.map { it.toAction() } + listOfNotNull(
         // Your own FLAC / MP3 files (a Local file, or the lossless file played for this song) can keep its lyrics (#16).
         if (local || dl?.lossless == true) ActionItem(PrismIcons.Lyrics, tr(R.string.save_lyrics_into_the_file)) { c.lyricsToFiles.request(listOf(song)) } else null,
+        // Another recording of it in its place (Reddit 1.7.9: an album song played as someone's cover).
+        if (song.isEpisode || local || song.isLive || guest != null) null
+        else ActionItem(PrismIcons.SwapVertical, tr(R.string.play_a_different_version), active = song.id in picks, keepOpen = true) { versions = true },
         if (song.isEpisode || local) null else videoDownloadAction(song, videos[song.id]),
         if (song.isEpisode) null else if (song.id in disliked) ActionItem(PrismIcons.ThumbDownFilled, tr(R.string.not_for_me), active = true, keepOpen = true) { c.library.setDisliked(song, false) }
         else ActionItem(PrismIcons.ThumbDown, tr(R.string.not_for_me)) { c.library.setDisliked(song, true); toast(tr(R.string.got_it_prism_will_steer_clear)) },

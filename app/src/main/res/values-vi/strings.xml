@@ -3820,4 +3820,18 @@
     <string name="on_discord">Đang bật trên Discord</string>
     <string name="it_didn_t_load">không tải được</string>
     <string name="error_word">lỗi</string>
+    <string name="show_genres">Hiện thể loại</string>
+    <string name="scroll_through_the_songs">Cuộn qua các bài hát</string>
+    <string name="genres_on_playlists">Thể loại trong danh sách phát</string>
+    <string name="genres_on_playlists_detail">Nhãn thể loại, thể loại của từng bài và Nhóm theo thể loại</string>
+    <string name="genres_on_playlists_keywords">thể loại nhãn danh mục nhóm thứ tự danh sách phát</string>
+    <string name="play_a_different_version">Phát phiên bản khác</string>
+    <string name="the_one_you_pick_plays_for">Phiên bản bạn chọn sẽ được phát cho bài này từ giờ</string>
+    <string name="version_original">Bản gốc</string>
+    <string name="couldn_t_look_for_other_versions">Không tìm được phiên bản khác. Hãy kiểm tra kết nối.</string>
+    <string name="youtube_has_no_other_version_of">YouTube không có phiên bản khác của bài này.</string>
+    <string name="plays_as_this_version_from_now">Từ giờ sẽ phát phiên bản này</string>
+    <string name="plays_as_itself_again">Đã phát lại bản gốc</string>
+    <string name="playing_this_one">Đang phát bản này</string>
+    <string name="another_upload">Bản tải lên khác</string>
 </resources>

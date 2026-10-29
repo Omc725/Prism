@@ -705,6 +705,23 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
     /** True from tapping the video button until its first frame shows. */
     val videoLoading: StateFlow<Boolean> = _videoLoading
 
+    /**
+     * Runs [meanwhile] with [songId] stopped, if it's the song playing now, then starts it again where it was: its
+     * sound changed (another version was picked), and what the player had loaded of the old one mustn't play on.
+     */
+    suspend fun reloadIfCurrent(songId: String, meanwhile: suspend () -> Unit) {
+        val p = player
+        if (p == null || p.currentMediaItem?.mediaId != songId) { meanwhile(); return }
+        val at = p.currentPosition
+        val play = p.playWhenReady
+        p.stop()
+        meanwhile()
+        if (p.currentMediaItem?.mediaId != songId) return
+        p.seekTo(at)
+        p.prepare()
+        p.playWhenReady = play
+    }
+
     fun setVideoMode(enabled: Boolean) {
         val s = service ?: return
         if (enabled && c.cast.casting) {

@@ -1,5 +1,7 @@
 package com.prism.music.ui.player
 
+import com.prism.music.R
+import com.prism.music.tr
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -82,7 +84,7 @@ object SingUi {
 }
 
 /** "Voice 62%", or "Voice none" at the bottom. */
-private fun voiceWord(level: Float) = if (level <= 0.005f) "Voice none" else "Voice ${(level * 100).toInt()}%"
+private fun voiceWord(level: Float) = if (level <= 0.005f) tr(R.string.voice_none) else tr(R.string.voice, (level * 100).toInt())
 
 /**
  * Sing tapped (its button, the player's button row): on or off, said under the progress bar. Before the engine is on
@@ -92,7 +94,7 @@ fun toggleSing(c: com.prism.music.AppContainer, onNeedsDownload: () -> Unit) {
     if (!c.sing.engineReady()) { onNeedsDownload(); return }
     val on = !c.sing.on.value
     c.sing.setOn(on)
-    SingUi.say(if (!on) "Sing off" else if (c.player.currentSong.value?.let { c.sing.store.complete(it.id) } == true) "Sing" else "Sing · getting ready")
+    SingUi.say(if (!on) tr(R.string.sing_off) else if (c.player.currentSong.value?.let { c.sing.store.complete(it.id) } == true) tr(R.string.sing) else tr(R.string.sing_getting_ready))
 }
 
 /** Sing's button at the lower right of the lyrics (nothing for what can't be sung: live streams, podcasts). */
@@ -164,11 +166,11 @@ fun SingButton(song: Song, onNeedsDownload: () -> Unit) {
                 drawPath(part, ring, style = Stroke(2.dp.toPx()))
             }
             .semantics {
-                contentDescription = "Sing"
-                stateDescription = if (!on) "Off" else voiceWord(level)
+                contentDescription = tr(R.string.sing)
+                stateDescription = if (!on) tr(R.string.off) else voiceWord(level)
                 progressBarRangeInfo = ProgressBarRangeInfo(level, 0f..1f)
-                onClick(if (on) "Turn Sing off" else "Turn Sing on") { toggleSing(c, onNeedsDownload); true }
-                setProgress("Voice") { v -> if (on) { sing.setLevel(v.coerceIn(0f, 1f)); true } else false }
+                onClick(if (on) tr(R.string.turn_sing_off) else tr(R.string.turn_sing_on)) { toggleSing(c, onNeedsDownload); true }
+                setProgress(tr(R.string.voice_2)) { v -> if (on) { sing.setLevel(v.coerceIn(0f, 1f)); true } else false }
             }
             .pointerInput(Unit) {
                 awaitEachGesture {
@@ -259,17 +261,17 @@ fun SingSheet(song: Song, onDismiss: () -> Unit) {
                 Icon(PrismIcons.MicFilled, null, Modifier.size(26.dp), tint = MaterialTheme.colorScheme.primary)
                 Spacer(Modifier.width(12.dp))
                 Column(Modifier.weight(1f)) {
-                    Text("Sing", style = MaterialTheme.typography.titleLarge)
-                    Text("The song's own music, with the voice taken out", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(tr(R.string.sing), style = MaterialTheme.typography.titleLarge)
+                    Text(tr(R.string.the_song_s_own_music_with), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 if (ready) PrismSwitch(on, { sing.setOn(it) })
             }
             Spacer(Modifier.height(16.dp))
             when {
-                runtime == null -> Text("Sing doesn't run on this phone's kind of processor.", style = MaterialTheme.typography.bodyMedium)
+                runtime == null -> Text(tr(R.string.sing_doesn_t_run_on_this), style = MaterialTheme.typography.bodyMedium)
                 !ready -> {
                     Text(
-                        "Sing separates each song's voice from its music on your phone, with no server. It needs a one-time download: ${ModelStore.Model.sizeText(ModelStore.Model.SING_MODEL, runtime)}.",
+                        tr(R.string.sing_separates_each_song_s_voice, ModelStore.Model.sizeText(ModelStore.Model.SING_MODEL, runtime)),
                         style = MaterialTheme.typography.bodyMedium,
                     )
                     Spacer(Modifier.height(10.dp))
@@ -277,44 +279,44 @@ fun SingSheet(song: Song, onDismiss: () -> Unit) {
                         downloading.isNotEmpty() -> Row(verticalAlignment = Alignment.CenterVertically) {
                             com.prism.music.ui.components.PrismSpinner(Modifier.size(18.dp), stroke = 2.dp)
                             Spacer(Modifier.width(10.dp))
-                            Text("Downloading… ${(downloading.first().fraction * 100).toInt()}%", style = MaterialTheme.typography.bodyMedium)
+                            Text(tr(R.string.downloading_5, (downloading.first().fraction * 100).toInt()), style = MaterialTheme.typography.bodyMedium)
                         }
                         else -> {
-                            if (failed != null) Text("Couldn't download it: ${failed.message}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
+                            if (failed != null) Text(tr(R.string.couldn_t_download_it, failed.message), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
                             Spacer(Modifier.height(4.dp))
                             com.prism.music.ui.components.PrismButton(
-                                onClick = { scope.launch { if (sing.downloadEngine()) { sing.setOn(true); SingUi.say("Sing · getting ready"); onDismiss() } } },
+                                onClick = { scope.launch { if (sing.downloadEngine()) { sing.setOn(true); SingUi.say(tr(R.string.sing_getting_ready)); onDismiss() } } },
                                 modifier = Modifier.fillMaxWidth(),
-                            ) { Text(if (failed != null) "Try again" else "Download and turn on") }
+                            ) { Text(if (failed != null) tr(R.string.try_again) else tr(R.string.download_and_turn_on)) }
                         }
                     }
                 }
-                !singable -> Text("Sing works with songs, not live streams or podcasts.", style = MaterialTheme.typography.bodyMedium)
+                !singable -> Text(tr(R.string.sing_works_with_songs_not_live), style = MaterialTheme.typography.bodyMedium)
                 else -> {
                     val p = progress[song.id]
                     val status = when {
-                        !on -> "Off: the song plays as it is."
-                        sing.store.complete(song.id) -> "Ready: the voice is out."
-                        p != null -> "Getting this song ready… ${(p * 100).toInt()}% (you can start singing as it goes)"
+                        !on -> tr(R.string.off_the_song_plays_as_it)
+                        sing.store.complete(song.id) -> tr(R.string.ready_the_voice_is_out)
+                        p != null -> tr(R.string.getting_this_song_ready_you_can, (p * 100).toInt())
                         problem != null -> problem!!
-                        else -> "Getting this song ready…"
+                        else -> tr(R.string.getting_this_song_ready)
                     }
                     Text(status, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(Modifier.height(14.dp))
                     Row {
-                        Text("Lead voice", Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
-                        Text(if (level <= 0.005f) "None" else "${(level * 100).toInt()}%", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                        Text(tr(R.string.lead_voice), Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
+                        Text(if (level <= 0.005f) tr(R.string.none) else "${(level * 100).toInt()}%", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                     }
                     PrismSlider(level, { sing.setLevel(it) }, enabled = on, valueRange = 0f..1f)
-                    Text("Keep a little of it in to sing along with, or none for karaoke. Backing vocals go with it.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(tr(R.string.keep_a_little_of_it_in), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(Modifier.height(14.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("Key", Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
+                        Text(tr(R.string.key), Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
                         PrismTextButton(onClick = { sing.setSemitones(semitones - 1) }, enabled = on && semitones > -6) { Text("−", style = MaterialTheme.typography.titleLarge) }
-                        Text(if (semitones == 0) "Original" else "%+d".format(semitones), Modifier.width(72.dp), style = MaterialTheme.typography.titleMedium, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+                        Text(if (semitones == 0) tr(R.string.original) else "%+d".format(semitones), Modifier.width(72.dp), style = MaterialTheme.typography.titleMedium, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
                         PrismTextButton(onClick = { sing.setSemitones(semitones + 1) }, enabled = on && semitones < 6) { Text("+", style = MaterialTheme.typography.titleLarge) }
                     }
-                    Text("Moves the song up or down to suit your voice (the tempo stays).", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(tr(R.string.moves_the_song_up_or_down), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
             Spacer(Modifier.height(8.dp))

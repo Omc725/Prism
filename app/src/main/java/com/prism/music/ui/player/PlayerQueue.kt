@@ -1,5 +1,7 @@
 package com.prism.music.ui.player
 
+import com.prism.music.R
+import com.prism.music.tr
 import androidx.compose.foundation.border
 import com.prism.music.ui.theme.PrismIcons
 import androidx.compose.foundation.background
@@ -110,16 +112,16 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
         com.prism.music.ui.components.SongActionsSheet(
             e.song,
             extra = if (isNow) listOf(
-                com.prism.music.ui.components.SheetItem(PrismIcons.Delete, "Clear everything after this", danger = true) { pc.clearAfter(e.index) },
+                com.prism.music.ui.components.SheetItem(PrismIcons.Delete, tr(R.string.clear_everything_after_this), danger = true) { pc.clearAfter(e.index) },
             ) else listOf(
-                com.prism.music.ui.components.SheetItem(PrismIcons.PlaylistPlay, "Move up next") { pc.moveNext(listOf(e.index)) },
-                com.prism.music.ui.components.SheetItem(PrismIcons.QueueMusic, "Move to the end") { pc.moveToEnd(listOf(e.index)) },
-                com.prism.music.ui.components.SheetItem(PrismIcons.Close, "Remove from the queue") { remove(e) },
-                com.prism.music.ui.components.SheetItem(PrismIcons.Delete, "Clear everything after this", danger = true) { pc.clearAfter(e.index) },
+                com.prism.music.ui.components.SheetItem(PrismIcons.PlaylistPlay, tr(R.string.move_up_next)) { pc.moveNext(listOf(e.index)) },
+                com.prism.music.ui.components.SheetItem(PrismIcons.QueueMusic, tr(R.string.move_to_the_end)) { pc.moveToEnd(listOf(e.index)) },
+                com.prism.music.ui.components.SheetItem(PrismIcons.Close, tr(R.string.remove_from_the_queue)) { remove(e) },
+                com.prism.music.ui.components.SheetItem(PrismIcons.Delete, tr(R.string.clear_everything_after_this), danger = true) { pc.clearAfter(e.index) },
             ),
         ) { menuFor = null }
     }
-    adding?.let { songs -> com.prism.music.ui.components.PlaylistPicker(songs, "From your queue") { adding = null } }
+    adding?.let { songs -> com.prism.music.ui.components.PlaylistPicker(songs, tr(R.string.from_your_queue)) { adding = null } }
 
     // DJ mode: its switch, energy curve and how far the scans have got; each song's key and tempo as badges.
     val dj by c.dj.on.collectAsState()
@@ -131,7 +133,7 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
         { song ->
             when {
                 dj -> if (!c.mixTempo.keyed(song.id)) "…" else djBadge(c.mixTempo.key(song.id), c.mixTempo.djBpm(song.id))
-                song.id in smartPicks -> "✦ Pick"
+                song.id in smartPicks -> tr(R.string.pick)
                 else -> null
             }
         }
@@ -145,13 +147,13 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
         if (!settings.isLoggedIn) {
             val list = (listOfNotNull(now) + order).map { it.song }.filter { !it.isLive && !it.isEpisode }.distinctBy { it.id }
             c.prismLibrary.create(name, list)
-            android.widget.Toast.makeText(context, "Saved ${com.prism.music.data.model.songCount(list.size)} to $name", android.widget.Toast.LENGTH_SHORT).show()
+            android.widget.Toast.makeText(context, tr(R.string.saved_to, com.prism.music.data.model.songCount(list.size), name), android.widget.Toast.LENGTH_SHORT).show()
             return@NewPlaylistDialog
         }
         val songs = (listOfNotNull(now) + order).map { it.song.id }.distinct().take(300)
         c.scope.launch(kotlinx.coroutines.Dispatchers.Main) {
             val id = runCatching { c.ytm.createPlaylist(name, songs, privacy = privacy) }.getOrNull()
-            android.widget.Toast.makeText(context, if (id != null) "Saved ${com.prism.music.data.model.songCount(songs.size)} to $name" else "Couldn't save the queue", android.widget.Toast.LENGTH_SHORT).show()
+            android.widget.Toast.makeText(context, if (id != null) tr(R.string.saved_to, com.prism.music.data.model.songCount(songs.size), name) else tr(R.string.couldn_t_save_the_queue), android.widget.Toast.LENGTH_SHORT).show()
             if (id != null) c.library.refreshCollections()
         }
     }
@@ -168,35 +170,35 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
         if (selecting) {
             val n = selected.orEmpty().size
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(if (n == 1) "1 song picked" else "$n songs picked", style = MaterialTheme.typography.titleLarge, color = Color.White, modifier = Modifier.weight(1f))
-                QueueChip("Done", selected = true) { selected = null }
+                Text(if (n == 1) tr(R.string.t_1_song_picked) else tr(R.string.songs_picked, n), style = MaterialTheme.typography.titleLarge, color = Color.White, modifier = Modifier.weight(1f))
+                QueueChip(tr(R.string.done), selected = true) { selected = null }
             }
             Spacer(Modifier.height(10.dp))
             androidx.compose.foundation.layout.FlowRow(horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp), verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)) {
                 val enabled = n > 0
-                QueueChip("Move up next") { if (enabled) { pc.moveNext(picked()); selected = null } }
-                QueueChip("Move to the end") { if (enabled) { pc.moveToEnd(picked()); selected = null } }
-                QueueChip("Add to playlist") { if (enabled) adding = pc.songsAt(picked()).filter { !it.isLive && !it.isEpisode } }
-                QueueChip("Remove") { if (enabled) { pc.removeMany(picked()); selected = null } }
+                QueueChip(tr(R.string.move_up_next)) { if (enabled) { pc.moveNext(picked()); selected = null } }
+                QueueChip(tr(R.string.move_to_the_end)) { if (enabled) { pc.moveToEnd(picked()); selected = null } }
+                QueueChip(tr(R.string.add_to_playlist)) { if (enabled) adding = pc.songsAt(picked()).filter { !it.isLive && !it.isEpisode } }
+                QueueChip(tr(R.string.remove)) { if (enabled) { pc.removeMany(picked()); selected = null } }
             }
         } else Row(pullToClose, verticalAlignment = Alignment.CenterVertically) {
-            Text("Queue", style = MaterialTheme.typography.titleLarge, color = Color.White, modifier = Modifier.weight(1f))
+            Text(tr(R.string.queue), style = MaterialTheme.typography.titleLarge, color = Color.White, modifier = Modifier.weight(1f))
             if (order.size > 1) {
                 QueueChip("DJ", selected = dj) { pc.setDjMode(!dj) }
                 Spacer(Modifier.width(8.dp))
             }
-            if (queue.size > 1) QueueChip("Save") { saving = true }
+            if (queue.size > 1) QueueChip(tr(R.string.save)) { saving = true }
             if (order.isNotEmpty()) {
                 Spacer(Modifier.width(8.dp))
-                QueueChip("Clear") { pc.clearUpcoming() }
+                QueueChip(tr(R.string.clear)) { pc.clearUpcoming() }
             }
             Spacer(Modifier.width(8.dp))
             // The lock: the order stays put while you scroll (#159).
             Box(
                 Modifier.size(34.dp).clip(CircleShape).background(if (locked) Color.White else Color.White.copy(alpha = 0.12f))
-                    .clickable(onClickLabel = if (locked) "Unlock the order" else "Lock the order") { c.settings.setQueueLocked(!locked) },
+                    .clickable(onClickLabel = if (locked) tr(R.string.unlock_the_order) else tr(R.string.lock_the_order)) { c.settings.setQueueLocked(!locked) },
                 contentAlignment = Alignment.Center,
-            ) { Icon(PrismIcons.Lock, if (locked) "Order locked" else "Lock the order", tint = if (locked) Color.Black else Color.White, modifier = Modifier.size(17.dp)) }
+            ) { Icon(PrismIcons.Lock, if (locked) tr(R.string.order_locked) else tr(R.string.lock_the_order), tint = if (locked) Color.Black else Color.White, modifier = Modifier.size(17.dp)) }
         }
         if (dj) {
             Spacer(Modifier.height(10.dp))
@@ -214,7 +216,7 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
                 if (offerData) {
                     Spacer(Modifier.width(8.dp))
                     // For this DJ set only (until Prism closes): "Measure songs on mobile data" stays as the listener set it.
-                    QueueChip("Use mobile data") { c.dj.rescan(allowData = true) }
+                    QueueChip(tr(R.string.use_mobile_data)) { c.dj.rescan(allowData = true) }
                 }
             }
         }
@@ -224,9 +226,9 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
                     .padding(start = 14.dp, end = 6.dp, top = 4.dp, bottom = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text("Removed “$title”", style = MaterialTheme.typography.bodyMedium, color = Color.White, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+                Text(tr(R.string.removed, title), style = MaterialTheme.typography.bodyMedium, color = Color.White, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
                 Text(
-                    "Undo", style = MaterialTheme.typography.labelLarge, color = Color.White,
+                    tr(R.string.undo), style = MaterialTheme.typography.labelLarge, color = Color.White,
                     modifier = Modifier.clip(RoundedCornerShape(50)).clickable { putBack(); undo = null }.padding(horizontal = 12.dp, vertical = 8.dp),
                 )
             }
@@ -237,7 +239,7 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
         LazyColumn(state = listState, modifier = Modifier.fillMaxWidth().nestedScroll(controlsOnScroll), contentPadding = PaddingValues(bottom = 24.dp)) {
             if (!headings) item(key = "h-gap") { Spacer(Modifier.height(8.dp)) }
             if (played.isNotEmpty()) {
-                if (headings) item(key = "h-played") { Heading("Played", Modifier.padding(top = 12.dp, bottom = 6.dp)) }
+                if (headings) item(key = "h-played") { Heading(tr(R.string.played), Modifier.padding(top = 12.dp, bottom = 6.dp)) }
                 items(played, key = { "played-" + it.uid }) { entry ->
                     QueueRow(
                         entry.song, isCurrent = false, onClick = { if (selecting) toggle(entry) else pc.skipTo(entry.index) },
@@ -248,7 +250,7 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
                 }
             }
             if (now != null) {
-                if (headings) item(key = "h-now") { Heading("Now Playing", Modifier.padding(top = 12.dp, bottom = 6.dp)) }
+                if (headings) item(key = "h-now") { Heading(tr(R.string.now_playing), Modifier.padding(top = 12.dp, bottom = 6.dp)) }
                 item(key = "now-" + now.uid) {
                     QueueRow(
                         now.song, isCurrent = true, onClick = { if (selecting) toggle(now) }, onRemove = null, badge = badge(now.song),
@@ -258,11 +260,11 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
             }
             val rows = SectionRows(selected, toggle, startSelecting, { menuFor = it }, locked, onDragStart = onHidePlayer)
             if (queued.isNotEmpty()) {
-                if (headings) item(key = "h-queued") { Heading("Next in queue", Modifier.padding(top = 16.dp, bottom = 6.dp)) }
+                if (headings) item(key = "h-queued") { Heading(tr(R.string.next_in_queue), Modifier.padding(top = 16.dp, bottom = 6.dp)) }
                 queueSection(queued, shuffled, badge = badge, onRemove = remove, rows = rows)
             }
             if (upcoming.isNotEmpty()) {
-                if (headings) item(key = "h-next") { Heading("Next from: ${source.title.ifBlank { now?.song?.album?.title ?: "Queue" }}", Modifier.padding(top = 16.dp, bottom = 6.dp)) }
+                if (headings) item(key = "h-next") { Heading(tr(R.string.next_from, source.title.ifBlank { now?.song?.album?.title ?: tr(R.string.queue) }), Modifier.padding(top = 16.dp, bottom = 6.dp)) }
                 queueSection(upcoming, shuffled, badge = badge, onRemove = remove, rows = rows)
             }
             if (settings.autoplay || autoplay.isNotEmpty()) {
@@ -378,9 +380,9 @@ private fun AutoplayHeading(hasTracks: Boolean) {
         Icon(PrismIcons.Autoplay, null, tint = Color.White.copy(alpha = 0.75f), modifier = Modifier.size(18.dp))
         Spacer(Modifier.width(8.dp))
         Column {
-            Text("Autoplay", style = MaterialTheme.typography.titleMedium, color = Color.White)
+            Text(tr(R.string.autoplay), style = MaterialTheme.typography.titleMedium, color = Color.White)
             Text(
-                if (hasTracks) "Similar music plays next" else "Similar music will play after your queue",
+                if (hasTracks) tr(R.string.similar_music_plays_next) else tr(R.string.similar_music_will_play_after_your),
                 style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = 0.55f),
             )
         }
@@ -444,11 +446,11 @@ private fun QueueRow(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (pick != null) {
-            if (pick) Icon(PrismIcons.CheckCircle, "Picked", tint = Color.White, modifier = Modifier.size(22.dp))
+            if (pick) Icon(PrismIcons.CheckCircle, tr(R.string.picked), tint = Color.White, modifier = Modifier.size(22.dp))
             else Box(Modifier.size(22.dp).padding(2.dp).border(1.5.dp, Color.White.copy(alpha = 0.4f), CircleShape))
             Spacer(Modifier.width(8.dp))
         } else if (dragHandle != null) {
-            Icon(PrismIcons.DragHandle, "Drag to reorder", tint = Color.White.copy(alpha = 0.4f), modifier = Modifier.size(20.dp).offset(x = (-4).dp).then(dragHandle))
+            Icon(PrismIcons.DragHandle, tr(R.string.drag_to_reorder), tint = Color.White.copy(alpha = 0.4f), modifier = Modifier.size(20.dp).offset(x = (-4).dp).then(dragHandle))
             Spacer(Modifier.width(4.dp))
         }
         AsyncImage(hiRes(song.thumbnail, 226), null, modifier = Modifier.size(44.dp).clip(RoundedCornerShape(10.dp)).background(Color.White.copy(alpha = 0.08f)))
@@ -465,14 +467,14 @@ private fun QueueRow(
             Spacer(Modifier.width(8.dp))
         }
         if (isCurrent) {
-            Icon(PrismIcons.Equalizer, "Now playing", tint = Color.White, modifier = Modifier.size(18.dp))
+            Icon(PrismIcons.Equalizer, tr(R.string.widget_now_playing), tint = Color.White, modifier = Modifier.size(18.dp))
             Spacer(Modifier.width(10.dp))
         }
         if (onMore != null && pick == null) Box(Modifier.size(32.dp).clip(CircleShape).clickable(onClick = onMore), contentAlignment = Alignment.Center) {
-            Icon(PrismIcons.More, "More for ${song.title}", tint = Color.White.copy(alpha = 0.55f), modifier = Modifier.size(18.dp))
+            Icon(PrismIcons.More, tr(R.string.more_for, song.title), tint = Color.White.copy(alpha = 0.55f), modifier = Modifier.size(18.dp))
         }
         if (onRemove != null) Box(Modifier.size(32.dp).clip(CircleShape).clickable(onClick = onRemove), contentAlignment = Alignment.Center) {
-            Icon(PrismIcons.Close, "Remove", tint = Color.White.copy(alpha = 0.55f), modifier = Modifier.size(18.dp))
+            Icon(PrismIcons.Close, tr(R.string.remove), tint = Color.White.copy(alpha = 0.55f), modifier = Modifier.size(18.dp))
         }
     }
 }

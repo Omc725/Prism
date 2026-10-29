@@ -1,5 +1,7 @@
 package com.prism.music.ui.components
 
+import com.prism.music.R
+import com.prism.music.tr
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -61,10 +63,10 @@ fun SwipeToQueue(song: Song, modifier: Modifier = Modifier, content: @Composable
         val guest = (together as? com.prism.music.playback.together.TogetherState.Guest)?.takeIf { !song.isLocal }
         val text = if (guest != null) {
             c.together.suggest(song, next = next)
-            "Sent to ${guest.hostName}"
+            tr(R.string.sent_to, guest.hostName)
         } else {
             if (next) c.player.playNext(song) else c.player.addToQueue(song)
-            if (next) "Playing next" else "Added to queue"
+            if (next) tr(R.string.playing_next) else tr(R.string.added_to_queue)
         }
         android.widget.Toast.makeText(context, text, android.widget.Toast.LENGTH_SHORT).show()
     }
@@ -94,7 +96,7 @@ fun SwipeToQueue(song: Song, modifier: Modifier = Modifier, content: @Composable
                     if (abs(x) > mark * 0.7f) {
                         if (next) Spacer(Modifier.width(8.dp))
                         Text(
-                            if (next) "Play next" else "Add to queue", color = ink, style = MaterialTheme.typography.labelLarge,
+                            if (next) tr(R.string.play_next) else tr(R.string.add_to_queue), color = ink, style = MaterialTheme.typography.labelLarge,
                             maxLines = 1, overflow = TextOverflow.Clip,
                         )
                         if (!next) Spacer(Modifier.width(8.dp))

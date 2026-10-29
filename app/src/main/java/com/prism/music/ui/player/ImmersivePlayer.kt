@@ -1,5 +1,7 @@
 package com.prism.music.ui.player
 
+import com.prism.music.R
+import com.prism.music.tr
 import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.CircleShape
@@ -208,13 +210,13 @@ fun ImmersivePlayer(
             // For TalkBack the gestures are actions: a double tap opens the settings (the button only shows for a few
             // seconds), and the swipes and the hold have their own entries in its actions menu.
             .semantics {
-                contentDescription = "Immersive player, ${song.title} by ${song.artistText}"
-                onClick("Open immersive mode settings") { menu = true; true }
+                contentDescription = tr(R.string.immersive_player_by, song.title, song.artistText)
+                onClick(tr(R.string.open_immersive_mode_settings)) { menu = true; true }
                 customActions = listOf(
-                    CustomAccessibilityAction("Next song") { c.player.next(); true },
-                    CustomAccessibilityAction("Previous song") { c.player.previous(); true },
-                    CustomAccessibilityAction("Leave immersive mode") { onExit(); true },
-                    CustomAccessibilityAction("Close the player") { onCollapse(); true },
+                    CustomAccessibilityAction(tr(R.string.next_song)) { c.player.next(); true },
+                    CustomAccessibilityAction(tr(R.string.previous_song)) { c.player.previous(); true },
+                    CustomAccessibilityAction(tr(R.string.leave_immersive_mode)) { onExit(); true },
+                    CustomAccessibilityAction(tr(R.string.close_the_player)) { onCollapse(); true },
                 )
             }
             .pointerInput(Unit) { detectTapGestures(onTap = { button = !button }) }
@@ -366,14 +368,14 @@ fun ImmersivePlayer(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
             ) {
-                ImmersiveGlyph(PrismIcons.Previous, "Previous") { haptics.tick(); poke++; c.player.previous() }
+                ImmersiveGlyph(PrismIcons.Previous, tr(R.string.widget_previous)) { haptics.tick(); poke++; c.player.previous() }
                 Box(
                     Modifier.size(56.dp).clip(CircleShape).background(Color.White)
                         .border(2.dp, com.prism.music.ui.theme.PrismTokens.spectrumRing(), CircleShape)
-                        .clickable(onClickLabel = if (isPlaying) "Pause" else "Play") { haptics.click(); poke++; c.player.togglePlay() },
+                        .clickable(onClickLabel = if (isPlaying) tr(R.string.widget_pause) else tr(R.string.widget_play)) { haptics.click(); poke++; c.player.togglePlay() },
                     contentAlignment = Alignment.Center,
-                ) { Icon(if (isPlaying) PrismIcons.Pause else PrismIcons.Play, if (isPlaying) "Pause" else "Play", Modifier.size(26.dp), tint = Color.Black) }
-                ImmersiveGlyph(PrismIcons.Next, "Next") { haptics.tick(); poke++; c.player.next() }
+                ) { Icon(if (isPlaying) PrismIcons.Pause else PrismIcons.Play, if (isPlaying) tr(R.string.widget_pause) else tr(R.string.widget_play), Modifier.size(26.dp), tint = Color.Black) }
+                ImmersiveGlyph(PrismIcons.Next, tr(R.string.widget_next)) { haptics.tick(); poke++; c.player.next() }
                 HoldToLeaveButton(
                     onTap = { menu = true },
                     onPressing = { pressing = it },
@@ -386,28 +388,28 @@ fun ImmersivePlayer(
     if (menu) ActionSheet(song.thumbnail, { menu = false; button = false }) { close ->
         ActionHeader(song.thumbnail, song.title, song.artistText)
         ActionGroup(
-            "Immersive mode",
+            tr(R.string.immersive_mode),
             listOf(
-                ActionItem(PrismIcons.FullscreenExit, "Show the player", onClick = onExit),
+                ActionItem(PrismIcons.FullscreenExit, tr(R.string.show_the_player), onClick = onExit),
                 // Fill the screen → zoomed out → the whole cover, round again.
-                ActionItem(PrismIcons.AspectRatio, "Artwork", value = art.label, keepOpen = true) {
+                ActionItem(PrismIcons.AspectRatio, tr(R.string.artwork), value = art.label, keepOpen = true) {
                     c.settings.setImmersiveArt(ImmersiveArt.entries[(art.ordinal + 1) % ImmersiveArt.entries.size])
                 },
-                ActionItem(PrismIcons.Play, "Keep controls on screen", value = if (settings.immersiveControls) "On" else "Off", active = settings.immersiveControls, keepOpen = true) {
+                ActionItem(PrismIcons.Play, tr(R.string.keep_controls_on_screen), value = if (settings.immersiveControls) tr(R.string.on_2) else tr(R.string.off), active = settings.immersiveControls, keepOpen = true) {
                     c.settings.setImmersiveControls(!settings.immersiveControls)
                 },
-                ActionItem(PrismIcons.More, "Song options", onClick = onSongOptions),
+                ActionItem(PrismIcons.More, tr(R.string.song_options), onClick = onSongOptions),
             ),
         ) { runAction(it, close) }
         ActionGroup(
-            "Lyrics",
+            tr(R.string.lyrics),
             listOf(
                 // High → middle → low → over the whole screen, round again.
-                ActionItem(PrismIcons.Lyrics, "Lyrics position", value = place.label, keepOpen = true) {
+                ActionItem(PrismIcons.Lyrics, tr(R.string.lyrics_position), value = place.label, keepOpen = true) {
                     c.settings.setImmersiveLyrics(ImmersiveLyrics.entries[(place.ordinal + 1) % ImmersiveLyrics.entries.size])
                 },
-                ActionItem(PrismIcons.Timer, "Lyrics timing", onClick = onLyricsTiming),
-                ActionItem(PrismIcons.Lyrics, "Lyrics source", onClick = onLyricsSource),
+                ActionItem(PrismIcons.Timer, tr(R.string.lyrics_timing), onClick = onLyricsTiming),
+                ActionItem(PrismIcons.Lyrics, tr(R.string.lyrics_source), onClick = onLyricsSource),
             ),
         ) { runAction(it, close) }
     }
@@ -521,7 +523,7 @@ private fun HoldToLeaveButton(onTap: () -> Unit, onPressing: (Boolean) -> Unit, 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         AnimatedVisibility(held, enter = fadeIn(tween(200)), exit = fadeOut(tween(200))) {
             Text(
-                "Keep holding to leave immersive mode (or press Back)", color = Color.White,
+                tr(R.string.keep_holding_to_leave_immersive_mode), color = Color.White,
                 style = MaterialTheme.typography.labelLarge.copy(shadow = lineShadow),
                 modifier = Modifier.padding(bottom = 10.dp),
             )
@@ -532,9 +534,9 @@ private fun HoldToLeaveButton(onTap: () -> Unit, onPressing: (Boolean) -> Unit, 
                 // The hold can't be done with TalkBack, so it's an action of the button's own.
                 .clearAndSetSemantics {
                     role = Role.Button
-                    contentDescription = "Immersive mode settings"
+                    contentDescription = tr(R.string.immersive_mode_settings)
                     onClick { onTap(); true }
-                    customActions = listOf(CustomAccessibilityAction("Leave immersive mode") { onHeld(); true })
+                    customActions = listOf(CustomAccessibilityAction(tr(R.string.leave_immersive_mode)) { onHeld(); true })
                 }
                 .pointerInput(Unit) {
                     awaitEachGesture {
@@ -568,7 +570,7 @@ private fun HoldToLeaveButton(onTap: () -> Unit, onPressing: (Boolean) -> Unit, 
                 },
             contentAlignment = Alignment.Center,
         ) {
-            FloatingDisc { ink -> Icon(PrismIcons.SettingsFilled, "Immersive mode settings (hold to leave)", Modifier.size(22.dp), tint = ink) }
+            FloatingDisc { ink -> Icon(PrismIcons.SettingsFilled, tr(R.string.immersive_mode_settings_hold_to_leave), Modifier.size(22.dp), tint = ink) }
         }
     }
 }

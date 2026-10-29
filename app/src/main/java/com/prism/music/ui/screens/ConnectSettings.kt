@@ -1,5 +1,7 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.R
+import com.prism.music.tr
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Icon
@@ -31,21 +33,21 @@ fun ConnectSettings() {
     val context = LocalContext.current
     val clipboard = LocalClipboardManager.current
     Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
-        Group("Speakers & TVs") {
+        Group(tr(R.string.speakers_tvs)) {
             Item(
-                "Play on a speaker or TV", "Pick it from the device line on the player",
-                info = "Tap the line under the player's controls (it says which device is playing) and pick a speaker, TV or receiver. " +
-                    "It has to be on this Wi-Fi with Google Cast (Chromecast, Google TV, speakers with Cast built in) or DLNA / UPnP " +
-                    "(sometimes called media sharing). Your queue, lyrics and controls stay on the phone, and its volume keys set the " +
-                    "speaker's volume. The equalizer, Crossfade, Sing and videos are the phone's own, so they're off while casting.",
+                tr(R.string.play_on_a_speaker_or_tv), tr(R.string.pick_it_from_the_device_line),
+                info = tr(R.string.tap_the_line_under_the_player) +
+                    tr(R.string.it_has_to_be_on_this) +
+                    tr(R.string.sometimes_called_media_sharing_your_queue) +
+                    tr(R.string.speaker_s_volume_the_equalizer_crossfade),
                 onClick = {},
             )
         }
 
-        Group("Control from a browser") {
+        Group(tr(R.string.control_from_a_browser)) {
             Toggle(
-                "Control from a browser", "From a computer or tablet on this Wi-Fi", s.webRemote,
-                info = "Play, search, and see the queue and lyrics. Only browsers on this Wi-Fi that type a code shown here get in, and only while Prism is open or playing. Nothing goes through the internet.",
+                tr(R.string.control_from_a_browser), tr(R.string.from_a_computer_or_tablet_on), s.webRemote,
+                info = tr(R.string.play_search_and_see_the_queue),
             ) { c.settings.setWebRemote(it) }
             if (s.webRemote) {
                 val remote = c.webRemote
@@ -58,42 +60,42 @@ fun ConnectSettings() {
                 val code = remember(tick) { remote.auth.code }
                 val browsers = remember(tick) { remote.auth.browsers() }
                 Item(
-                    "Address", address ?: if (running) "Connect to Wi-Fi to use it" else "Couldn't start. Try switching it off and on.",
+                    tr(R.string.address), address ?: if (running) tr(R.string.connect_to_wi_fi_to_use) else tr(R.string.couldn_t_start_try_switching_it),
                     onClick = {
                         address?.let {
                             clipboard.setText(AnnotatedString(it))
-                            android.widget.Toast.makeText(context, "Copied", android.widget.Toast.LENGTH_SHORT).show()
+                            android.widget.Toast.makeText(context, tr(R.string.copied), android.widget.Toast.LENGTH_SHORT).show()
                         }
                     },
-                ) { if (address != null) Icon(PrismIcons.Copy, "Copy", tint = MaterialTheme.colorScheme.onSurfaceVariant) }
-                Item("Pairing code", "${code.take(3)} ${code.drop(3)} · one browser per code", onClick = { remote.auth.newCode(); tick++ }) {
-                    Icon(PrismIcons.Refresh, "New code", tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                ) { if (address != null) Icon(PrismIcons.Copy, tr(R.string.copy), tint = MaterialTheme.colorScheme.onSurfaceVariant) }
+                Item(tr(R.string.pairing_code), tr(R.string.one_browser_per_code, code.take(3), code.drop(3)), onClick = { remote.auth.newCode(); tick++ }) {
+                    Icon(PrismIcons.Refresh, tr(R.string.new_code), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 browsers.forEach { b ->
-                    Item(b.name, "Paired ${day(b.pairedAt)} · last used ${day(b.lastSeen)}", onClick = {}) {
+                    Item(b.name, tr(R.string.paired_last_used, day(b.pairedAt), day(b.lastSeen)), onClick = {}) {
                         androidx.compose.material3.IconButton(onClick = { remote.auth.forget(b.id); tick++ }) {
-                            Icon(PrismIcons.Close, "Unpair ${b.name}", tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Icon(PrismIcons.Close, tr(R.string.unpair, b.name), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
                 }
-                if (browsers.size > 1) Item("Unpair all browsers", "They'll need a new code", onClick = { remote.auth.forgetAll(); tick++ })
+                if (browsers.size > 1) Item(tr(R.string.unpair_all_browsers), tr(R.string.they_ll_need_a_new_code), onClick = { remote.auth.forgetAll(); tick++ })
 
             }
         }
 
-        Group("Handoff") {
+        Group(tr(R.string.handoff)) {
             val handoff = c.handoff
             Toggle(
-                "Available for handoff", "Move music between your Prism devices", s.handoffAvailable,
-                info = "Other devices with Prism on this Wi-Fi can move what they're playing here, or bring it over. On the device that's playing, open the player's device list and pick this one under Prism devices (Prism has to be open or playing here). The first time, a code shows to type in.",
+                tr(R.string.available_for_handoff), tr(R.string.move_music_between_your_prism_devices), s.handoffAvailable,
+                info = tr(R.string.other_devices_with_prism_on_this),
             ) { c.settings.setHandoffAvailable(it) }
             val shown by handoff.shownCode.collectAsState()
-            shown?.let { Item("Pairing code", "${it.code.take(3)} ${it.code.drop(3)} · type it on ${it.from}", onClick = {}) }
+            shown?.let { Item(tr(R.string.pairing_code), tr(R.string.type_it_on, it.code.take(3), it.code.drop(3), it.from), onClick = {}) }
             val paired by handoff.pairedDevices.collectAsState()
             paired.forEach { (id, name) ->
-                Item(name, "Paired", onClick = {}) {
+                Item(name, tr(R.string.paired), onClick = {}) {
                     androidx.compose.material3.IconButton(onClick = { handoff.forget(id) }) {
-                        Icon(PrismIcons.Close, "Forget $name", tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Icon(PrismIcons.Close, tr(R.string.forget, name), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }
@@ -109,6 +111,6 @@ private fun day(ms: Long): String {
     return when (d) {
         today -> "today"
         today.minusDays(1) -> "yesterday"
-        else -> java.time.format.DateTimeFormatter.ofPattern("d MMM").format(d)
+        else -> java.time.format.DateTimeFormatter.ofPattern(tr(R.string.d_mmm)).format(d)
     }
 }

@@ -1,5 +1,7 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.R
+import com.prism.music.tr
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -81,13 +83,13 @@ import kotlin.math.roundToInt
 private val SampleDark = Color(0xFF15141B)
 
 /** Prism's own words for the examples, timed word by word: a line sung over three seconds. */
-private val SAMPLE_WORDS = listOf("Every ", "color ", "finds ", "its ", "way")
+private val SAMPLE_WORDS = listOf(tr(R.string.every), "color ", "finds ", "its ", "way")
 private val SAMPLE_LINE = LyricLine(
     0, SAMPLE_WORDS.joinToString(""), 3000,
     SAMPLE_WORDS.mapIndexed { i, w -> LyricWord(i * 560L, i * 560L + 520L, w) },
 )
-private val SAMPLE_BEFORE = LyricLine(-1, "Somewhere a light is turning on")
-private val SAMPLE_AFTER = LyricLine(-1, "We follow the line of the sound")
+private val SAMPLE_BEFORE = LyricLine(-1, tr(R.string.somewhere_a_light_is_turning_on))
+private val SAMPLE_AFTER = LyricLine(-1, tr(R.string.we_follow_the_line_of_the))
 
 /** The examples' clock: round and round the sample line, or held part-way through with Reduce motion. */
 @Composable
@@ -163,11 +165,11 @@ fun LyricsStyleGroup() {
     val palette = com.prism.music.ui.components.rememberArtPalette(cover)
     val cardGround = cardColor(palette?.vibrant ?: palette?.dominant ?: Color(0xFF6B3FA0))
     val styleInfo = when (s.lyricsStyle) {
-        LyricsStyle.CARD -> "Bold card: the lyrics sit on a color from the cover, changing with each song."
-        LyricsStyle.TYPEWRITER, LyricsStyle.KARAOKE -> "${s.lyricsStyle.label}: lyrics timed by the line, not the word, are filled in at a steady pace through each line."
+        LyricsStyle.CARD -> tr(R.string.bold_card_the_lyrics_sit_on)
+        LyricsStyle.TYPEWRITER, LyricsStyle.KARAOKE -> tr(R.string.lyrics_timed_by_the_line_not, s.lyricsStyle.label)
         else -> null
     }
-    Group("Style", info = styleInfo) {
+    Group(tr(R.string.style), info = styleInfo) {
         ChoiceCards(
             LyricsStyle.entries, s.lyricsStyle, title = { it.label }, detail = { it.note },
             onSelect = { prefs.setLyricsStyle(it) },
@@ -185,7 +187,7 @@ fun LyricsStyleGroup() {
         }
         // Why Bold card shows no color with this background: a state, so it stays in view.
         if (s.lyricsStyle == LyricsStyle.CARD && s.lyricsBackground != LyricsBackground.PLAYER && s.lyricsBackground != LyricsBackground.COVER_COLOR)
-            Note("Bold card's color shows with the background As now or The cover's color (Background, below); here it keeps its bold type.")
+            Note(tr(R.string.bold_card_s_color_shows_with))
     }
 }
 
@@ -197,19 +199,19 @@ fun LyricsLookDetails() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     LyricsSample(currentLook(), Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp))
-    Label("Alignment")
+    Label(tr(R.string.alignment))
     Chips(LyricsAlign.entries, s.lyricsAlign, { it.label }) { prefs.setLyricsAlign(it) }
-    SliderSetting("Text size", s.lyricsScale, 0.75f..1.4f, { "${(it * 100).roundToInt()}%" }) { prefs.setLyricsScale(it) }
-    Label("Weight")
+    SliderSetting(tr(R.string.text_size), s.lyricsScale, 0.75f..1.4f, { "${(it * 100).roundToInt()}%" }) { prefs.setLyricsScale(it) }
+    Label(tr(R.string.weight))
     Chips(LyricsWeight.entries, s.lyricsWeight, { it.label }) { prefs.setLyricsWeight(it) }
-    SliderSetting("Line spacing", s.lyricsSpacing, 0.6f..1.8f, { worded(if (it < 0.85f) "Tight" else if (it <= 1.15f) "As usual" else "Airy", it) }) { prefs.setLyricsSpacing(it) }
-    SliderSetting("Other lines", s.lyricsOthersAlpha, 0.2f..1f, { worded(if (it < 0.35f) "Faint" else if (it < 0.75f) "Dimmed" else "Bright", it) }) { prefs.setLyricsOthersAlpha(it) }
-    SliderSetting("Focus blur", s.lyricsBlurAmount, 0f..2f, { if (it < 0.05f) "Off" else "${(it * 100).roundToInt()}%" }) { prefs.setLyricsBlurAmount(if (it < 0.05f) 0f else it) }
-    if (android.os.Build.VERSION.SDK_INT < 31 && s.lyricsBlurAmount > 0f) Note("Focus blur needs Android 12 or later; on this phone the other lines are only dimmed.")
-    SliderSetting("Background vocals", s.lyricsBackingSize, 0.4f..0.9f, { "${(it * 100).roundToInt()}% of the line" }) { prefs.setLyricsBackingSize(it) }
-    Toggle("Progress line", "Split light under the line being sung", s.lyricsProgressLine) { prefs.setLyricsProgressLine(it) }
-    Toggle("Shadow", "Helps the words read over photos and moving covers", s.lyricsShadow) { prefs.setLyricsShadow(it) }
-    Toggle("Capitals", "EVERY LINE IN CAPITALS", s.lyricsUppercase) { prefs.setLyricsUppercase(it) }
+    SliderSetting(tr(R.string.line_spacing), s.lyricsSpacing, 0.6f..1.8f, { worded(if (it < 0.85f) tr(R.string.tight) else if (it <= 1.15f) tr(R.string.as_usual) else tr(R.string.airy), it) }) { prefs.setLyricsSpacing(it) }
+    SliderSetting(tr(R.string.other_lines), s.lyricsOthersAlpha, 0.2f..1f, { worded(if (it < 0.35f) tr(R.string.faint) else if (it < 0.75f) tr(R.string.dimmed) else tr(R.string.bright), it) }) { prefs.setLyricsOthersAlpha(it) }
+    SliderSetting(tr(R.string.focus_blur), s.lyricsBlurAmount, 0f..2f, { if (it < 0.05f) tr(R.string.off) else "${(it * 100).roundToInt()}%" }) { prefs.setLyricsBlurAmount(if (it < 0.05f) 0f else it) }
+    if (android.os.Build.VERSION.SDK_INT < 31 && s.lyricsBlurAmount > 0f) Note(tr(R.string.focus_blur_needs_android_12_or))
+    SliderSetting(tr(R.string.background_vocals), s.lyricsBackingSize, 0.4f..0.9f, { tr(R.string.of_the_line, (it * 100).roundToInt()) }) { prefs.setLyricsBackingSize(it) }
+    Toggle(tr(R.string.progress_line), tr(R.string.split_light_under_the_line_being), s.lyricsProgressLine) { prefs.setLyricsProgressLine(it) }
+    Toggle(tr(R.string.shadow), tr(R.string.helps_the_words_read_over_photos), s.lyricsShadow) { prefs.setLyricsShadow(it) }
+    Toggle(tr(R.string.capitals), tr(R.string.every_line_in_capitals), s.lyricsUppercase) { prefs.setLyricsUppercase(it) }
 }
 
 // ---------------------------------------------------------------------------- Colors
@@ -219,17 +221,17 @@ fun LyricsColorsGroup() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     var picking by remember { mutableStateOf<String?>(null) }
-    Group("Colors") {
+    Group(tr(R.string.colors)) {
         LyricsSample(currentLook(), Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp), lines = 2)
-        Label("The line being sung")
+        Label(tr(R.string.the_line_being_sung))
         LyricsColorSwatches(s.lyricsSungColor, s.lyricsSungCustom, { prefs.setLyricsSungColor(it) }) { picking = "sung" }
-        Label("The other lines", info = if (s.lyricsStyle == LyricsStyle.CARD) "On Bold card's color, the lines still to come are dark." else null)
+        Label(tr(R.string.the_other_lines), info = if (s.lyricsStyle == LyricsStyle.CARD) tr(R.string.on_bold_card_s_color_the) else null)
         LyricsColorSwatches(s.lyricsOtherColor, s.lyricsOtherCustom, { prefs.setLyricsOtherColor(it) }, spectrum = false) { picking = "other" }
     }
     picking?.let { which ->
         val sung = which == "sung"
         com.prism.music.ui.components.ColorPickerSheet(
-            if (sung) "The line being sung" else "The other lines",
+            if (sung) tr(R.string.the_line_being_sung) else tr(R.string.the_other_lines),
             if (sung) s.lyricsSungCustom else s.lyricsOtherCustom,
             onDismiss = { picking = null },
             preview = { col ->
@@ -280,23 +282,23 @@ private fun LyricsColorSwatches(selected: LyricsColor, custom: Int, onSelect: (L
 fun LyricsPlacementGroup() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
-    Group("Where the lines go") {
+    Group(tr(R.string.where_the_lines_go)) {
         ChoiceCards(
             LyricsPosition.entries, s.lyricsPosition, title = { it.label }, detail = { it.note }, columns = 3,
             onSelect = { prefs.setLyricsPosition(it) },
         ) { PositionSample(it.fraction, s.lyricsAhead.lines) }
-        Label("Lines to come", info = "How many of the next lines show; the rest appear as the song gets to them.")
+        Label(tr(R.string.lines_to_come), info = tr(R.string.how_many_of_the_next_lines))
         Chips(LyricsAhead.entries, s.lyricsAhead, { it.label }) { prefs.setLyricsAhead(it) }
-        Label("The line on the player", info = "The lyric over the progress bar, on the player itself.")
+        Label(tr(R.string.the_line_on_the_player), info = tr(R.string.the_lyric_over_the_progress_bar))
         ChoiceCards(
-            listOf(LyricsAlign.START, LyricsAlign.CENTER), s.lyricsStripAlign, title = { if (it == LyricsAlign.START) "Left" else "Centered" },
+            listOf(LyricsAlign.START, LyricsAlign.CENTER), s.lyricsStripAlign, title = { if (it == LyricsAlign.START) tr(R.string.left) else tr(R.string.centered) },
             detail = { null }, onSelect = { prefs.setLyricsStripAlign(it) },
         ) { StripSample(it == LyricsAlign.CENTER, if (s.lyricsStripTwoLines) 2 else 1) }
         Toggle(
-            "Up to two lines", "A long line wraps instead of being cut off", s.lyricsStripTwoLines,
-            info = "The line keeps room for two lines all the time, so the player doesn't move as the lines change.",
+            tr(R.string.up_to_two_lines), tr(R.string.a_long_line_wraps_instead_of), s.lyricsStripTwoLines,
+            info = tr(R.string.the_line_keeps_room_for_two),
         ) { prefs.setLyricsStripTwoLines(it) }
-        Label("Instrumental breaks", info = "What shows between lines while the music plays on its own. It lights up as the break goes by.")
+        Label(tr(R.string.instrumental_breaks), info = tr(R.string.what_shows_between_lines_while_the))
         ChoiceCards(
             com.prism.music.data.prefs.LyricsGapMark.entries, s.lyricsGapMark, title = { it.label }, detail = { null },
             onSelect = { prefs.setLyricsGapMark(it) },
@@ -373,13 +375,13 @@ private fun PositionSample(fraction: Float, ahead: Int) {
 fun LyricsExtrasGroup() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
-    Group("Translations & romanized lines", info = "How a translation, or a line spelled out in Latin letters, sits with each line.") {
-        LyricsSample(currentLook(), Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp), lines = 1, extra = "Cada color encuentra su camino")
+    Group(tr(R.string.translations_romanized_lines), info = tr(R.string.how_a_translation_or_a_line)) {
+        LyricsSample(currentLook(), Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp), lines = 1, extra = tr(R.string.cada_color_encuentra_su_camino))
         Chips(LyricsExtraPlace.entries, s.lyricsExtraPlace, { it.label }) { prefs.setLyricsExtraPlace(it) }
-        SliderSetting("Size", s.lyricsExtraSize, 0.7f..1.4f, { "${(it * 100).roundToInt()}%" }) { prefs.setLyricsExtraSize(it) }
-        Label("Color", info = if (s.lyricsExtraColor == LyricsColor.CUSTOM) "Your color here is the one picked for the other lines (Colors, above)." else null)
+        SliderSetting(tr(R.string.size), s.lyricsExtraSize, 0.7f..1.4f, { "${(it * 100).roundToInt()}%" }) { prefs.setLyricsExtraSize(it) }
+        Label(tr(R.string.color_2), info = if (s.lyricsExtraColor == LyricsColor.CUSTOM) tr(R.string.your_color_here_is_the_one) else null)
         LyricsColorSwatches(s.lyricsExtraColor, s.lyricsOtherCustom, { prefs.setLyricsExtraColor(it) }) { prefs.setLyricsExtraColor(LyricsColor.CUSTOM) }
-        Toggle("Italics", "Sets them apart from the lyrics", s.lyricsExtraItalic) { prefs.setLyricsExtraItalic(it) }
+        Toggle(tr(R.string.italics), tr(R.string.sets_them_apart_from_the_lyrics), s.lyricsExtraItalic) { prefs.setLyricsExtraItalic(it) }
     }
 }
 
@@ -390,41 +392,41 @@ fun LyricsBackgroundGroup() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     var picking by remember { mutableStateOf<Int?>(null) }
-    Group("Background") {
-        Label("Behind the lyrics", info = if (s.lyricsBackground == LyricsBackground.CANVAS) "Animated cover: songs without a moving cover show the cover blurred." else null)
+    Group(tr(R.string.background)) {
+        Label(tr(R.string.behind_the_lyrics), info = if (s.lyricsBackground == LyricsBackground.CANVAS) tr(R.string.animated_cover_songs_without_a_moving) else null)
         ChoiceCards(
-            LyricsBackground.entries, s.lyricsBackground, title = { it.label }, detail = { if (it == LyricsBackground.PLAYER) "The player's own background" else it.note },
+            LyricsBackground.entries, s.lyricsBackground, title = { it.label }, detail = { if (it == LyricsBackground.PLAYER) tr(R.string.the_player_s_own_background) else it.note },
             onSelect = { prefs.setLyricsBackground(it) },
         ) { LyricsSample(currentLook(), Modifier.fillMaxWidth(), ground = backgroundSample(it), size = 0.7f, lines = 2) }
         if (s.lyricsBackground == LyricsBackground.COLOR || s.immersiveBackground == LyricsBackground.COLOR) {
-            Label("Your colors", info = "Kept dark enough for white words.")
+            Label(tr(R.string.your_colors), info = tr(R.string.kept_dark_enough_for_white_words))
             Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                ColorDot("Top", Color(s.lyricsBgColor)) { picking = 1 }
-                ColorDot("Bottom", if (s.lyricsBgColor2 == 0) null else Color(s.lyricsBgColor2)) { picking = 2 }
+                ColorDot(tr(R.string.top), Color(s.lyricsBgColor)) { picking = 1 }
+                ColorDot(tr(R.string.bottom), if (s.lyricsBgColor2 == 0) null else Color(s.lyricsBgColor2)) { picking = 2 }
                 if (s.lyricsBgColor2 != 0) Text(
-                    "One color", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary,
+                    tr(R.string.one_color), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.clip(RoundedCornerShape(8.dp)).clickable { prefs.setLyricsBgColors(s.lyricsBgColor, 0) }.padding(8.dp),
                 )
             }
         }
-        Label("Immersive mode")
+        Label(tr(R.string.immersive_mode))
         ChoiceCards(
-            LyricsBackground.entries, s.immersiveBackground, title = { if (it == LyricsBackground.PLAYER) "The cover" else it.label },
-            detail = { if (it == LyricsBackground.PLAYER) "Filling the screen, as now" else it.note },
+            LyricsBackground.entries, s.immersiveBackground, title = { if (it == LyricsBackground.PLAYER) tr(R.string.the_cover) else it.label },
+            detail = { if (it == LyricsBackground.PLAYER) tr(R.string.filling_the_screen_as_now) else it.note },
             onSelect = { prefs.setImmersiveBackground(it) },
         ) { LyricsSample(currentLook().withoutCard(s.lyricsOthersAlpha), Modifier.fillMaxWidth(), ground = backgroundSample(it, immersive = true), size = 0.7f, lines = 2) }
         Toggle(
-            "Same look everywhere", "The current-lyric line and immersive mode follow these settings", s.lyricsEverywhere,
-            info = "On, the line above the progress bar and immersive mode draw the lyrics in the style, colors, weight and capitals picked here. Off, they keep Prism's own look.",
+            tr(R.string.same_look_everywhere), tr(R.string.the_current_lyric_line_and_immersive), s.lyricsEverywhere,
+            info = tr(R.string.on_the_line_above_the_progress),
         ) { prefs.setLyricsEverywhere(it) }
     }
     picking?.let { which ->
         val prefsNow = LocalAppSettings.current
         com.prism.music.ui.components.ColorPickerSheet(
-            if (which == 1) "Top color" else "Bottom color",
+            if (which == 1) tr(R.string.top_color) else tr(R.string.bottom_color),
             if (which == 1) prefsNow.lyricsBgColor else prefsNow.lyricsBgColor2.takeIf { it != 0 } ?: prefsNow.lyricsBgColor,
             onDismiss = { picking = null },
-            reset = if (which == 2 && prefsNow.lyricsBgColor2 != 0) "One color" to { prefs.setLyricsBgColors(prefsNow.lyricsBgColor, 0) } else null,
+            reset = if (which == 2 && prefsNow.lyricsBgColor2 != 0) tr(R.string.one_color) to { prefs.setLyricsBgColors(prefsNow.lyricsBgColor, 0) } else null,
             preview = { col ->
                 val top = cardColor(Color(if (which == 1) col else prefsNow.lyricsBgColor))
                 val bottom = if (which == 2) cardColor(Color(col)) else if (prefsNow.lyricsBgColor2 == 0) androidx.compose.ui.graphics.lerp(top, Color.Black, 0.3f) else cardColor(Color(prefsNow.lyricsBgColor2))

@@ -1,5 +1,7 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.R
+import com.prism.music.tr
 import com.prism.music.ui.components.PrismSlider
 import com.prism.music.ui.components.PrismSwitch
 import androidx.compose.foundation.layout.Column
@@ -33,13 +35,13 @@ fun SoundSettings(onOpenEq: () -> Unit) {
     val c = LocalContainer.current
     val s = LocalAppSettings.current
     Toggle(
-        "Prism Spatial", "Wider sound for any headphones", s.spatial,
-        info = "Software spatial audio: a wider stage, sound placed outside your head and a sense of room. Built into Prism, so it needs no Dolby Atmos or spatial audio hardware.",
+        tr(R.string.prism_spatial), tr(R.string.wider_sound_for_any_headphones), s.spatial,
+        info = tr(R.string.software_spatial_audio_a_wider_stage),
     ) { c.settings.setSpatial(it) }
-    if (s.spatial) SliderSetting("Intensity", s.spatialAmount, 0.1f..1f, { "${(it * 100).toInt()}%" }) { c.settings.setSpatialAmount(it) }
+    if (s.spatial) SliderSetting(tr(R.string.intensity), s.spatialAmount, 0.1f..1f, { "${(it * 100).toInt()}%" }) { c.settings.setSpatialAmount(it) }
     Item(
-        "Equalizer",
-        if (s.eq.enabled) "On · ${s.eq.preset}" else "10 bands, your presets, headphone correction",
+        tr(R.string.equalizer),
+        if (s.eq.enabled) tr(R.string.on, s.eq.preset) else tr(R.string.t_10_bands_your_presets_headphone_correction),
         onClick = onOpenEq,
     ) { Chevron() }
 }
@@ -49,7 +51,7 @@ fun SoundSettings(onOpenEq: () -> Unit) {
 fun CrossfadeCurveCards() {
     val c = LocalContainer.current
     val s = LocalAppSettings.current
-    Label("How they cross", info = "How the ending song goes down and the next comes up over the crossfade. The line coming up is the next song.")
+    Label(tr(R.string.how_they_cross), info = tr(R.string.how_the_ending_song_goes_down))
     ChoiceCards(CrossfadeCurve.entries, s.sound.crossfadeCurve, { it.label }, { it.detail }, onSelect = { c.settings.setCrossfadeCurve(it) }) { curve ->
         CurveSample(curve)
     }
@@ -80,13 +82,13 @@ private fun CurveSample(curve: CrossfadeCurve) {
 fun NormalizeLevel() {
     val c = LocalContainer.current
     val s = LocalAppSettings.current
-    Label("Level", info = "How loud Normalize volume makes every song. Loud suits noisy places and quiet earbuds; Broadcast leaves the most room for big moments. Songs are only lifted by up to 6 dB.")
+    Label(tr(R.string.level), info = tr(R.string.how_loud_normalize_volume_makes_every))
     val ink = MaterialTheme.colorScheme.primary
     val track = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.10f)
     ChoiceCards(
         NORMALIZE_TARGETS.map { it.first }, s.sound.normalizeTarget,
         { t -> NORMALIZE_TARGETS.first { it.first == t }.second },
-        { t -> "$t LUFS" + when (t) { -14 -> ", like Spotify and YouTube"; -16 -> ", like Apple Music"; -23 -> ", like TV and radio"; else -> "" } },
+        { t -> "$t LUFS" + when (t) { -14 -> tr(R.string.like_spotify_and_youtube); -16 -> tr(R.string.like_apple_music); -23 -> tr(R.string.like_tv_and_radio); else -> "" } },
         columns = 3, onSelect = { c.settings.setNormalizeTarget(it) },
     ) { t ->
         androidx.compose.foundation.Canvas(Modifier.fillMaxWidth().height(10.dp)) {
@@ -96,8 +98,8 @@ fun NormalizeLevel() {
         }
     }
     Toggle(
-        "Albums as they are", "An album keeps its own quiet and loud songs", s.sound.normalizeAlbums,
-        info = "While an album plays through, every song on it gets the same volume change, set by its loudest song measured so far, so a quiet interlude stays quiet next to the single. Other music is evened out song by song.",
+        tr(R.string.albums_as_they_are), tr(R.string.an_album_keeps_its_own_quiet), s.sound.normalizeAlbums,
+        info = tr(R.string.while_an_album_plays_through_every),
     ) { c.settings.setNormalizeAlbums(it) }
 }
 
@@ -107,20 +109,20 @@ fun SpeedAndFades() {
     val c = LocalContainer.current
     val s = LocalAppSettings.current
     SliderSetting(
-        "Speed when Prism starts", s.sound.musicSpeed, 0.5f..2f, { speedText(it) }, steps = 29,
-        info = "Songs start at this speed each time Prism opens; the Speed & pitch sheet changes it for now. Podcasts keep their own speed, live streams always play at 1×.",
+        tr(R.string.speed_when_prism_starts), s.sound.musicSpeed, 0.5f..2f, { speedText(it) }, steps = 29,
+        info = tr(R.string.songs_start_at_this_speed_each),
     ) { c.settings.setMusicDefaults(it, s.sound.musicPitch); c.player.setMusicSpeed(it) }
     SliderSetting(
-        "Pitch when Prism starts", s.sound.musicPitch.toFloat(), -12f..12f, { pitchText(it.roundToInt()) }, steps = 23,
-        info = "Moves every song up or down by semitones, on its own or with the speed. 12 is a whole octave.",
+        tr(R.string.pitch_when_prism_starts), s.sound.musicPitch.toFloat(), -12f..12f, { pitchText(it.roundToInt()) }, steps = 23,
+        info = tr(R.string.moves_every_song_up_or_down),
     ) { c.settings.setMusicDefaults(s.sound.musicSpeed, it.roundToInt()); c.player.setMusicPitch(it.roundToInt()) }
     SliderSetting(
-        "Sleep timer fades out", s.sound.sleepFadeSeconds.toFloat(), 0f..60f, { if (it < 1f) "Off" else "${it.roundToInt()} s" }, steps = 11,
-        info = "The music fades out over the last seconds before the sleep timer pauses it, instead of stopping at once.",
+        tr(R.string.sleep_timer_fades_out), s.sound.sleepFadeSeconds.toFloat(), 0f..60f, { if (it < 1f) tr(R.string.off) else "${it.roundToInt()} s" }, steps = 11,
+        info = tr(R.string.the_music_fades_out_over_the),
     ) { c.settings.setSleepFade(it.roundToInt()) }
     Toggle(
-        "Fade on pause and play", "A quick fade instead of a cut", s.sound.pauseFade,
-        info = "Pausing fades the sound out over a quarter of a second, and playing brings it up the same way. Pauses from the phone itself (a call, unplugged headphones) still stop at once.",
+        tr(R.string.fade_on_pause_and_play), tr(R.string.a_quick_fade_instead_of_a), s.sound.pauseFade,
+        info = tr(R.string.pausing_fades_the_sound_out_over),
     ) { c.settings.setPauseFade(it) }
 }
 
@@ -129,7 +131,7 @@ fun speedText(speed: Float): String = "%.2f".format(speed).trimEnd('0').trimEnd(
 
 /** "As recorded", "+3", "−2" (semitones). */
 fun pitchText(semitones: Int): String = when {
-    semitones == 0 -> "As recorded"
+    semitones == 0 -> tr(R.string.as_recorded)
     semitones > 0 -> "+$semitones"
     else -> "−${-semitones}"
 }

@@ -1,5 +1,7 @@
 package com.prism.music.ui.player
 
+import com.prism.music.R
+import com.prism.music.tr
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -73,7 +75,7 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 
 /** What the second pane of a wide player shows. */
-enum class PlayerPane(val label: String) { LYRICS("Lyrics"), QUEUE("Up next"), STATS("Stats") }
+enum class PlayerPane(val label: String) { LYRICS(tr(R.string.lyrics)), QUEUE(tr(R.string.up_next)), STATS(tr(R.string.stats)) }
 
 /**
  * The player on a wide window (a tablet, an unfolded foldable, a phone on its side): the cover and controls on one
@@ -349,9 +351,9 @@ internal fun PlayerCredits(song: Song, onMore: () -> Unit, onCollapse: () -> Uni
         Spacer(Modifier.width(10.dp))
         val isLiked = song.id in liked
         if (heart) {
-            CircleGlyph(if (isLiked) PrismIcons.HeartFilled else PrismIcons.Heart, if (isLiked) "Remove from liked" else "Like", isLiked) { c.library.toggleLike(song) }
+            CircleGlyph(if (isLiked) PrismIcons.HeartFilled else PrismIcons.Heart, if (isLiked) tr(R.string.remove_from_liked) else tr(R.string.widget_like), isLiked) { c.library.toggleLike(song) }
             Spacer(Modifier.width(8.dp))
         }
-        CircleGlyph(PrismIcons.More, "Song options", onClick = onMore)
+        CircleGlyph(PrismIcons.More, tr(R.string.song_options), onClick = onMore)
     }
 }

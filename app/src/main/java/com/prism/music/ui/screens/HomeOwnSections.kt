@@ -1,5 +1,7 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.R
+import com.prism.music.tr
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
@@ -55,20 +57,20 @@ object OwnSections {
 
     /** What a rule section says about itself under its name. */
     fun strapline(key: String): String? = when {
-        key == HomeSections.LIKED_MONTH -> "Your likes from the last 30 days"
-        key == HomeSections.UNPLAYED_DOWNLOADS -> "On the phone, not played yet"
-        key.startsWith(HomeSections.YEAR_PREFIX) -> "Your most played that year"
-        key.startsWith(HomeSections.PIN_PREFIX) -> "Pinned"
+        key == HomeSections.LIKED_MONTH -> tr(R.string.your_likes_from_the_last_30)
+        key == HomeSections.UNPLAYED_DOWNLOADS -> tr(R.string.on_the_phone_not_played_yet)
+        key.startsWith(HomeSections.YEAR_PREFIX) -> tr(R.string.your_most_played_that_year)
+        key.startsWith(HomeSections.PIN_PREFIX) -> tr(R.string.pinned)
         else -> null
     }
 
     /** The rule sections Customize Home can add (years with plays in them, newest first). */
     suspend fun rules(c: AppContainer): List<HomeSectionConfig> = withContext(Dispatchers.IO) {
         listOf(
-            HomeSectionConfig(HomeSections.LIKED_MONTH, "Liked this month", style = SectionStyle.LIST),
-            HomeSectionConfig(HomeSections.UNPLAYED_DOWNLOADS, "Downloads you haven't played"),
+            HomeSectionConfig(HomeSections.LIKED_MONTH, tr(R.string.liked_this_month), style = SectionStyle.LIST),
+            HomeSectionConfig(HomeSections.UNPLAYED_DOWNLOADS, tr(R.string.downloads_you_haven_t_played)),
         ) + runCatching { c.db.plays().yearsPlayed() }.getOrDefault(emptyList()).take(6)
-            .map { y -> HomeSectionConfig(HomeSections.yearKey(y), "Most played in $y") }
+            .map { y -> HomeSectionConfig(HomeSections.yearKey(y), tr(R.string.most_played_in, y)) }
     }
 
     suspend fun load(c: AppContainer, key: String): List<Song> = withContext(Dispatchers.IO) {

@@ -1,5 +1,7 @@
 package com.prism.music.ui.components
 
+import com.prism.music.R
+import com.prism.music.tr
 import com.prism.music.ui.theme.lit
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.contentDescription
@@ -129,7 +131,7 @@ fun SectionHeader(title: String, modifier: Modifier = Modifier, strapline: Strin
         modifier.fillMaxWidth()
             .padding(start = 8.dp, end = 8.dp, top = ui.gap(18.dp), bottom = ui.gap(2.dp))
             .clip(RoundedCornerShape(12.dp))
-            .then(if (onMore != null) Modifier.clickable(onClickLabel = "See all", onClick = onMore) else Modifier)
+            .then(if (onMore != null) Modifier.clickable(onClickLabel = tr(R.string.see_all), onClick = onMore) else Modifier)
             .padding(start = 12.dp, end = 4.dp, top = ui.gap(8.dp), bottom = ui.gap(8.dp)),
     ) {
         if (!strapline.isNullOrBlank()) Text(
@@ -141,7 +143,7 @@ fun SectionHeader(title: String, modifier: Modifier = Modifier, strapline: Strin
                 title, Modifier.weight(1f), style = sectionTitleStyle(),
                 maxLines = 1, overflow = TextOverflow.Ellipsis,
             )
-            if (onMore != null) Icon(PrismIcons.ChevronRight, "See all", Modifier.size(26.dp), tint = scheme.onSurfaceVariant)
+            if (onMore != null) Icon(PrismIcons.ChevronRight, tr(R.string.see_all), Modifier.size(26.dp), tint = scheme.onSurfaceVariant)
         }
     }
 }
@@ -209,7 +211,7 @@ fun SongRowLayout(
     ) {
         if (index != null) {
             Row(Modifier.width(38.dp), verticalAlignment = Alignment.CenterVertically) {
-                if (starred) Icon(PrismIcons.StarFilled, "Popular", Modifier.size(11.dp), tint = scheme.ink3)
+                if (starred) Icon(PrismIcons.StarFilled, tr(R.string.popular), Modifier.size(11.dp), tint = scheme.ink3)
                 else Spacer(Modifier.width(11.dp))
                 Spacer(Modifier.width(3.dp))
                 Text(
@@ -231,10 +233,10 @@ fun SongRowLayout(
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
                 val mark = Modifier.size(13.dp).padding(end = 3.dp)
-                if (song.explicit) Icon(PrismIcons.Explicit, "Explicit", mark, tint = scheme.ink3)
-                if (liked) Icon(PrismIcons.HeartFilled, "Liked", mark, tint = scheme.ink3)
-                if (downloaded) Icon(PrismIcons.DownloadDone, "Downloaded", mark, tint = scheme.ink3)
-                if (videoSaved) Icon(PrismIcons.Video, "Video saved", mark, tint = scheme.ink3)
+                if (song.explicit) Icon(PrismIcons.Explicit, tr(R.string.explicit), mark, tint = scheme.ink3)
+                if (liked) Icon(PrismIcons.HeartFilled, tr(R.string.liked), mark, tint = scheme.ink3)
+                if (downloaded) Icon(PrismIcons.DownloadDone, tr(R.string.downloaded), mark, tint = scheme.ink3)
+                if (videoSaved) Icon(PrismIcons.Video, tr(R.string.video_saved), mark, tint = scheme.ink3)
                 Text(
                     listOfNotNull(song.artistText, trailingInfo ?: song.album?.title).joinToString(" · "),
                     maxLines = 1, overflow = TextOverflow.Ellipsis,
@@ -243,7 +245,7 @@ fun SongRowLayout(
             }
         }
         if (playing) PlayingBars(Modifier.padding(start = 8.dp).size(13.dp, 14.dp), spectrum = true)
-        IconButton(onClick = onMore) { Icon(PrismIcons.More, "More", Modifier.size(20.dp), tint = scheme.ink3) }
+        IconButton(onClick = onMore) { Icon(PrismIcons.More, tr(R.string.more), Modifier.size(20.dp), tint = scheme.ink3) }
     }
 }
 
@@ -368,7 +370,7 @@ fun PrismSpinner(modifier: Modifier = Modifier, stroke: androidx.compose.ui.unit
     // With reduced motion it doesn't turn, and no animation runs for it.
     val turn = if (still) null else rememberInfiniteTransition(label = "spin").animateFloat(0f, 360f, infiniteRepeatable(tween(900, easing = androidx.compose.animation.core.LinearEasing)), label = "turn")
     val track = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.10f)
-    androidx.compose.foundation.Canvas(modifier.then(Modifier.semantics { contentDescription = "Loading" })) {
+    androidx.compose.foundation.Canvas(modifier.then(Modifier.semantics { contentDescription = tr(R.string.loading) })) {
         val w = stroke.toPx()
         val inset = w / 2
         val arc = androidx.compose.ui.geometry.Size(size.width - w, size.height - w)
@@ -395,7 +397,7 @@ fun PrismProgressBar(progress: (() -> Float)?, modifier: Modifier = Modifier, he
     val run = if (progress == null && !still) {
         rememberInfiniteTransition(label = "bar").animateFloat(-0.35f, 1f, infiniteRepeatable(tween(1300, easing = androidx.compose.animation.core.FastOutSlowInEasing)), label = "run")
     } else null
-    androidx.compose.foundation.Canvas(modifier.fillMaxWidth().height(height).clip(CircleShape).semantics { contentDescription = "Loading" }) {
+    androidx.compose.foundation.Canvas(modifier.fillMaxWidth().height(height).clip(CircleShape).semantics { contentDescription = tr(R.string.loading) }) {
         drawRect(track)
         val brush = com.prism.music.ui.theme.PrismTokens.spectrum(dark, 0f, size.width)
         if (progress != null) {
@@ -421,7 +423,7 @@ fun ErrorState(message: String, modifier: Modifier = Modifier, onRetry: (() -> U
         )
         if (onRetry != null) {
             Spacer(Modifier.height(16.dp))
-            PrismOutlinedButton(onClick = onRetry) { Text("Try again") }
+            PrismOutlinedButton(onClick = onRetry) { Text(tr(R.string.try_again)) }
         }
     }
 }
@@ -474,7 +476,7 @@ fun SearchField(query: String, hint: String, onChange: (String) -> Unit, modifie
             )
         }
         if (query.isNotEmpty()) IconButton(onClick = { onChange(""); focus.clearFocus() }) {
-            Icon(PrismIcons.Close, "Clear search", Modifier.size(20.dp), tint = scheme.onSurfaceVariant)
+            Icon(PrismIcons.Close, tr(R.string.clear_search), Modifier.size(20.dp), tint = scheme.onSurfaceVariant)
         }
     }
 }
@@ -537,10 +539,10 @@ fun videoDownloadAction(song: Song, video: com.prism.music.download.VideoDownloa
     val done = video?.state == androidx.media3.exoplayer.offline.Download.STATE_COMPLETED
     val failed = video?.state == androidx.media3.exoplayer.offline.Download.STATE_FAILED
     return ActionItem(
-        PrismIcons.Video, if (done) "Remove downloaded video" else "Download video",
+        PrismIcons.Video, if (done) tr(R.string.remove_downloaded_video) else tr(R.string.download_video),
         value = when {
-            done -> "Saved"
-            failed -> "Failed: tap to remove"
+            done -> tr(R.string.saved_2)
+            failed -> tr(R.string.failed_tap_to_remove)
             video != null -> "${video.percent.toInt().coerceAtLeast(0)}%"
             else -> null
         },
@@ -580,42 +582,42 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
 
     // In someone's Listen Together session, songs go into their queue.
     val quick = listOf(
-        if (guest != null) ActionItem(PrismIcons.Groups, "Play next") { c.together.suggest(song, next = true); toast("Sent to ${guest.hostName}") }
-        else ActionItem(PrismIcons.PlaylistPlay, "Play next") { c.player.playNext(song) },
-        if (guest != null) ActionItem(PrismIcons.PersonAdd, "Add to queue") { c.together.suggest(song, next = false); toast("Sent to ${guest.hostName}") }
-        else ActionItem(PrismIcons.QueueMusic, "Add to queue") { c.player.addToQueue(song) },
+        if (guest != null) ActionItem(PrismIcons.Groups, tr(R.string.play_next)) { c.together.suggest(song, next = true); toast(tr(R.string.sent_to, guest.hostName)) }
+        else ActionItem(PrismIcons.PlaylistPlay, tr(R.string.play_next)) { c.player.playNext(song) },
+        if (guest != null) ActionItem(PrismIcons.PersonAdd, tr(R.string.add_to_queue)) { c.together.suggest(song, next = false); toast(tr(R.string.sent_to, guest.hostName)) }
+        else ActionItem(PrismIcons.QueueMusic, tr(R.string.add_to_queue)) { c.player.addToQueue(song) },
         // A radio of a podcast episode is music radio: not offered for episodes.
-        if (song.isEpisode || local) null else ActionItem(PrismIcons.Radio, "Radio") { c.player.playRadio(song) },
+        if (song.isEpisode || local) null else ActionItem(PrismIcons.Radio, tr(R.string.radio_2)) { c.player.playRadio(song) },
         if (local) null else ActionItem(
-            if (downloaded) PrismIcons.DownloadDone else PrismIcons.Download, "Download",
-            value = when { downloaded -> "Downloaded"; dl != null -> "${dl.percent.toInt().coerceAtLeast(0)}%"; else -> null },
+            if (downloaded) PrismIcons.DownloadDone else PrismIcons.Download, tr(R.string.download),
+            value = when { downloaded -> tr(R.string.downloaded); dl != null -> "${dl.percent.toInt().coerceAtLeast(0)}%"; else -> null },
             active = downloaded, keepOpen = true,
         ) { if (dl != null) c.downloads.remove(song.id) else c.downloads.download(song) },
     ).filterNotNull()
     val go = listOfNotNull(
         // Straight to its most replayed stretch (or its chorus).
-        if (song.isEpisode || song.isLive || guest != null) null else ActionItem(PrismIcons.FlameFilled, "Play from the best part") { c.player.playFromBestPart(song) },
-        song.podcastId?.let { id -> ActionItem(PrismIcons.Podcasts, "Go to podcast") { nav.go(Routes.podcast(id)) } },
-        if (song.isEpisode && song.id in c.episodes.played.value) ActionItem(PrismIcons.Refresh, "Mark as unplayed") { c.episodes.forget(song.id); c.episodes.unmarkPlayed(song.id) }
-        else if (song.isEpisode) ActionItem(PrismIcons.DoneAll, "Mark as played") { c.episodes.markPlayed(song.id) } else null,
-        ActionItem(PrismIcons.PlaylistAdd, "Add to playlist", keepOpen = true) { pickPlaylist = true },
-        song.album?.id?.let { id -> ActionItem(PrismIcons.Album, "Go to album", value = song.album?.title?.takeIf { it.length <= 22 }) { nav.go(Routes.album(id)) } },
+        if (song.isEpisode || song.isLive || guest != null) null else ActionItem(PrismIcons.FlameFilled, tr(R.string.play_from_the_best_part)) { c.player.playFromBestPart(song) },
+        song.podcastId?.let { id -> ActionItem(PrismIcons.Podcasts, tr(R.string.go_to_podcast)) { nav.go(Routes.podcast(id)) } },
+        if (song.isEpisode && song.id in c.episodes.played.value) ActionItem(PrismIcons.Refresh, tr(R.string.mark_as_unplayed)) { c.episodes.forget(song.id); c.episodes.unmarkPlayed(song.id) }
+        else if (song.isEpisode) ActionItem(PrismIcons.DoneAll, tr(R.string.mark_as_played)) { c.episodes.markPlayed(song.id) } else null,
+        ActionItem(PrismIcons.PlaylistAdd, tr(R.string.add_to_playlist), keepOpen = true) { pickPlaylist = true },
+        song.album?.id?.let { id -> ActionItem(PrismIcons.Album, tr(R.string.go_to_album), value = song.album?.title?.takeIf { it.length <= 22 }) { nav.go(Routes.album(id)) } },
     ) + goToArtists(song) { route -> nav.go(route) } + listOfNotNull(
         // Who performed, wrote and produced it (Reddit 1.7).
-        if (song.isEpisode || local || song.isLive) null else ActionItem(PrismIcons.Info, "Song credits", keepOpen = true) { credits = true },
+        if (song.isEpisode || local || song.isLive) null else ActionItem(PrismIcons.Info, tr(R.string.song_credits), keepOpen = true) { credits = true },
     )
     val more = extra.map { it.toAction() } + listOfNotNull(
         // Your own FLAC / MP3 files (a Local file, or the lossless file played for this song) can keep its lyrics (#16).
-        if (local || dl?.lossless == true) ActionItem(PrismIcons.Lyrics, "Save lyrics into the file") { c.lyricsToFiles.request(listOf(song)) } else null,
+        if (local || dl?.lossless == true) ActionItem(PrismIcons.Lyrics, tr(R.string.save_lyrics_into_the_file)) { c.lyricsToFiles.request(listOf(song)) } else null,
         if (song.isEpisode || local) null else videoDownloadAction(song, videos[song.id]),
-        if (song.isEpisode) null else if (song.id in disliked) ActionItem(PrismIcons.ThumbDownFilled, "Not for me", active = true, keepOpen = true) { c.library.setDisliked(song, false) }
-        else ActionItem(PrismIcons.ThumbDown, "Not for me") { c.library.setDisliked(song, true); toast("Got it — Prism will steer clear of this song") },
+        if (song.isEpisode) null else if (song.id in disliked) ActionItem(PrismIcons.ThumbDownFilled, tr(R.string.not_for_me), active = true, keepOpen = true) { c.library.setDisliked(song, false) }
+        else ActionItem(PrismIcons.ThumbDown, tr(R.string.not_for_me)) { c.library.setDisliked(song, true); toast(tr(R.string.got_it_prism_will_steer_clear)) },
         // Plays as usual, but its plays don't shape recommendations (a song played for someone else).
         if (song.isEpisode || local) null else {
             val out = c.exclusions.isSongExcluded(song.id)
-            ActionItem(PrismIcons.Block, if (out) "Back in my taste" else "Leave out of my taste") {
+            ActionItem(PrismIcons.Block, if (out) tr(R.string.back_in_my_taste) else tr(R.string.leave_out_of_my_taste)) {
                 c.exclusions.setSong(com.prism.music.data.foryou.Excluded(song.id, "${song.title} · ${song.artistText}", song.thumbnail), !out)
-                toast(if (out) "It counts towards your recommendations again" else "Its plays won't shape your recommendations")
+                toast(if (out) tr(R.string.it_counts_towards_your_recommendations_again) else tr(R.string.its_plays_won_t_shape_your))
             }
         },
     )
@@ -626,13 +628,13 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
             listOfNotNull(song.artistText, formatDuration(song.durationSec).takeIf { it.isNotEmpty() }).joinToString(" · "),
             placeholderIcon = PrismIcons.Song,
         ) {
-            SheetIconButton(if (isLiked) PrismIcons.HeartFilled else PrismIcons.Heart, if (isLiked) "Remove from liked songs" else "Add to liked songs", active = isLiked) {
+            SheetIconButton(if (isLiked) PrismIcons.HeartFilled else PrismIcons.Heart, if (isLiked) tr(R.string.remove_from_liked_songs) else tr(R.string.add_to_liked_songs), active = isLiked) {
                 c.library.toggleLike(song)
             }
-            if (!local) SheetIconButton(PrismIcons.Share, "Share") { sharing = true }
+            if (!local) SheetIconButton(PrismIcons.Share, tr(R.string.share)) { sharing = true }
         }
         if (guest != null) Text(
-            "Adding to ${guest.hostName}'s session", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary,
+            tr(R.string.adding_to_s_session, guest.hostName), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(start = 24.dp, bottom = 8.dp),
         )
         QuickActions(quick) { runAction(it, close) }
@@ -688,14 +690,14 @@ fun PlaylistPicker(songs: List<Song>, what: String, onDismiss: () -> Unit) {
         NewPlaylistDialog(onDismiss = { creating = false; onDismiss() }, local = !signedIn) { name, privacy ->
             creating = false
             onDismiss()
-            if (!signedIn) { c.prismLibrary.create(name, songs); toast("Added to $name"); return@NewPlaylistDialog }
+            if (!signedIn) { c.prismLibrary.create(name, songs); toast(tr(R.string.added_to, name)); return@NewPlaylistDialog }
             c.scope.launch(kotlinx.coroutines.Dispatchers.Main) {
                 // A long list (Liked songs, a big playlist) goes in 50 at a time after the first: one request with
                 // thousands of songs could be refused.
                 val id = runCatching {
                     c.ytm.createPlaylist(name, ids.take(50), privacy = privacy)?.also { if (ids.size > 50) c.ytm.addAllToPlaylist(it, ids.drop(50)) }
                 }.getOrNull()
-                toast(if (id != null) "Added to $name" else "Couldn't make the playlist")
+                toast(if (id != null) tr(R.string.added_to, name) else tr(R.string.couldn_t_make_the_playlist))
                 if (id != null) c.library.refreshCollections()
             }
         }
@@ -706,16 +708,16 @@ fun PlaylistPicker(songs: List<Song>, what: String, onDismiss: () -> Unit) {
     val shown = if (query.isBlank()) mine else mine.filter { it.title.contains(query.trim(), ignoreCase = true) }
     PrismSheet(onDismiss = onDismiss) { close ->
         Column(Modifier.padding(bottom = 20.dp)) {
-            Text("Add to playlist", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium, modifier = Modifier.padding(horizontal = 20.dp))
+            Text(tr(R.string.add_to_playlist), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium, modifier = Modifier.padding(horizontal = 20.dp))
             Text(
                 if (many) "$what · ${com.prism.music.data.model.songCount(songs.size)}" else what,
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(horizontal = 20.dp),
             )
             Spacer(Modifier.height(10.dp))
-            SheetAction(PrismIcons.Add, "New playlist") { creating = true }
-            if (mine.size > 8) SearchField(query, "Find a playlist", { query = it }, Modifier.padding(horizontal = 20.dp, vertical = 6.dp))
+            SheetAction(PrismIcons.Add, tr(R.string.new_playlist)) { creating = true }
+            if (mine.size > 8) SearchField(query, tr(R.string.find_a_playlist), { query = it }, Modifier.padding(horizontal = 20.dp, vertical = 6.dp))
             if (mine.isEmpty()) Text(
-                if (signedIn) "Your playlists show up here once your library has synced." else "Make your first playlist: it's kept on this phone, no account needed.", style = MaterialTheme.typography.bodyMedium,
+                if (signedIn) tr(R.string.your_playlists_show_up_here_once) else tr(R.string.make_your_first_playlist_it_s), style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(20.dp),
             )
             androidx.compose.foundation.lazy.LazyColumn(Modifier.heightIn(max = 440.dp)) {
@@ -727,9 +729,9 @@ fun PlaylistPicker(songs: List<Song>, what: String, onDismiss: () -> Unit) {
                                     val added = c.prismLibrary.add(p.id, songs)
                                     toast(
                                         when {
-                                            added == 0 -> "Already in ${p.title}"
-                                            many -> "${com.prism.music.data.model.songCount(added)} added to ${p.title}"
-                                            else -> "Added to ${p.title}"
+                                            added == 0 -> tr(R.string.already_in, p.title)
+                                            many -> tr(R.string.added_to_2, com.prism.music.data.model.songCount(added), p.title)
+                                            else -> tr(R.string.added_to, p.title)
                                         },
                                     )
                                     return@close
@@ -738,9 +740,9 @@ fun PlaylistPicker(songs: List<Song>, what: String, onDismiss: () -> Unit) {
                                     val added = runCatching { if (many) { c.ytm.addAllToPlaylist(p.id, ids); true } else c.ytm.addToPlaylist(p.id, ids.single()) }
                                     toast(
                                         when {
-                                            added.isFailure -> "Couldn't add to ${p.title}"
-                                            added.getOrNull() == false -> "Already in ${p.title}"
-                                            else -> "Added to ${p.title}"
+                                            added.isFailure -> tr(R.string.couldn_t_add_to, p.title)
+                                            added.getOrNull() == false -> tr(R.string.already_in, p.title)
+                                            else -> tr(R.string.added_to, p.title)
                                         },
                                     )
                                 }
@@ -768,30 +770,30 @@ fun NewPlaylistDialog(onDismiss: () -> Unit, local: Boolean = false, onCreate: (
     var privacy by remember { mutableStateOf("PRIVATE") }
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("New playlist") },
+        title = { Text(tr(R.string.new_playlist)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                com.prism.music.ui.components.PrismTextField(name, { name = it.take(150) }, label = { Text("Name") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+                com.prism.music.ui.components.PrismTextField(name, { name = it.take(150) }, label = { Text(tr(R.string.name)) }, singleLine = true, modifier = Modifier.fillMaxWidth())
                 if (local) {
                     Text(
-                        "Kept on this phone (and in your backups), no account needed. Sign in to YouTube Music for playlists on your account.",
+                        tr(R.string.kept_on_this_phone_and_in),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     return@Column
                 }
-                Segmented(listOf("PRIVATE", "UNLISTED", "PUBLIC"), privacy, { when (it) { "PRIVATE" -> "Private"; "UNLISTED" -> "Unlisted"; else -> "Public" } }) { privacy = it }
+                Segmented(listOf("PRIVATE", "UNLISTED", "PUBLIC"), privacy, { when (it) { "PRIVATE" -> tr(R.string.private_text); "UNLISTED" -> tr(R.string.unlisted); else -> tr(R.string.public_text) } }) { privacy = it }
                 Text(
                     when (privacy) {
-                        "PRIVATE" -> "Only you can see it."
-                        "UNLISTED" -> "Anyone with the link can open it, so it's easy to share."
-                        else -> "Anyone can find it."
+                        "PRIVATE" -> tr(R.string.only_you_can_see_it)
+                        "UNLISTED" -> tr(R.string.anyone_with_the_link_can_open)
+                        else -> tr(R.string.anyone_can_find_it)
                     },
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         },
-        confirmButton = { PrismTextButton(onClick = { onCreate(name.trim(), privacy) }, enabled = name.isNotBlank()) { Text("Create") } },
-        dismissButton = { PrismTextButton(onClick = onDismiss) { Text("Cancel") } },
+        confirmButton = { PrismTextButton(onClick = { onCreate(name.trim(), privacy) }, enabled = name.isNotBlank()) { Text(tr(R.string.create)) } },
+        dismissButton = { PrismTextButton(onClick = onDismiss) { Text(tr(R.string.cancel)) } },
     )
 }
 
@@ -846,7 +848,7 @@ fun openableArtists(song: Song): List<com.prism.music.data.model.ArtistRef> =
 
 /** "Go to …" for each of a song's artists (#42): a song with features lists every one, not only the first. */
 fun goToArtists(song: Song, go: (String) -> Unit): List<ActionItem> =
-    openableArtists(song).take(5).map { a -> ActionItem(PrismIcons.Person, "Go to ${a.name}") { go(com.prism.music.ui.Routes.artist(a)) } }
+    openableArtists(song).take(5).map { a -> ActionItem(PrismIcons.Person, tr(R.string.go_to, a.name)) { go(com.prism.music.ui.Routes.artist(a)) } }
 
 /** A list's count on the left and its [SortButton] on the right. */
 @Composable

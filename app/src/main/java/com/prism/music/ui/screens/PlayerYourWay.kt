@@ -1,5 +1,7 @@
 package com.prism.music.ui.screens
 
+import com.prism.music.R
+import com.prism.music.tr
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -74,17 +76,17 @@ fun PlayerLayoutGroup() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     val layoutInfo = when (s.playerLayout) {
-        PlayerLayout.MINIMAL -> "Minimal: swipe the cover for the next or previous song, and double-tap it to skip ahead or back (Gestures, below). "
-        PlayerLayout.COVER -> "Cover: tap the cover for the controls; they tuck away again after a few seconds. "
+        PlayerLayout.MINIMAL -> tr(R.string.minimal_swipe_the_cover_for_the)
+        PlayerLayout.COVER -> tr(R.string.cover_tap_the_cover_for_the)
         else -> ""
-    } + "Tablets and phones turned sideways keep their side-by-side player."
-    Group("Layout", info = layoutInfo) {
+    } + tr(R.string.tablets_and_phones_turned_sideways_keep)
+    Group(tr(R.string.layout), info = layoutInfo) {
         ChoiceCards(
             PlayerLayout.entries, s.playerLayout,
             title = { it.label }, detail = { it.note },
             onSelect = { prefs.setPlayerLayout(it) },
         ) { LayoutSample(it) }
-        if (s.playerLayout == PlayerLayout.VINYL) Toggle("Tonearm", "Swings onto the record while it plays", s.vinylTonearm) { prefs.setVinylTonearm(it) }
+        if (s.playerLayout == PlayerLayout.VINYL) Toggle(tr(R.string.tonearm), tr(R.string.swings_onto_the_record_while_it), s.vinylTonearm) { prefs.setVinylTonearm(it) }
     }
 }
 
@@ -182,9 +184,9 @@ fun PlayerButtonsGroup() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     val chosen = s.playerButtons
-    Group("Buttons", info = "Pick ${PlayerButton.MIN} to ${PlayerButton.MAX} for the row under the controls. Hold one (or drag its grip) to put them in your order. The rest stay in the player's ⋯ menu.") {
+    Group(tr(R.string.buttons), info = tr(R.string.pick_to_for_the_row_under, PlayerButton.MIN, PlayerButton.MAX)) {
         // The row as it'll be, in a capsule or apart (1.7.8, #155): each as its own card.
-        ChoiceCards(listOf(true, false), s.view.buttonsPill, { if (it) "In a capsule" else "Apart" }, { if (it) "One glass capsule (as now)" else "Spread across the row, as in Prism 1.6" }, onSelect = { prefs.setButtonsPill(it) }) { pill ->
+        ChoiceCards(listOf(true, false), s.view.buttonsPill, { if (it) tr(R.string.in_a_capsule) else tr(R.string.apart) }, { if (it) tr(R.string.one_glass_capsule_as_now) else tr(R.string.spread_across_the_row_as_in) }, onSelect = { prefs.setButtonsPill(it) }) { pill ->
             SampleScreen(Modifier.padding(6.dp).fillMaxWidth().height(52.dp)) {
                 Row(
                     if (pill) Modifier.align(Alignment.Center).clip(CircleShape).background(Color.White.copy(alpha = 0.10f)).border(1.dp, Color.White.copy(alpha = 0.16f), CircleShape).padding(horizontal = 8.dp, vertical = 6.dp)
@@ -211,7 +213,7 @@ fun PlayerButtonsGroup() {
             )
         }
         if (chosen != PlayerButton.DEFAULT) com.prism.music.ui.components.PrismTextButton({ prefs.setPlayerButtons(PlayerButton.DEFAULT) }, Modifier.padding(start = 12.dp)) {
-            Text("Back to Lyrics, Video and Up next")
+            Text(tr(R.string.back_to_lyrics_video_and_up))
         }
     }
 }
@@ -222,7 +224,7 @@ fun SessionButtonsGroup() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     val chosen = s.sessionButtons
-    Group("Notification and car", info = "Your phone's notification and lock screen show the first two beside play; Android Auto shows them all, in this order. Hold one to move it.") {
+    Group(tr(R.string.notification_and_car), info = tr(R.string.your_phone_s_notification_and_lock)) {
         // The notification as it'll look: previous, play, next and the first two beside them.
         SampleScreen(Modifier.padding(horizontal = 16.dp, vertical = 6.dp).fillMaxWidth().height(56.dp)) {
             Row(Modifier.align(Alignment.Center), horizontalArrangement = Arrangement.spacedBy(18.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -249,7 +251,7 @@ fun SessionButtonsGroup() {
             )
         }
         if (chosen != SessionButton.DEFAULT) com.prism.music.ui.components.PrismTextButton({ prefs.setSessionButtons(SessionButton.DEFAULT) }, Modifier.padding(start = 12.dp)) {
-            Text("Back to Prism's buttons")
+            Text(tr(R.string.back_to_prism_s_buttons))
         }
     }
 }
@@ -271,10 +273,10 @@ private fun OrderRow(
         Spacer(Modifier.width(12.dp))
         Text(label, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge, color = if (on) scheme.onSurface else scheme.onSurfaceVariant)
         if (on && !held) {
-            IconButton(onClick = { onUp?.invoke() }, enabled = onUp != null) { Icon(PrismIcons.ChevronUp, "Move $label up") }
-            IconButton(onClick = { onDown?.invoke() }, enabled = onDown != null) { Icon(PrismIcons.ChevronDown, "Move $label down") }
+            IconButton(onClick = { onUp?.invoke() }, enabled = onUp != null) { Icon(PrismIcons.ChevronUp, tr(R.string.move_up_2, label)) }
+            IconButton(onClick = { onDown?.invoke() }, enabled = onDown != null) { Icon(PrismIcons.ChevronDown, tr(R.string.move_down_2, label)) }
         } else if (held) Spacer(Modifier.width(96.dp))
-        if (grip != null) com.prism.music.ui.components.DragGrip(grip.padding(start = 4.dp, end = 8.dp), "Drag $label")
+        if (grip != null) com.prism.music.ui.components.DragGrip(grip.padding(start = 4.dp, end = 8.dp), tr(R.string.drag, label))
     }
 }
 
@@ -315,7 +317,7 @@ fun PlayerArrangeGroup() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     val order = s.playerDeck
-    Group("Under the title", info = "Top to bottom, as they sit on the player; hold one to move it. The progress bar, controls and buttons are always there.") {
+    Group(tr(R.string.under_the_title), info = tr(R.string.top_to_bottom_as_they_sit)) {
         com.prism.music.ui.components.ReorderList(order, { it }, { prefs.setPlayerDeck(it) }) { part, i, held, mod ->
             val shown = when (part) { DeckPart.STRIP -> s.lyricsOnPlayer; DeckPart.VOLUME -> !s.hideVolumeBar; else -> true }
             val hideable = part == DeckPart.STRIP || part == DeckPart.VOLUME
@@ -328,14 +330,14 @@ fun PlayerArrangeGroup() {
             )
         }
         if (order != DeckPart.entries) com.prism.music.ui.components.PrismTextButton({ prefs.setPlayerDeck(DeckPart.entries) }, Modifier.padding(start = 12.dp)) {
-            Text("Back to Prism's order")
+            Text(tr(R.string.back_to_prism_s_order))
         }
         // GitHub #116: a volume just for Prism, for phones whose volume buttons don't work (or to keep other apps' as they are).
         Label(
-            "The volume slider changes",
+            tr(R.string.the_volume_slider_changes),
             info = s.volumeControl.label + ": " + if (s.volumeControl == com.prism.music.data.prefs.VolumeControl.PRISM)
-                "only Prism gets quieter or louder; other apps and the phone's volume stay as they are. The phone's volume buttons still change the phone's volume."
-            else "like the phone's volume buttons, every app's music volume.",
+                tr(R.string.only_prism_gets_quieter_or_louder)
+            else tr(R.string.like_the_phone_s_volume_buttons),
         )
         Chips(com.prism.music.data.prefs.VolumeControl.entries, s.volumeControl, { it.label }) { v ->
             prefs.setVolumeControl(v)
@@ -359,47 +361,47 @@ private fun deckIcon(p: DeckPart): ImageVector = when (p) {
 fun PlayerTitleGroup() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
-    Group("Title and times") {
+    Group(tr(R.string.title_and_times)) {
         ChoiceCards(
-            PlayerTitleAlign.entries, s.playerTitleAlign, title = { it.label }, detail = { if (it == PlayerTitleAlign.START) "Under the cover's left edge" else "In the middle" },
+            PlayerTitleAlign.entries, s.playerTitleAlign, title = { it.label }, detail = { if (it == PlayerTitleAlign.START) tr(R.string.under_the_cover_s_left_edge) else tr(R.string.in_the_middle) },
             onSelect = { prefs.setPlayerTitleAlign(it) },
         ) { TitleSample(it) }
-        Label("Title size")
+        Label(tr(R.string.title_size))
         Chips(com.prism.music.data.prefs.PlayerTitleSize.entries, s.playerTitleSize, { it.label }) { prefs.setPlayerTitleSize(it) }
-        Label("Title weight", info = "Light is Prism's own, and follows Text → Weight. Bold makes the artist's name heavier too.")
+        Label(tr(R.string.title_weight), info = tr(R.string.light_is_prism_s_own_and))
         ChoiceCards(
             com.prism.music.data.prefs.PlayerTitleWeight.entries, s.type.playerTitleWeight, title = { it.label }, detail = { null },
             onSelect = { prefs.setPlayerTitleWeight(it) },
         ) { TitleSample(s.playerTitleAlign, it) }
-        Toggle("Scrolling titles", "A long title scrolls across (off: it ends with …)", s.playerTitleScroll) { prefs.setPlayerTitleScroll(it) }
-        Label("Times under the progress bar")
+        Toggle(tr(R.string.scrolling_titles), tr(R.string.a_long_title_scrolls_across_off), s.playerTitleScroll) { prefs.setPlayerTitleScroll(it) }
+        Label(tr(R.string.times_under_the_progress_bar))
         ChoiceCards(
             PlayerTimes.entries, s.playerTimes, title = { it.label }, detail = { null }, onSelect = { prefs.setPlayerTimes(it) },
         ) { TimesSample(it) }
-        Label("Progress bar color")
+        Label(tr(R.string.progress_bar_color))
         ChoiceCards(
             ScrubberColor.entries, s.scrubberColor, title = { it.label },
             detail = {
                 when (it) {
-                    ScrubberColor.SPECTRUM -> "The split light"
-                    ScrubberColor.ACCENT -> "Your accent color"
-                    ScrubberColor.WHITE -> "Plain white"
-                    ScrubberColor.COVER -> "The song's cover's color"
+                    ScrubberColor.SPECTRUM -> tr(R.string.the_split_light)
+                    ScrubberColor.ACCENT -> tr(R.string.your_accent_color)
+                    ScrubberColor.WHITE -> tr(R.string.plain_white)
+                    ScrubberColor.COVER -> tr(R.string.the_song_s_cover_s_color)
                 }
             },
             onSelect = { prefs.setScrubberColor(it) },
         ) { BarSample(it) }
         // Thickness and the knob (1.7.4): the waveform keeps its own height.
         SliderSetting(
-            "Progress bar thickness", s.scrubberThickness, 0.6f..2f, { worded(if (it < 0.85f) "Thinner" else if (it <= 1.15f) "As the style" else "Thicker", it) },
-            info = if (s.scrubberStyle == com.prism.music.data.prefs.ScrubberStyle.WAVE) "The waveform keeps its own height; thickness shows until a song has been scanned." else null,
+            tr(R.string.progress_bar_thickness), s.scrubberThickness, 0.6f..2f, { worded(if (it < 0.85f) tr(R.string.thinner) else if (it <= 1.15f) tr(R.string.as_the_style) else tr(R.string.thicker), it) },
+            info = if (s.scrubberStyle == com.prism.music.data.prefs.ScrubberStyle.WAVE) tr(R.string.the_waveform_keeps_its_own_height) else null,
         ) {
             prefs.setScrubberThickness(if (it in 0.93f..1.07f) 1f else it)
         }
-        Label("Knob at the playhead")
+        Label(tr(R.string.knob_at_the_playhead))
         ChoiceCards(
             com.prism.music.data.prefs.ScrubberThumb.entries, s.scrubberThumb, title = { it.label },
-            detail = { if (it == com.prism.music.data.prefs.ScrubberThumb.AUTO) "A dot with the Thumb style" else null },
+            detail = { if (it == com.prism.music.data.prefs.ScrubberThumb.AUTO) tr(R.string.a_dot_with_the_thumb_style) else null },
             onSelect = { prefs.setScrubberThumb(it) },
         ) { KnobSample(it, s.scrubberThickness) }
     }
@@ -440,16 +442,16 @@ private fun KnobSample(knob: com.prism.music.data.prefs.ScrubberThumb, thickness
 fun PlayerVisualizerGroup() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
-    Group("Visualizer", info = "It listens to Prism's own sound (no microphone) and only runs while the player is open and playing. On an older phone, Off keeps the player lightest.") {
+    Group(tr(R.string.visualizer), info = tr(R.string.it_listens_to_prism_s_own)) {
         ChoiceCards(
             com.prism.music.data.prefs.VisualizerStyle.entries, s.visualizer, title = { it.label }, detail = { it.note },
             onSelect = { prefs.setVisualizer(it) },
         ) { VisualizerSample(it, s.visualizerColor) }
         if (s.visualizer != com.prism.music.data.prefs.VisualizerStyle.OFF) {
-            Label("Visualizer color")
+            Label(tr(R.string.visualizer_color))
             Chips(ScrubberColor.entries, s.visualizerColor, { it.label }) { prefs.setVisualizerColor(it) }
             // Why it doesn't move: a state, so it stays in view.
-            if (s.reduceMotion) Note("Reduce motion is on, so it stays still.")
+            if (s.reduceMotion) Note(tr(R.string.reduce_motion_is_on_so_it))
         }
     }
 }
@@ -521,11 +523,11 @@ private fun TitleSample(align: PlayerTitleAlign, weight: com.prism.music.data.pr
             if (align == PlayerTitleAlign.CENTER) Spacer(Modifier.width(22.dp))
             Column(Modifier.weight(1f), horizontalAlignment = if (align == PlayerTitleAlign.CENTER) Alignment.CenterHorizontally else Alignment.Start) {
                 Text(
-                    "Northern Lights", color = Color.White, fontSize = 12.sp, maxLines = 1, textAlign = if (align == PlayerTitleAlign.CENTER) TextAlign.Center else TextAlign.Start,
+                    tr(R.string.northern_lights), color = Color.White, fontSize = 12.sp, maxLines = 1, textAlign = if (align == PlayerTitleAlign.CENTER) TextAlign.Center else TextAlign.Start,
                     // Prism's own big titles are light; at this size their own weight wouldn't show it.
                     fontWeight = weight.title ?: androidx.compose.ui.text.font.FontWeight.Light,
                 )
-                Text("Prism Sample", color = Color.White.copy(alpha = 0.6f), fontSize = 10.sp, maxLines = 1, fontWeight = weight.artist)
+                Text(tr(R.string.prism_sample), color = Color.White.copy(alpha = 0.6f), fontSize = 10.sp, maxLines = 1, fontWeight = weight.artist)
             }
             Box(Modifier.size(9.dp).clip(CircleShape).background(Faint))
             Spacer(Modifier.width(4.dp))
@@ -559,11 +561,11 @@ fun ScrubberStyleCards() {
         com.prism.music.data.prefs.ScrubberStyle.entries, s.scrubberStyle, title = { it.label },
         detail = {
             when (it) {
-                com.prism.music.data.prefs.ScrubberStyle.HAIRLINE -> "A thin line"
-                com.prism.music.data.prefs.ScrubberStyle.BOLD -> "A thicker bar"
-                com.prism.music.data.prefs.ScrubberStyle.THUMB -> "A line and a knob"
-                com.prism.music.data.prefs.ScrubberStyle.WAVE -> "Each song's own shape"
-                com.prism.music.data.prefs.ScrubberStyle.RIBBONS -> "Strands flow along while it plays"
+                com.prism.music.data.prefs.ScrubberStyle.HAIRLINE -> tr(R.string.a_thin_line)
+                com.prism.music.data.prefs.ScrubberStyle.BOLD -> tr(R.string.a_thicker_bar)
+                com.prism.music.data.prefs.ScrubberStyle.THUMB -> tr(R.string.a_line_and_a_knob)
+                com.prism.music.data.prefs.ScrubberStyle.WAVE -> tr(R.string.each_song_s_own_shape)
+                com.prism.music.data.prefs.ScrubberStyle.RIBBONS -> tr(R.string.strands_flow_along_while_it_plays)
             }
         },
         onSelect = { prefs.setScrubberStyle(it) },
@@ -631,12 +633,12 @@ fun PlayerBackgroundTuning() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     if (s.playerBackground == com.prism.music.data.prefs.PlayerBackground.MESH) {
-        SliderSetting("Motion", s.meshSpeed, 0f..1f, { if (it < 0.05f) "Still" else worded(if (it < 0.5f) "Slow drift" else "Drifting", it) }) { prefs.setMeshSpeed(if (it < 0.05f) 0f else it) }
-        if (s.reduceMotion && s.meshSpeed > 0f) Note("Reduce motion is on, so it stays still.")
-        SliderSetting("Colors", s.meshIntensity, 0.4f..1.6f, { worded(if (it < 0.8f) "Soft" else if (it <= 1.2f) "As the cover" else "Rich", it) }) { prefs.setMeshIntensity(it) }
+        SliderSetting(tr(R.string.motion), s.meshSpeed, 0f..1f, { if (it < 0.05f) tr(R.string.still) else worded(if (it < 0.5f) tr(R.string.slow_drift) else tr(R.string.drifting), it) }) { prefs.setMeshSpeed(if (it < 0.05f) 0f else it) }
+        if (s.reduceMotion && s.meshSpeed > 0f) Note(tr(R.string.reduce_motion_is_on_so_it))
+        SliderSetting(tr(R.string.colors), s.meshIntensity, 0.4f..1.6f, { worded(if (it < 0.8f) tr(R.string.soft) else if (it <= 1.2f) tr(R.string.as_the_cover) else tr(R.string.rich), it) }) { prefs.setMeshIntensity(it) }
     }
     if (s.playerBackground == com.prism.music.data.prefs.PlayerBackground.MESH || s.playerBackground == com.prism.music.data.prefs.PlayerBackground.BLUR) {
-        SliderSetting("Softness", s.playerBlur, 0.5f..1.5f, { "${(it * 100).roundToInt()}%" }) { prefs.setPlayerBlur(it) }
+        SliderSetting(tr(R.string.softness), s.playerBlur, 0.5f..1.5f, { "${(it * 100).roundToInt()}%" }) { prefs.setPlayerBlur(it) }
     }
 }
 
@@ -647,22 +649,22 @@ fun PlayerBackgroundTuning() {
 fun PlayerGesturesGroup() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
-    Group("Gestures", info = "On the player's cover. Swiping down always closes the player.") {
-        GestureRow("Swipe left", s.coverSwipeLeft, PlayerGesture.choices()) { prefs.setGesture("cover_swipe_left", it) }
-        GestureRow("Swipe right", s.coverSwipeRight, PlayerGesture.choices()) { prefs.setGesture("cover_swipe_right", it) }
-        GestureRow("Swipe up", s.coverSwipeUp, PlayerGesture.choices()) { prefs.setGesture("cover_swipe_up", it) }
-        GestureRow("Double tap", s.coverDoubleTap, PlayerGesture.choices(double = true)) {
+    Group(tr(R.string.gestures), info = tr(R.string.on_the_player_s_cover_swiping)) {
+        GestureRow(tr(R.string.swipe_left), s.coverSwipeLeft, PlayerGesture.choices()) { prefs.setGesture("cover_swipe_left", it) }
+        GestureRow(tr(R.string.swipe_right), s.coverSwipeRight, PlayerGesture.choices()) { prefs.setGesture("cover_swipe_right", it) }
+        GestureRow(tr(R.string.swipe_up), s.coverSwipeUp, PlayerGesture.choices()) { prefs.setGesture("cover_swipe_up", it) }
+        GestureRow(tr(R.string.double_tap), s.coverDoubleTap, PlayerGesture.choices(double = true)) {
             prefs.setGesture("cover_double_tap", it)
             // Seek by side needs a step; it used to be switched off by setting none.
             if (it == PlayerGesture.SEEK_SIDES && s.doubleTapSeekSeconds <= 0) prefs.setDoubleTapSeekSeconds(10)
         }
-        if (s.coverDoubleTap == PlayerGesture.SEEK_SIDES) Chips(listOf(3, 5, 10, 15), s.doubleTapSeekSeconds.coerceAtLeast(3), { "$it s a tap" }) { prefs.setDoubleTapSeekSeconds(it) }
-        GestureRow("Long press", s.coverLongPress, PlayerGesture.choices()) { prefs.setGesture("cover_long_press", it) }
-        Label("Mini player")
-        GestureRow("Swipe left", s.miniSwipeLeft, PlayerGesture.choices(mini = true)) { prefs.setGesture("mini_swipe_left", it) }
-        GestureRow("Swipe right", s.miniSwipeRight, PlayerGesture.choices(mini = true)) { prefs.setGesture("mini_swipe_right", it) }
-        GestureRow("Swipe up", s.miniSwipeUp, PlayerGesture.choices(mini = true)) { prefs.setGesture("mini_swipe_up", it) }
-        GestureRow("Pull down", s.miniSwipeDown, PlayerGesture.choices(mini = true)) { prefs.setGesture("mini_swipe_down", it) }
+        if (s.coverDoubleTap == PlayerGesture.SEEK_SIDES) Chips(listOf(3, 5, 10, 15), s.doubleTapSeekSeconds.coerceAtLeast(3), { tr(R.string.s_a_tap, it) }) { prefs.setDoubleTapSeekSeconds(it) }
+        GestureRow(tr(R.string.long_press), s.coverLongPress, PlayerGesture.choices()) { prefs.setGesture("cover_long_press", it) }
+        Label(tr(R.string.mini_player))
+        GestureRow(tr(R.string.swipe_left), s.miniSwipeLeft, PlayerGesture.choices(mini = true)) { prefs.setGesture("mini_swipe_left", it) }
+        GestureRow(tr(R.string.swipe_right), s.miniSwipeRight, PlayerGesture.choices(mini = true)) { prefs.setGesture("mini_swipe_right", it) }
+        GestureRow(tr(R.string.swipe_up), s.miniSwipeUp, PlayerGesture.choices(mini = true)) { prefs.setGesture("mini_swipe_up", it) }
+        GestureRow(tr(R.string.pull_down), s.miniSwipeDown, PlayerGesture.choices(mini = true)) { prefs.setGesture("mini_swipe_down", it) }
     }
 }
 
@@ -672,7 +674,7 @@ private fun GestureRow(title: String, value: PlayerGesture, choices: List<Player
     var open by remember { mutableStateOf(false) }
     Box {
         Row(
-            Modifier.fillMaxWidth().clickable(onClickLabel = "Change what $title does") { open = true }.padding(horizontal = 16.dp, vertical = 12.dp),
+            Modifier.fillMaxWidth().clickable(onClickLabel = tr(R.string.change_what_does, title)) { open = true }.padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(title, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)

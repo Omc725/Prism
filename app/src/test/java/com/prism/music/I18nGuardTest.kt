@@ -17,14 +17,14 @@ class I18nGuardTest {
         val tool = I18nConvert()
         val found = CONVERTED.flatMap { path ->
             File(src, path).let { f -> if (f.isDirectory) f.walkTopDown().filter { it.extension == "kt" }.toList() else listOf(f) }
-        }.flatMap { f -> tool.pending(f.readText()).map { "${f.relativeTo(src)}:$it" } }
+        }.filter { it.name !in I18nConvert.SKIP_FILES }.flatMap { f -> tool.pending(f.readText()).map { "${f.relativeTo(src)}:$it" } }
         assertTrue("Text written in the code instead of strings.xml:\n" + found.joinToString("\n"), found.isEmpty())
     }
 
     companion object {
         /** Moved into strings.xml so far (1.7.9, section T). */
         val CONVERTED = listOf(
-            "ui/screens/LookSettings.kt",
+            "ui/components", "ui/screens", "ui/player", "ui/tour",
         )
     }
 }

@@ -127,7 +127,7 @@ class I18nConvert {
         if (!Regex("\\p{L}{2,}").containsMatchIn(t)) return false
         if (t.contains("://") || t.startsWith("www.") || t.startsWith("prism:") || t.startsWith("http")) return false
         if (Regex("^[a-z0-9_.:/#=?&-]+$").matches(t)) return false // keys, routes, ids
-        if (Regex("^[A-Z0-9_]+$").matches(t) && t.contains('_')) return false // CONSTANT_NAMES
+        if (Regex("^[A-Z0-9_]+$").matches(t)) return false // CONSTANT_NAMES and codes ("PRISM", "LIGHT")
         if (Regex("^[a-z]+[A-Z]\\w*$").matches(t)) return false // camelCase identifiers
         if (Regex("^\\w+\\.\\w+").matches(t) && !t.contains(' ')) return false // dotted names
         return t.contains(' ') || Regex("^\\p{Lu}\\p{Ll}").containsMatchIn(t) || t.contains('…') || t.length >= 2 && t.first().isLetter()
@@ -136,12 +136,15 @@ class I18nConvert {
     private val KEEP_BEFORE = listOf(
         "Log." to "log", "log(" to "log", "AudioDiagnostics" to "log", "note(" to "log", "PrismLog" to "log", "println(" to "log",
         "Regex(" to "pattern", "toRegex" to "pattern", "PreferencesKey(" to "key", "getSharedPreferences(" to "key",
-        "navigate(" to "route", "Routes." to "route", "route" to "route", "testTag(" to "key", "key =" to "key", "key(" to "key",
-        "contentType" to "key", "startsWith(" to "compare", "endsWith(" to "compare", "contains(" to "compare", "equals(" to "compare",
+        // (Keys and routes are lowercase codes, which never look like text; a route's words, like a settings group to
+        // open, are the group's own title, so they move with it.)
+        "testTag(" to "key", "startsWith(" to "compare", "endsWith(" to "compare", "contains(" to "compare", "equals(" to "compare",
         "split(" to "compare", "replace(" to "compare", "removePrefix(" to "compare",
         "removeSuffix(" to "compare", "substringBefore(" to "compare", "substringAfter(" to "compare", "indexOf(" to "compare",
-        "Uri.parse(" to "address", "mimeType" to "key", "setType(" to "key", "MIME" to "key", "putExtra(" to "key", "getString(" to "key",
-        "Intent(" to "key", "Font(" to "key", "assets" to "key", "File(" to "path",
+        "Uri.parse(" to "address", "mimeType" to "key", "setType(" to "key", "MIME" to "key",
+        "Font(" to "key", "assets" to "key", "File(" to "path",
+        // Icons are looked up by their drawing's name (not their descriptions: Icon(PrismIcons.Share, "Share") is text).
+        "drawn(" to "icon name", "icon(" to "icon name", "PrismIcons.preview(" to "icon name",
     )
 
     /** Why a literal stays in the code, or null to move it. */
@@ -152,7 +155,10 @@ class I18nConvert {
         val after = text.substring(lit.end, lineEnd)
         val trimmed = before.trimStart()
         if (trimmed.startsWith("@") || trimmed.contains("const val")) return "constant"
-        if (enums.any { lit.start in it } && !before.contains("tr(")) return "enum entry"
+        // A list of icon names handed to a lookup later on the line: listOf("Home", "Search").map { PrismIcons.preview(it) }.
+        if (after.contains("PrismIcons.preview(") || after.contains("Icons.preview(")) return "icon name"
+        // An enum entry's own words are its label (read once; Prism restarts when its language changes), but not a
+        // code like "PRISM" (looksLikeText leaves single capitals words alone).
         // A when's case: "A", "B" -> …
         if (Regex("^\\s*(,\\s*\"[^\"]*\"\\s*)*->").containsMatchIn(after) && Regex("^(\\s*\"[^\"]*\"\\s*,)*\\s*$").matches(before)) return "when case"
         // Compared itself: x == "…", "…" != x, "…" in set.
@@ -275,7 +281,7 @@ class I18nConvert {
 
     companion object {
         /** Files left as they are: tools, Prism's own text tool, debug-only screens. */
-        private val SKIP_FILES = setOf("Strings.kt", "DesignGallery.kt")
+        internal val SKIP_FILES = setOf("Strings.kt", "DesignGallery.kt")
 
         fun slug(s: String): String {
             val words = s.lowercase().replace(Regex("%\\d\\\$s"), " ").split(Regex("[^\\p{L}\\p{N}]+")).filter { it.isNotEmpty() }
@@ -294,6 +300,8 @@ class I18nConvert {
             "instanceof", "int", "interface", "long", "native", "new", "null", "package", "private", "protected", "public", "return",
             "short", "static", "strictfp", "super", "switch", "synchronized", "this", "throw", "throws", "transient", "true", "try",
             "void", "volatile", "while", "var", "record", "yield",
+            // Kotlin's own (R.string.in wouldn't compile).
+            "as", "fun", "in", "is", "object", "typealias", "typeof", "val", "when", "it",
         )
 
         fun xmlEscape(s: String): String {

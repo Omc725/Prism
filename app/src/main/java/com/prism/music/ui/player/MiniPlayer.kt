@@ -1,5 +1,7 @@
 package com.prism.music.ui.player
 
+import com.prism.music.R
+import com.prism.music.tr
 import com.prism.music.ui.theme.PrismIcons
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
@@ -232,20 +234,20 @@ fun MiniPlayer(
                 }
             }
             if (settings.miniPrevButton) {
-                IconButton(onClick = { haptics.click(); pc.previous() }, modifier = Modifier.size(40.dp)) { Icon(PrismIcons.Previous, "Previous") }
+                IconButton(onClick = { haptics.click(); pc.previous() }, modifier = Modifier.size(40.dp)) { Icon(PrismIcons.Previous, tr(R.string.widget_previous)) }
             }
             if (style == MiniPlayerStyle.PILL) {
                 Box(
                     Modifier.size(40.dp).clip(CircleShape).background(scheme.onSurface).clickable { haptics.click(); pc.togglePlay() },
                     contentAlignment = Alignment.Center,
-                ) { Icon(if (playing) PrismIcons.Pause else PrismIcons.Play, "Play/pause", Modifier.size(24.dp), tint = scheme.surface) }
+                ) { Icon(if (playing) PrismIcons.Pause else PrismIcons.Play, tr(R.string.play_pause), Modifier.size(24.dp), tint = scheme.surface) }
             } else {
                 IconButton(onClick = { haptics.click(); pc.togglePlay() }, modifier = Modifier.size(44.dp)) {
-                    Icon(if (playing) PrismIcons.Pause else PrismIcons.Play, "Play/pause", Modifier.size(if (style == MiniPlayerStyle.SLIM) 26.dp else 28.dp))
+                    Icon(if (playing) PrismIcons.Pause else PrismIcons.Play, tr(R.string.play_pause), Modifier.size(if (style == MiniPlayerStyle.SLIM) 26.dp else 28.dp))
                 }
             }
             if (settings.miniSkipButtons) {
-                IconButton(onClick = { haptics.click(); pc.next() }, modifier = Modifier.size(40.dp)) { Icon(PrismIcons.Next, "Next") }
+                IconButton(onClick = { haptics.click(); pc.next() }, modifier = Modifier.size(40.dp)) { Icon(PrismIcons.Next, tr(R.string.widget_next)) }
             }
         }
         if (settings.miniProgress == MiniProgress.LINE) {

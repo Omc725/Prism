@@ -1,5 +1,6 @@
 package com.prism.music.ui.player
 
+import com.prism.music.tr
 import com.prism.music.ui.theme.PrismIcons
 import android.app.Activity
 import android.content.pm.ActivityInfo
@@ -460,7 +461,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
         if (BestPartEditor.open) BestPartSheet { BestPartEditor.open = false }
         if (showOutputs) {
             val profile by c.account.profile.collectAsState()
-            val name = (profile?.name ?: settings.accountName).trim().split(" ").firstOrNull()?.takeIf { it.isNotBlank() }?.let { "$it's Phone" } ?: "This Phone"
+            val name = (profile?.name ?: settings.accountName).trim().split(" ").firstOrNull()?.takeIf { it.isNotBlank() }?.let { tr(R.string.s_phone, it) } ?: tr(R.string.this_phone)
             OutputPickerSheet(name) { showOutputs = false }
         }
         if (showPlaylists) com.prism.music.ui.components.PlaylistPicker(song) { showPlaylists = false }
@@ -755,7 +756,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                 )
                 if (collapse.value < 0.999f && settings.showPlayingFrom && originAlbum != null) PlaybackOriginCaption(
                     // The song's own album, which needn't be what's playing (a playlist, a radio): not "Playing from".
-                    "From the album ${originAlbum.title}",
+                    tr(R.string.from_the_album_2, originAlbum.title),
                     Modifier.align(Alignment.BottomCenter).graphicsLayer { alpha = 1f - p() },
                 ) {
                     onCollapse(); nav.go(Routes.album(originAlbum.id!!))
@@ -802,16 +803,16 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                             // One video view at a time: full-bleed, it's drawn behind the player (see videoBehind).
                             if (!videoBehind) MusicVideoSurface(Modifier.fillMaxSize(), fill = videoFill)
                             Row(Modifier.align(Alignment.BottomEnd).padding(10.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                if (!videoBehind) VideoChip(PrismIcons.AspectRatio, if (videoFill) "Fit video" else "Fill") { videoFill = !videoFill }
-                                if (!wide) VideoChip(PrismIcons.FillIn, if (videoBehind) "Video in a box" else "Full-bleed video") {
+                                if (!videoBehind) VideoChip(PrismIcons.AspectRatio, if (videoFill) tr(R.string.fit_video) else tr(R.string.fill)) { videoFill = !videoFill }
+                                if (!wide) VideoChip(PrismIcons.FillIn, if (videoBehind) tr(R.string.video_in_a_box) else tr(R.string.full_bleed_video)) {
                                     c.settings.setVideoFullBleed(!settings.videoFullBleed)
                                 }
-                                if (activity != null) VideoChip(PrismIcons.PictureInPicture, "Picture-in-picture") {
+                                if (activity != null) VideoChip(PrismIcons.PictureInPicture, tr(R.string.picture_in_picture)) {
                                     if (!activity.enterPip()) android.widget.Toast.makeText(
-                                        context, "Picture-in-picture is off for Prism in Android's settings", android.widget.Toast.LENGTH_SHORT,
+                                        context, tr(R.string.picture_in_picture_is_off_for), android.widget.Toast.LENGTH_SHORT,
                                     ).show()
                                 }
-                                VideoChip(PrismIcons.Fullscreen, "Full screen") { fullscreenVideo = true }
+                                VideoChip(PrismIcons.Fullscreen, tr(R.string.full_screen)) { fullscreenVideo = true }
                             }
                         }
                     }
@@ -967,12 +968,12 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                         }
                         val isLiked = song.id in liked
                         if (!heartBelow) {
-                            CircleGlyph(if (isLiked) PrismIcons.HeartFilled else PrismIcons.Heart, if (isLiked) "Remove from liked" else "Like", isLiked) {
+                            CircleGlyph(if (isLiked) PrismIcons.HeartFilled else PrismIcons.Heart, if (isLiked) tr(R.string.remove_from_liked) else tr(R.string.widget_like), isLiked) {
                                 c.library.toggleLike(song)
                             }
                             Spacer(Modifier.width(8.dp))
                         }
-                        CircleGlyph(PrismIcons.More, "Song options") { showActions = true }
+                        CircleGlyph(PrismIcons.More, tr(R.string.song_options)) { showActions = true }
                     }
 
                     // ---- Lyrics and queue panels, under the collapsed header
@@ -1234,12 +1235,12 @@ private fun FullscreenVideo(song: Song, forceLandscape: Boolean, pip: Boolean = 
                 Box(
                     Modifier.align(Alignment.TopEnd).padding(16.dp).size(44.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.4f)).clickable(onClick = onExit),
                     contentAlignment = Alignment.Center,
-                ) { Icon(PrismIcons.FullscreenExit, "Exit full screen", tint = Color.White) }
+                ) { Icon(PrismIcons.FullscreenExit, tr(R.string.exit_full_screen), tint = Color.White) }
                 Box(
                     Modifier.align(Alignment.Center).size(72.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.4f))
                         .clickable(remember { MutableInteractionSource() }, indication = null) { pc.togglePlay() },
                     contentAlignment = Alignment.Center,
-                ) { Icon(if (isPlaying) PrismIcons.Pause else PrismIcons.Play, "Play/pause", tint = Color.White, modifier = Modifier.size(44.dp)) }
+                ) { Icon(if (isPlaying) PrismIcons.Pause else PrismIcons.Play, tr(R.string.play_pause), tint = Color.White, modifier = Modifier.size(44.dp)) }
                 Box(Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(horizontal = 32.dp, vertical = 16.dp)) {
                     PlayheadScrubber(position, pc.duration)
                 }

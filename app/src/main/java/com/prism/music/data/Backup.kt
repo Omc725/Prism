@@ -52,6 +52,12 @@ class Backup(private val c: AppContainer) {
     private val ctx: Context get() = c.app
     private val data: File get() = ctx.filesDir.parentFile!!
 
+    /**
+     * A backup any Prism made, whatever its app id: the test copy's, a copy renamed to show in a phone's own media
+     * island (#204), the real one. Its manifest says it's Prism's, and a restore only ever takes Prism's own folders.
+     */
+    private fun fromPrism(m: BackupManifest) = m.app.isNotBlank()
+
     /** Writes a backup of [parts] to [uri]. */
     suspend fun export(uri: Uri, parts: Set<BackupPart>) = withContext(Dispatchers.IO) {
         // Fold Room's write-ahead log into the main file so the copy is complete.
@@ -107,7 +113,7 @@ class Backup(private val c: AppContainer) {
                     val e = zip.nextEntry ?: break
                     if (e.name != MANIFEST) continue
                     val m = InnerTube.json.decodeFromString(BackupManifest.serializer(), zip.readBytes().decodeToString())
-                    if (m.app != ctx.packageName) return@runCatching null
+                    if (!fromPrism(m)) return@runCatching null
                     return@runCatching m.partSet()
                 }
                 null
@@ -143,7 +149,7 @@ class Backup(private val c: AppContainer) {
                 }
             }
             val m = manifest ?: error("That file isn't a Prism backup")
-            if (m.app != ctx.packageName) error("That backup is from a different app")
+            if (!fromPrism(m)) error("That file isn't a Prism backup")
             if (m.format > FORMAT) error("That backup is from a newer Prism; update first")
             File(staging, MANIFEST).writeText(InnerTube.json.encodeToString(BackupManifest.serializer(), m))
         } catch (e: Throwable) {

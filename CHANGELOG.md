@@ -17,6 +17,8 @@ What changed in each release. Older releases are described on the [Releases page
   or the bar at the bottom brings them. With "Full screen" a scroll never brings them.
 - **Widgets show the new song at once** (#217): they waited for its cover to load, and every update meanwhile started
   that over, so the old song stayed up for a while. The title changes straight away; the cover follows.
+- **Backups move between Prism copies** (#204): a backup restores into any Prism, whatever its app id (the test copy,
+  or a copy renamed so a phone's media island shows it). It used to say it was "from a different app".
 
 ## 1.7.8
 

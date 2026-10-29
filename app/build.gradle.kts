@@ -32,6 +32,10 @@ android {
         manifestPlaceholders["appLabel"] = "@string/app_name"
         // Only the side-by-side test copy can be profiled from adb (simpleperf / Perfetto), for chasing jank (1.7.4).
         manifestPlaceholders["profileable"] = "false"
+        // In-app tests (app/src/androidTest, 1.7.9): Prism on a fixed offline setup, YouTube and lyrics answered from
+        // recordings (PrismTestRunner), each test in a fresh app with its data cleared (the orchestrator).
+        testInstrumentationRunner = "com.prism.music.PrismTestRunner"
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
         // Optional: `lastfm.apiKey=…` in local.properties lets genre detection ask Last.fm too.
         val localProps = Properties().apply {
             rootProject.file("local.properties").takeIf { it.exists() }?.inputStream()?.use { load(it) }
@@ -102,6 +106,8 @@ android {
         unitTests.isReturnDefaultValues = true
         // Robolectric tests can read the app's own resources (strings, the widgets' layouts).
         unitTests.isIncludeAndroidResources = true
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+        animationsDisabled = true
     }
 
     packaging {
@@ -216,6 +222,16 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     // Renders the backgrounds to PNGs on the PC (BackdropRenderTest), with Robolectric's real graphics.
     testImplementation("org.robolectric:robolectric:4.14.1")
+
+    // In-app tests (1.7.9, release-check PLAN.md): Compose UI tests on a device, all Apache-2.0, test-only.
+    androidTestImplementation(composeBom)
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    androidTestImplementation("androidx.test:runner:1.7.0")
+    androidTestImplementation("androidx.test:rules:1.7.0")
+    androidTestImplementation("androidx.test.ext:junit:1.3.0")
+    androidTestImplementation("androidx.test.uiautomator:uiautomator:2.4.0")
+    androidTestUtil("androidx.test:orchestrator:1.6.1")
+    androidTestUtil("androidx.test.services:test-services:1.6.0")
 }
 
 // The tests use ONNX Runtime's desktop build (with its PC libraries); the Android one's classes would clash with it.

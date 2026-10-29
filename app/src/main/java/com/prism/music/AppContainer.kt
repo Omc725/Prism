@@ -230,6 +230,7 @@ class AppContainer(val app: Application) {
     val http: OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(15, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
+        .apply { TestHooks.network?.let(::addInterceptor) }
         .build()
     private val streamHttp: OkHttpClient = http.newBuilder()
         .addInterceptor(YouTubeStreamInterceptor(http))

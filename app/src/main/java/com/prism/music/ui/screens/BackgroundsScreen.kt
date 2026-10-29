@@ -217,7 +217,10 @@ fun BackgroundsScreen(bottomPadding: Dp, forPlayer: Boolean = false) {
             }
             if (!forPlayer) item {
                 Column(Modifier.padding(top = 8.dp).pane(ui.card, MaterialTheme.colorScheme.surfaceContainer).padding(16.dp)) {
-                    Text("Softness", style = MaterialTheme.typography.bodyLarge)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text("Softness", Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
+                        Text("${kotlin.math.round(dim / 0.8f * 100).toInt()}%", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
                     Text("How much the theme color washes over the background, for easier reading", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     PrismSlider(dim, { dim = it }, valueRange = 0f..0.8f, onValueChangeFinished = { c.settings.setBackdropDim(dim) })
                     Row(verticalAlignment = Alignment.CenterVertically) {

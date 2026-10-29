@@ -202,8 +202,8 @@ fun LyricsLookDetails() {
     SliderSetting("Text size", s.lyricsScale, 0.75f..1.4f, { "${(it * 100).roundToInt()}%" }) { prefs.setLyricsScale(it) }
     Label("Weight")
     Chips(LyricsWeight.entries, s.lyricsWeight, { it.label }) { prefs.setLyricsWeight(it) }
-    SliderSetting("Line spacing", s.lyricsSpacing, 0.6f..1.8f, { if (it < 0.85f) "Tight" else if (it <= 1.15f) "As usual" else "Airy" }) { prefs.setLyricsSpacing(it) }
-    SliderSetting("Other lines", s.lyricsOthersAlpha, 0.2f..1f, { if (it < 0.35f) "Faint" else if (it < 0.75f) "Dimmed" else "Bright" }) { prefs.setLyricsOthersAlpha(it) }
+    SliderSetting("Line spacing", s.lyricsSpacing, 0.6f..1.8f, { worded(if (it < 0.85f) "Tight" else if (it <= 1.15f) "As usual" else "Airy", it) }) { prefs.setLyricsSpacing(it) }
+    SliderSetting("Other lines", s.lyricsOthersAlpha, 0.2f..1f, { worded(if (it < 0.35f) "Faint" else if (it < 0.75f) "Dimmed" else "Bright", it) }) { prefs.setLyricsOthersAlpha(it) }
     SliderSetting("Focus blur", s.lyricsBlurAmount, 0f..2f, { if (it < 0.05f) "Off" else "${(it * 100).roundToInt()}%" }) { prefs.setLyricsBlurAmount(if (it < 0.05f) 0f else it) }
     if (android.os.Build.VERSION.SDK_INT < 31 && s.lyricsBlurAmount > 0f) Note("Focus blur needs Android 12 or later; on this phone the other lines are only dimmed.")
     SliderSetting("Background vocals", s.lyricsBackingSize, 0.4f..0.9f, { "${(it * 100).roundToInt()}% of the line" }) { prefs.setLyricsBackingSize(it) }

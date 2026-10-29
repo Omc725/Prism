@@ -1664,7 +1664,7 @@ private fun PlayerLookGroup() {
             ) { Chevron() }
         }
         if (s.playerBackground == PlayerBackground.BLUR || s.playerBackground == PlayerBackground.APPEARANCE) SliderSetting(
-            "Show background", s.playerBackdropShow, 0f..1f, { if (it < 0.2f) "Subtle" else if (it < 0.7f) "Balanced" else "Vivid" },
+            "Show background", s.playerBackdropShow, 0f..1f, { worded(if (it < 0.2f) "Subtle" else if (it < 0.7f) "Balanced" else "Vivid", it) },
         ) { prefs.setPlayerBackdropShow(it) }
         // The mesh's motion and colors, the blur's softness (1.7.4).
         PlayerBackgroundTuning()

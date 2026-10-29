@@ -40,6 +40,14 @@ class SettingsSearchTest {
         assertTrue("Crossfade songs turned ${if (before) "off" else "on"}", Fixture.container.settings.current.mix != before)
     }
 
+    /** #209 (1.7.9): a slider described in words also shows its number. */
+    @Test fun slidersShowTheirNumber() {
+        compose.openSettings()
+        compose.onNode(hasSetTextAction()).performTextInput("line spacing")
+        compose.clickWhenFound(androidx.compose.ui.test.hasText("Line spacing") and androidx.compose.ui.test.hasClickAction())
+        compose.waitForText("As usual · 100%")
+    }
+
     @Test fun aWordWithNoSettingSaysSo() {
         compose.openSettings()
         compose.onNode(hasSetTextAction()).performTextInput("zzqx")

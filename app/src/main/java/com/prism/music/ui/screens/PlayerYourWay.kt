@@ -391,7 +391,7 @@ fun PlayerTitleGroup() {
         ) { BarSample(it) }
         // Thickness and the knob (1.7.4): the waveform keeps its own height.
         SliderSetting(
-            "Progress bar thickness", s.scrubberThickness, 0.6f..2f, { if (it < 0.85f) "Thinner" else if (it <= 1.15f) "As the style" else "Thicker" },
+            "Progress bar thickness", s.scrubberThickness, 0.6f..2f, { worded(if (it < 0.85f) "Thinner" else if (it <= 1.15f) "As the style" else "Thicker", it) },
             info = if (s.scrubberStyle == com.prism.music.data.prefs.ScrubberStyle.WAVE) "The waveform keeps its own height; thickness shows until a song has been scanned." else null,
         ) {
             prefs.setScrubberThickness(if (it in 0.93f..1.07f) 1f else it)
@@ -631,9 +631,9 @@ fun PlayerBackgroundTuning() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     if (s.playerBackground == com.prism.music.data.prefs.PlayerBackground.MESH) {
-        SliderSetting("Motion", s.meshSpeed, 0f..1f, { if (it < 0.05f) "Still" else if (it < 0.5f) "Slow drift" else "Drifting" }) { prefs.setMeshSpeed(if (it < 0.05f) 0f else it) }
+        SliderSetting("Motion", s.meshSpeed, 0f..1f, { if (it < 0.05f) "Still" else worded(if (it < 0.5f) "Slow drift" else "Drifting", it) }) { prefs.setMeshSpeed(if (it < 0.05f) 0f else it) }
         if (s.reduceMotion && s.meshSpeed > 0f) Note("Reduce motion is on, so it stays still.")
-        SliderSetting("Colors", s.meshIntensity, 0.4f..1.6f, { if (it < 0.8f) "Soft" else if (it <= 1.2f) "As the cover" else "Rich" }) { prefs.setMeshIntensity(it) }
+        SliderSetting("Colors", s.meshIntensity, 0.4f..1.6f, { worded(if (it < 0.8f) "Soft" else if (it <= 1.2f) "As the cover" else "Rich", it) }) { prefs.setMeshIntensity(it) }
     }
     if (s.playerBackground == com.prism.music.data.prefs.PlayerBackground.MESH || s.playerBackground == com.prism.music.data.prefs.PlayerBackground.BLUR) {
         SliderSetting("Softness", s.playerBlur, 0.5f..1.5f, { "${(it * 100).roundToInt()}%" }) { prefs.setPlayerBlur(it) }

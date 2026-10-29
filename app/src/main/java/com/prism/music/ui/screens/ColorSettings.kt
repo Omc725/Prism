@@ -554,7 +554,7 @@ private fun StrengthSlider(s: AppSettings, onSave: (Float) -> Unit) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("Tint strength", Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
             Text(
-                when { v < 0.6f -> "Faint"; v < 1.4f -> "Gentle"; v < 2.2f -> "Strong"; else -> "Very strong" },
+                worded(when { v < 0.6f -> "Faint"; v < 1.4f -> "Gentle"; v < 2.2f -> "Strong"; else -> "Very strong" }, v),
                 style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }

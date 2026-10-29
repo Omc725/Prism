@@ -19,6 +19,8 @@ What changed in each release. Older releases are described on the [Releases page
   that over, so the old song stayed up for a while. The title changes straight away; the cover follows.
 - **Backups move between Prism copies** (#204): a backup restores into any Prism, whatever its app id (the test copy,
   or a copy renamed so a phone's media island shows it). It used to say it was "from a different app".
+- **Sliders show their number** (#209): the ones that only said a word ("Balanced", "Airy") now say both
+  ("Airy · 140%"), and Backgrounds' Softness shows one too, so you can come back to exactly the same place.
 
 ## 1.7.8
 

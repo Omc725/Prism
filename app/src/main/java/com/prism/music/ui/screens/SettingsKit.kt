@@ -293,6 +293,12 @@ fun SliderSetting(
 }
 
 /**
+ * A slider's value as a word and its number ("Airy · 140%"): the word says what it does, the number lets you come back
+ * to exactly the same place (#209: some sliders only said "Balanced").
+ */
+fun worded(word: String, v: Float) = "$word · ${kotlin.math.round(v * 100).toInt()}%"
+
+/**
  * A round tick: filled in ink with a check when on, an empty hairline circle when off (the Tabs list). The 48 dp row
  * around it is the target.
  */

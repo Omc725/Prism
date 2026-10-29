@@ -86,6 +86,7 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
     val autoplay = order.filter { it.index >= autoplayFrom && it.song.id !in userQueued }
 
     val controlsOnScroll = remember { ControlsOnScroll(onHide = onHidePlayer, onReveal = onRevealPlayer) }
+    controlsOnScroll.reveals = scrollReveals(settings)
 
     // A song taken out (swiped away or its ×, #149) can be put back for a few seconds.
     var undo by remember { mutableStateOf<Pair<String, () -> Unit>?>(null) }

@@ -10,6 +10,11 @@ What changed in each release. Older releases are described on the [Releases page
   blue night with two pink lights gave a pink accent). A color now has to fill a real part of the picture.
 - **Removing a playlist's downloads asks first** (#212): the download button on a playlist or album whose songs are
   all downloaded removes them, so it now says how many and waits for Delete. TalkBack names it "Remove downloads".
+- **Update from Settings** (#201): Settings → Backup & about → Check for updates shows the new version right there,
+  ready to install, so updating works with the Home tab turned off.
+- **Scrolling up the lyrics can leave the controls away** (#214): Settings → Player → Lyrics and the queue →
+  "Scrolling up shows the controls" (on, as before). Off, going back to an earlier chorus keeps the whole screen; a tap
+  or the bar at the bottom brings them. With "Full screen" a scroll never brings them.
 
 ## 1.7.8
 

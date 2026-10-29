@@ -259,6 +259,8 @@ object SettingsIndex {
         SettingEntry(P, "Show on the player", "Hide controls over videos", "music video controls hide tap full"),
         SettingEntry(P, "Show on the player", "Cover flies into place", "animation transition open player cover mini player apple music"),
         SettingEntry(P, "Lyrics and the queue", "Queue headings", "played now playing up next headings list"),
+        SettingEntry(P, "Lyrics and the queue", "Scrolling up shows the controls", "scroll swipe down lyrics seek bar controls pop up panel",
+            needs = Needs("Pick \"Hide after a moment\" first") { it.view.panelPlayer == com.prism.music.data.prefs.PanelPlayer.AUTO_HIDE }),
         SettingEntry(P, "Immersive mode", "Show the video", "immersive music video behind lyrics", needs = immersive),
         SettingEntry(CT, "Buttons and touch", "Swipe up for the queue", "gesture one hand queue lyrics swipe"),
         SettingEntry(CT, "Screen", "Lock to portrait", "rotation orientation landscape upright"),

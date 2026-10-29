@@ -536,9 +536,11 @@ private fun ContextLine() {
 /**
  * "A new Prism is out" under the greeting, when there is one. Tapping it downloads the update and
  * opens Android's installer (asking once for permission to install); × puts it off until the next.
+ * Settings → Backup & about shows it too, [inSettings] (no ×: it's there because the listener asked), so an update
+ * installs without Home (#201: with the Home tab turned off, About pointed at a banner that wasn't there).
  */
 @Composable
-private fun UpdateBanner() {
+internal fun UpdateBanner(inSettings: Boolean = false) {
     val c = LocalContainer.current
     val update by c.updates.available.collectAsState()
     val progress by c.updates.progress.collectAsState()
@@ -572,7 +574,8 @@ private fun UpdateBanner() {
         is com.prism.music.data.UpdateProgress.NewSignature -> "Prism ${u.version} needs a reinstall" to "Tap to move over; your things come with you"
     }
     Column(
-        Modifier.padding(start = 16.dp, end = 16.dp, top = ui.gap(14.dp)).fillMaxWidth().pane(ui.shape(16.dp)).border(1.5.dp, com.prism.music.ui.theme.PrismTokens.spectrum, ui.shape(16.dp))
+        Modifier.padding(start = 16.dp, end = 16.dp, top = if (inSettings) 4.dp else ui.gap(14.dp), bottom = if (inSettings) 8.dp else 0.dp)
+            .fillMaxWidth().pane(ui.shape(16.dp)).border(1.5.dp, com.prism.music.ui.theme.PrismTokens.spectrum, ui.shape(16.dp))
             .clickable(enabled = !busy) {
                 when {
                     !u.isApk -> runCatching { uri.openUri(u.url) }
@@ -589,7 +592,7 @@ private fun UpdateBanner() {
                 Text(title, style = MaterialTheme.typography.titleSmall, color = ink)
                 Text(detail, style = MaterialTheme.typography.bodySmall, color = ink.copy(alpha = 0.8f))
             }
-            if (!busy) IconButton(onClick = { c.updates.dismiss() }) { Icon(PrismIcons.Close, "Dismiss", tint = ink) }
+            if (!busy && !inSettings) IconButton(onClick = { c.updates.dismiss() }) { Icon(PrismIcons.Close, "Dismiss", tint = ink) }
         }
         (progress as? com.prism.music.data.UpdateProgress.Downloading)?.let { p ->
             com.prism.music.ui.components.PrismProgressBar(p.fraction?.let { f -> { f } }, Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp))

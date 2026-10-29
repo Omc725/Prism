@@ -40,6 +40,11 @@ class RecordedNetwork(private val record: Boolean) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val key = keyOf(request)
+        // A test's own answer comes first (GitHub announcing a newer Prism, for one test only).
+        answers.entries.firstOrNull { (url, _) -> request.url.toString().startsWith(url) }?.let { (_, body) ->
+            return Response.Builder().request(request).protocol(Protocol.HTTP_1_1).code(200).message("Test")
+                .body(body.toResponseBody("application/json".toMediaTypeOrNull())).build()
+        }
         if (record) return chain.proceed(request).also { keep(key, it) }
         val saved = runCatching {
             instrumentation.context.assets.open("recorded/$key.json").use { json.decodeFromString(Recording.serializer(), it.readBytes().decodeToString()) }
@@ -79,6 +84,9 @@ class RecordedNetwork(private val record: Boolean) : Interceptor {
         private const val TAG = "PrismTestNet"
         private const val MAX_RECORDING = 4L * 1024 * 1024
         const val RECORDED = "/sdcard/prism-tests/recorded"
+
+        /** Answers a test sets for itself, by the start of the address (each test runs in a fresh app). */
+        val answers: MutableMap<String, String> = java.util.concurrent.ConcurrentHashMap()
         private val NAMING = listOf("browseId", "query", "videoId", "params", "continuation", "playlistId", "input")
 
         fun keyOf(request: Request): String {

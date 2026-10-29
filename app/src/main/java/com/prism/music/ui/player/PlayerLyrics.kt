@@ -707,11 +707,13 @@ fun WeightSweptLine(
 class ControlsOnScroll(private val onHide: () -> Unit, private val onReveal: () -> Unit) : NestedScrollConnection {
     private var acc = 0f
     private var switched = false
+    /** Whether scrolling back up brings the controls (Settings → Player, #214); hiding them on the way down always works. */
+    var reveals = true
 
     override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
         if (source != NestedScrollSource.UserInput || switched) return Offset.Zero
         acc = if ((acc > 0) == (available.y > 0)) acc + available.y else available.y
-        if (acc < -40f) { onHide(); switched = true } else if (acc > 40f) { onReveal(); switched = true }
+        if (acc < -40f) { onHide(); switched = true } else if (acc > 40f) { if (reveals) onReveal(); switched = true }
         return Offset.Zero
     }
 
@@ -722,6 +724,13 @@ class ControlsOnScroll(private val onHide: () -> Unit, private val onReveal: () 
         return androidx.compose.ui.unit.Velocity.Zero
     }
 }
+
+/**
+ * Whether scrolling back up the lyrics or the queue brings the controls: the listener's switch (#214), and never with
+ * "Full screen", whose lyrics and queue keep the screen until a tap or the bar at the bottom.
+ */
+fun scrollReveals(s: com.prism.music.data.prefs.AppSettings) =
+    s.behavior.scrollShowsControls && s.view.panelPlayer != com.prism.music.data.prefs.PanelPlayer.HIDDEN
 
 /** The phone's language as Google Translate names it (Chinese by script, old Java codes renamed). */
 fun defaultTranslateTarget(): String {
@@ -783,6 +792,7 @@ fun LyricsPanel(
         }
     }
     val controlsOnScroll = remember { ControlsOnScroll(onHide = onHideControls, onReveal = onRevealControls) }
+    controlsOnScroll.reveals = scrollReveals(com.prism.music.ui.theme.LocalAppSettings.current)
 
     // A translation under each line, when it's turned on and the song isn't already in that language.
     val translateTo = settings.lyricsTranslateTo.ifBlank { defaultTranslateTarget() }

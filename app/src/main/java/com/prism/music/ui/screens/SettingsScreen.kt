@@ -538,7 +538,7 @@ private fun CheckForUpdates() {
             if (!checking) scope.launch {
                 checking = true
                 result = runCatching { c.updates.checkNow() }.fold(
-                    { v -> if (v != null) "Prism $v is out · install it from the banner on Home" else "You're up to date" },
+                    { v -> if (v != null) "Prism $v is out · tap below to install it" else "You're up to date" },
                     { "Couldn't reach GitHub · try again in a moment" },
                 )
                 checking = false
@@ -547,6 +547,8 @@ private fun CheckForUpdates() {
     ) {
         if (checking) com.prism.music.ui.components.PrismSpinner(Modifier.size(20.dp), stroke = 2.dp)
     }
+    // The update itself, installed from here (#201): the same card as Home's, which needs Home to be a tab.
+    UpdateBanner(inSettings = true)
 }
 
 @Composable
@@ -1559,6 +1561,10 @@ private fun PlayerSettings() {
                 com.prism.music.data.prefs.PanelPlayer.entries, s.view.panelPlayer, title = { it.label }, detail = { it.detail }, columns = 3,
                 onSelect = { prefs.setPanelPlayer(it) },
             ) { PanelPlayerSample(it) }
+            if (s.view.panelPlayer == com.prism.music.data.prefs.PanelPlayer.AUTO_HIDE) Toggle(
+                "Scrolling up shows the controls", "Back up the lyrics or the queue", s.behavior.scrollShowsControls,
+                info = "Off, scrolling back up to an earlier line leaves the lyrics and the queue on the whole screen: tap them, or the bar at the bottom, for the controls.",
+            ) { prefs.setScrollShowsControls(it) }
             Toggle(
                 "Queue headings", "\"Played\", \"Now Playing\" and \"Up next\"", s.view.queueHeadings,
                 info = "Off, the queue is one list of songs from the ones played to the ones coming up.",

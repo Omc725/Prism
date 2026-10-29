@@ -1,5 +1,6 @@
 package com.prism.music.playback
 
+import com.prism.music.tr
 import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.ComponentName
@@ -45,11 +46,11 @@ class PlayTileService : TileService() {
         val pc = applicationContext.container.player
         val song = pc.currentSong.value?.takeIf { pc.player != null }
         val playing = song != null && pc.isPlaying.value
-        tile.label = "Prism"
+        tile.label = tr(R.string.app_name)
         tile.state = if (playing) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
         tile.icon = Icon.createWithResource(this, if (playing) R.drawable.ic_w_pause else R.drawable.ic_w_play)
-        if (Build.VERSION.SDK_INT >= 29) tile.subtitle = song?.title ?: "Open Prism"
-        tile.contentDescription = song?.let { "${if (playing) "Pause" else "Play"} ${it.title}" } ?: "Open Prism"
+        if (Build.VERSION.SDK_INT >= 29) tile.subtitle = song?.title ?: tr(R.string.widget_open)
+        tile.contentDescription = song?.let { "${if (playing) "Pause" else "Play"} ${it.title}" } ?: tr(R.string.widget_open)
         tile.updateTile()
     }
 

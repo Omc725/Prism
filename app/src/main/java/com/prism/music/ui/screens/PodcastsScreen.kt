@@ -353,7 +353,7 @@ fun EpisodeRow(
             )
             val length = when {
                 e.played -> tr(R.string.played)
-                leftMs != null && leftMs > 0 -> "${formatLength(leftMs / 1000)} left"
+                leftMs != null && leftMs > 0 -> tr(R.string.left_2, formatLength(leftMs / 1000))
                 song.durationSec > 0 -> formatLength(song.durationSec.toLong())
                 else -> null
             }
@@ -398,7 +398,7 @@ private fun EpisodeDetailsSheet(e: Episode, about: ShowAbout?, leftMs: Long?, on
             listOfNotNull(
                 e.date,
                 song.durationSec.takeIf { it > 0 }?.let { formatLength(it.toLong()) },
-                leftMs?.takeIf { it > 0 && !e.played }?.let { "${formatLength(it / 1000)} left" },
+                leftMs?.takeIf { it > 0 && !e.played }?.let { tr(R.string.left_2, formatLength(it / 1000)) },
                 tr(R.string.played).takeIf { e.played },
             ).joinToString(" • ").ifEmpty { null },
             shape = LocalUi.current.shape(8.dp), placeholderIcon = PrismIcons.Podcasts,
@@ -452,8 +452,8 @@ private fun formatLength(sec: Long): String {
     val m = (sec % 3600) / 60
     return when {
         h > 0 && m > 0 -> tr(R.string.hr_min, h, m)
-        h > 0 -> "$h hr"
-        m > 0 -> "$m min"
-        else -> "$sec sec"
+        h > 0 -> tr(R.string.hr, h)
+        m > 0 -> tr(R.string.min, m)
+        else -> tr(R.string.sec, sec)
     }
 }

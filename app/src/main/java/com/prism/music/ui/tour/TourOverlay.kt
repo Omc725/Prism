@@ -111,7 +111,7 @@ fun TourOverlay(plan: TourPlan, onOpen: (String) -> Unit, onDone: () -> Unit) {
         Column(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()) {
             Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    if (pager.currentPage == 0) "" else "${pager.currentPage} of ${pages - 1}",
+                    if (pager.currentPage == 0) "" else tr(R.string.of_2, pager.currentPage, pages - 1),
                     color = Color.White.copy(alpha = 0.6f), style = MaterialTheme.typography.labelLarge, modifier = Modifier.weight(1f).padding(start = 12.dp),
                 )
                 PrismTextButton(onClick = ::finish) { Text(tr(R.string.skip_tour), color = Color.White.copy(alpha = 0.8f)) }

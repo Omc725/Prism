@@ -156,7 +156,7 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
         // in Spanish found neither), for a diagnostics log.
         com.prism.music.playback.AudioDiagnostics.log(
             "home",
-            "${pages.size} pages: " + fresh.joinToString { s ->
+            tr(R.string.pages_2, pages.size) + fresh.joinToString { s ->
                 s.title + " (" + listOfNotNull("rows".takeIf { s.rows }, "stacked".takeIf { s.stacked }, "${s.items.size}").joinToString(" ") + ")"
             } + tr(R.string.quick_picks_speed_dial, fresh.quickPicks()?.title ?: "none", fresh.speedDial()?.title ?: "none") +
                 if (kept.isNotEmpty()) tr(R.string.kept_from_before, kept.joinToString { it.title }) else "",

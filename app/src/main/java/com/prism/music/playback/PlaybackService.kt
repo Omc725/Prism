@@ -1,5 +1,6 @@
 package com.prism.music.playback
 
+import com.prism.music.tr
 import com.prism.music.data.friendlyMessage
 import android.app.PendingIntent
 import android.content.Context
@@ -823,7 +824,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             val idx = player.currentMediaItemIndex
             if (id.startsWith(Song.LOCAL_PREFIX)) {
                 AudioDiagnostics.log("error", "$id is ALAC and this phone can't decode it (${error.errorCodeName})")
-                c.player.reportError("This phone can't play Apple Lossless (ALAC) files")
+                c.player.reportError(tr(R.string.this_phone_can_t_play_apple))
                 return
             }
             // Only once per file: one that can't be told apart (or was already set aside) fails as usual, never loops.
@@ -935,7 +936,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 c.soundFrom[id] = video
                 val here = unavailableHere(error)
                 AudioDiagnostics.log("song", "$id ${if (here) "isn't available here" else "won't play (${(error.cause ?: error).message})"}: playing its music video $video's sound")
-                c.player.reportError("${song.title} ${if (here) "isn't available where you are" else "wouldn't play"}, so its music video's sound plays")
+                c.player.reportError(tr(R.string.so_its_music_video_s_sound, song.title, if (here) tr(R.string.isn_t_available_where_you_are) else tr(R.string.wouldn_t_play)))
                 player.prepare()
                 player.play()
             }
@@ -946,7 +947,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
 
     /** Says why a song didn't play, and moves on to the next one. */
     private fun failAndSkip(error: PlaybackException) {
-        c.player.reportError((error.cause ?: error).friendlyMessage("Playback failed"))
+        c.player.reportError((error.cause ?: error).friendlyMessage(tr(R.string.playback_failed)))
         if (player.hasNextMediaItem()) {
             scope.launch {
                 delay(1500)
@@ -1477,7 +1478,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             applyLiveVideo()
             if (player.playbackState == Player.STATE_IDLE) { player.prepare(); player.play() }
             c.player.onVideoFailed(songId)
-            c.player.reportError("The live video didn't load, so it's playing as audio. Tap the video button to try again.")
+            c.player.reportError(tr(R.string.the_live_video_didn_t_load))
             return
         }
         current.videoModeId?.let { failedVideos += it; prefetched -= it }
@@ -1489,7 +1490,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         player.prepare()
         player.play()
         c.player.onVideoFailed(songId)
-        c.player.reportError("The music video didn't load, so the song is playing. Tap the video button to try again.")
+        c.player.reportError(tr(R.string.the_music_video_didn_t_load))
     }
 
     private fun flushPlayTime() {
@@ -1738,19 +1739,19 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             CommandButton.Builder(icon).setDisplayName(name).setSessionCommand(command).setSlots(CommandButton.SLOT_OVERFLOW).build()
         val custom = c.settings.current.sessionButtons.map { b ->
             when (b) {
-                SessionButton.LIKE -> button(if (liked) CommandButton.ICON_HEART_FILLED else CommandButton.ICON_HEART_UNFILLED, if (liked) "Remove from liked" else "Like", likeCommand)
-                SessionButton.SHUFFLE -> button(if (player.shuffleModeEnabled) CommandButton.ICON_SHUFFLE_ON else CommandButton.ICON_SHUFFLE_OFF, if (player.shuffleModeEnabled) "Shuffle off" else "Shuffle", shuffleCommand)
+                SessionButton.LIKE -> button(if (liked) CommandButton.ICON_HEART_FILLED else CommandButton.ICON_HEART_UNFILLED, if (liked) tr(R.string.remove_from_liked) else tr(R.string.widget_like), likeCommand)
+                SessionButton.SHUFFLE -> button(if (player.shuffleModeEnabled) CommandButton.ICON_SHUFFLE_ON else CommandButton.ICON_SHUFFLE_OFF, if (player.shuffleModeEnabled) tr(R.string.shuffle_off) else tr(R.string.shuffle), shuffleCommand)
                 SessionButton.REPEAT -> when (player.repeatMode) {
-                    Player.REPEAT_MODE_ALL -> button(CommandButton.ICON_REPEAT_ALL, "Repeat one", repeatCommand)
-                    Player.REPEAT_MODE_ONE -> button(CommandButton.ICON_REPEAT_ONE, "Repeat off", repeatCommand)
-                    else -> button(CommandButton.ICON_REPEAT_OFF, "Repeat", repeatCommand)
+                    Player.REPEAT_MODE_ALL -> button(CommandButton.ICON_REPEAT_ALL, tr(R.string.repeat_one), repeatCommand)
+                    Player.REPEAT_MODE_ONE -> button(CommandButton.ICON_REPEAT_ONE, tr(R.string.repeat_off), repeatCommand)
+                    else -> button(CommandButton.ICON_REPEAT_OFF, tr(R.string.repeat), repeatCommand)
                 }
-                SessionButton.CAR_LYRICS -> if (c.settings.current.carLyrics) button(CommandButton.ICON_SUBTITLES, "Hide lyrics", lyricsCommand)
-                    else button(CommandButton.ICON_SUBTITLES_OFF, "Show lyrics", lyricsCommand)
-                SessionButton.RADIO -> button(CommandButton.ICON_RADIO, "Start radio", radioCommand)
-                SessionButton.DISLIKE -> button(CommandButton.ICON_THUMB_DOWN_UNFILLED, "Not for me", dislikeCommand)
-                SessionButton.BACK_10 -> button(CommandButton.ICON_SKIP_BACK_10, "Back 10 seconds", back10Command)
-                SessionButton.AHEAD_30 -> button(CommandButton.ICON_SKIP_FORWARD_30, "Ahead 30 seconds", ahead30Command)
+                SessionButton.CAR_LYRICS -> if (c.settings.current.carLyrics) button(CommandButton.ICON_SUBTITLES, tr(R.string.hide_lyrics), lyricsCommand)
+                    else button(CommandButton.ICON_SUBTITLES_OFF, tr(R.string.show_lyrics), lyricsCommand)
+                SessionButton.RADIO -> button(CommandButton.ICON_RADIO, tr(R.string.start_radio), radioCommand)
+                SessionButton.DISLIKE -> button(CommandButton.ICON_THUMB_DOWN_UNFILLED, tr(R.string.not_for_me), dislikeCommand)
+                SessionButton.BACK_10 -> button(CommandButton.ICON_SKIP_BACK_10, tr(R.string.back_10_seconds), back10Command)
+                SessionButton.AHEAD_30 -> button(CommandButton.ICON_SKIP_FORWARD_30, tr(R.string.ahead_30_seconds), ahead30Command)
             }
         }
         // Previous/next named for their slots outright: with only custom buttons, a controller that lays out by slots (the
@@ -1758,9 +1759,9 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         // Media3 takes the standard skip actions off the phone's media session, so widgets and "Dynamic Island" apps
         // that read those couldn't skip (Reddit R4). So they're only named when a watch's companion app is on the phone.
         val buttons = (if (watchPaired) listOf(
-            CommandButton.Builder(CommandButton.ICON_PREVIOUS).setDisplayName("Previous")
+            CommandButton.Builder(CommandButton.ICON_PREVIOUS).setDisplayName(tr(R.string.widget_previous))
                 .setPlayerCommand(Player.COMMAND_SEEK_TO_PREVIOUS).setSlots(CommandButton.SLOT_BACK).build(),
-            CommandButton.Builder(CommandButton.ICON_NEXT).setDisplayName("Next")
+            CommandButton.Builder(CommandButton.ICON_NEXT).setDisplayName(tr(R.string.widget_next))
                 .setPlayerCommand(Player.COMMAND_SEEK_TO_NEXT).setSlots(CommandButton.SLOT_FORWARD).build(),
         ) else emptyList()) + custom
         session.setMediaButtonPreferences(buttons)
@@ -1814,7 +1815,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             if (idx > 0) player.removeMediaItems(0, idx)
             player.shuffleModeEnabled = false
             player.addMediaItems(add.map { it.toMediaItem() })
-            c.queue.source.value = QueueSource(QueueKind.RADIO, "${song.title} radio", seedId = song.id)
+            c.queue.source.value = QueueSource(QueueKind.RADIO, tr(R.string.radio_3, song.title), seedId = song.id)
             c.queue.autoplayStart.value = -1
             c.queue.autoplayContinuation = r.continuation
         }
@@ -2104,7 +2105,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             if (single != null && single.mediaId.isBlank() && !query.isNullOrBlank()) {
                 val top = tree.searchTop(query)
                 if (top != null) {
-                    c.queue.source.value = QueueSource(QueueKind.SINGLE, "Autoplay", seedId = top.id)
+                    c.queue.source.value = QueueSource(QueueKind.SINGLE, tr(R.string.autoplay), seedId = top.id)
                     c.queue.autoplayStart.value = -1
                     c.queue.autoplayContinuation = null
                     return@future MediaSession.MediaItemsWithStartPosition(listOf(top.toMediaItem()), 0, C.TIME_UNSET)
@@ -2151,7 +2152,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                     return@future MediaSession.MediaItemsWithStartPosition(list.map { it.toMediaItem() }, index, startPositionMs)
                 }
                 tree.song(single.mediaId, single)?.let { song ->
-                    c.queue.source.value = QueueSource(QueueKind.SINGLE, "Autoplay", seedId = song.id)
+                    c.queue.source.value = QueueSource(QueueKind.SINGLE, tr(R.string.autoplay), seedId = song.id)
                     c.queue.autoplayStart.value = -1
                     c.queue.autoplayContinuation = null
                     return@future MediaSession.MediaItemsWithStartPosition(listOf(song.toMediaItem()), 0, startPositionMs)

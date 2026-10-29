@@ -126,7 +126,7 @@ class I18nConvert {
         val t = s.replace("{}", "").trim()
         if (!Regex("\\p{L}{2,}").containsMatchIn(t)) return false
         if (t.contains("://") || t.startsWith("www.") || t.startsWith("prism:") || t.startsWith("http")) return false
-        if (Regex("^[a-z0-9_.:/#=?&-]+$").matches(t)) return false // keys, routes, ids
+        if (Regex("^[a-z0-9_.:/#=?&{}-]+$").matches(s.trim())) return false // keys, routes ("blend/{who}"), ids
         if (Regex("^[A-Z0-9_]+$").matches(t)) return false // CONSTANT_NAMES and codes ("PRISM", "LIGHT")
         if (Regex("^[a-z]+[A-Z]\\w*$").matches(t)) return false // camelCase identifiers
         if (Regex("^\\w+\\.\\w+").matches(t) && !t.contains(' ')) return false // dotted names
@@ -143,8 +143,21 @@ class I18nConvert {
         "removeSuffix(" to "compare", "substringBefore(" to "compare", "substringAfter(" to "compare", "indexOf(" to "compare",
         "Uri.parse(" to "address", "mimeType" to "key", "setType(" to "key", "MIME" to "key",
         "Font(" to "key", "assets" to "key", "File(" to "path",
+        "Thread(" to "thread name", "SimpleDateFormat(" to "pattern", "ofPattern(" to "pattern", "DateTimeFormatter" to "pattern",
         // Icons are looked up by their drawing's name (not their descriptions: Icon(PrismIcons.Share, "Share") is text).
         "drawn(" to "icon name", "icon(" to "icon name", "PrismIcons.preview(" to "icon name",
+    )
+
+    /**
+     * PRISM_I18N_SINKS=1: for code that mixes what the listener sees with diagnostics and protocols (the player service),
+     * only text handed straight to something on screen moves: a toast, an error the player shows, the car's folders and
+     * buttons, the notification, a queue's "Playing from" title.
+     */
+    private val sinksOnly = System.getenv("PRISM_I18N_SINKS") == "1"
+    private val SINKS = listOf(
+        "Toast.makeText(", "reportError(", "tryEmit(", "Denied(", "folder(", "songList(", "startItem(", "button(", "setDisplayName(",
+        "QueueSource(", "tile.label", "tile.subtitle", "tile.contentDescription", "setContentTitle(", "setContentText(", "setSubText(",
+        "friendlyMessage(", "_problem.value", "follow(", "Notification",
     )
 
     /** Why a literal stays in the code, or null to move it. */
@@ -153,6 +166,7 @@ class I18nConvert {
         val lineEnd = text.indexOf('\n', lit.end).let { if (it < 0) text.length else it }
         val before = text.substring(lineStart, lit.start)
         val after = text.substring(lit.end, lineEnd)
+        if (sinksOnly && SINKS.none { before.contains(it) }) return "not on screen"
         val trimmed = before.trimStart()
         if (trimmed.startsWith("@") || trimmed.contains("const val")) return "constant"
         // A list of icon names handed to a lookup later on the line: listOf("Home", "Search").map { PrismIcons.preview(it) }.
@@ -281,7 +295,13 @@ class I18nConvert {
 
     companion object {
         /** Files left as they are: tools, Prism's own text tool, debug-only screens. */
-        internal val SKIP_FILES = setOf("Strings.kt", "DesignGallery.kt")
+        internal val SKIP_FILES = setOf(
+            "Strings.kt", "DesignGallery.kt",
+            // Diagnostics stay English, so a bug report reads the same from every phone.
+            "AudioDiagnostics.kt", "MainThreadWatch.kt", "CrashLog.kt", "NerdStats.kt",
+            // The equalizer's preset names are stored as the listener's choice (shown translated later, by name).
+            "AudioEffects.kt",
+        )
 
         fun slug(s: String): String {
             val words = s.lowercase().replace(Regex("%\\d\\\$s"), " ").split(Regex("[^\\p{L}\\p{N}]+")).filter { it.isNotEmpty() }

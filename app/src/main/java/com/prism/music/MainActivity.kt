@@ -272,14 +272,14 @@ open class MainActivity : ComponentActivity() {
         val lookCode = if (intent?.action == Intent.ACTION_SEND) com.prism.music.data.looks.LookCode.findIn(intent.getStringExtra(Intent.EXTRA_TEXT)) else null
         if (lookCode != null) {
             container.looks.decode(lookCode)?.let { container.looks.pending.value = it }
-                ?: Toast.makeText(this, "That Look code couldn't be read", Toast.LENGTH_SHORT).show()
+                ?: Toast.makeText(this, tr(R.string.that_look_code_couldn_t_be), Toast.LENGTH_SHORT).show()
             return Uri.parse("prism://looks")
         }
         lookFile(intent)?.let { file ->
             container.scope.launch(Dispatchers.Main) {
                 val look = runCatching { contentResolver.openInputStream(file)?.use { container.looks.readFile(it) } }
                 look.getOrNull()?.let { container.looks.pending.value = it }
-                    ?: Toast.makeText(this@MainActivity, look.exceptionOrNull()?.message ?: "That file isn't a Prism Look", Toast.LENGTH_SHORT).show()
+                    ?: Toast.makeText(this@MainActivity, look.exceptionOrNull()?.message ?: tr(R.string.that_file_isn_t_a_prism), Toast.LENGTH_SHORT).show()
             }
             return Uri.parse("prism://looks")
         }
@@ -302,7 +302,7 @@ open class MainActivity : ComponentActivity() {
 
     private fun linkOf(intent: Intent?): Uri? = when (intent?.action) {
         Intent.ACTION_SEND -> com.prism.music.data.ShareLinks.findIn(intent.getStringExtra(Intent.EXTRA_TEXT))?.let(Uri::parse).also {
-            if (it == null) Toast.makeText(this, "That isn't a YouTube or YouTube Music link", Toast.LENGTH_SHORT).show()
+            if (it == null) Toast.makeText(this, tr(R.string.that_isn_t_a_youtube_or), Toast.LENGTH_SHORT).show()
         }
         else -> intent?.data
     }
@@ -412,7 +412,7 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                 c.scope.launch(kotlinx.coroutines.Dispatchers.Main) {
                     val r = runCatching { kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { c.radio(mix.seedVideoId, mix.id, mix.params, keepFirst = true) } }.getOrNull()
                     if (r == null || r.songs.isEmpty()) {
-                        Toast.makeText(context, "Couldn't start ${mix.title}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, tr(R.string.couldn_t_start, mix.title), Toast.LENGTH_SHORT).show()
                         return@launch
                     }
                     // Stations like "Listen together" open on a live stream: found out now (the stream is resolved anyway), it starts as one.
@@ -603,10 +603,10 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                             }
                         }
                         composable(Routes.LOOK_SCAN) {
-                            com.prism.music.ui.screens.BlendScanScreen("Point at a Prism Look's code", com.prism.music.data.looks.LookCode::findIn) { code ->
+                            com.prism.music.ui.screens.BlendScanScreen(tr(R.string.point_at_a_prism_look_s), com.prism.music.data.looks.LookCode::findIn) { code ->
                                 navController.popBackStack()
                                 c.looks.decode(code)?.let { c.looks.pending.value = it }
-                                    ?: Toast.makeText(context, "That Look code couldn't be read", Toast.LENGTH_SHORT).show()
+                                    ?: Toast.makeText(context, tr(R.string.that_look_code_couldn_t_be), Toast.LENGTH_SHORT).show()
                             }
                         }
                         composable("blend/{who}", listOf(navArgument("who") { type = NavType.StringType })) {
@@ -813,11 +813,11 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
 private fun TogetherPill(state: com.prism.music.playback.together.TogetherState, modifier: Modifier, onClick: () -> Unit) {
     val (icon, text) = when (state) {
         is com.prism.music.playback.together.TogetherState.Hosting ->
-            PrismIcons.Radio to "Hosting · code ${state.code}" + when (state.guests.size) { 0 -> ""; 1 -> " · 1 listening"; else -> " · ${state.guests.size} listening" }
+            PrismIcons.Radio to tr(R.string.hosting_code, state.code) + when (state.guests.size) { 0 -> ""; 1 -> tr(R.string.t_1_listening); else -> tr(R.string.listening_3, state.guests.size) }
         is com.prism.music.playback.together.TogetherState.Guest ->
-            PrismIcons.Groups to "With ${state.hostName}" + when {
-                !state.listenHere -> " · adding songs"
-                !state.inSync -> " · out of step"
+            PrismIcons.Groups to tr(R.string.with, state.hostName) + when {
+                !state.listenHere -> tr(R.string.adding_songs)
+                !state.inSync -> tr(R.string.out_of_step_2)
                 else -> ""
             }
         else -> return
@@ -825,7 +825,7 @@ private fun TogetherPill(state: com.prism.music.playback.together.TogetherState,
     Box(modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         GlassSurface(Modifier.height(34.dp), shape = RoundedCornerShape(17.dp), elevation = 4.dp) {
             Row(
-                Modifier.fillMaxHeight().clickable(onClickLabel = "Open Listen together", onClick = onClick).padding(horizontal = 14.dp),
+                Modifier.fillMaxHeight().clickable(onClickLabel = tr(R.string.open_listen_together), onClick = onClick).padding(horizontal = 14.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(icon, null, Modifier.size(16.dp), tint = MaterialTheme.colorScheme.primary)
@@ -1008,7 +1008,7 @@ private fun TabItem(tab: Tab, selected: Boolean, labels: NavLabels, compact: Flo
     val c = LocalContainer.current
     val click = Modifier.combinedClickable(
         interactionSource = remember { MutableInteractionSource() }, indication = null, onClickLabel = tab.label,
-        onLongClickLabel = if (tab.route == Routes.SETTINGS) "Customize this" else null,
+        onLongClickLabel = if (tab.route == Routes.SETTINGS) tr(R.string.customize_this) else null,
         onLongClick = if (tab.route == Routes.SETTINGS) ({ c.customizing.value = !c.customizing.value }) else null,
         onClick = onClick,
     ).semantics { this.selected = selected }
@@ -1101,7 +1101,7 @@ private fun handleDeepLink(uri: Uri, nav: Navigator, c: AppContainer) {
                 c.scope.launch(kotlinx.coroutines.Dispatchers.Main) {
                     val ok = c.lastFm.finishSignIn(token)
                     android.widget.Toast.makeText(
-                        c.app, if (ok) "Connected to Last.fm as ${c.lastFm.user.value}" else "Last.fm didn't connect. Try again from Settings.",
+                        c.app, if (ok) tr(R.string.connected_to_last_fm_as, c.lastFm.user.value) else tr(R.string.last_fm_didn_t_connect_try),
                         android.widget.Toast.LENGTH_LONG,
                     ).show()
                 }
@@ -1146,6 +1146,6 @@ private fun handleDeepLink(uri: Uri, nav: Navigator, c: AppContainer) {
 
 private fun launchSingle(c: AppContainer, videoId: String) = c.scope.launch {
     val r = runCatching { c.ytm.next(videoId) }.getOrNull()
-    val song = r?.songs?.firstOrNull { it.id == videoId } ?: Song(videoId, "Loading…")
+    val song = r?.songs?.firstOrNull { it.id == videoId } ?: Song(videoId, tr(R.string.loading_2))
     withContext(Dispatchers.Main) { c.player.playSingle(song) }
 }

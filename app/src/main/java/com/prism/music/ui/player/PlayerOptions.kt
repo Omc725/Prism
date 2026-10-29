@@ -93,7 +93,7 @@ fun PlayerOptionsSheet(
         ActionItem(PrismIcons.PlaylistAdd, tr(R.string.playlist), keepOpen = true) { pickPlaylist = true },
         ActionItem(
             PrismIcons.Moon, tr(R.string.sleep),
-            value = when { sleepEnd -> tr(R.string.song_end); sleepAt > 0 -> "${sleepMin} min"; else -> null },
+            value = when { sleepEnd -> tr(R.string.song_end); sleepAt > 0 -> tr(R.string.min, sleepMin); else -> null },
             active = sleeping, onClick = onSleepTimer,
         ),
     )

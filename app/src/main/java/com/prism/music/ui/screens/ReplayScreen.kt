@@ -451,7 +451,7 @@ private fun HeroCard(d: ReplayData, period: Period, notYet: Boolean, loading: Bo
             Spacer(Modifier.height(4.dp))
             Column(Modifier.toggleListenUnit()) {
                 Text(total.text(anim.value.toLong()), color = Color.White, style = MaterialTheme.typography.displayLarge, maxLines = 1)
-                Text("${total.unit} listened".trim(),color = Color.White.copy(alpha = 0.85f), style = MaterialTheme.typography.titleMedium)
+                Text(tr(R.string.listened_2, total.unit).trim(),color = Color.White.copy(alpha = 0.85f), style = MaterialTheme.typography.titleMedium)
             }
             Spacer(Modifier.height(18.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(22.dp)) {

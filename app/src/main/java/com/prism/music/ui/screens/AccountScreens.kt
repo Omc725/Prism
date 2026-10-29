@@ -266,10 +266,10 @@ fun PrismAccountScreen(onboarding: Boolean, bottomPadding: Dp, onDone: () -> Uni
                     val stars by c.artistPrefs.favorites.collectAsState()
                     Text(
                         listOf(
-                            "${liked.size} liked ${if (liked.size == 1) "song" else "songs"}",
+                            tr(R.string.liked_2, liked.size, if (liked.size == 1) "song" else "songs"),
                             "${lists.size} ${if (lists.size == 1) "playlist" else "playlists"}",
-                            "${albums.size} saved ${if (albums.size == 1) "album" else "albums"}",
-                            "${stars.size} starred ${if (stars.size == 1) "artist" else "artists"}",
+                            tr(R.string.saved_3, albums.size, if (albums.size == 1) "album" else "albums"),
+                            tr(R.string.starred, stars.size, if (stars.size == 1) "artist" else "artists"),
                         ).joinToString(" · "),
                         style = MaterialTheme.typography.bodyMedium,
                     )

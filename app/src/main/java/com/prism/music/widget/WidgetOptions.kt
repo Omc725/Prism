@@ -1,13 +1,15 @@
 package com.prism.music.widget
 
+import com.prism.music.R
+import com.prism.music.tr
 import android.content.Context
 import kotlinx.serialization.Serializable
 
 /** A widget's background (1.7.7): as its style draws it, a color of yours, the cover's color, or see-through. */
-enum class WidgetBackground(val label: String) { DESIGN("As designed"), COLOR("Your color"), COVER("The cover's color"), CLEAR("See-through") }
+enum class WidgetBackground(val label: String) { DESIGN(tr(R.string.as_designed)), COLOR(tr(R.string.your_color)), COVER(tr(R.string.the_cover_s_color)), CLEAR(tr(R.string.see_through)) }
 
 /** The widget's words: as its style has them, or always white or black. */
-enum class WidgetText(val label: String) { AUTO("As designed"), WHITE("White"), BLACK("Black") }
+enum class WidgetText(val label: String) { AUTO(tr(R.string.as_designed)), WHITE(tr(R.string.white)), BLACK(tr(R.string.black)) }
 
 /**
  * One placed widget's own settings (1.7.7, W1): two Prism widgets on a home screen can look different. Stored per

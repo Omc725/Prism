@@ -1111,7 +1111,7 @@ fun SleepBadge(modifier: Modifier = Modifier) {
     var now by remember { mutableStateOf(System.currentTimeMillis()) }
     val lifecycle = androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle
     LaunchedEffect(sleepAt, lifecycle) { if (sleepAt > 0) lifecycle.tickWhileShown(15_000) { now = System.currentTimeMillis() } }
-    val left = if (endOfSong) tr(R.string.song_end) else "${((sleepAt - now) / 60_000).coerceAtLeast(0) + 1} min"
+    val left = if (endOfSong) tr(R.string.song_end) else tr(R.string.min, ((sleepAt - now) / 60_000).coerceAtLeast(0) + 1)
     var open by remember { mutableStateOf(false) }
     Row(
         modifier.clip(CircleShape).background(Color.White.copy(alpha = 0.10f)).clickable { open = true }
@@ -1405,7 +1405,7 @@ fun qualityText(stats: com.prism.music.playback.NerdStats): String {
                 stats.sampleRate.takeIf { it > 0 }?.let(::sampleRateText),
             ).joinToString(" · ")
         }
-        stats.streamBitrateKbps > 0 -> "$codec ${stats.streamBitrateKbps} kbps".trim()
+        stats.streamBitrateKbps > 0 -> tr(R.string.kbps, codec, stats.streamBitrateKbps).trim()
         else -> codec
     }
 }

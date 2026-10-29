@@ -68,7 +68,7 @@ fun FolderScreen(id: String, bottomPadding: Dp) {
         return
     }
     val inside = folder.playlists.mapNotNull { pid -> all.firstOrNull { PrismLibrary.samePlaylist(it.id, pid) } }
-    SubPage(folder.name, bottomPadding, subtitle = if (inside.size == 1) tr(R.string.t_1_playlist) else "${inside.size} playlists", actions = {
+    SubPage(folder.name, bottomPadding, subtitle = if (inside.size == 1) tr(R.string.t_1_playlist) else tr(R.string.playlists_2, inside.size), actions = {
         RoundAction(PrismIcons.Edit, tr(R.string.rename_folder)) { renaming = true }
         RoundAction(PrismIcons.Delete, tr(R.string.take_the_folder_apart)) { c.prismLibrary.deleteFolder(id); nav.back() }
     }) {
@@ -101,7 +101,7 @@ internal fun MoveToFolderSheet(playlist: BrowseItem, onDismiss: () -> Unit) {
         com.prism.music.ui.components.ActionHeader(c.covers.art(playlist), playlist.title, current?.let { tr(R.string.in_text, it.name) } ?: tr(R.string.move_to_a_folder), placeholderIcon = PrismIcons.QueueMusic)
         Column(Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
             folders.filter { it.id != current?.id }.forEach { f ->
-                FolderRow(PrismIcons.Folder, f.name, if (f.playlists.size == 1) tr(R.string.t_1_playlist) else "${f.playlists.size} playlists") {
+                FolderRow(PrismIcons.Folder, f.name, if (f.playlists.size == 1) tr(R.string.t_1_playlist) else tr(R.string.playlists_2, f.playlists.size)) {
                     c.prismLibrary.moveToFolder(playlist.id, f.id); close {}
                 }
             }

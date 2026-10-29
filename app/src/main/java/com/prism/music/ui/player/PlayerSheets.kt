@@ -81,7 +81,7 @@ fun NerdStatsPanel(modifier: Modifier = Modifier) {
         // The essentials, big: what the audio is.
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             StatTile(tr(R.string.codec), codecName(stats.codec), Modifier.weight(1f))
-            StatTile(tr(R.string.bitrate), stats.streamBitrateKbps.takeIf { it > 0 }?.let { "$it kbps" } ?: "—", Modifier.weight(1f))
+            StatTile(tr(R.string.bitrate), stats.streamBitrateKbps.takeIf { it > 0 }?.let { tr(R.string.kbps_2, it) } ?: "—", Modifier.weight(1f))
             StatTile(tr(R.string.sample_rate), sampleRateText(stats.sampleRate), Modifier.weight(1f))
         }
         Spacer(Modifier.height(8.dp))
@@ -90,9 +90,9 @@ fun NerdStatsPanel(modifier: Modifier = Modifier) {
         val rows = listOf(
             tr(R.string.video_id) to stats.videoId,
             tr(R.string.source) to stats.source,
-            tr(R.string.stream) to listOfNotNull(stats.itag.takeIf { it > 0 }?.let { "itag $it" }, stats.container.takeIf { it.isNotBlank() }, stats.client.takeIf { it.isNotBlank() }?.let { "client $it" }).joinToString(" · "),
+            tr(R.string.stream) to listOfNotNull(stats.itag.takeIf { it > 0 }?.let { tr(R.string.itag, it) }, stats.container.takeIf { it.isNotBlank() }, stats.client.takeIf { it.isNotBlank() }?.let { tr(R.string.client, it) }).joinToString(" · "),
             tr(R.string.codec) to listOfNotNull(stats.codec.takeIf { it.isNotBlank() }, stats.decoder.takeIf { it.isNotBlank() }).joinToString(" · "),
-            tr(R.string.bitrate) to "${stats.streamBitrateKbps} kbps" + if (stats.contentLength > 0) tr(R.string.t_2f_mb).format(stats.contentLength / 1_048_576f) else "",
+            tr(R.string.bitrate) to tr(R.string.kbps_2, stats.streamBitrateKbps) + if (stats.contentLength > 0) tr(R.string.t_2f_mb).format(stats.contentLength / 1_048_576f) else "",
             tr(R.string.format) to tr(R.string.hz_ch, stats.sampleRate, stats.channels),
             tr(R.string.output) to tr(R.string.hz, stats.outputEncoding, stats.outputSampleRate) + if (stats.offload) tr(R.string.offload) else "",
             tr(R.string.device) to stats.outputDevice,
@@ -294,7 +294,7 @@ fun SleepTimerDialog(onDismiss: () -> Unit) {
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     FilterChip(endOfSong, { pc.setSleepEndOfSong(true); onDismiss() }, { Text(tr(R.string.end_of_song)) })
                     listOf(5, 10, 15, 30, 45, 60, 90).forEach { m ->
-                        FilterChip(false, { pc.setSleepTimer(m); onDismiss() }, { Text("$m min") })
+                        FilterChip(false, { pc.setSleepTimer(m); onDismiss() }, { Text(tr(R.string.min, m)) })
                     }
                 }
             }

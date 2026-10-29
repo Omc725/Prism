@@ -1,5 +1,7 @@
 package com.prism.music.playback.sing
 
+import com.prism.music.R
+import com.prism.music.tr
 import ai.onnxruntime.OrtEnvironment
 import ai.onnxruntime.OrtSession
 import android.os.Process
@@ -129,7 +131,7 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
                 .onSuccess { _problem.value = null }
                 .onFailure {
                     Log.w("PrismSing", "Couldn't separate ${next.id}: $it")
-                    _problem.value = it.message ?: "Couldn't get this song ready"
+                    _problem.value = it.message ?: tr(R.string.couldn_t_get_this_song_ready)
                 }
             _progress.update { it - next.id }
         }

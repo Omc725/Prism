@@ -25,6 +25,9 @@ class I18nGuardTest {
         /** Moved into strings.xml so far (1.7.9, section T). */
         val CONVERTED = listOf(
             "ui/components", "ui/screens", "ui/player", "ui/tour",
+            "MainActivity.kt", "widget", "playback/MediaTree.kt", "playback/DjMode.kt", "playback/together/Together.kt",
+            "playback/PlayTileService.kt",
+            // (The player service, its connection, Sing and car lyrics mix diagnostics in: only what they show moved.)
         )
     }
 }

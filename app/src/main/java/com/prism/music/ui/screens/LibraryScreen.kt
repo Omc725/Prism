@@ -392,7 +392,7 @@ fun LibraryScreen(bottomPadding: Dp) {
                             if (rearranging) Text(
                                 tr(R.string.hold_and_drag_or_use_the), style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 8.dp, top = 4.dp, bottom = 4.dp),
-                            ) else if (myPlaylists.size > 1) SortBar("${myPlaylists.size} playlists", PlaylistSort.entries, playlistSort, { it.label }) {
+                            ) else if (myPlaylists.size > 1) SortBar(tr(R.string.playlists_2, myPlaylists.size), PlaylistSort.entries, playlistSort, { it.label }) {
                                 c.library.setPlaylistSort(it.name)
                             }
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(start = 8.dp, top = 4.dp, bottom = 4.dp)) {
@@ -461,13 +461,13 @@ fun LibraryScreen(bottomPadding: Dp) {
                     }
                     LibTab.ALBUMS -> {
                         if (albums.isNotEmpty()) item(span = { GridItemSpan(maxLineSpan) }) {
-                            SortBar(if (albums.size == 1) tr(R.string.t_1_album) else "${albums.size} albums", AlbumSort.entries, albumSort, { it.label }) { albumSort = it; c.library.setSort("library:albums", it.name) }
+                            SortBar(if (albums.size == 1) tr(R.string.t_1_album) else tr(R.string.albums_2, albums.size), AlbumSort.entries, albumSort, { it.label }) { albumSort = it; c.library.setSort("library:albums", it.name) }
                         }
                         items(pinnedFirst(sortedAlbums), key = { "a" + it.id }) { a -> LibraryItem(shown(a), asList, onLongClick = { itemMenu = a }) { nav.open(a, onSong) } }
                     }
                     LibTab.ARTISTS -> {
                         if (artists.isNotEmpty()) item(span = { GridItemSpan(maxLineSpan) }) {
-                            SortBar(if (artists.size == 1) tr(R.string.t_1_artist) else "${artists.size} artists", ArtistSort.entries, artistSort, { it.label }) { artistSort = it; c.library.setSort("library:artists", it.name) }
+                            SortBar(if (artists.size == 1) tr(R.string.t_1_artist) else tr(R.string.artists_3, artists.size), ArtistSort.entries, artistSort, { it.label }) { artistSort = it; c.library.setSort("library:artists", it.name) }
                         }
                         items(pinnedFirst(sortedArtists), key = { "r" + it.id }) { a -> LibraryItem(shown(a), asList, onLongClick = { itemMenu = a }) { nav.open(a, onSong) } }
                     }
@@ -797,7 +797,7 @@ private fun DownloadsSummary() {
                 .clickable { nav.go(Routes.DOWNLOADS) }.padding(20.dp),
         ) {
             Column {
-                Text("${com.prism.music.data.model.songCount(done.size)} offline", style = MaterialTheme.typography.titleLarge, color = ink)
+                Text(tr(R.string.offline, com.prism.music.data.model.songCount(done.size)), style = MaterialTheme.typography.titleLarge, color = ink)
                 Text(
                     tr(R.string.t_1f_mb_used).format(done.sumOf { it.bytes } / 1_048_576.0) + if (running > 0) tr(R.string.in_progress, running) else "",
                     style = MaterialTheme.typography.bodyMedium, color = ink.copy(alpha = 0.8f),

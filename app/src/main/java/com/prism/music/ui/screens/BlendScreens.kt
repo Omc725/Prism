@@ -253,8 +253,8 @@ fun BlendsScreen(bottomPadding: Dp) {
                     Text(
                         tr(R.string.your_blend_name, sent.name) +
                             tr(R.string.genres, sent.genres.entries.joinToString { "${it.key} ${it.value}%" }.ifEmpty { tr(R.string.none_yet_2) }) +
-                            "${sent.artists.size} artists: ${sent.artists.joinToString { it.name }}\n" +
-                            "${sent.songs.size} songs: ${sent.songs.joinToString { "${it.title} (${it.artist})" }}\n" +
+                            tr(R.string.artists_2, sent.artists.size, sent.artists.joinToString { it.name }) +
+                            tr(R.string.songs_2, sent.songs.size, sent.songs.joinToString { "${it.title} (${it.artist})" }) +
                             tr(R.string.and_a_random_id_for_this) +
                             tr(R.string.artists_you_don_t_play_and),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,

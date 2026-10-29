@@ -1,5 +1,7 @@
 package com.prism.music.playback
 
+import com.prism.music.R
+import com.prism.music.tr
 import android.content.ComponentName
 import android.content.Context
 import android.media.AudioDeviceCallback
@@ -374,7 +376,7 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
     }
 
     /** Plays a lone song; autoplay then continues with similar music. */
-    fun playSingle(song: Song) = playQueue(listOf(song), 0, QueueSource(QueueKind.SINGLE, "Autoplay", seedId = song.id))
+    fun playSingle(song: Song) = playQueue(listOf(song), 0, QueueSource(QueueKind.SINGLE, tr(R.string.autoplay), seedId = song.id))
 
     /**
      * Plays [song] from its best part (its most replayed stretch, or its chorus), then on as [playSingle] would.
@@ -385,13 +387,13 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         scope.launch {
             val start = kotlinx.coroutines.withTimeoutOrNull(5_000) { runCatching { c.bestParts.startMs(song) }.getOrNull() }
             if (token != playToken) return@launch
-            if (start == null) reportError("Prism doesn't know a best part for \"${song.title}\" yet, so it plays from the start")
-            startQueue(listOf(song), 0, QueueSource(QueueKind.SINGLE, "Autoplay", seedId = song.id), shuffle = false, startVideo = null, startMs = start ?: 0)
+            if (start == null) reportError(tr(R.string.prism_doesn_t_know_a_best, song.title))
+            startQueue(listOf(song), 0, QueueSource(QueueKind.SINGLE, tr(R.string.autoplay), seedId = song.id), shuffle = false, startVideo = null, startMs = start ?: 0)
         }
     }
 
     /** Plays [song] and then a radio of songs like it (YouTube Music's), whether or not Autoplay is on. */
-    fun playRadio(song: Song) = playQueue(listOf(song), 0, QueueSource(QueueKind.RADIO, "${song.title} Radio", seedId = song.id))
+    fun playRadio(song: Song) = playQueue(listOf(song), 0, QueueSource(QueueKind.RADIO, tr(R.string.radio, song.title), seedId = song.id))
 
     fun playNext(song: Song) = playNext(listOf(song), null)
 
@@ -706,7 +708,7 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
     fun setVideoMode(enabled: Boolean) {
         val s = service ?: return
         if (enabled && c.cast.casting) {
-            _errors.tryEmit("Videos play on this phone. While casting, the speaker or TV gets the song")
+            _errors.tryEmit(tr(R.string.videos_play_on_this_phone_while))
             return
         }
         _videoLoading.value = enabled

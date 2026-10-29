@@ -173,7 +173,7 @@ fun ReplayCard(style: ReplayCardStyle, d: ReplayCardData, art: Painter?, modifie
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(yearPercent(d.yearDone), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Light), color = scheme.onSurface)
-                    Text("of ${d.year}", style = MaterialTheme.typography.labelSmall, color = scheme.onSurfaceVariant)
+                    Text(tr(R.string.of, d.year), style = MaterialTheme.typography.labelSmall, color = scheme.onSurfaceVariant)
                 }
             }
             Spacer(Modifier.width(20.dp))
@@ -199,7 +199,7 @@ fun ReplayCard(style: ReplayCardStyle, d: ReplayCardData, art: Painter?, modifie
                     Text(d.topSong ?: tr(R.string.your_year_so_far), style = MaterialTheme.typography.titleLarge, color = Color.White, maxLines = 2, overflow = TextOverflow.Ellipsis)
                     d.topSongArtist?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = 0.78f), maxLines = 1) }
                     Spacer(Modifier.height(8.dp))
-                    Text("${d.total} listened", style = MaterialTheme.typography.labelLarge, color = Color.White.copy(alpha = 0.9f))
+                    Text(tr(R.string.listened_2, d.total), style = MaterialTheme.typography.labelLarge, color = Color.White.copy(alpha = 0.9f))
                 }
             }
         }

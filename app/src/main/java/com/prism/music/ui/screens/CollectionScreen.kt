@@ -728,7 +728,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                         listOfNotNull(
                             page.year?.toString(),
                             "${visible.size} ${if (visible.size == 1) "song" else "songs"}" + (if (totalSec > 0) ", ${durationText(totalSec)}" else ""),
-                            if (downloadedCount > 0) "$downloadedCount downloaded" else null,
+                            if (downloadedCount > 0) tr(R.string.downloaded_2, downloadedCount) else null,
                         ).joinToString(" · ") + if (loadingMore) tr(R.string.loading_more) else "",
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 8.dp),
@@ -855,7 +855,7 @@ private fun durationText(sec: Int): String {
     val m = (sec % 3600) / 60
     return when {
         h > 0 -> tr(R.string.hr_min, h, m)
-        else -> "$m min"
+        else -> tr(R.string.min, m)
     }
 }
 
@@ -1149,7 +1149,7 @@ private fun DownloadedCollections(visible: List<Song>, sort: SortMode, query: St
             .filter { it.size >= 2 }
             .map { songs ->
                 val id = songs.groupingBy { it.album!!.id!! }.eachCount().maxBy { it.value }.key
-                AlbumItem(id, songs.first().album!!.title, listOf(songs.first().primaryArtist, "${songs.size} downloaded").joinToString(" • "), songs.first().thumbnail)
+                AlbumItem(id, songs.first().album!!.title, listOf(songs.first().primaryArtist, tr(R.string.downloaded_2, songs.size)).joinToString(" • "), songs.first().thumbnail)
             }
         val albums = (fromSongs + keptAlbums.map { (id, p) ->
             AlbumItem(id, p.title, listOfNotNull(p.artists.firstOrNull()?.name, com.prism.music.data.model.songCount(p.songs.size)).joinToString(" • "), p.thumbnail)

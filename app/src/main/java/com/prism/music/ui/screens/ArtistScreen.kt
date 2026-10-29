@@ -522,7 +522,7 @@ private fun Spotlight(item: AlbumItem, onOpen: () -> Unit) {
     val release by produceState<List<Song>?>(null, item.id) { value = runCatching { c.ytm.album(item.id).songs }.getOrNull() }
     val details = release?.takeIf { it.isNotEmpty() }?.let { songs ->
         val min = (songs.sumOf { it.durationSec } + 30) / 60
-        listOfNotNull(com.prism.music.data.model.songCount(songs.size), min.takeIf { it > 0 }?.let { "$it min" }).joinToString(" · ")
+        listOfNotNull(com.prism.music.data.model.songCount(songs.size), min.takeIf { it > 0 }?.let { tr(R.string.min, it) }).joinToString(" · ")
     }
     val kind = item.subtitle.split(" • ").firstOrNull { it in setOf("Single", "EP", "Album") } ?: tr(R.string.album)
     val year = yearOf(item).takeIf { it > 0 }
@@ -848,7 +848,7 @@ private fun androidx.compose.foundation.lazy.LazyListScope.releaseGrid(
             ReleaseSort.entries.forEach { s -> com.prism.music.ui.components.PrismChip(sort == s, { onSort(s) }, s.label) }
             Spacer(Modifier.weight(1f))
             Text(
-                if (items.size == 1) tr(R.string.t_1_release) else "${items.size} releases",
+                if (items.size == 1) tr(R.string.t_1_release) else tr(R.string.releases, items.size),
                 style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }

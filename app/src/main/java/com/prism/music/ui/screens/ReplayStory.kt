@@ -1087,7 +1087,7 @@ private fun Summary(s: ReplayStory, modifier: Modifier, onReplay: () -> Unit, on
             Row {
                 Column(Modifier.weight(1f)) {
                     val total = listenTotal(s.totalMs)
-                    Text("${total.unit} listened".trim().uppercase(), style = kicker(10.sp).copy(color = Color.White.copy(alpha = 0.75f)))
+                    Text(tr(R.string.listened_2, total.unit).trim().uppercase(), style = kicker(10.sp).copy(color = Color.White.copy(alpha = 0.75f)))
                     Text(total.text(total.value), style = display(36.sp), maxLines = 1)
                 }
                 s.genres.firstOrNull()?.let { (g, _) ->

@@ -370,7 +370,7 @@ private fun LookActions(look: Look, onDismiss: () -> Unit, onApply: () -> Unit, 
             ActionItem(PrismIcons.Share, tr(R.string.share), onClick = onShare),
             if (!look.builtIn) ActionItem(PrismIcons.Edit, tr(R.string.rename), onClick = onRename) else null,
             ActionItem(PrismIcons.Copy, if (look.builtIn) tr(R.string.save_a_copy_to_change) else tr(R.string.duplicate), onClick = {
-                scope.launch { c.looks.keep(look, if (look.builtIn) look.name else "${look.name} copy") }
+                scope.launch { c.looks.keep(look, if (look.builtIn) look.name else tr(R.string.copy_2, look.name)) }
             }),
             if (!look.builtIn) ActionItem(PrismIcons.Delete, tr(R.string.delete), danger = true, onClick = { c.looks.delete(look.id) }) else null,
         )

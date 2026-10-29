@@ -142,10 +142,10 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
 
     fun summary(s: AppSettings, dark: Boolean = true): String = when (this) {
         APPEARANCE -> tr(R.string.looks_colors_fonts_the_player_and)
-        INTERFACE -> listOf(s.navStyle.label + " bar", "${s.navTabs.size} tabs", s.miniPlayerStyle.label + tr(R.string.mini_player_2)).joinToString(" · ")
+        INTERFACE -> listOf(s.navStyle.label + " bar", tr(R.string.tabs_2, s.navTabs.size), s.miniPlayerStyle.label + tr(R.string.mini_player_2)).joinToString(" · ")
         PLAYER -> listOfNotNull(s.playerLayout.label + " layout", s.playerBackground.label, if (s.canvasEnabled) tr(R.string.animated_covers) else null).joinToString(" · ")
         SOUND -> listOfNotNull(if (s.lossless) tr(R.string.lossless) else s.audioQuality.label + " quality", if (s.mix) tr(R.string.crossfade) else null, if (s.normalize) tr(R.string.normalized) else null, if (s.spatial) tr(R.string.prism_spatial) else null, if (s.eq.enabled) "EQ ${s.eq.preset}" else null).joinToString(" · ")
-        LYRICS -> listOfNotNull("${s.lyricsSources.first().label} first", if (s.lyricsTranslate) tr(R.string.translated) else null, tr(R.string.sing)).joinToString(" · ")
+        LYRICS -> listOfNotNull(tr(R.string.first, s.lyricsSources.first().label), if (s.lyricsTranslate) tr(R.string.translated) else null, tr(R.string.sing)).joinToString(" · ")
         LYRICS_LOOK -> tr(R.string.style_2, s.lyricsStyle.label, s.lyricsPosition.label)
         CONTROLS -> tr(R.string.swipes_and_taps_on_the_player)
         DOWNLOADS -> listOfNotNull(tr(R.string.smart_downloads_2, formatGb(s.offlineGb)), if (s.downloadWifiOnly) tr(R.string.wi_fi_only) else tr(R.string.any_network), if (s.dataSaver) tr(R.string.data_saver) else null).joinToString(" · ")
@@ -160,7 +160,7 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
         COLOR -> listOfNotNull(
             // The light's name (White shows as Black in light mode).
             if (s.lightStyle == com.prism.music.data.prefs.LightStyle.WHITE) whiteName(dark) + " light"
-            else com.prism.music.ui.theme.SpectrumPresets.label(s.spectrumPreset).let { if (it == com.prism.music.ui.theme.SpectrumPresets.COVER_LABEL) tr(R.string.light_from_the_cover) else "$it light" },
+            else com.prism.music.ui.theme.SpectrumPresets.label(s.spectrumPreset).let { if (it == com.prism.music.ui.theme.SpectrumPresets.COVER_LABEL) tr(R.string.light_from_the_cover) else tr(R.string.light_2, it) },
             when (s.colorSource) { ColorSource.CUSTOM -> com.prism.music.ui.theme.ColorMath.toHex(s.accent) + " accent"; ColorSource.ARTWORK -> tr(R.string.accent_from_the_cover); ColorSource.DYNAMIC -> tr(R.string.accent_from_the_wallpaper) },
         ).joinToString(" · ")
         TEXT -> listOfNotNull(s.fontChoice.label + " font", if (s.textScale != 1f) tr(R.string.size_2, (s.textScale * 100).roundToInt()) else null).joinToString(" · ")
@@ -828,7 +828,7 @@ private fun GlassSettings() {
                     Item(
                         tr(R.string.screen_backgrounds),
                         if (count == 0) tr(R.string.designs_or_your_own_photo)
-                        else screens.values.map { com.prism.music.ui.theme.Backdrop.parse(it).first.label }.distinct().joinToString(" · ") + " on $count ${if (count == 1) "screen" else "screens"}",
+                        else screens.values.map { com.prism.music.ui.theme.Backdrop.parse(it).first.label }.distinct().joinToString(" · ") + tr(R.string.on_3, count, if (count == 1) "screen" else "screens"),
                         onClick = { nav.go(Routes.BACKGROUNDS) },
                     ) { Chevron() }
                 }
@@ -1720,7 +1720,7 @@ private fun PlayerCoverGroup() {
     Group(tr(R.string.cover)) {
         Label(tr(R.string.cover_size))
         Chips(CoverSize.entries, s.coverSize, { it.label }) { prefs.setCoverSize(it) }
-        SliderSetting(tr(R.string.corners), s.playerArtCorners.toFloat(), 0f..32f, { "${it.roundToInt()} dp" }, steps = 7) { prefs.setPlayerArtCorners(it.roundToInt()) }
+        SliderSetting(tr(R.string.corners), s.playerArtCorners.toFloat(), 0f..32f, { tr(R.string.dp, it.roundToInt()) }, steps = 7) { prefs.setPlayerArtCorners(it.roundToInt()) }
         Toggle(
             tr(R.string.full_bleed_artwork), tr(R.string.edge_to_edge_at_the_top), s.fullBleedArtwork,
             info = tr(R.string.the_cover_runs_to_the_screen),

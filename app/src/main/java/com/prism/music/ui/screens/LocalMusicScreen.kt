@@ -319,9 +319,9 @@ fun LocalMusicScreen(bottomPadding: Dp) {
             // The count sits under the title (#29), where "Music files on this phone" was.
             val sub = when {
                 album != null -> listOfNotNull(album.artist.ifBlank { null }, album.year.takeIf { it > 0 }?.toString(), songCount(album.tracks.size)).joinToString(" · ")
-                artist != null -> listOf(songCount(artist.tracks.size), if (artist.albums.size == 1) tr(R.string.t_1_album) else "${artist.albums.size} albums").joinToString(" · ")
+                artist != null -> listOf(songCount(artist.tracks.size), if (artist.albums.size == 1) tr(R.string.t_1_album) else tr(R.string.albums_2, artist.albums.size)).joinToString(" · ")
                 openRecent -> songCount(recent.size)
-                allowed && tracks.isNotEmpty() -> listOf(songCount(tracks.size), if (albums.size == 1) tr(R.string.t_1_album) else "${albums.size} albums").joinToString(" · ")
+                allowed && tracks.isNotEmpty() -> listOf(songCount(tracks.size), if (albums.size == 1) tr(R.string.t_1_album) else tr(R.string.albums_2, albums.size)).joinToString(" · ")
                 else -> null
             }
             if (sub != null) Text(sub, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -450,7 +450,7 @@ private fun ArtistsPage(artists: List<LocalArtist>, bottomPadding: Dp, sort: Ord
     val ui = LocalUi.current
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(top = 0.dp, bottom = bottomPadding + 16.dp)) {
         item {
-            SortRow(if (artists.size == 1) tr(R.string.t_1_artist) else "${artists.size} artists", tr(R.string.sort_artists), ArtistKey.entries, sort, { it.label }, { it.dirs }, onSort)
+            SortRow(if (artists.size == 1) tr(R.string.t_1_artist) else tr(R.string.artists_3, artists.size), tr(R.string.sort_artists), ArtistKey.entries, sort, { it.label }, { it.dirs }, onSort)
         }
         items(artists, key = { "a" + it.key }) { a ->
             Row(
@@ -462,7 +462,7 @@ private fun ArtistsPage(artists: List<LocalArtist>, bottomPadding: Dp, sort: Ord
                 Column(Modifier.weight(1f)) {
                     Text(a.name, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Text(
-                        listOf(songCount(a.tracks.size), if (a.albums.size == 1) tr(R.string.t_1_album) else "${a.albums.size} albums").joinToString(" · "),
+                        listOf(songCount(a.tracks.size), if (a.albums.size == 1) tr(R.string.t_1_album) else tr(R.string.albums_2, a.albums.size)).joinToString(" · "),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
@@ -481,7 +481,7 @@ private fun AlbumsPage(
         contentPadding = PaddingValues(start = 12.dp, end = 12.dp, top = if (sort != null) 0.dp else 4.dp, bottom = bottomPadding + 16.dp),
     ) {
         if (sort != null) item(span = { androidx.compose.foundation.lazy.grid.GridItemSpan(maxLineSpan) }) {
-            SortRow(if (albums.size == 1) tr(R.string.t_1_album) else "${albums.size} albums", tr(R.string.sort_albums), AlbumKey.entries, sort, { it.label }, { it.dirs }, onSort, inset = 4.dp)
+            SortRow(if (albums.size == 1) tr(R.string.t_1_album) else tr(R.string.albums_2, albums.size), tr(R.string.sort_albums), AlbumKey.entries, sort, { it.label }, { it.dirs }, onSort, inset = 4.dp)
         }
         items(albums, key = { "b" + it.id }) { a -> AlbumTile(a) { onOpen(a) } }
     }

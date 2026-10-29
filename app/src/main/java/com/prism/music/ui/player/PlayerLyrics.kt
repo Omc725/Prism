@@ -1225,7 +1225,7 @@ private fun SearchAsPane(state: LyricsState, sources: List<LyricsSource>, onSear
             Column(Modifier.weight(1f)) {
                 Text(tr(R.string.search_with_another_title), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
                 Text(
-                    current?.let { (t, a) -> tr(R.string.looking_up, t) + if (a.isNotBlank()) " by $a" else "" }
+                    current?.let { (t, a) -> tr(R.string.looking_up, t) + if (a.isNotBlank()) tr(R.string.by, a) else "" }
                         ?: tr(R.string.when_the_lyrics_are_listed_under),
                     style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis,
                 )

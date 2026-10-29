@@ -193,8 +193,12 @@ fun LibraryScreen(bottomPadding: Dp) {
     val mine = remember(liked, dls) {
         (liked + dls.values.filter { it.state == androidx.media3.exoplayer.offline.Download.STATE_COMPLETED }.mapNotNull { it.song }).distinctBy { it.id }
     }
-    val albums = remember(remoteAlbums, mine, savedAlbums) {
-        (savedAlbums.map { it.item() } + remoteAlbums + LibraryRepository.albumsFrom(mine)).distinctBy { it.id }
+    // Signed in, Albums is the account's saved albums (and ones saved in Prism), as in YouTube Music (#191: 56 saved
+    // showed as many more, singles too, since the albums of every liked and downloaded song were added). Without an
+    // account, those songs' albums are all there is to show. Downloaded albums are on the Downloads page either way.
+    val signedIn = settings.isLoggedIn
+    val albums = remember(remoteAlbums, mine, savedAlbums, signedIn) {
+        (savedAlbums.map { it.item() } + remoteAlbums + if (signedIn) emptyList() else LibraryRepository.albumsFrom(mine)).distinctBy { it.id }
     }
     // Starred artists lead, marked as favourites.
     val artists = remember(remoteArtists, mine, thumbs, favorites) {
@@ -367,7 +371,13 @@ fun LibraryScreen(bottomPadding: Dp) {
                                         PrismIcons.Phone, asList,
                                     ) { nav.go(Routes.LOCAL) }
                                 }
-                                LibraryTile.REPLAY -> item(key = "tile-replay") { ShortcutTile("Replay", "Your listening recap", PrismIcons.History, asList) { nav.go(Routes.REPLAY) } }
+                                LibraryTile.REPLAY -> item(key = "tile-replay") { ShortcutTile("Replay", "Your listening recap", if (LibraryTile.HISTORY in settings.libraryTiles) PrismIcons.Replay else PrismIcons.History, asList) { nav.go(Routes.REPLAY) } }
+                                // Replay keeps its clock unless History's tile is there too, which takes it (Replay gets its chart).
+                                LibraryTile.HISTORY -> item(key = "tile-history") {
+                                    ShortcutTile("History", "Everything you've played", PrismIcons.History, asList) {
+                                        scope.launch { pager.animateScrollToPage(LibTab.HISTORY.ordinal) }
+                                    }
+                                }
                                 // Home's Podcasts button turned off (#28): Podcasts lives here instead.
                                 LibraryTile.PODCASTS -> if (!settings.homePodcastsButton) item(key = "tile-podcasts") { ShortcutTile("Podcasts", "Shows and episodes", PrismIcons.Podcasts, asList) { nav.go(Routes.PODCASTS) } }
                                 LibraryTile.TOGETHER -> item(key = "tile-together") { ShortcutTile("Listen together", "With friends on the same Wi-Fi", PrismIcons.Groups, asList) { nav.go(Routes.TOGETHER) } }
@@ -598,7 +608,7 @@ private fun RearrangePlaylists(playlists: List<com.prism.music.data.model.Browse
             verticalAlignment = Alignment.CenterVertically,
         ) {
             com.prism.music.ui.components.Artwork(
-                c.covers.art(p), Modifier.size(44.dp), ui.smallArt, size = 226,
+                c.covers.art(p), Modifier.size(44.dp), ui.albumArt, size = 226,
                 placeholderIcon = PrismIcons.QueueMusic,
             )
             Spacer(Modifier.width(12.dp))

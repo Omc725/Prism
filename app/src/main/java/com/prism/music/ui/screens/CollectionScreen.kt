@@ -1512,6 +1512,7 @@ private fun DownloadsInfo(songs: List<Song>, ask: (String, () -> Unit) -> Unit) 
 }
 
 /** How far one download has got, in words: a percentage, or why it isn't moving. */
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 fun downloadStateText(d: com.prism.music.download.DownloadInfo, waitingForNetwork: Boolean): String = when (d.state) {
     Download.STATE_FAILED -> tr(R.string.failed)
     Download.STATE_QUEUED -> if (waitingForNetwork) tr(R.string.waiting_for_wi_fi) else tr(R.string.queued)

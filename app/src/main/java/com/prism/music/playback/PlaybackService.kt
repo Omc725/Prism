@@ -794,6 +794,30 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             android.util.Log.i("PrismStream", "${player.currentMediaItem?.mediaId} stalled ${now - stalledAt} ms at ${player.currentPosition} ms")
             stalledAt = 0
         }
+        if (playbackState == Player.STATE_READY) checkLength()
+    }
+
+    /** The song whose length was last checked against what's playing ([checkLength]). */
+    private var lengthChecked: String? = null
+
+    /**
+     * Notes in diagnostics when what plays runs much longer or shorter than the song (Reddit, 1.7.9: an album song
+     * played as someone's guitar cover). The release check's night hunt looks for these lines; nothing else changes.
+     */
+    private fun checkLength() {
+        val item = player.currentMediaItem ?: return
+        if (item.mediaId == lengthChecked) return
+        val song = item.toSong() ?: return
+        val playing = player.duration
+        if (playing <= 0 || song.durationSec <= 0 || song.isLive || song.isEpisode || song.isLocal) return
+        lengthChecked = item.mediaId
+        val diff = playing / 1000 - song.durationSec
+        if (kotlin.math.abs(diff) > LENGTH_MISMATCH_SEC) AudioDiagnostics.log(
+            "song",
+            "length mismatch: ${song.id} \"${song.title}\" is ${song.durationSec} s but ${playing / 1000} s plays" +
+                (c.versions.of(song.id)?.let { " (picked version $it)" } ?: c.soundFrom[song.id]?.let { " (from its video $it)" } ?: "") +
+                (if (item.videoModeId != null) " (video mode)" else ""),
+        )
     }
 
     override fun onShuffleModeEnabledChanged(shuffleModeEnabled: Boolean) {
@@ -2424,6 +2448,9 @@ private const val UNDER_WAY_MS = 5_000L
  * later the video stays where it is and only the lyrics follow the offset.
  */
 private const val LATE_VIDEO_SEEK_MS = 3_000L
+
+/** How far what plays may run from the song's own length before diagnostics note it ([PlaybackService.checkLength]). */
+private const val LENGTH_MISMATCH_SEC = 8
 
 /** Songs heard this recently aren't added by radio or autoplay again (1.7.9, Reddit: "the same songs over and over"). */
 private const val RADIO_REST_MS = 4 * 3_600_000L

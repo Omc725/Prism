@@ -33,6 +33,10 @@ A free, open-source YouTube Music client for Android, with word-by-word lyrics, 
 
 The last of the 1.7.x updates: Prism in 31 languages, recommendations that keep finding new music, and your requests from GitHub and Reddit. New options start off, so nothing changes until you pick it.
 
+<img src="docs/screenshots/languages.jpg" width="32%" alt="Settings → Language: your phone's language or any of Prism's 31">
+<img src="docs/screenshots/song-versions.jpg" width="32%" alt="Play a different version: the other recordings of a song, with album and length">
+<img src="docs/screenshots/playlist-slider.jpg" width="32%" alt="A 1,100-song playlist with the slider on its right edge and the song's number beside it">
+
 - **31 languages (#105):** Spanish, Portuguese, French, German, Italian, Dutch, Swedish, Polish, Czech, Romanian, Hungarian, Greek, Russian, Ukrainian, Turkish, Arabic, Persian, Hebrew, Hindi, Bengali, Urdu, Indonesian, Malay, Vietnamese, Thai, Filipino, Japanese, Korean and Chinese, plus English. Prism follows your phone's language or the one you pick, right to left where the language is, with dates, counts and YouTube's own words to match. Translated with AI (Claude): corrections are welcome (see [Contributing](CONTRIBUTING.md)).
 - **Recommendations that keep changing:** Daily Mixes that are half new every day, new music from YouTube Music's radio, "You might also like" and similar artists, no artist taking over, skipped suggestions resting for two months, and radio that sounds like radio.
 - **Play a different version:** a song playing as the wrong recording can be swapped for the right one, and stays swapped.

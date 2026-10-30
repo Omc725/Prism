@@ -15,7 +15,7 @@ A free, open-source YouTube Music client for Android, with word-by-word lyrics, 
 
 ### [⬇ Download Prism.apk](../../releases/latest/download/Prism.apk)
 
-[What's new in 1.7.8](../../releases/tag/v1.7.8) · [Changelog](CHANGELOG.md) · [Watch the film](../../releases/download/v1.7.0/Prism-1.7-film.mp4)
+[What's new in 1.7.9](../../releases/tag/v1.7.9) · [Changelog](CHANGELOG.md) · [Watch the film](../../releases/download/v1.7.0/Prism-1.7-film.mp4)
 
 <a href="../../releases/download/v1.7.0/Prism-1.7-film.mp4"><img src="docs/screenshots/preview.gif" width="720" alt="Prism 1.7: word-by-word lyrics on the player. Click to watch the full film."></a>
 
@@ -29,13 +29,19 @@ A free, open-source YouTube Music client for Android, with word-by-word lyrics, 
 > [!NOTE]
 > Prism is an independent, unofficial app. It is not affiliated with, endorsed by, or connected to Google, YouTube or YouTube Music.
 
-## New in 1.7.8: sound and listening, your way
+## New in 1.7.9: Prism in your language
 
-The seventh of the 1.7.x customization updates, Prism 1.6's look back as a choice, and a long list of your requests from GitHub and Reddit. Every new option starts off, so nothing changes until you pick it.
+The last of the 1.7.x updates: Prism in 31 languages, recommendations that keep finding new music, and your requests from GitHub and Reddit. New options start off, so nothing changes until you pick it.
 
-<img src="docs/screenshots/speed-pitch.jpg" width="32%" alt="Speed & pitch: speed and pitch on their own sliders, with Slowed picked">
-<img src="docs/screenshots/crossfade-curves.jpg" width="32%" alt="Playback & sound: four crossfade curves drawn on their cards, and speed and pitch for when Prism starts">
-<img src="docs/screenshots/classic.jpg" width="32%" alt="Home in the Classic Look: Prism 1.6's icons, bold type and docked tabs">
+- **31 languages (#105):** Spanish, Portuguese, French, German, Italian, Dutch, Swedish, Polish, Czech, Romanian, Hungarian, Greek, Russian, Ukrainian, Turkish, Arabic, Persian, Hebrew, Hindi, Bengali, Urdu, Indonesian, Malay, Vietnamese, Thai, Filipino, Japanese, Korean and Chinese, plus English. Prism follows your phone's language or the one you pick, right to left where the language is, with dates, counts and YouTube's own words to match. Translated with AI (Claude): corrections are welcome (see [Contributing](CONTRIBUTING.md)).
+- **Recommendations that keep changing:** Daily Mixes that are half new every day, new music from YouTube Music's radio, "You might also like" and similar artists, no artist taking over, skipped suggestions resting for two months, and radio that sounds like radio.
+- **Play a different version:** a song playing as the wrong recording can be swapped for the right one, and stays swapped.
+- **You asked for it:** a slider on long playlists, genres off on playlists, the lyrics' source beside Sing, search in Local files (#225), fades between screens off (#227), sliders with their number (#209), Unlimited room for sung songs (#238), the widget's play button in another color, and more.
+- **Fixes:** "Response code: 400" at the end of songs (#206), updating with the Home tab off (#201), Load ahead offline (#213), music videos jumping ahead (#203), colors from the cover (#233, #235, #236), widgets (#217), backups between copies (#204) and more. See the [changelog](CHANGELOG.md).
+
+## 1.7.8: sound and listening, your way
+
+The seventh of the 1.7.x customization updates, Prism 1.6's look back as a choice, and a long list of your requests from GitHub and Reddit.
 
 - **Speed & pitch:** 0.5× to 2× and up to 12 semitones up or down, each on its own, with Slowed and Sped up a tap away, for now or every time Prism opens.
 - **Crossfade your way:** four curves (Smooth, Straight, Gentle, DJ cut), a mark on the progress bar where the next song comes in, and covers that blend into each other with the music.

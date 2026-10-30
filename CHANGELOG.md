@@ -80,8 +80,9 @@ were rebuilt so they keep finding music around what you play, and stop going rou
   settling there on Android 9 (and kept the phone drawing).
 - **Back to a song's own version, it plays again**: with "Play a different version", both recordings were kept under
   the song in the song cache, and switching back while the other one was still loading mixed the two, so the song gave
-  a playback error on every tap. Each version now keeps its own cached part, and a cached part Prism can't read is
-  cleared and the song streamed afresh (which also mends a song this already happened to).
+  a playback error on every tap. Each version now keeps its own cached part, a download still coming down is never read
+  mid-song (picking a version starts a song's unfinished download over too), and a cached part or download Prism can't
+  read is cleared and the song streamed afresh at once (which also mends a song this already happened to).
 - **The accent from the cover is the cover's color** (Reddit): a few pixels of another color no longer decide it (a deep
   blue night with two pink lights gave a pink accent). A color now has to fill a real part of the picture. A
   black-and-white cover gives a grey accent, as it looks (its slight tint used to turn into a color); "Always colorful"

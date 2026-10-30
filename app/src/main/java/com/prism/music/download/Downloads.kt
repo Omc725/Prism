@@ -367,10 +367,12 @@ class DownloadRepository(private val context: Context, private val c: AppContain
     /**
      * A finished download the player couldn't read (its file is broken: #183, two formats stitched together by a
      * download that resumed in another one): it's thrown away and fetched again, whole. True when it was a download.
+     * [unfinished]: one still coming down starts over too (another version was picked: what's come so far is the
+     * version before, and finishing it would keep that recording as the song's download).
      */
-    fun redownload(id: String): Boolean {
+    fun redownload(id: String, unfinished: Boolean = false): Boolean {
         val d = runCatching { manager.downloadIndex.getDownload(id) }.getOrNull() ?: return false
-        if (d.state != Download.STATE_COMPLETED) return false
+        if (d.state != Download.STATE_COMPLETED && !(unfinished && d.state in UNFINISHED)) return false
         mainHandler.post {
             manager.removeDownload(id)
             c.forgetDownloadFormat(id)
@@ -698,6 +700,8 @@ class CancelDownloadsReceiver : android.content.BroadcastReceiver() {
 }
 
 private val PREMIUM_ITAGS = com.prism.music.data.stream.StreamResolver.PREMIUM_ITAGS
+/** A download on its way (or waiting to be): [Downloads.redownload] can start it over. */
+private val UNFINISHED = setOf(Download.STATE_QUEUED, Download.STATE_DOWNLOADING, Download.STATE_STOPPED, Download.STATE_FAILED)
 /** Below this a download isn't Premium's 256 kbps (normal quality is 128–160). */
 private const val PREMIUM_KBPS = 200
 

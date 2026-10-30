@@ -915,8 +915,10 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             AudioDiagnostics.log("song", "$id: its download can't be read (${(error.cause ?: error).message?.take(80)}); downloading it again and streaming it now")
             val pos = player.currentPosition
             scope.launch {
-                // The download's removal lands on the download manager's thread first, so the player reads from the network.
-                delay(600)
+                // The download's removal lands on the download manager's thread first, so the player reads from the
+                // network. A fixed 0.6 s wasn't always enough (the owner's phone, 1.7.9's check): the broken file was
+                // read again and the song skipped.
+                withTimeoutOrNull(8_000) { while (withContext(Dispatchers.IO) { c.downloadedWhole(id) }) delay(100) }
                 player.prepare()
                 player.seekTo(pos)
                 player.play()

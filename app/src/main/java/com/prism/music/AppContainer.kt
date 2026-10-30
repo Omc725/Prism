@@ -553,7 +553,7 @@ class AppContainer(val app: Application) {
                 kotlinx.coroutines.withContext(Dispatchers.IO) {
                     mixTempo.forget(song.id)
                     waves.forget(song.id)
-                    downloads.redownload(song.id)
+                    downloads.redownload(song.id, unfinished = true)
                 }
             }
         }
@@ -579,7 +579,7 @@ class AppContainer(val app: Application) {
             if (playerCache.fullyCached(id, spec.position, spec.length)) {
                 streamDetails[song] = "Cached" to streamDetails[song]?.second
                 onStreamResolved?.invoke(song)
-                return spec.buildUpon().setKey(id).build()
+                return spec.buildUpon().setKey(STREAMED + id).build()
             }
         }
         // The listener's own upload (#101): only their account may play it, so it's asked for that way at once instead of
@@ -597,8 +597,11 @@ class AppContainer(val app: Application) {
         if (useCaches) cacheFormat(id, s.itag) else downloadFormat(id, s.itag, spec.position)
         streamDetails[song] = (if (useCaches) "Streaming" else "Downloading") to s
         if (useCaches) onStreamResolved?.invoke(song)
-        return spec.buildUpon().setUri(s.audioUrl).setKey(id).build()
+        return spec.buildUpon().setUri(s.audioUrl).setKey(if (useCaches) STREAMED + id else id).build()
     }
+
+    /** [id] is downloaded whole, so the player reads it from Downloads ([resolveAudio]). */
+    fun downloadedWhole(id: String): Boolean = runCatching { downloadCache.fullyCached(id, 0, C.LENGTH_UNSET.toLong()) }.getOrDefault(false)
 
     /** The format (itag) each download's bytes are in so far, kept so a later part never comes from another one. */
     private val downloadFormats = app.getSharedPreferences("download_formats", android.content.Context.MODE_PRIVATE)
@@ -652,6 +655,9 @@ class AppContainer(val app: Application) {
     fun downloadedItag(id: String): Int? = downloadFormats.getInt(id, 0).takeIf { it != 0 }
 
     companion object {
+        /** The mark on a streamed song's key: Downloads holds no such key ([playbackDataSourceFactory]). */
+        private const val STREAMED = "streamed:"
+
         /**
          * Records [id]'s full length in [cache] once all of it is saved there. The cache only learns a length from a
          * request without one (a song played through); Load ahead's request names its length, so a song it saved whole
@@ -713,11 +719,18 @@ class AppContainer(val app: Application) {
         }
     }
 
-    /** Download cache → song cache → network, with prism:// URIs resolved lazily. */
+    /**
+     * Download cache → song cache → network, with prism:// URIs resolved lazily. Only a whole download is read from
+     * Downloads: a song that streams (or plays from the song cache) has its key marked [STREAMED], which Downloads never
+     * holds, and the song cache reads it without the mark. Before, a download still coming down was read as far as it
+     * had got, and the stream went on from there: another version's (1.7.9's check, "Woke Up Older"), or another
+     * format's, and the two couldn't be read as one.
+     */
     fun playbackDataSourceFactory(): DataSource.Factory {
         val upstream = OkHttpDataSource.Factory(streamHttp)
         val songCache = CacheDataSource.Factory()
             .setCache(playerCache)
+            .setCacheKeyFactory { it.key?.removePrefix(STREAMED) ?: it.uri.toString() }
             .setUpstreamDataSourceFactory(upstream)
             .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
         val downloadsFirst = CacheDataSource.Factory()

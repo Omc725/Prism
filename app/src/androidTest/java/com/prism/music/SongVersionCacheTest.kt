@@ -6,6 +6,7 @@ import androidx.media3.datasource.cache.CacheDataSource
 import androidx.media3.datasource.cache.CacheWriter
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.prism.music.data.SongVersions
+import kotlinx.coroutines.launch
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -55,15 +56,7 @@ class SongVersionCacheTest {
         val c = Fixture.container
         val song = Fixture.songs(1).first()
         // A whole song in the cache (a WAV the player reads), so it plays from there without the network.
-        val rate = 8_000
-        val samples = rate * 60
-        val wav = java.io.ByteArrayOutputStream().apply {
-            fun le32(v: Int) = write(byteArrayOf(v.toByte(), (v shr 8).toByte(), (v shr 16).toByte(), (v shr 24).toByte()))
-            fun le16(v: Int) = write(byteArrayOf(v.toByte(), (v shr 8).toByte()))
-            write("RIFF".toByteArray()); le32(36 + samples * 2); write("WAVEfmt ".toByteArray())
-            le32(16); le16(1); le16(1); le32(rate); le32(rate * 2); le16(2); le16(16)
-            write("data".toByteArray()); le32(samples * 2); write(ByteArray(samples * 2))
-        }.toByteArray()
+        val wav = wav(60)
         CacheWriter(
             CacheDataSource(c.playerCache, ByteArrayDataSource(wav)),
             DataSpec.Builder().setUri("prism://audio/${song.id}").setKey(song.id).build(), null, null,
@@ -88,5 +81,54 @@ class SongVersionCacheTest {
         while (System.currentTimeMillis() < gone && c.playerCache.getCachedBytes(song.id, 0, Long.MAX_VALUE) > 0) Thread.sleep(200)
         assertEquals("its cached part went", 0L, c.playerCache.getCachedBytes(song.id, 0, Long.MAX_VALUE))
         androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().runOnMainSync { player.stop() }
+    }
+
+    /**
+     * A download still coming down isn't read mid-song: it may be another version's (picked, then back) or another
+     * format's, and the song cache's part then followed it as one file. Here the download's start is noise and the
+     * song cache holds the whole song: it plays from the song cache.
+     */
+    @Test fun aDownloadStillComingDownIsntRead() {
+        Fixture.ready()
+        Fixture.launch()
+        val c = Fixture.container
+        val song = Fixture.songs(1).first()
+        val wav = wav(60)
+        CacheWriter(
+            CacheDataSource(c.playerCache, ByteArrayDataSource(wav)),
+            DataSpec.Builder().setUri("prism://audio/${song.id}").setKey(song.id).build(), null, null,
+        ).cache()
+        // Its first 64 KB "downloaded" from something else, the rest not yet.
+        val noise = ByteArray(64 * 1024) { ((it * 7919) % 256).toByte() }
+        CacheWriter(
+            CacheDataSource(c.downloadCache, ByteArrayDataSource(noise)),
+            DataSpec.Builder().setUri("prism://audio/${song.id}").setKey(song.id).setLength(noise.size.toLong()).build(), null, null,
+        ).cache()
+        val player = c.player
+        val errors = java.util.Collections.synchronizedList(mutableListOf<String>())
+        val instrumentation = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation()
+        val watch = kotlinx.coroutines.MainScope().launch { player.errors.collect { errors += it } }
+        instrumentation.runOnMainSync {
+            player.playQueue(listOf(song), 0, com.prism.music.playback.QueueSource(com.prism.music.playback.QueueKind.OTHER, "Download test"))
+        }
+        fun pos(): Long { var p = 0L; instrumentation.runOnMainSync { p = player.position }; return p }
+        val end = System.currentTimeMillis() + 20_000
+        while (System.currentTimeMillis() < end && pos() < 3_000) Thread.sleep(200)
+        watch.cancel()
+        assertTrue("plays from the song cache (at ${pos()} ms; errors $errors)", pos() >= 3_000 && player.currentSong.value?.id == song.id)
+        instrumentation.runOnMainSync { player.stop() }
+    }
+
+    /** A WAV of [seconds] of silence the player reads (8 kHz mono). */
+    private fun wav(seconds: Int): ByteArray {
+        val rate = 8_000
+        val samples = rate * seconds
+        return java.io.ByteArrayOutputStream().apply {
+            fun le32(v: Int) = write(byteArrayOf(v.toByte(), (v shr 8).toByte(), (v shr 16).toByte(), (v shr 24).toByte()))
+            fun le16(v: Int) = write(byteArrayOf(v.toByte(), (v shr 8).toByte()))
+            write("RIFF".toByteArray()); le32(36 + samples * 2); write("WAVEfmt ".toByteArray())
+            le32(16); le16(1); le16(1); le32(rate); le32(rate * 2); le16(2); le16(16)
+            write("data".toByteArray()); le32(samples * 2); write(ByteArray(samples * 2))
+        }.toByteArray()
     }
 }

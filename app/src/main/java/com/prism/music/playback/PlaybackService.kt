@@ -932,6 +932,23 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             }
             return
         }
+        // The phone took the audio decoder away mid-song (1.7.9's night check: screen off, Prism in the background,
+        // "releaseOutputBuffer() is valid only at Executing states; currently at Released state" at 0:58.9, and the
+        // song was skipped). The song itself is fine: it plays on from where it stopped with a new decoder, twice at most.
+        val codecKey = "codec:$id"
+        val codecTries = retries[codecKey] ?: 0
+        if (decoderLost(error) && codecTries < 2) {
+            retries[codecKey] = codecTries + 1
+            AudioDiagnostics.log("song", "$id: the phone released its decoder (${error.errorCodeName}); playing on from ${player.currentPosition / 1000} s")
+            val pos = player.currentPosition
+            scope.launch {
+                delay(300)
+                player.prepare()
+                player.seekTo(pos)
+                player.play()
+            }
+            return
+        }
         if (attempts < 2 && (httpCode == 403 || httpCode == 410 || error.errorCode == PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS ||
                 error.errorCode == PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED)
         ) {
@@ -2426,6 +2443,15 @@ internal fun wontPlayHere(error: Throwable, refused: Boolean = false): Boolean {
         }) return false
     return unavailableHere(error) || refused || chain.any { it is com.prism.music.data.stream.StreamException }
 }
+
+/**
+ * Whether [error] is the audio decoder failing or going away rather than the song's bytes: Android releases a background
+ * app's codecs when another one needs them (1.7.9's night check). Unreadable bytes are a [androidx.media3.common.ParserException],
+ * handled on their own; a format this phone can't decode has its own error codes and isn't retried.
+ */
+internal fun decoderLost(error: PlaybackException): Boolean =
+    (error.errorCode == PlaybackException.ERROR_CODE_DECODING_FAILED || error.errorCode == PlaybackException.ERROR_CODE_DECODER_INIT_FAILED) &&
+        generateSequence(error as Throwable) { it.cause }.none { it is androidx.media3.common.ParserException }
 
 private const val TARGET_LUFS = -14f
 /** The extra Media3 puts on the media button it sends when its notification is swiped away. */

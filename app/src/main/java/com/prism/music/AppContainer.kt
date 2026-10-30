@@ -115,6 +115,13 @@ class PrismApp : Application(), coil3.SingletonImageLoader.Factory {
             container.quietNetwork()
             runCatching { container.rewind.freezeLastYear() }
         }
+        // Scrobbles made offline go to Last.fm once the phone is back online (#133).
+        container.scope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            if (!container.lastFm.available) return@launch
+            container.network.online.collect { online -> if (online && container.lastFm.user.value != null) runCatching { container.lastFm.flush() } }
+        }
+        // A restored backup's settings (since 1.7.8 kept as values beside the store) go in at once, before Home shows.
+        container.scope.launch(kotlinx.coroutines.Dispatchers.IO) { runCatching { container.backup.applyRestoredSettings() } }
         // Downloads a restore left waiting carry on once the first screen is up (the download manager stays on the
         // main thread, where it was made).
         container.scope.launch(kotlinx.coroutines.Dispatchers.Main) {
@@ -236,7 +243,7 @@ class AppContainer(val app: Application) {
     )
     val db = PrismDatabase.build(app)
     val streams by lazy { StreamResolver(app, http, settings, innerTube) }
-    val translator = com.prism.music.data.lyrics.LyricsTranslator(http)
+    val translator = com.prism.music.data.lyrics.LyricsTranslator(http, File(app.filesDir, "translations"))
     val network = com.prism.music.data.NetworkState(app)
     /** Covers kept on the phone for downloads and the library, so they show offline. */
     val artwork = com.prism.music.data.ArtworkStore(app, http) { quietNetwork() }
@@ -244,6 +251,10 @@ class AppContainer(val app: Application) {
     val offline = com.prism.music.data.OfflineLibrary(app)
     /** The last Home, shown at once at the next start while the new one loads (#126). */
     val homeCache = com.prism.music.data.HomeCache(app.filesDir)
+    /** Albums and playlists played lately (Home's Recently played, #196). */
+    val recentCollections by lazy { com.prism.music.data.RecentCollections(app) }
+    /** Last.fm scrobbling, when the listener connects their account (#133). */
+    val lastFm by lazy { com.prism.music.data.lastfm.LastFm(app, http, scope) }
     val lyrics = LyricsRepository(http, db.lyrics(), ytm) { settings.current }.apply {
         choices = app.getSharedPreferences("lyrics_choice", android.content.Context.MODE_PRIVATE)
         searchNames = app.getSharedPreferences("lyrics_search_as", android.content.Context.MODE_PRIVATE)
@@ -429,6 +440,10 @@ class AppContainer(val app: Application) {
     val recognizer by lazy { com.prism.music.data.recognize.Recognizer(this) }
 
     /** Headphone correction (AutoEq profiles per headphones). */
+    /** Crossfade's plan and progress, for the player's mark and blended covers (1.7.8, A6). */
+    val mixState = com.prism.music.playback.MixState()
+    /** Your own equalizer presets, and the one picked for each output (1.7.8, A3). */
+    val eqPresets by lazy { com.prism.music.data.prefs.EqPresetStore(app) }
     val headphoneEq by lazy { com.prism.music.data.HeadphoneEq(app, http, scope, player.preferredOutput) }
 
     /** "Listening to Prism" on the listener's Discord profile, when they've turned it on (Settings → Discord). */
@@ -524,7 +539,7 @@ class AppContainer(val app: Application) {
         // The song's start was saved ahead from another format (the network changed since, so another quality
         // was picked): bytes of two formats can't be stitched together, so that start goes.
         prebuffered.remove(id)?.let { itag -> if (itag != s.itag) runCatching { playerCache.removeResource(id) } }
-        if (!useCaches) downloadFormat(id, s.itag, spec.position)
+        if (useCaches) cacheFormat(id, s.itag) else downloadFormat(id, s.itag, spec.position)
         streamDetails[song] = (if (useCaches) "Streaming" else "Downloading") to s
         if (useCaches) onStreamResolved?.invoke(song)
         return spec.buildUpon().setUri(s.audioUrl).setKey(id).build()
@@ -550,8 +565,35 @@ class AppContainer(val app: Application) {
         if (before != itag) downloadFormats.edit().putInt(id, itag).apply()
     }
 
+    /** The format (itag) each song's cached part came in (1.7.8), so a later part never comes from another one. */
+    private val cacheFormats = app.getSharedPreferences("cache_formats", android.content.Context.MODE_PRIVATE)
+
+    /**
+     * The song cache's side of [downloadFormat] (Reddit, 1.7.7: "Element 134 must be in a TrackEntry" on one song every
+     * time): what's cached of [id] from another format goes before today's stream adds to it. Before 1.7.8 nothing was
+     * recorded; such a song is caught when it can't be read ([forgetCachedAudio] from the player).
+     */
+    private fun cacheFormat(id: String, itag: Int) {
+        val before = cacheFormats.getInt(id, 0)
+        if (before == itag) return
+        if (before != 0 && playerCache.getCachedBytes(id, 0, Long.MAX_VALUE) > 0) {
+            runCatching { playerCache.removeResource(id) }
+            com.prism.music.playback.AudioDiagnostics.log("stream", "$id came as format $itag, not $before as cached: its cached part goes")
+        }
+        cacheFormats.edit().putInt(id, itag).apply()
+    }
+
+    /** [id]'s cached part can't be read: it goes, with its format. Blocking (the cache's own lock). */
+    fun forgetCachedAudio(id: String) {
+        runCatching { playerCache.removeResource(id) }
+        cacheFormats.edit().remove(id).apply()
+    }
+
     /** A download was removed (or is being fetched again): its format no longer binds the next one. */
     fun forgetDownloadFormat(id: String) = downloadFormats.edit().remove(id).apply()
+
+    /** The format (itag) a download came down in, when it's known (recorded since 1.7.7.1). */
+    fun downloadedItag(id: String): Int? = downloadFormats.getInt(id, 0).takeIf { it != 0 }
 
     /** Songs whose first seconds [warmUp] saved into the song cache, and the stream (itag) they came from. */
     private val prebuffered = ConcurrentHashMap<String, Int>()

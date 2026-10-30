@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 data class QueueEntry(val index: Int, val song: Song, val uid: String)
@@ -197,12 +198,39 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
     }
 
     private val _musicSpeed = MutableStateFlow(1f)
-    /** Songs' playback speed (1.7.4, the Speed button under the player; 1× unless picked, for this session). */
+    /**
+     * Songs' playback speed (1.7.4, the Speed button under the player; 1.7.8's Speed & pitch sheet): for this session,
+     * starting from Settings' default each time Prism starts.
+     */
     val musicSpeed: StateFlow<Float> = _musicSpeed
 
     fun setMusicSpeed(speed: Float) {
-        _musicSpeed.value = speed
-        service?.musicSpeed = speed
+        speedTouched = true
+        _musicSpeed.value = speed.coerceIn(0.5f, 2f)
+        service?.musicSpeed = _musicSpeed.value
+    }
+
+    private val _musicPitch = MutableStateFlow(0)
+    /** Songs' pitch in semitones (1.7.8, R12), apart from Sing's key; for this session, as [musicSpeed]. */
+    val musicPitch: StateFlow<Int> = _musicPitch
+
+    fun setMusicPitch(semitones: Int) {
+        speedTouched = true
+        _musicPitch.value = semitones.coerceIn(-12, 12)
+        service?.musicPitch = _musicPitch.value
+    }
+
+    /** The sheet was used before Settings' defaults were read: those don't overwrite the listener's pick. */
+    private var speedTouched = false
+
+    init {
+        scope.launch {
+            val s = c.settings.flow.first().sound
+            if (!speedTouched) {
+                _musicSpeed.value = s.musicSpeed; _musicPitch.value = s.musicPitch
+                service?.let { it.musicSpeed = s.musicSpeed; it.musicPitch = s.musicPitch }
+            }
+        }
     }
 
     fun setOutput(device: AudioDeviceInfo?, reason: String = "picked in the device sheet") {
@@ -225,6 +253,7 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         service = s
         s.episodeSpeed = _episodeSpeed.value
         s.musicSpeed = _musicSpeed.value
+        s.musicPitch = _musicPitch.value
         s.player.addListener(this)
         refresh()
         pending.toList().forEach { it(s.player) }
@@ -271,6 +300,7 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
 
     fun playQueue(songs: List<Song>, startIndex: Int = 0, source: QueueSource, shuffle: Boolean = false) {
         if (songs.isEmpty()) return
+        source.page?.let { c.recentCollections.played(it) }
         val token = ++playToken
         val first = if (shuffle) songs.indices.random() else startIndex.coerceIn(0, songs.lastIndex)
         val tapped = songs[first]
@@ -500,7 +530,9 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         if (!p.isPlaying) ensureStarted()
         if (p.playbackState == Player.STATE_IDLE) p.prepare()
         if (p.playbackState == Player.STATE_ENDED) p.seekTo(0, 0)
-        if (p.isPlaying) p.pause() else p.play()
+        val play = !p.isPlaying
+        // With "Fade on pause and play" (A5) the service fades it; else at once.
+        if (service?.gentle(play) != true) { if (play) p.play() else p.pause() }
     }
 
     fun next() = withPlayer { it.seekToNext() }
@@ -548,6 +580,75 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         }
     }
     fun move(from: Int, to: Int) = withPlayer { it.moveMediaItem(from, to) }
+
+    // ---- Editing several songs at once (R11, #159): what the queue's selection and its rows' ⋯ menus do.
+
+    /** [indices] in the order they play now (the queue lists them that way, shuffled or not). */
+    private fun inPlayOrder(p: ExoPlayer, indices: Collection<Int>): List<Int> {
+        val order = playOrder(p)
+        return indices.distinct().filter { it in 0 until p.mediaItemCount }.sortedBy { order.indexOf(it).let { at -> if (at < 0) Int.MAX_VALUE else at } }
+    }
+
+    /**
+     * Moves the songs at [indices] one after another into place, [to] giving each one's place in a running copy of the
+     * queue's order ([list], the songs' original indices) once it's out. The songs moved are the listener's from then on;
+     * autoplay's suggestions start again at the first of theirs that stayed.
+     */
+    private fun shift(p: ExoPlayer, indices: List<Int>, to: (MutableList<Int>, Int) -> Int) {
+        val plan = QueueEdit.plan(p.mediaItemCount, indices, c.queue.autoplayStart.value, to)
+        plan.moves.forEach { (from, at) -> p.moveMediaItem(from, at) }
+        c.queue.autoplayStart.value = plan.autoplayStart
+    }
+
+    /** The songs at [indices] play straight after the current one, in the order they're in now. */
+    fun moveNext(indices: Collection<Int>) = withPlayer { p ->
+        val cur = p.currentMediaItemIndex
+        val picked = inPlayOrder(p, indices).filter { it != cur }
+        if (picked.isEmpty()) return@withPlayer
+        c.queue.userQueued.value = c.queue.userQueued.value + picked.map { p.getMediaItemAt(it).mediaId }
+        if (p.shuffleModeEnabled) {
+            // Each one straight after the current song, last first, so they end up in their order.
+            picked.asReversed().forEach { moveInPlayOrder(it, cur, after = true) }
+            return@withPlayer
+        }
+        var anchor = cur
+        shift(p, picked) { list, s -> (list.indexOf(anchor) + 1).also { anchor = s } }
+    }
+
+    /** The songs at [indices] go to the end of what's queued, before autoplay's suggestions. */
+    fun moveToEnd(indices: Collection<Int>) = withPlayer { p ->
+        val cur = p.currentMediaItemIndex
+        val picked = inPlayOrder(p, indices).filter { it != cur }
+        if (picked.isEmpty()) return@withPlayer
+        if (p.shuffleModeEnabled) {
+            picked.forEach { s -> playOrder(p).lastOrNull { it != s }?.let { last -> moveInPlayOrder(s, last, after = true) } }
+            return@withPlayer
+        }
+        val auto = c.queue.autoplayStart.value
+        shift(p, picked) { list, _ ->
+            // Before autoplay's first suggestion that stays one (its place in the running copy), or the very end.
+            if (auto < 0) list.size else list.indices.firstOrNull { i -> list[i] >= auto && list[i] !in picked } ?: list.size
+        }
+    }
+
+    /** Takes the songs at [indices] out (never the current one). */
+    fun removeMany(indices: Collection<Int>) = withPlayer { p ->
+        val cur = p.currentMediaItemIndex
+        indices.distinct().filter { it != cur && it in 0 until p.mediaItemCount }.sortedDescending().forEach { removeAt(it) }
+    }
+
+    /** Takes out every song that plays after the one at [index] (the queue's "Clear everything after this"). */
+    fun clearAfter(index: Int) = withPlayer { p ->
+        val order = playOrder(p)
+        val at = order.indexOf(index)
+        if (at < 0) return@withPlayer
+        removeMany(order.drop(at + 1))
+    }
+
+    /** The songs at [indices], for adding them to a playlist. */
+    fun songsAt(indices: Collection<Int>): List<Song> = player?.let { p ->
+        inPlayOrder(p, indices).mapNotNull { p.getMediaItemAt(it).toSong() }
+    } ?: emptyList()
 
     /**
      * Shuffled, a song dragged in the queue: the queue shows the play order then, so the song moves there, to just after
@@ -639,16 +740,31 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         if (!playWhenReady && reason == Player.PLAY_WHEN_READY_CHANGE_REASON_END_OF_MEDIA_ITEM && _sleepEndOfSong.value) setSleepEndOfSong(false)
     }
 
+    @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
     fun setSleepTimer(minutes: Int) {
         if (_sleepEndOfSong.value) setSleepEndOfSong(false)
         _sleepAt.value = if (minutes <= 0) 0 else System.currentTimeMillis() + minutes * 60_000L
         if (minutes > 0) scope.launch {
             val target = _sleepAt.value
-            kotlinx.coroutines.delay(minutes * 60_000L)
+            // A5: the music fades out over the last seconds instead of stopping mid-note.
+            val fadeMs = c.settings.current.sound.sleepFadeSeconds * 1000L
+            kotlinx.coroutines.delay((minutes * 60_000L - fadeMs).coerceAtLeast(0))
+            if (_sleepAt.value != target) return@launch
+            if (fadeMs > 0 && player?.isPlaying == true) {
+                val from = android.os.SystemClock.elapsedRealtime()
+                while (_sleepAt.value == target) {
+                    val f = ((android.os.SystemClock.elapsedRealtime() - from).toFloat() / fadeMs).coerceIn(0f, 1f)
+                    NormalizerProcessor.fadeVolume = (1 - f) * (1 - f)
+                    if (f >= 1f) break
+                    kotlinx.coroutines.delay(100)
+                }
+            }
             if (_sleepAt.value == target) {
                 player?.pause()
                 _sleepAt.value = 0
+                kotlinx.coroutines.delay(400) // what's already queued for the speaker plays out silent
             }
+            NormalizerProcessor.fadeVolume = 1f
         }
     }
 

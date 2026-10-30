@@ -20,6 +20,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
@@ -34,6 +35,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -121,6 +123,22 @@ private const val LYRIC_SETTLE_MS = 400
 private val FALLOFF_ALPHA = floatArrayOf(1f, 0.8f, 0.7f, 0.58f, 0.46f)
 private val FALLOFF_BLUR = arrayOf(0.dp, 1.dp, 1.dp, 1.7.dp, 2.4.dp)
 private const val UNSUNG_ALPHA = 0.38f
+/** What the lyric line on the player has beside its words: the arrow after them (gap + icon), the note before. */
+private val STRIP_ARROW = 20.dp
+private val STRIP_NOTE = 22.dp
+/** Times a song's translation is asked for while its lyrics stay open (the waits grow; Google's rest decides them). */
+private const val TRANSLATE_TRIES = 5
+
+/** "Translation unavailable right now", at most once every few minutes rather than on every song. */
+private object TranslateNotice {
+    private var shownAt = 0L
+    fun show(context: android.content.Context) {
+        val now = android.os.SystemClock.elapsedRealtime()
+        if (shownAt != 0L && now - shownAt < 10 * 60_000L) return
+        shownAt = now
+        android.widget.Toast.makeText(context, "Translation unavailable right now. Prism will try again in a while.", android.widget.Toast.LENGTH_LONG).show()
+    }
+}
 
 enum class ProviderState { UNKNOWN, LOADING, FOUND_KARAOKE, FOUND_SYNCED, FOUND_PLAIN, NONE }
 
@@ -450,10 +468,13 @@ fun CurrentLyricStrip(state: LyricsState, isPlaying: Boolean, onClick: () -> Uni
                 var visible by remember(state.song.id) { mutableStateOf(true) }
                 LaunchedEffect(state.song.id) { delay(4000); visible = false }
                 val a by animateFloatAsState(if (visible) 0.55f else 0f, tween(900), label = "na")
-                Text("Lyrics not available".localized(), style = baseStyle, color = Color.White, maxLines = 1,
-                    modifier = Modifier.padding(vertical = 4.dp).graphicsLayer { alpha = a })
+                Text("Lyrics not available".localized(), style = baseStyle, color = Color.White, maxLines = 1, textAlign = if (centered) TextAlign.Center else null,
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp).graphicsLayer { alpha = a })
             }
-            else -> Text("Looking for lyrics…".localized(), style = baseStyle, color = Color.White.copy(alpha = 0.55f), maxLines = 1, modifier = Modifier.padding(vertical = 4.dp))
+            else -> Text(
+                "Looking for lyrics…".localized(), style = baseStyle, color = Color.White.copy(alpha = 0.55f), maxLines = 1, textAlign = if (centered) TextAlign.Center else null,
+                modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+            )
         }
     }
 }
@@ -468,6 +489,10 @@ private fun StripRow(onClick: () -> Unit, note: Boolean, rtl: Boolean = false, c
             horizontalArrangement = if (centered) Arrangement.Center else Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            // Centered, the words sit in the middle on their own (#164: the arrow after them pushed them left): the side
+            // with less beside the words gets the difference as empty room.
+            val before = if (note) STRIP_NOTE else 0.dp
+            if (centered && STRIP_ARROW > before) Spacer(Modifier.width(STRIP_ARROW - before))
             if (note) {
                 Icon(PrismIcons.Song, null, tint = Color.White, modifier = Modifier.size(16.dp))
                 Spacer(Modifier.width(6.dp))
@@ -475,6 +500,7 @@ private fun StripRow(onClick: () -> Unit, note: Boolean, rtl: Boolean = false, c
             Box(Modifier.weight(1f, fill = false)) { content() }
             Spacer(Modifier.width(6.dp))
             Icon(PrismIcons.ChevronRight, null, tint = Color.White.copy(alpha = 0.5f), modifier = Modifier.size(14.dp))
+            if (centered && before > STRIP_ARROW) Spacer(Modifier.width(before - STRIP_ARROW))
         }
     }
 }
@@ -721,6 +747,8 @@ fun LyricsPanel(
     modifier: Modifier = Modifier,
     /** The lyrics background is drawn behind this panel (the phone's player; a wide player's pane has none of its own). */
     lyricsGround: Boolean = true,
+    /** The line at the end of the lyrics opens the lyrics source sheet (1.7.8, V). */
+    onChangeSource: (() -> Unit)? = null,
 ) {
     val c = LocalContainer.current
     val settings by c.settings.flow.collectAsState()
@@ -760,11 +788,27 @@ fun LyricsPanel(
     // A translation under each line, when it's turned on and the song isn't already in that language.
     val translateTo = settings.lyricsTranslateTo.ifBlank { defaultTranslateTarget() }
     var translation by remember(lines, settings.lyricsTranslate, translateTo) { mutableStateOf<com.prism.music.data.lyrics.LyricsTranslator.Translation?>(null) }
+    val translateContext = androidx.compose.ui.platform.LocalContext.current
     LaunchedEffect(lines, settings.lyricsTranslate, translateTo) {
         if (!settings.lyricsTranslate || lines.isEmpty()) return@LaunchedEffect
         val texts = lines.map { l -> if (l.isGap || (l.text.startsWith("[") && l.text.endsWith("]"))) "" else l.text }
-        translation = runCatching { c.translator.translate(texts, translateTo) }
-            .onFailure { android.util.Log.w("PrismLyrics", "Couldn't translate the lyrics: $it") }.getOrNull()
+        // Asked again while the lyrics stay open when Google isn't answering (#198), instead of showing nothing for good.
+        for (attempt in 0 until TRANSLATE_TRIES) {
+            val result = try {
+                c.translator.translate(texts, translateTo)
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                android.util.Log.w("PrismLyrics", "Couldn't translate the lyrics: $e")
+                com.prism.music.playback.AudioDiagnostics.log("translate", "couldn't translate ${state.song.id}: $e")
+                if (e is com.prism.music.data.lyrics.LyricsTranslator.Unavailable) TranslateNotice.show(translateContext)
+                val wait = (e as? com.prism.music.data.lyrics.LyricsTranslator.Unavailable)?.retryAtMs?.minus(System.currentTimeMillis())
+                kotlinx.coroutines.delay((wait ?: (20_000L shl attempt)).coerceIn(15_000L, 10 * 60_000L))
+                continue
+            }
+            translation = result
+            break
+        }
     }
     val translations = translation?.takeUnless { it.sameLanguage }?.translations
     // Turned on for a song already in that language, nothing changes: say why, once, right after it's turned on.
@@ -846,7 +890,11 @@ fun LyricsPanel(
                 when { !synced -> 0.95f; isActive -> 1f; hidden -> 0f; browsing -> 0.8f; else -> FALLOFF_ALPHA[step] }, tween(LYRIC_SETTLE_MS, easing = LYRIC_EASING), label = "alpha",
             )
             if (line.isGap) {
-                GapDots(line, lines.getOrNull(index + 1)?.timeMs ?: line.endMs, clock, isActive, alpha) { c.player.seekToLyric(line.timeMs) }
+                GapDots(
+                    line, lines.getOrNull(index + 1)?.timeMs ?: line.endMs, clock, isActive, alpha,
+                    centred = settings.lyricsAlign == com.prism.music.data.prefs.LyricsAlign.CENTER,
+                    note = settings.lyricsGapMark == com.prism.music.data.prefs.LyricsGapMark.NOTE,
+                ) { c.player.seekToLyric(line.timeMs) }
                 return@itemsIndexed
             }
             val centred = settings.lyricsAlign == com.prism.music.data.prefs.LyricsAlign.CENTER
@@ -935,11 +983,20 @@ fun LyricsPanel(
             }
         }
         item {
-            Text(
-                "Lyrics from ${state.lyrics?.source?.label ?: "—"}",
-                style = MaterialTheme.typography.labelMedium, color = Color.White.copy(alpha = 0.4f),
-                modifier = Modifier.padding(top = 20.dp),
-            )
+            // Where the lyrics come from, where Apple puts the songwriters (1.7.8, V): a tap picks another source.
+            Row(
+                Modifier.padding(top = 20.dp).then(
+                    if (onChangeSource == null) Modifier
+                    else Modifier.clip(CircleShape).clickable(onClickLabel = "Change lyrics source", onClick = onChangeSource).padding(vertical = 6.dp, horizontal = 2.dp),
+                ),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    "Lyrics from ${state.lyrics?.source?.label ?: "—"}" + if (state.lyrics?.wordSynced == true) " · Karaoke" else "",
+                    style = MaterialTheme.typography.labelMedium, color = Color.White.copy(alpha = 0.4f),
+                )
+                if (onChangeSource != null) Icon(PrismIcons.ChevronRight, null, Modifier.padding(start = 2.dp).size(14.dp), tint = Color.White.copy(alpha = 0.3f))
+            }
             // Japanese kanji were spelled out by Google (no reading data yet): offer the proper readings.
             val needsJapanese by c.romanizer.needsJapanese.collectAsState()
             val models by c.models.states.collectAsState()
@@ -990,24 +1047,34 @@ private fun ControlsReveal(modifier: Modifier, onReveal: () -> Unit) {
 }
 
 @Composable
-private fun GapDots(line: LyricLine, until: Long, clock: State<Long>, active: Boolean, alpha: Float, onClick: () -> Unit) {
+private fun GapDots(
+    line: LyricLine, until: Long, clock: State<Long>, active: Boolean, alpha: Float,
+    centred: Boolean = false, note: Boolean = false, onClick: () -> Unit,
+) {
     val swell by animateFloatAsState(if (active) 1f else 0f, tween(if (active) 400 else 350, easing = LYRIC_EASING), label = "gap")
-    Box(Modifier.height(54.dp * swell), contentAlignment = Alignment.CenterStart) {
+    // Where the lines sit (#158: with centered lyrics the dots stayed on the left), growing from that side.
+    Box(Modifier.fillMaxWidth().height(54.dp * swell), contentAlignment = if (centred) Alignment.Center else Alignment.CenterStart) {
         Box(
             Modifier
                 .clip(RoundedCornerShape(10.dp))
                 .clickable(onClick = onClick)
                 .padding(10.dp)
-                .size(width = 50.dp, height = 12.dp)
+                .size(width = if (note) 22.dp else 50.dp, height = if (note) 22.dp else 12.dp)
                 .graphicsLayer {
                     val g = 0.7f + 0.3f * swell
                     scaleX = g; scaleY = g
-                    transformOrigin = TransformOrigin(0f, 0.5f)
+                    transformOrigin = TransformOrigin(if (centred) 0.5f else 0f, 0.5f)
                     this.alpha = alpha * swell
                 }
                 .drawBehind {
                     val span = (until - line.timeMs).coerceAtLeast(1)
                     val through = ((clock.value - line.timeMs).toFloat() / span).coerceIn(0f, 1f)
+                    if (note) {
+                        // A music note that fills with light from the bottom as the break goes by.
+                        drawNote(Color.White.copy(alpha = 0.35f))
+                        clipRect(top = size.height * (1f - through)) { drawNote(Color.White) }
+                        return@drawBehind
+                    }
                     val r = size.height / 2
                     val stride = (size.width - 2 * r) / 2
                     repeat(3) { d ->
@@ -1017,6 +1084,28 @@ private fun GapDots(line: LyricLine, until: Long, clock: State<Long>, active: Bo
                 },
         )
     }
+}
+
+/** A beamed pair of eighth notes, drawn to fill the area (also the Lyrics settings' example). */
+internal fun androidx.compose.ui.graphics.drawscope.DrawScope.drawNote(color: Color) {
+    val w = size.width
+    val h = size.height
+    val head = w * 0.17f
+    val stem = w * 0.075f
+    val left = Offset(w * 0.24f, h * 0.80f)
+    val right = Offset(w * 0.78f, h * 0.70f)
+    drawOval(color, Offset(left.x - head * 1.15f, left.y - head * 0.85f), androidx.compose.ui.geometry.Size(head * 2.3f, head * 1.7f))
+    drawOval(color, Offset(right.x - head * 1.15f, right.y - head * 0.85f), androidx.compose.ui.geometry.Size(head * 2.3f, head * 1.7f))
+    drawRect(color, Offset(left.x + head * 0.95f, h * 0.18f), androidx.compose.ui.geometry.Size(stem, left.y - h * 0.18f))
+    drawRect(color, Offset(right.x + head * 0.95f, h * 0.08f), androidx.compose.ui.geometry.Size(stem, right.y - h * 0.08f))
+    val beam = androidx.compose.ui.graphics.Path().apply {
+        moveTo(left.x + head * 0.95f, h * 0.18f)
+        lineTo(right.x + head * 0.95f + stem, h * 0.08f)
+        lineTo(right.x + head * 0.95f + stem, h * 0.08f + h * 0.16f)
+        lineTo(left.x + head * 0.95f, h * 0.18f + h * 0.16f)
+        close()
+    }
+    drawPath(beam, color)
 }
 
 /** "Lyrics from X  Change" — shown above the scrubber while lyrics are open. */

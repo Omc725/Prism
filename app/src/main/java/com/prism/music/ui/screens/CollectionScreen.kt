@@ -345,6 +345,11 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     val source = QueueSource(
         if (type == CollectionType.ALBUM) QueueKind.ALBUM else QueueKind.PLAYLIST, page.title + (genreFilter?.let { " · $it" } ?: ""),
         originId = page.playlistId ?: page.id.removePrefix("VL").takeIf { type == CollectionType.PLAYLIST || type == CollectionType.MIX } ?: page.id,
+        page = when (type) {
+            CollectionType.ALBUM -> com.prism.music.data.model.AlbumItem(page.id, page.title, page.subtitle, page.thumbnail, page.playlistId)
+            CollectionType.PLAYLIST, CollectionType.PRISM -> com.prism.music.data.model.PlaylistItem(page.id, page.title, page.subtitle, page.thumbnail)
+            else -> null
+        },
     )
     // Offline (#55): only songs on the phone (downloaded, cached whole, or files) play; the rest show greyed out.
     val online by c.network.online.collectAsState()
@@ -1591,8 +1596,22 @@ private fun downloadsSheetItems(ask: (String, () -> Unit) -> Unit): List<SheetIt
     }
     val smart = all.filter { it.value.state == Download.STATE_COMPLETED && it.key in smartIds }.keys
     val videos by c.downloads.videos.collectAsState()
+    // With Premium quality on: downloads below it (from before it was on, or before 1.7.7.1 made it work) can come down
+    // again in 256 kbps (#149).
+    val settings = com.prism.music.ui.theme.LocalAppSettings.current
+    var below by remember { mutableStateOf(emptyList<String>()) }
+    LaunchedEffect(all.size, settings.premiumStream, settings.isLoggedIn) {
+        below = if (!settings.premiumStream || !settings.isLoggedIn) emptyList()
+        else kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { c.downloads.belowPremium() }
+    }
     return buildList {
         add(SheetItem(PrismIcons.Lyrics, "Get missing lyrics".localized()) { c.downloads.backfillLyrics(force = true) })
+        if (below.isNotEmpty()) add(SheetItem(PrismIcons.Download, "Download again in Premium quality (${below.size})".localized()) {
+            ask(
+                ("Download ${com.prism.music.data.model.songCount(below.size)} again in Premium quality (256 kbps)? Each one is " +
+                    "fetched whole again; until it's back, it plays from the internet rather than from the phone.").localized(context)
+            ) { c.downloads.downloadAgain(below) }
+        })
         if (smart.isNotEmpty()) add(SheetItem(PrismIcons.Delete, "Delete smart downloads (${smart.size})".localized(), danger = true) {
             ask("Delete the ${com.prism.music.data.model.songCount(smart.size)} smart downloads added? They may come back later if smart downloads stays on.".localized(context)) { c.downloads.removeMany(smart) }
         })

@@ -67,6 +67,10 @@
             android:supportsPictureInPicture="true"
             android:resizeableActivity="true"
             android:windowSoftInputMode="adjustResize">
+            <!-- Holding the "Prism" Quick Settings tile opens Prism. -->
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -86,6 +90,13 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="application/zip" />
+            </intent-filter>
+            <!-- Last.fm's sign-in page sends the browser back here with a token (1.7.8). -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="prism" android:host="lastfm" />
             </intent-filter>
         </activity>
 
@@ -407,6 +418,11 @@
             android:name=".widget.WidgetActionReceiver"
             android:exported="false" />
 
+        <!-- The downloads notification's Cancel (1.7.8). -->
+        <receiver
+            android:name=".download.CancelDownloadsReceiver"
+            android:exported="false" />
+
         <!-- Results from Android's installer while Prism updates itself. -->
         <receiver
             android:name=".data.UpdateInstallReceiver"
@@ -430,6 +446,17 @@
             </intent-filter>
         </service>
 
+        <!-- Quick Settings: "Prism" plays or pauses what's lined up (1.7.8). -->
+        <service
+            android:name=".playback.PlayTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_w_play"
+            android:label="@string/tile_play"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
         <!-- Quick Settings: "Recognize song" opens Prism already listening. -->
         <service
             android:name=".data.recognize.RecognizeTileService"

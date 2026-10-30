@@ -203,9 +203,12 @@ open class MainActivity : ComponentActivity() {
 
     private val pipSupported by lazy { packageManager.hasSystemFeature(android.content.pm.PackageManager.FEATURE_PICTURE_IN_PICTURE) }
 
+    /** Settings → Controls & gestures → Picture-in-picture: "Only with its button" (#167) never floats the video by itself. */
+    private val pipOnLeave: Boolean get() = container.settings.current.behavior.pip == com.prism.music.data.prefs.PipMode.AUTO
+
     private fun pipParams(): android.app.PictureInPictureParams = android.app.PictureInPictureParams.Builder()
         .setAspectRatio(pipAspect)
-        .apply { if (Build.VERSION.SDK_INT >= 31) { setAutoEnterEnabled(pipEligible); setSeamlessResizeEnabled(true) } }
+        .apply { if (Build.VERSION.SDK_INT >= 31) { setAutoEnterEnabled(pipEligible && pipOnLeave); setSeamlessResizeEnabled(true) } }
         .build()
 
     /** The player says whether a music video is playing on it, and its shape ([width] × [height], 0 if unknown). */
@@ -230,7 +233,7 @@ open class MainActivity : ComponentActivity() {
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
         // Before Android 12 there's no auto-enter: going Home with a video playing floats it here.
-        if (Build.VERSION.SDK_INT < 31 && pipEligible) enterPip()
+        if (Build.VERSION.SDK_INT < 31 && pipEligible && pipOnLeave) enterPip()
     }
 
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: android.content.res.Configuration) {
@@ -430,6 +433,14 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
             }
             lifecycle.addObserver(watcher)
             onDispose { lifecycle.removeObserver(watcher) }
+        }
+        // Settings → Controls & gestures → "Lock to portrait" (#190): phones stay upright; tablets keep their own layouts.
+        // A full-screen video still turns sideways (it sets its own and puts this back after).
+        val tablet = androidx.compose.ui.platform.LocalConfiguration.current.smallestScreenWidthDp >= 600
+        androidx.compose.runtime.LaunchedEffect(settings.behavior.lockPortrait, tablet) {
+            (rootView.context as? android.app.Activity)?.requestedOrientation =
+                if (settings.behavior.lockPortrait && !tablet) android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                else android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
         val navController = rememberNavController()
         var playerOpen by rememberSaveable { mutableStateOf(false) }
@@ -781,9 +792,16 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                 }
                 }
 
+                // "Cover flies into place" (#199): the player fades in while the mini player's cover flies to its spot.
+                val flight = settings.view.coverFlight && !settings.reduceMotion
+                LaunchedEffect(playerOpen) {
+                    if (!playerOpen) com.prism.music.ui.player.CoverFlight.player = null
+                    else if (flight) com.prism.music.ui.player.CoverFlight.fly()
+                }
                 AnimatedVisibility(
                     playerOpen && song != null,
-                    enter = slideInVertically(tween(if (settings.reduceMotion) 260 else 420)) { it } + fadeIn(tween(200)),
+                    enter = if (flight) fadeIn(tween(com.prism.music.ui.player.CoverFlight.FLIGHT_MS))
+                        else slideInVertically(tween(if (settings.reduceMotion) 260 else 420)) { it } + fadeIn(tween(200)),
                     exit = slideOutVertically(tween(if (settings.reduceMotion) 240 else 360)) { it } + fadeOut(tween(300)),
                 ) {
                     // Settled once it's done sliding in; no longer the moment it starts to leave.
@@ -793,6 +811,7 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                     androidx.compose.runtime.DisposableEffect(Unit) { onDispose { playerCover.settled = false } }
                     Box(Modifier.customizable(com.prism.music.ui.components.CustomizeTarget.PLAYER)) { NowPlayingScreen { playerOpen = false } }
                 }
+                com.prism.music.ui.player.CoverFlightLayer(song?.thumbnail)
 
                 // Looks (1.7.3): "Undo" after each change to the look, and "Customize this" while it's on.
                 com.prism.music.ui.components.LookUndoBar(
@@ -1113,6 +1132,19 @@ private fun handleDeepLink(uri: Uri, nav: Navigator, c: AppContainer) {
     val list = uri.getQueryParameter("list")
     val path = uri.pathSegments
     when {
+        // Back from Last.fm's page in the browser, with the token it gave for this listener (#133).
+        uri.scheme == "prism" && uri.host == "lastfm" -> {
+            nav.go(Routes.settings(com.prism.music.ui.screens.SettingsSection.LIBRARY.key))
+            uri.getQueryParameter("token")?.takeIf { it.isNotBlank() }?.let { token ->
+                c.scope.launch(kotlinx.coroutines.Dispatchers.Main) {
+                    val ok = c.lastFm.finishSignIn(token)
+                    android.widget.Toast.makeText(
+                        c.app, if (ok) "Connected to Last.fm as ${c.lastFm.user.value}" else "Last.fm didn't connect. Try again from Settings.",
+                        android.widget.Toast.LENGTH_LONG,
+                    ).show()
+                }
+            }
+        }
         // A widget's cover or title: the player.
         uri.scheme == "prism" && uri.host == "player" -> nav.openPlayer()
         // Release Radar's notification.

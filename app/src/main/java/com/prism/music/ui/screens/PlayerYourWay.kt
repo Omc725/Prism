@@ -185,12 +185,15 @@ fun PlayerButtonsGroup() {
     val context = androidx.compose.ui.platform.LocalContext.current
     val chosen = s.playerButtons
     Group("Buttons", info = "Pick ${PlayerButton.MIN} to ${PlayerButton.MAX} for the row under the controls. Hold one (or drag its grip) to put them in your order. The rest stay in the player's ⋯ menu.") {
-        // The row as it'll be.
-        SampleScreen(Modifier.padding(horizontal = 16.dp, vertical = 6.dp).fillMaxWidth().height(64.dp)) {
-            Row(
-                Modifier.align(Alignment.Center).clip(CircleShape).background(Color.White.copy(alpha = 0.10f)).border(1.dp, Color.White.copy(alpha = 0.16f), CircleShape).padding(horizontal = 10.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically,
-            ) { chosen.forEach { Icon(buttonIcon(it), it.label(context), Modifier.size(22.dp), tint = Color.White.copy(alpha = 0.85f)) } }
+        // The row as it'll be, in a capsule or apart (1.7.8, #155): each as its own card.
+        ChoiceCards(listOf(true, false), s.view.buttonsPill, { (if (it) "In a capsule" else "Apart").localized(context) }, { (if (it) "One glass capsule (as now)" else "Spread across the row, as in Prism 1.6").localized(context) }, onSelect = { prefs.setButtonsPill(it) }) { pill ->
+            SampleScreen(Modifier.padding(6.dp).fillMaxWidth().height(52.dp)) {
+                Row(
+                    if (pill) Modifier.align(Alignment.Center).clip(CircleShape).background(Color.White.copy(alpha = 0.10f)).border(1.dp, Color.White.copy(alpha = 0.16f), CircleShape).padding(horizontal = 8.dp, vertical = 6.dp)
+                    else Modifier.align(Alignment.Center).fillMaxWidth(),
+                    horizontalArrangement = if (pill) Arrangement.spacedBy(8.dp) else Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically,
+                ) { chosen.forEach { Icon(buttonIcon(it), it.label(context), Modifier.size(18.dp), tint = Color.White.copy(alpha = 0.85f)) } }
+            }
         }
         // The picked ones, in their order, to drag; then the rest to pick from.
         com.prism.music.ui.components.ReorderList(chosen, { it }, { prefs.setPlayerButtons(it) }) { b, i, held, mod ->

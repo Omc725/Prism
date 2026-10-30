@@ -264,6 +264,10 @@ object LookLabels {
         "immersive_video" to tr(R.string.video_in_immersive_mode), "bleed_fit" to tr(R.string.full_bleed_artwork_s_fit), "cover_flight" to tr(R.string.cover_flies_into_the_player),
         "video_controls_hide" to tr(R.string.controls_hide_over_videos), "crossfade_mark" to tr(R.string.crossfade_mark), "blend_covers" to tr(R.string.covers_blend_in_a_crossfade), "player_buttons_pill" to tr(R.string.player_buttons_in_a_capsule),
         "hide_status_bar" to tr(R.string.hide_the_status_bar),
+        "hide_status_bar_player" to tr(R.string.hide_status_bar_on_the_player),
+        "volume_matches_progress" to tr(R.string.volume_bar_like_the_progress_bar),
+        "player_handle" to tr(R.string.handle_at_the_top),
+        "player_nav_band" to tr(R.string.band_behind_the_navigation_buttons),
         "corner_scale" to tr(R.string.corners), "cover_shape_songs" to tr(R.string.songs_covers), "cover_shape_albums" to tr(R.string.albums_covers),
         "cover_shape_artists" to tr(R.string.artists_pictures), "cover_shape_player" to tr(R.string.player_s_cover), "button_shape" to tr(R.string.buttons),
         "play_outlined" to tr(R.string.outlined_play), "type_weight" to tr(R.string.text_weight), "type_spacing" to tr(R.string.letter_spacing), "title_font" to tr(R.string.titles_font),
@@ -389,14 +393,14 @@ object LookLabels {
         "layout" to setOf(
             "corners", "ui_density", "title_size", "card_size", "nav_style", "nav_labels", "nav_hide_on_scroll", "nav_tabs", "start_tab",
             "mini_player_style", "mini_skip_buttons", "mini_prev_button", "mini_progress", "library_view", "library_views", "library_columns", "library_subtitles", "home_header", "home_header_height", "playlist_hero_cover", "replay_theme_colors", "replay_card",
-            "hide_status_bar", "tab_names", "nav_bar_size", "nav_bar_fill", "mini_player_joined", "controls_classic",
+            "hide_status_bar", "hide_status_bar_player", "tab_names", "nav_bar_size", "nav_bar_fill", "mini_player_joined", "controls_classic",
         ),
         "player" to setOf(
             "player_background", "player_backdrop_show", "player_art_corners", "transport_style", "cover_size", "scrubber_style", "art_shrink_on_pause",
             "show_output_device", "full_bleed_artwork", "video_full_bleed", "hide_volume_bar", "show_playing_from", "player_shuffle_repeat", "immersive_art", "immersive_lyrics", "immersive_controls",
             "player_layout", "vinyl_tonearm", "player_deck", "player_buttons", "scrubber_color", "player_title_align", "player_title_size",
             "player_title_weight", "player_title_scroll", "player_times", "mesh_speed", "mesh_intensity", "player_blur", "canvas_fills_background",
-            "scrubber_thickness", "scrubber_thumb", "visualizer", "visualizer_color",
+            "scrubber_thickness", "scrubber_thumb", "volume_matches_progress", "player_handle", "player_nav_band", "visualizer", "visualizer_color",
             "panel_player", "queue_headings", "cast_mark", "immersive_video", "bleed_fit", "cover_flight", "video_controls_hide", "crossfade_mark", "blend_covers", "player_buttons_pill",
         ),
         "lyrics" to setOf(

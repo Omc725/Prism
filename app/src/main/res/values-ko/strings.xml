@@ -3849,4 +3849,18 @@
     <string name="pages_fade_into_each_other">페이지가 서로 겹치며 바뀌어요</string>
     <string name="off_a_page_changes_at_once">끄면 페이지가 바로 바뀌어서, 사라지는 페이지를 잘못 누를 일이 없어요.</string>
     <string name="fades_between_screens_keywords">애니메이션 전환 페이드 화면 페이지 탭</string>
+    <string name="hide_status_bar_on_the_player">플레이어에서만 숨기기</string>
+    <string name="only_while_the_player_its_lyrics">플레이어, 가사 또는 대기열이 열려 있을 때만</string>
+    <string name="volume_bar_like_the_progress_bar">진행 막대와 같은 볼륨 막대</string>
+    <string name="same_style_and_thickness">진행 막대의 스타일과 두께</string>
+    <string name="handle_at_the_top">상단 핸들</string>
+    <string name="volume_bar_keywords">볼륨 막대 두께 얇게 두껍게 높이 같게 진행</string>
+    <string name="player_handle_keywords">핸들 회색 막대 알약 상단 드래그</string>
+    <string name="band_behind_the_navigation_buttons">탐색 버튼 뒤의 띠</string>
+    <string name="nav_band_keywords">탐색 바 그림자 검은 어두운 띠 아래 세 버튼</string>
+    <string name="keep_an_album_s_songs_whole">한 앨범의 곡은 그대로 재생</string>
+    <string name="no_crossfade_between_songs_of_one_album">같은 앨범의 두 곡 사이에 크로스페이드 없음</string>
+    <string name="an_album_playing_through_never_blends">앨범을 처음부터 끝까지 재생할 때는 크로스페이드하지 않습니다. 이 설정은 재생목록이나 셔플이 같은 앨범의 두 곡을 나란히 놓을 때도 그대로 재생합니다.</string>
+    <string name="keep_albums_keywords">앨범 갭리스 끊김없는 전환 크로스페이드 끄기</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

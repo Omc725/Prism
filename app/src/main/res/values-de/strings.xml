@@ -3899,4 +3899,18 @@
     <string name="pages_fade_into_each_other">Seiten blenden ineinander über</string>
     <string name="off_a_page_changes_at_once">Aus: Die Seite wechselt sofort, so trifft ein Tippen nicht die, die gerade ausblendet.</string>
     <string name="fades_between_screens_keywords">Animation Übergang Überblenden Bildschirm Seite Tab</string>
+    <string name="hide_status_bar_on_the_player">Nur im Player ausblenden</string>
+    <string name="only_while_the_player_its_lyrics">Nur solange der Player, seine Songtexte oder die Warteschlange offen sind</string>
+    <string name="volume_bar_like_the_progress_bar">Lautstärkeleiste wie die Fortschrittsleiste</string>
+    <string name="same_style_and_thickness">Stil und Dicke der Fortschrittsleiste</string>
+    <string name="handle_at_the_top">Griff oben</string>
+    <string name="volume_bar_keywords">lautstärke leiste dicke dünn höhe gleich fortschritt</string>
+    <string name="player_handle_keywords">griff graue leiste pille oben ziehen</string>
+    <string name="band_behind_the_navigation_buttons">Streifen hinter den Navigationstasten</string>
+    <string name="nav_band_keywords">navigation leiste schatten schwarz dunkel streifen unten drei tasten</string>
+    <string name="keep_an_album_s_songs_whole">Songs eines Albums ganz lassen</string>
+    <string name="no_crossfade_between_songs_of_one_album">Kein Crossfade zwischen zwei Songs eines Albums</string>
+    <string name="an_album_playing_through_never_blends">Ein Album, das durchläuft, blendet nie über. Das lässt auch zwei seiner Songs ganz, wenn eine Playlist oder Zufallswiedergabe sie nebeneinanderstellt.</string>
+    <string name="keep_albums_keywords">album lückenlos nahtlos übergang crossfade aus</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

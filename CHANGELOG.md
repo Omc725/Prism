@@ -2,6 +2,47 @@
 
 What changed in each release. Older releases are described on the [Releases page](https://github.com/Yigder/Prism/releases).
 
+## 1.7.9.1 (unreleased)
+
+### Fixes
+
+- **Customize Prism → Icons & shapes closed Prism in every language but English** (#255): its examples asked for
+  Prism's drawings by their translated names ("Inicio"). Two smaller slips of the same kind are fixed too: an artist's
+  releases could show "Album" where the artist's name goes, and a shared single could say "Album", outside English.
+- **Japanese lyrics romanized as Chinese** (#256): when Google's romanization was busy (it rests after many requests,
+  translations included), Prism fell back to Android's own, which reads kanji as Chinese and leaves kana as they are
+  ("xīn の zàng"), and kept that. A line Google doesn't answer now waits for the next try instead, one refusal no longer
+  spoils the whole song, a word the Japanese dictionary doesn't know sends its line to Google, and songs spelled the old
+  way are spelled again.
+- **Repeat stays on after the song is swiped away** (#241): swiping the song off the mini player and closing Prism turned
+  repeat (and shuffle) off.
+- **A video in landscape can go back to the player** (#245): turned sideways, a music video fills the screen, and its
+  exit (or Back) put it straight back in full screen, with no way out but turning the phone. Now it goes back to the
+  player (the video in the cover's place, with every control) until the phone turns or the video is switched off.
+- **The lyrics glide to the next line** (#258): on slower phones a line change looked like a jump (the move barely
+  started, then rushed through in a few frames). It now starts at once and eases out over half a second.
+- **The song playing is marked in Home's lists** (#242), Quick picks among them, as in a playlist; TalkBack says
+  "Now Playing" on it.
+
+### Options (Reddit and GitHub)
+
+Each is off until you pick it, so nothing changes otherwise.
+
+- **Keep an album's songs whole** (#247): Settings → Playback & sound → Crossfade. An album playing through never blended;
+  this also keeps two of its songs whole when a playlist or shuffle puts them side by side.
+- **No dark band behind the navigation buttons** (#250): Customize Prism → Player → Show on the player → untick "Band
+  behind the navigation buttons" (three-button navigation), and the player shows through.
+- **Albums or singles in Library → Albums** (Reddit): All, Albums, or Singles & EPs, when the library has both.
+- **Any Home section as a 3 × 3 grid** (Reddit): Customize Home → a section → 3 × 3 shows it as YouTube Music's Speed
+  dial does, pages of nine square covers, uncropped ("Listen again" among them).
+
+- **The volume bar like the progress bar**: Customize Prism → Player → "Volume bar like the progress bar" gives the volume
+  bar the progress bar's style and thickness (it kept its own height).
+- **No grey handle on the player**: Customize Prism → Player → Show on the player → untick "Handle at the top". A swipe down
+  still closes the player.
+- **Hide the status bar only on the player**: Customize Prism → Tabs & mini player → "Hide it only on the player". The
+  status bar goes while the player, its lyrics or the queue are open, and comes back on Home and the other tabs.
+
 ## 1.7.9
 
 ### Prism in 31 languages

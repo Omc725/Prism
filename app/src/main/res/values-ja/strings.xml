@@ -3849,4 +3849,18 @@
     <string name="pages_fade_into_each_other">ページが重なり合うように切り替わります</string>
     <string name="off_a_page_changes_at_once">オフにすると画面がすぐに切り替わり、消えかけのページをタップしてしまうことがなくなります。</string>
     <string name="fades_between_screens_keywords">アニメーション 切り替え フェード 画面 ページ タブ</string>
+    <string name="hide_status_bar_on_the_player">プレーヤーでのみ非表示</string>
+    <string name="only_while_the_player_its_lyrics">プレーヤー、歌詞、キューを開いている間だけ</string>
+    <string name="volume_bar_like_the_progress_bar">音量バーを再生バーと同じに</string>
+    <string name="same_style_and_thickness">再生バーのスタイルと太さ</string>
+    <string name="handle_at_the_top">上部のハンドル</string>
+    <string name="volume_bar_keywords">音量 バー 太さ 細い 太い 高さ 同じ 再生</string>
+    <string name="player_handle_keywords">ハンドル グレー バー ピル 上 ドラッグ</string>
+    <string name="band_behind_the_navigation_buttons">ナビゲーションボタンの背後の帯</string>
+    <string name="nav_band_keywords">ナビゲーション バー 影 黒 暗い 帯 下 3ボタン</string>
+    <string name="keep_an_album_s_songs_whole">アルバムの曲はそのまま再生</string>
+    <string name="no_crossfade_between_songs_of_one_album">同じアルバムの2曲の間でクロスフェードしない</string>
+    <string name="an_album_playing_through_never_blends">アルバムを通して再生するときはクロスフェードしません。この設定では、プレイリストやシャッフルで同じアルバムの2曲が並んだときもそのまま再生します。</string>
+    <string name="keep_albums_keywords">アルバム ギャップレス シームレス 切り替え クロスフェード オフ</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

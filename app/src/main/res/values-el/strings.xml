@@ -3899,4 +3899,18 @@
     <string name="pages_fade_into_each_other">Οι σελίδες σβήνουν η μία στην άλλη</string>
     <string name="off_a_page_changes_at_once">Απενεργοποιημένο, η σελίδα αλλάζει αμέσως, ώστε ένα πάτημα να μην πέφτει σε αυτή που σβήνει.</string>
     <string name="fades_between_screens_keywords">κίνηση μετάβαση σβήσιμο οθόνη σελίδα καρτέλα</string>
+    <string name="hide_status_bar_on_the_player">Απόκρυψη μόνο στο πρόγραμμα αναπαραγωγής</string>
+    <string name="only_while_the_player_its_lyrics">Μόνο όσο είναι ανοιχτά το πρόγραμμα αναπαραγωγής, οι στίχοι ή η ουρά</string>
+    <string name="volume_bar_like_the_progress_bar">Γραμμή έντασης όπως η γραμμή προόδου</string>
+    <string name="same_style_and_thickness">Το στυλ και το πάχος της γραμμής προόδου</string>
+    <string name="handle_at_the_top">Λαβή στην κορυφή</string>
+    <string name="volume_bar_keywords">ένταση γραμμή πάχος λεπτή χοντρή ύψος ίδιο πρόοδος</string>
+    <string name="player_handle_keywords">λαβή γκρι γραμμή χάπι πάνω σύρσιμο</string>
+    <string name="band_behind_the_navigation_buttons">Λωρίδα πίσω από τα κουμπιά πλοήγησης</string>
+    <string name="nav_band_keywords">πλοήγηση γραμμή σκιά μαύρη σκούρα λωρίδα κάτω τρία κουμπιά</string>
+    <string name="keep_an_album_s_songs_whole">Ολόκληρα τα τραγούδια ενός άλμπουμ</string>
+    <string name="no_crossfade_between_songs_of_one_album">Χωρίς crossfade ανάμεσα σε δύο τραγούδια του ίδιου άλμπουμ</string>
+    <string name="an_album_playing_through_never_blends">Ένα άλμπουμ που παίζει ολόκληρο δεν συγχωνεύεται ποτέ. Αυτό κρατά ολόκληρα και δύο τραγούδια του όταν μια λίστα ή η τυχαία σειρά τα βάζει δίπλα δίπλα.</string>
+    <string name="keep_albums_keywords">άλμπουμ χωρίς κενά συνεχές μετάβαση crossfade κλειστό</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

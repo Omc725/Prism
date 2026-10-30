@@ -3999,4 +3999,18 @@
     <string name="pages_fade_into_each_other">Strony przenikają się nawzajem</string>
     <string name="off_a_page_changes_at_once">Wyłączone: strona zmienia się od razu, więc dotknięcie nie trafi w tę, która znika.</string>
     <string name="fades_between_screens_keywords">animacja przejście przenikanie ekran strona karta</string>
+    <string name="hide_status_bar_on_the_player">Ukryj ją tylko w odtwarzaczu</string>
+    <string name="only_while_the_player_its_lyrics">Tylko gdy odtwarzacz, tekst lub kolejka są otwarte</string>
+    <string name="volume_bar_like_the_progress_bar">Pasek głośności jak pasek postępu</string>
+    <string name="same_style_and_thickness">Styl i grubość paska postępu</string>
+    <string name="handle_at_the_top">Uchwyt na górze</string>
+    <string name="volume_bar_keywords">głośność pasek grubość cienki gruby wysokość taki sam postęp</string>
+    <string name="player_handle_keywords">uchwyt szary pasek pigułka góra przeciągnij</string>
+    <string name="band_behind_the_navigation_buttons">Pasek za przyciskami nawigacji</string>
+    <string name="nav_band_keywords">nawigacja pasek cień czarny ciemny dół trzy przyciski</string>
+    <string name="keep_an_album_s_songs_whole">Nie przenikaj utworów z jednego albumu</string>
+    <string name="no_crossfade_between_songs_of_one_album">Bez przenikania między dwoma utworami z jednego albumu</string>
+    <string name="an_album_playing_through_never_blends">Album odtwarzany w całości nigdy się nie przenika. To utrzymuje też w całości dwa jego utwory, gdy playlista lub losowanie postawi je obok siebie.</string>
+    <string name="keep_albums_keywords">album bez przerw ciągły przejście przenikanie wyłączone</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

@@ -193,7 +193,7 @@ fun ImmersivePlayer(
         view.keepScreenOn = true
         onDispose {
             // Back to the bars as the settings have them (#115: the status bar may stay hidden).
-            com.prism.music.ui.components.SystemBars.apply(ctl, c.settings.current.hideStatusBar)
+            com.prism.music.ui.components.SystemBars.apply(ctl, com.prism.music.ui.components.SystemBars.hidden(c.settings.current))
             view.keepScreenOn = false
         }
     }

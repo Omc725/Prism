@@ -77,7 +77,8 @@ data class PinnedPlaylist(val id: String, val title: String, val thumbnail: Stri
 /** Where Autoplay finds what to play next. */
 enum class AutoplaySource(val label: String) { MIXED(tr(R.string.both)), YOURS(tr(R.string.your_music)), YOUTUBE(tr(R.string.prism_music)) }
 
-enum class SectionStyle(val label: String) { CAROUSEL(tr(R.string.carousel)), GRID(tr(R.string.grid)), LIST(tr(R.string.list)), HERO(tr(R.string.spotlight)) }
+/** DIAL (Reddit, 1.7.9.1): pages of 3 × 3 square tiles, as YouTube Music's Speed dial, for any section's items. */
+enum class SectionStyle(val label: String) { CAROUSEL(tr(R.string.carousel)), GRID(tr(R.string.grid)), LIST(tr(R.string.list)), HERO(tr(R.string.spotlight)), DIAL(tr(R.string.grid_3x3)) }
 
 // ---------------------------------------------------------------- Look & layout
 
@@ -932,6 +933,11 @@ data class AppSettings(
     val mixAuto: Boolean = true,
     /** DJ-style: lines up the songs' beats and plays the incoming song at the outgoing one's tempo during the crossfade. */
     val mixBeatMatch: Boolean = false,
+    /**
+     * An album's songs never cross into each other, wherever they sit side by side (#247; an album playing through
+     * already didn't). Off as before: a playlist or shuffle putting two of an album's songs together blends them.
+     */
+    val mixKeepAlbums: Boolean = false,
     /** Tempo analysis (a 1–4 MB download per song) may use mobile data, not only Wi-Fi. */
     val mixTempoOnCellular: Boolean = false,
     val videoMaxHeight: Int = 1080,
@@ -1094,6 +1100,14 @@ data class AppSettings(
     /** The progress bar's thickness (0.6 thin … 2 thick; 1 as the style draws it) and the knob at the playhead. */
     val scrubberThickness: Float = 1f,
     val scrubberThumb: ScrubberThumb = ScrubberThumb.AUTO,
+    /** The volume bar takes the progress bar's style and thickness (Reddit, 1.7.9.1); off, its own height as before. */
+    val volumeMatchesProgress: Boolean = false,
+    /** The grey handle at the player's top (Reddit, 1.7.9.1); a swipe down closes the player with or without it. */
+    val playerHandle: Boolean = true,
+    /** The status bar hidden only while the player is open, with its lyrics and queue (Reddit, 1.7.9.1). */
+    val hideStatusBarPlayer: Boolean = false,
+    /** The dark band behind three-button navigation on the player (#250, 1.7.9.1); off, the player shows through it. */
+    val playerNavBand: Boolean = true,
     /**
      * The visualizer (off by default: it's the one part of the player that works on every frame): moves with the music
      * Prism plays (its own sound, so no microphone), only while the player is on screen.
@@ -1321,6 +1335,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val mixSeconds = intPreferencesKey("mix_seconds")
         val mixAuto = booleanPreferencesKey("mix_auto")
         val mixBeatMatch = booleanPreferencesKey("mix_beat_match")
+        val mixKeepAlbums = booleanPreferencesKey("mix_keep_albums")
         val mixTempoOnCellular = booleanPreferencesKey("mix_tempo_cellular")
         val contentCountry = stringPreferencesKey("content_country")
         val videoMaxHeight = intPreferencesKey("video_max_height")
@@ -1417,6 +1432,10 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val canvasFillsBackground = booleanPreferencesKey("canvas_fills_background")
         val scrubberThickness = floatPreferencesKey("scrubber_thickness")
         val scrubberThumb = stringPreferencesKey("scrubber_thumb")
+        val volumeMatchesProgress = booleanPreferencesKey("volume_matches_progress")
+        val playerHandle = booleanPreferencesKey("player_handle")
+        val hideStatusBarPlayer = booleanPreferencesKey("hide_status_bar_player")
+        val playerNavBand = booleanPreferencesKey("player_nav_band")
         val visualizer = stringPreferencesKey("visualizer")
         val visualizerColor = stringPreferencesKey("visualizer_color")
         val lyricsStyle = stringPreferencesKey("lyrics_style")
@@ -1522,8 +1541,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 immersiveArt, immersiveLyrics, immersiveControls, playerShuffleRepeat, lightStyle,
                 playerLayout, vinylTonearm, playerDeck, playerButtons, scrubberColor, playerTitleAlign, playerTitleSize, playerTitleScroll,
                 playerTimes, meshSpeed, meshIntensity, playerBlur, canvasFillsBackground,
-                scrubberThickness, scrubberThumb, visualizer, visualizerColor,
-                lyricsBlur, lyricsScale, lyricsProgressLine, lyricsSourceButton, hideStatusBar,
+                scrubberThickness, scrubberThumb, volumeMatchesProgress, playerHandle, playerNavBand, visualizer, visualizerColor,
+                lyricsBlur, lyricsScale, lyricsProgressLine, lyricsSourceButton, hideStatusBar, hideStatusBarPlayer,
                 tabNames, navBarSize, navBarFill, miniPlayerJoined, libraryViews, libraryColumns, librarySubtitles,
                 homeHeader, homeHeaderHeight,
                 cornerScale, songShape, albumShape, artistShape, playerShape, buttonShape, playOutlined,
@@ -1556,6 +1575,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 playerLayout to 's', vinylTonearm to 'b', playerDeck to 's', playerButtons to 's', scrubberColor to 's', playerTitleAlign to 's',
                 playerTitleSize to 's', playerTitleScroll to 'b', playerTimes to 's', meshSpeed to 'f', meshIntensity to 'f', playerBlur to 'f',
                 canvasFillsBackground to 'b', scrubberThickness to 'f', scrubberThumb to 's', visualizer to 's', visualizerColor to 's',
+                volumeMatchesProgress to 'b', playerHandle to 'b', hideStatusBarPlayer to 'b', playerNavBand to 'b',
                 lyricsAlign to 's', lyricsBlur to 'b', lyricsProgressLine to 'b', lyricsSourceButton to 'b', lyricsScale to 'f',
                 libraryView to 's', libraryViews to 's', libraryColumns to 's', librarySubtitles to 'b', playlistHeroCover to 'b',
                 homeHeader to 's', homeHeaderHeight to 's', replayThemeColors to 'b', replayCard to 's', hideStatusBar to 'b',
@@ -1569,7 +1589,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         /** Settings that aren't part of a Look: what you listen to and how, your account, Home's contents. */
         val notLook: Set<String> by lazy {
             setOf(
-                "performance_mode", "performance_offered", "share_youtube_links",
+                "performance_mode", "performance_offered", "share_youtube_links", "mix_keep_albums",
                 "merge_liked_videos", "volume_control", "app_volume", "speed_dial_youtube_only", "swipe_tabs",
                 "onboarded", "cookie", "visitor_data", "data_sync_id", "auth_user", "discord_presence", "account_name", "account_email",
                 "account_avatar", "haptics", "immersive_player", "preload", "preload_cellular", "canvas_enabled", "canvas_on_cellular",
@@ -1756,6 +1776,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
             mixSeconds = (p[K.mixSeconds] ?: d.mixSeconds).coerceIn(1, 12),
             mixAuto = p[K.mixAuto] ?: d.mixAuto,
             mixBeatMatch = p[K.mixBeatMatch] ?: d.mixBeatMatch,
+            mixKeepAlbums = p[K.mixKeepAlbums] ?: d.mixKeepAlbums,
             mixTempoOnCellular = p[K.mixTempoOnCellular] ?: d.mixTempoOnCellular,
             contentCountry = p[K.contentCountry] ?: d.contentCountry,
             skipSilence = p[K.skipSilence] ?: d.skipSilence,
@@ -1904,6 +1925,10 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
             canvasFillsBackground = p[K.canvasFillsBackground] ?: d.canvasFillsBackground,
             scrubberThickness = (p[K.scrubberThickness] ?: d.scrubberThickness).coerceIn(0.6f, 2f),
             scrubberThumb = p.enum(K.scrubberThumb, d.scrubberThumb),
+            volumeMatchesProgress = p[K.volumeMatchesProgress] ?: d.volumeMatchesProgress,
+            playerHandle = p[K.playerHandle] ?: d.playerHandle,
+            hideStatusBarPlayer = p[K.hideStatusBarPlayer] ?: d.hideStatusBarPlayer,
+            playerNavBand = p[K.playerNavBand] ?: d.playerNavBand,
             visualizer = p.enum(K.visualizer, d.visualizer),
             visualizerColor = p.enum(K.visualizerColor, d.visualizerColor),
             lyricsLook = LyricsLookPrefs(
@@ -2203,6 +2228,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setMixSeconds(v: Int) = edit { it[K.mixSeconds] = v.coerceIn(1, 12) }
     fun setMixAuto(v: Boolean) = edit { it[K.mixAuto] = v }
     fun setMixBeatMatch(v: Boolean) = edit { it[K.mixBeatMatch] = v }
+    fun setMixKeepAlbums(v: Boolean) = edit { it[K.mixKeepAlbums] = v }
     fun setMixTempoOnCellular(v: Boolean) = edit { it[K.mixTempoOnCellular] = v }
     fun setContentCountry(v: String) = edit { it[K.contentCountry] = v }
     fun setSkipSilence(v: Boolean) = edit { it[K.skipSilence] = v }
@@ -2310,6 +2336,10 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setCanvasFillsBackground(v: Boolean) = edit { it[K.canvasFillsBackground] = v }
     fun setScrubberThickness(v: Float) = edit { it[K.scrubberThickness] = v.coerceIn(0.6f, 2f) }
     fun setScrubberThumb(v: ScrubberThumb) = edit { it[K.scrubberThumb] = v.name }
+    fun setVolumeMatchesProgress(v: Boolean) = edit { it[K.volumeMatchesProgress] = v }
+    fun setPlayerHandle(v: Boolean) = edit { it[K.playerHandle] = v }
+    fun setHideStatusBarPlayer(v: Boolean) = edit { it[K.hideStatusBarPlayer] = v }
+    fun setPlayerNavBand(v: Boolean) = edit { it[K.playerNavBand] = v }
     fun setVisualizer(v: VisualizerStyle) = edit { it[K.visualizer] = v.name }
     fun setVisualizerColor(v: ScrubberColor) = edit { it[K.visualizerColor] = v.name }
     fun setLyricsStyle(v: LyricsStyle) = edit { it[K.lyricsStyle] = v.name }

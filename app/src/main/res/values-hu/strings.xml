@@ -3899,4 +3899,18 @@
     <string name="pages_fade_into_each_other">Az oldalak egymásba úsznak</string>
     <string name="off_a_page_changes_at_once">Kikapcsolva az oldal azonnal vált, így egy koppintás nem érheti az eltűnőt.</string>
     <string name="fades_between_screens_keywords">animáció átmenet áttűnés képernyő oldal lap</string>
+    <string name="hide_status_bar_on_the_player">Csak a lejátszón rejtse el</string>
+    <string name="only_while_the_player_its_lyrics">Csak amíg a lejátszó, a dalszöveg vagy a sor nyitva van</string>
+    <string name="volume_bar_like_the_progress_bar">Hangerősáv, mint a folyamatjelző</string>
+    <string name="same_style_and_thickness">A folyamatjelző stílusa és vastagsága</string>
+    <string name="handle_at_the_top">Fogantyú felül</string>
+    <string name="volume_bar_keywords">hangerő sáv vastagság vékony vastag magasság ugyanaz folyamat</string>
+    <string name="player_handle_keywords">fogantyú szürke sáv pirula felül húzás</string>
+    <string name="band_behind_the_navigation_buttons">Sáv a navigációs gombok mögött</string>
+    <string name="nav_band_keywords">navigáció sáv árnyék fekete sötét alul három gomb</string>
+    <string name="keep_an_album_s_songs_whole">Egy album dalai maradjanak egészben</string>
+    <string name="no_crossfade_between_songs_of_one_album">Nincs áttűnés egy album két dala között</string>
+    <string name="an_album_playing_through_never_blends">A végigjátszott album sosem tűnik át. Ez egy album két dalát is egészben hagyja, ha egy lejátszási lista vagy a keverés egymás mellé teszi őket.</string>
+    <string name="keep_albums_keywords">album szünet nélküli folyamatos átmenet áttűnés ki</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

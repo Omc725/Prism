@@ -88,6 +88,7 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.constrain
@@ -236,7 +237,9 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
 
     // The player is always dark, so it owns light system-bar icons, and the navigation bar's scrim (three-button
     // navigation) is a dark one: in light mode a light grey strip sat under the player.
-    DisposableEffect(Unit) {
+    // Player → Show on the player → "Band behind the navigation buttons" (#250, 1.7.9.1): off, the player shows through.
+    val navBand = settings.playerNavBand
+    DisposableEffect(navBand) {
         val window = (view.context as? Activity)?.window
         val ctl = window?.let { WindowCompat.getInsetsController(it, view) }
         val previous = ctl?.isAppearanceLightStatusBars
@@ -246,12 +249,16 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
         @Suppress("DEPRECATION")
         val previousNavColor = window?.navigationBarColor
         @Suppress("DEPRECATION")
-        window?.navigationBarColor = android.graphics.Color.argb(0x80, 0x1b, 0x1b, 0x1b)
+        window?.navigationBarColor = if (navBand) android.graphics.Color.argb(0x80, 0x1b, 0x1b, 0x1b) else android.graphics.Color.TRANSPARENT
+        // Android's own scrim behind three buttons (10+) would put a band back.
+        val previousEnforced = if (android.os.Build.VERSION.SDK_INT >= 29) window?.isNavigationBarContrastEnforced else null
+        if (android.os.Build.VERSION.SDK_INT >= 29 && !navBand) window?.isNavigationBarContrastEnforced = false
         onDispose {
             if (previous != null) ctl.isAppearanceLightStatusBars = previous
             if (previousNav != null) ctl.isAppearanceLightNavigationBars = previousNav
             @Suppress("DEPRECATION")
             if (previousNavColor != null) window.navigationBarColor = previousNavColor
+            if (android.os.Build.VERSION.SDK_INT >= 29 && previousEnforced != null) window?.isNavigationBarContrastEnforced = previousEnforced
         }
     }
     // Lyrics on screen keep it awake (a wide player shows them unless its other pane is picked), and so does a music
@@ -305,6 +312,15 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     }
 
     val landscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    // Sideways, a video fills the screen; its exit (or Back) keeps it in the player instead, until the phone turns or the
+    // video's switched off (#245: on a Fold held sideways it went straight back to full screen, no way out but turning it).
+    var sidewaysInPlayer by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(landscape, videoMode) { if (!landscape || !videoMode) sidewaysInPlayer = false }
+    val sidewaysFull = landscape && !sidewaysInPlayer
+    fun leaveFullscreenVideo() {
+        fullscreenVideo = false
+        if (landscape) sidewaysInPlayer = true
+    }
     // How far the player has been pulled down (px). Closing slides it the rest of the way, from wherever it is, the same
     // way for Back and for a swipe (#26: a swipe used to hand over to a different exit animation part-way down).
     val dismiss = remember { Animatable(0f) }
@@ -324,7 +340,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     DisposableEffect(cover) { onDispose { cover.pulled = false } }
     BackHandler {
         when {
-            fullscreenVideo -> fullscreenVideo = false
+            fullscreenVideo || (videoMode && sidewaysFull) -> leaveFullscreenVideo()
             // A wide player always shows its lyrics pane: "open" (left from portrait) isn't something Back undoes there.
             lyricsOpen && !wide -> closeLyrics()
             queueOpen -> queueOpen = false
@@ -344,8 +360,8 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
         )
         onDispose { activity?.setPipEligible(false) }
     }
-    if (videoMode && (fullscreenVideo || landscape || inPip)) {
-        FullscreenVideo(song, forceLandscape = fullscreenVideo && !inPip, pip = inPip, onExit = { fullscreenVideo = false })
+    if (videoMode && (fullscreenVideo || sidewaysFull || inPip)) {
+        FullscreenVideo(song, forceLandscape = fullscreenVideo && !inPip, pip = inPip, onExit = { leaveFullscreenVideo() })
         return
     }
 
@@ -750,8 +766,10 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
         Column(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding().then(skipGesture), horizontalAlignment = Alignment.CenterHorizontally) {
             // ------------------------------------------------ Handle + caption
             Box(Modifier.fillMaxWidth().height(DISMISS_STRIP).then(dismissGesture)) {
-                Box(
-                    Modifier.align(Alignment.TopCenter)
+                // Settings → Player → Show on the player → Handle at the top (Reddit, 1.7.9.1): off, the strip still
+                // takes the swipe down.
+                if (settings.playerHandle) Box(
+                    Modifier.align(Alignment.TopCenter).testTag("playerHandle")
                         .offset { IntOffset(0, lerp(6.dp, (DISMISS_STRIP - 5.dp) / 2, p()).roundToPx()) }
                         .size(36.dp, 4.dp)
                         .clip(RoundedCornerShape(2.dp))
@@ -1219,7 +1237,7 @@ private fun FullscreenVideo(song: Song, forceLandscape: Boolean, pip: Boolean = 
         ctl?.hide(WindowInsetsCompat.Type.systemBars())
         onDispose {
             // Back to the bars as the settings have them (#115: the status bar may stay hidden).
-            com.prism.music.ui.components.SystemBars.apply(ctl, prefs.current.hideStatusBar)
+            com.prism.music.ui.components.SystemBars.apply(ctl, com.prism.music.ui.components.SystemBars.hidden(prefs.current))
             if (forceLandscape) activity?.requestedOrientation = previousOrientation ?: ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
     }

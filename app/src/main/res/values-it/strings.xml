@@ -3949,4 +3949,18 @@
     <string name="pages_fade_into_each_other">Le pagine si dissolvono l’una nell’altra</string>
     <string name="off_a_page_changes_at_once">Disattivato, la pagina cambia subito, così un tocco non finisce su quella che sta svanendo.</string>
     <string name="fades_between_screens_keywords">animazione transizione dissolvenza schermata pagina scheda</string>
+    <string name="hide_status_bar_on_the_player">Nascondila solo nel lettore</string>
+    <string name="only_while_the_player_its_lyrics">Solo con il lettore, il testo o la coda aperti</string>
+    <string name="volume_bar_like_the_progress_bar">Barra del volume come quella di avanzamento</string>
+    <string name="same_style_and_thickness">Lo stile e lo spessore della barra di avanzamento</string>
+    <string name="handle_at_the_top">Maniglia in alto</string>
+    <string name="volume_bar_keywords">volume barra spessore sottile spessa altezza uguale avanzamento</string>
+    <string name="player_handle_keywords">maniglia barra grigia pillola alto trascina</string>
+    <string name="band_behind_the_navigation_buttons">Fascia dietro i pulsanti di navigazione</string>
+    <string name="nav_band_keywords">navigazione barra ombra nera scura fascia basso tre pulsanti</string>
+    <string name="keep_an_album_s_songs_whole">Lascia intere le canzoni di un album</string>
+    <string name="no_crossfade_between_songs_of_one_album">Nessuna dissolvenza tra due canzoni dello stesso album</string>
+    <string name="an_album_playing_through_never_blends">Un album riprodotto per intero non si fonde mai. Questo lascia intere anche due sue canzoni quando una playlist o la riproduzione casuale le mette vicine.</string>
+    <string name="keep_albums_keywords">album senza pause continuo transizione dissolvenza disattivata</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

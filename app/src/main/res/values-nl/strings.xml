@@ -3899,4 +3899,18 @@
     <string name="pages_fade_into_each_other">Pagina’s vloeien in elkaar over</string>
     <string name="off_a_page_changes_at_once">Uit: een pagina wisselt meteen, zodat een tik niet op de verdwijnende pagina terechtkomt.</string>
     <string name="fades_between_screens_keywords">animatie overgang vervagen scherm pagina tabblad</string>
+    <string name="hide_status_bar_on_the_player">Alleen in de speler verbergen</string>
+    <string name="only_while_the_player_its_lyrics">Alleen terwijl de speler, de songtekst of de wachtrij open is</string>
+    <string name="volume_bar_like_the_progress_bar">Volumebalk zoals de voortgangsbalk</string>
+    <string name="same_style_and_thickness">De stijl en dikte van de voortgangsbalk</string>
+    <string name="handle_at_the_top">Greep bovenaan</string>
+    <string name="volume_bar_keywords">volume balk dikte dun dik hoogte gelijk voortgang</string>
+    <string name="player_handle_keywords">greep grijze balk pil boven slepen</string>
+    <string name="band_behind_the_navigation_buttons">Band achter de navigatieknoppen</string>
+    <string name="nav_band_keywords">navigatie balk schaduw zwart donker band onder drie knoppen</string>
+    <string name="keep_an_album_s_songs_whole">Nummers van een album heel laten</string>
+    <string name="no_crossfade_between_songs_of_one_album">Geen crossfade tussen twee nummers van één album</string>
+    <string name="an_album_playing_through_never_blends">Een album dat doorspeelt, loopt nooit over. Dit laat ook twee van zijn nummers heel als een playlist of shuffle ze naast elkaar zet.</string>
+    <string name="keep_albums_keywords">album zonder pauze naadloos overgang crossfade uit</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

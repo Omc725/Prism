@@ -75,7 +75,7 @@ import com.prism.music.ui.theme.LocalContainer
 
 private fun SectionStyle.icon(): ImageVector = when (this) {
     SectionStyle.CAROUSEL -> PrismIcons.Carousel
-    SectionStyle.GRID -> PrismIcons.Customize
+    SectionStyle.GRID, SectionStyle.DIAL -> PrismIcons.Customize
     SectionStyle.LIST -> PrismIcons.Queue
     SectionStyle.HERO -> PrismIcons.Rows
 }

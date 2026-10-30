@@ -64,6 +64,16 @@ import kotlin.math.roundToInt
 
 data class VideoLookup(val id: String?, val lookupFailed: Boolean = false)
 
+/**
+ * Whether a song may cross into the next by their albums ([from] and [to] album ids): not while an album plays through
+ * ([albumPlaying]), and with "Keep an album's songs whole" ([keepAlbums], #247) not wherever two of an album's songs
+ * meet (a playlist, shuffle, a radio). An album played as a DJ set ([dj]) is a set: it blends.
+ */
+internal fun blendsAcrossAlbum(from: String?, to: String?, albumPlaying: Boolean, keepAlbums: Boolean, dj: Boolean): Boolean {
+    val sameAlbum = from != null && from == to
+    return dj || !(sameAlbum && (albumPlaying || keepAlbums))
+}
+
 @Serializable
 private data class SavedQueue(
     val songs: List<Song>, val index: Int, val positionMs: Long, val title: String,
@@ -397,8 +407,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         if (c.queue.followingHost || c.together.state.value !is com.prism.music.playback.together.TogetherState.Idle) return false
         // Only while an album plays through (a radio or playlist that puts two of an album's songs side by side blends).
         // An album played as a DJ set is a set: it blends.
-        val album = a.album?.id
-        return c.dj.onNow || !(album != null && album == b.album?.id && c.queue.source.value.kind == QueueKind.ALBUM)
+        return blendsAcrossAlbum(a.album?.id, b.album?.id, c.queue.source.value.kind == QueueKind.ALBUM, c.settings.current.mixKeepAlbums, c.dj.onNow)
     }
 
     /**
@@ -1976,7 +1985,13 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
 
     private fun restoreQueue() {
         val q = runCatching { InnerTube.json.decodeFromString(SavedQueue.serializer(), queueFile.readText()) }.getOrNull() ?: return
-        if (q.songs.isEmpty()) return
+        // Repeat and shuffle are how the listener listens, kept with nothing lined up too (#241: the song swiped away from
+        // the mini player, then Prism closed, and repeat was off again).
+        if (q.songs.isEmpty()) {
+            if (q.repeat != Player.REPEAT_MODE_OFF) player.repeatMode = q.repeat
+            if (q.shuffle) player.shuffleModeEnabled = true
+            return
+        }
         c.queue.source.value = QueueSource(QueueKind.OTHER, q.title)
         player.setMediaItems(q.songs.map { it.toMediaItem() }, q.index.coerceIn(0, q.songs.lastIndex), q.positionMs)
         // Shuffle and repeat as they were, in the same order.

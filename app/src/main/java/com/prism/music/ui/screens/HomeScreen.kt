@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -715,6 +716,7 @@ private fun SongSection(
     onMore: (() -> Unit)? = null,
 ) {
     val c = LocalContainer.current
+    val current by c.player.currentSong.collectAsState()
     val start: (Int) -> Unit = { i -> play?.invoke(songs, i) ?: c.player.playQueue(songs, i, QueueSource(QueueKind.OTHER, title)) }
     val indexOf: (BrowseItem) -> Int = { item -> songs.indexOfFirst { it.id == item.id }.coerceAtLeast(0) }
     SectionHeader(title, strapline = strapline, onMore = onMore)
@@ -743,12 +745,14 @@ private fun SongSection(
                 flingBehavior = if (snap) snapping else androidx.compose.foundation.gestures.ScrollableDefaults.flingBehavior(),
             ) {
                 items(songs.size) { i ->
-                    Box(Modifier.width(330.dp)) { SongRow(songs[i]) { start(i) } }
+                    // The song playing is marked, as in a playlist (#242: Quick picks never showed it).
+                    Box(Modifier.width(330.dp)) { SongRow(songs[i], playing = current?.id == songs[i].id) { start(i) } }
                 }
             }
         }
         SectionStyle.HERO -> HeroRow(songs.map { SongItem(it) }) { item -> start(indexOf(item)) }
         SectionStyle.CAROUSEL -> ItemCarousel(songs.map { SongItem(it) }, { item -> start(indexOf(item)) })
+        SectionStyle.DIAL -> SpeedDialPages(songs.map { SongItem(it) }) { item -> start(indexOf(item)) }
     }
 }
 
@@ -780,7 +784,7 @@ private fun SpeedDialSection(cfg: HomeSectionConfig, items: List<BrowseItem>, op
         SectionStyle.CAROUSEL -> ItemCarousel(items, open)
         SectionStyle.HERO -> HeroRow(items, open)
         SectionStyle.LIST -> StyledItems(SectionStyle.LIST, items, open)
-        SectionStyle.GRID -> SpeedDialPages(items, open)
+        SectionStyle.GRID, SectionStyle.DIAL -> SpeedDialPages(items, open)
     }
 }
 
@@ -802,12 +806,12 @@ private suspend fun speedDialFromHistory(c: com.prism.music.AppContainer): List<
 
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
-private fun SpeedDialPages(items: List<BrowseItem>, open: (BrowseItem) -> Unit) {
+internal fun SpeedDialPages(items: List<BrowseItem>, open: (BrowseItem) -> Unit) {
     val pages = remember(items) { items.chunked(9) }
     val pager = androidx.compose.foundation.pager.rememberPagerState { pages.size }
     val ui = com.prism.music.ui.theme.LocalUi.current
     val menu = rememberPlayMenu()
-    Column {
+    Column(Modifier.testTag("dialPages")) {
         androidx.compose.foundation.pager.HorizontalPager(
             pager,
             // Even margins on both sides (#67 again on 1.7.1: the next page peeking in at the right read as the grid

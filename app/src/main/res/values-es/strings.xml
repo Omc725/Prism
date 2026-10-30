@@ -3949,4 +3949,18 @@
     <string name="pages_fade_into_each_other">Las páginas se funden entre sí</string>
     <string name="off_a_page_changes_at_once">Desactivado, la página cambia al instante, así que un toque no puede caer en la que se está desvaneciendo.</string>
     <string name="fades_between_screens_keywords">animación transición fundido pantalla página pestaña</string>
+    <string name="hide_status_bar_on_the_player">Ocultarla solo en el reproductor</string>
+    <string name="only_while_the_player_its_lyrics">Solo con el reproductor, su letra o la cola abiertos</string>
+    <string name="volume_bar_like_the_progress_bar">Barra de volumen como la de progreso</string>
+    <string name="same_style_and_thickness">El estilo y el grosor de la barra de progreso</string>
+    <string name="handle_at_the_top">Asa en la parte superior</string>
+    <string name="volume_bar_keywords">volumen barra grosor fina gruesa altura igual progreso</string>
+    <string name="player_handle_keywords">asa barra gris píldora arriba arrastrar</string>
+    <string name="band_behind_the_navigation_buttons">Franja detrás de los botones de navegación</string>
+    <string name="nav_band_keywords">navegación barra sombra negra oscura franja abajo tres botones</string>
+    <string name="keep_an_album_s_songs_whole">Mantener enteras las canciones de un álbum</string>
+    <string name="no_crossfade_between_songs_of_one_album">Sin fundido entre dos canciones del mismo álbum</string>
+    <string name="an_album_playing_through_never_blends">Un álbum que suena completo nunca se funde. Esto también mantiene enteras dos de sus canciones cuando una lista o el aleatorio las pone juntas.</string>
+    <string name="keep_albums_keywords">álbum sin pausas continuo transición fundido apagado</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

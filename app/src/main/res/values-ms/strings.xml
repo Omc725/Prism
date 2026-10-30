@@ -3849,4 +3849,18 @@
     <string name="pages_fade_into_each_other">Halaman pudar ke halaman lain</string>
     <string name="off_a_page_changes_at_once">Jika dimatikan, halaman bertukar serta-merta, jadi ketikan tidak terkena halaman yang sedang pudar.</string>
     <string name="fades_between_screens_keywords">animasi peralihan pudar skrin halaman tab</string>
+    <string name="hide_status_bar_on_the_player">Sembunyikan hanya pada pemain</string>
+    <string name="only_while_the_player_its_lyrics">Hanya semasa pemain, liriknya atau baris gilir dibuka</string>
+    <string name="volume_bar_like_the_progress_bar">Bar kelantangan seperti bar kemajuan</string>
+    <string name="same_style_and_thickness">Gaya dan ketebalan bar kemajuan</string>
+    <string name="handle_at_the_top">Pemegang di atas</string>
+    <string name="volume_bar_keywords">kelantangan bar ketebalan nipis tebal tinggi sama kemajuan</string>
+    <string name="player_handle_keywords">pemegang bar kelabu pil atas seret</string>
+    <string name="band_behind_the_navigation_buttons">Jalur di belakang butang navigasi</string>
+    <string name="nav_band_keywords">navigasi bar bayang hitam gelap jalur bawah tiga butang</string>
+    <string name="keep_an_album_s_songs_whole">Kekalkan lagu satu album utuh</string>
+    <string name="no_crossfade_between_songs_of_one_album">Tiada crossfade antara dua lagu daripada satu album</string>
+    <string name="an_album_playing_through_never_blends">Album yang dimainkan penuh tidak pernah bercampur. Ini juga mengekalkan dua lagunya utuh apabila senarai main atau rawak meletakkannya bersebelahan.</string>
+    <string name="keep_albums_keywords">album tanpa jeda lancar peralihan crossfade mati</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

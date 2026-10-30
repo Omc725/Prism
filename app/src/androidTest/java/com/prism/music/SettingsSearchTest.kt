@@ -56,9 +56,10 @@ class SettingsSearchTest {
 }
 
 /** Home's picture opens Settings (there's no Settings tab by default). */
-fun androidx.compose.ui.test.junit4.ComposeTestRule.openSettings() {
-    waitUntil(15_000) { onAllNodesWithContentDescription("Settings").fetchSemanticsNodes().isNotEmpty() }
-    onAllNodesWithContentDescription("Settings").onFirst().performClick()
+/** [name]: the Settings button's name in the language Prism is in. */
+fun androidx.compose.ui.test.junit4.ComposeTestRule.openSettings(name: String = "Settings") {
+    waitUntil(15_000) { onAllNodesWithContentDescription(name).fetchSemanticsNodes().isNotEmpty() }
+    onAllNodesWithContentDescription(name).onFirst().performClick()
     waitUntil(10_000) { onAllNodes(hasSetTextAction()).fetchSemanticsNodes().isNotEmpty() }
 }
 

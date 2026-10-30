@@ -3899,4 +3899,18 @@
     <string name="pages_fade_into_each_other">Sayfalar birbirine geçerek değişir</string>
     <string name="off_a_page_changes_at_once">Kapalıyken sayfa hemen değişir, böylece dokunuş kaybolmakta olan sayfaya gitmez.</string>
     <string name="fades_between_screens_keywords">animasyon geçiş solma ekran sayfa sekme</string>
+    <string name="hide_status_bar_on_the_player">Yalnızca oynatıcıda gizle</string>
+    <string name="only_while_the_player_its_lyrics">Yalnızca oynatıcı, şarkı sözleri veya sıra açıkken</string>
+    <string name="volume_bar_like_the_progress_bar">İlerleme çubuğu gibi ses çubuğu</string>
+    <string name="same_style_and_thickness">İlerleme çubuğunun stili ve kalınlığı</string>
+    <string name="handle_at_the_top">Üstte tutamaç</string>
+    <string name="volume_bar_keywords">ses çubuk kalınlık ince kalın yükseklik aynı ilerleme</string>
+    <string name="player_handle_keywords">tutamaç gri çubuk hap üst sürükle</string>
+    <string name="band_behind_the_navigation_buttons">Gezinme düğmelerinin arkasındaki şerit</string>
+    <string name="nav_band_keywords">gezinme çubuk gölge siyah koyu şerit alt üç düğme</string>
+    <string name="keep_an_album_s_songs_whole">Bir albümün şarkılarını bütün tut</string>
+    <string name="no_crossfade_between_songs_of_one_album">Aynı albümün iki şarkısı arasında geçiş efekti yok</string>
+    <string name="an_album_playing_through_never_blends">Baştan sona çalan bir albüm asla birbirine geçmez. Bu, bir çalma listesi veya karıştırma iki şarkısını yan yana koyduğunda da onları bütün tutar.</string>
+    <string name="keep_albums_keywords">albüm boşluksuz kesintisiz geçiş efekti kapalı</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

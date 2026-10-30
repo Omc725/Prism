@@ -177,7 +177,7 @@ internal fun WidePlayerContent(
             val short = maxHeight < 520.dp
             Column(Modifier.fillMaxSize()) {
                 Box(Modifier.fillMaxWidth().height(if (short) 18.dp else 28.dp).then(dismissGesture)) {
-                    Box(
+                    if (com.prism.music.ui.theme.LocalAppSettings.current.playerHandle) Box(
                         Modifier.align(Alignment.Center).size(38.dp, 5.dp).clip(RoundedCornerShape(3.dp))
                             .background(Color.White.copy(alpha = 0.6f)),
                     )

@@ -273,8 +273,10 @@ fun com.prism.music.data.model.BrowseItem.shareTarget(art: String? = thumbnail):
     return when (this) {
         is com.prism.music.data.model.SongItem -> song.shareTarget()
         is com.prism.music.data.model.AlbumItem -> {
-            val kind = parts.firstOrNull { it in setOf(tr(R.string.album), tr(R.string.single), "EP") } ?: tr(R.string.album)
-            ShareTarget(title, parts.filter { it != kind && !it.matches(Regex("\\d{4}")) }.joinToString(", "), kind, art, url)
+            // YouTube's kinds as Prism reads them (English, Parser.canonical) or already in Prism's language; shown translated.
+            val found = parts.firstOrNull { it in com.prism.music.data.model.RELEASE_KINDS || it == tr(R.string.album) || it == tr(R.string.single) }
+            val kind = found?.let { f -> com.prism.music.data.model.kindName(f) ?: f } ?: tr(R.string.album)
+            ShareTarget(title, parts.filter { it != found && !it.matches(Regex("\\d{4}")) }.joinToString(", "), kind, art, url)
         }
         is com.prism.music.data.model.ArtistItem -> ShareTarget(title, parts.filter { it != "Artist" }.joinToString(" · "), tr(R.string.artist), art, url, round = true)
         is com.prism.music.data.model.PodcastItem -> ShareTarget(title, subtitle, tr(R.string.podcast), art, url)

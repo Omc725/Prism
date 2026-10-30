@@ -3949,4 +3949,18 @@
     <string name="pages_fade_into_each_other">Paginile se estompează una în alta</string>
     <string name="off_a_page_changes_at_once">Dezactivat, pagina se schimbă imediat, așa că o atingere nu poate ajunge pe cea care dispare.</string>
     <string name="fades_between_screens_keywords">animație tranziție estompare ecran pagină filă</string>
+    <string name="hide_status_bar_on_the_player">Ascunde-o doar în player</string>
+    <string name="only_while_the_player_its_lyrics">Doar cât playerul, versurile sau coada sunt deschise</string>
+    <string name="volume_bar_like_the_progress_bar">Bara de volum ca bara de progres</string>
+    <string name="same_style_and_thickness">Stilul și grosimea barei de progres</string>
+    <string name="handle_at_the_top">Mâner sus</string>
+    <string name="volume_bar_keywords">volum bară grosime subțire groasă înălțime la fel progres</string>
+    <string name="player_handle_keywords">mâner bară gri pastilă sus trage</string>
+    <string name="band_behind_the_navigation_buttons">Bandă în spatele butoanelor de navigare</string>
+    <string name="nav_band_keywords">navigare bară umbră neagră întunecată bandă jos trei butoane</string>
+    <string name="keep_an_album_s_songs_whole">Păstrează întregi piesele unui album</string>
+    <string name="no_crossfade_between_songs_of_one_album">Fără crossfade între două piese ale aceluiași album</string>
+    <string name="an_album_playing_through_never_blends">Un album ascultat cap-coadă nu se îmbină niciodată. Asta păstrează întregi și două dintre piesele lui când un playlist sau amestecarea le pune una lângă alta.</string>
+    <string name="keep_albums_keywords">album fără pauze continuu tranziție crossfade oprit</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

@@ -91,6 +91,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -404,10 +405,11 @@ fun PlayerScrubber(positionMs: Long, durationMs: Long, centerLabel: @Composable 
         // Spectrum: a thin line, the played part in the split light (or the color picked for it).
         ThinSlider(
             value = shown,
+            modifier = Modifier.testTag("progressBar"),
             onValueChange = { scrub = it },
             onValueChangeFinished = { scrub?.let { pc.seekTo((it * duration).toLong()) }; scrub = null },
-            idleHeight = if (waved) 22.dp else when (style) { ScrubberStyle.HAIRLINE -> 5.dp; ScrubberStyle.BOLD, ScrubberStyle.WAVE -> 9.dp; ScrubberStyle.THUMB -> 4.dp; ScrubberStyle.RIBBONS -> 6.dp } * thick,
-            activeHeight = if (waved) 26.dp else when (style) { ScrubberStyle.HAIRLINE -> 10.dp; ScrubberStyle.BOLD, ScrubberStyle.WAVE -> 14.dp; ScrubberStyle.THUMB -> 6.dp; ScrubberStyle.RIBBONS -> 9.dp } * thick,
+            idleHeight = if (waved) 22.dp else barHeights(style, thick).first,
+            activeHeight = if (waved) 26.dp else barHeights(style, thick).second,
             thumb = knob != com.prism.music.data.prefs.ScrubberThumb.NONE,
             thumbShape = knob,
             spectrum = true,
@@ -758,12 +760,23 @@ fun rememberPlayerVolume(): PlayerVolume {
 
 val VOLUME_ROW_HEIGHT = 32.dp
 
+/** The progress bar's line at rest and while held, for its [style] and thickness [thick] (the waveform aside). */
+fun barHeights(style: ScrubberStyle, thick: Float): Pair<Dp, Dp> = when (style) {
+    ScrubberStyle.HAIRLINE -> 5.dp to 10.dp
+    ScrubberStyle.BOLD, ScrubberStyle.WAVE -> 9.dp to 14.dp
+    ScrubberStyle.THUMB -> 4.dp to 6.dp
+    ScrubberStyle.RIBBONS -> 6.dp to 9.dp
+}.let { (idle, held) -> idle * thick to held * thick }
+
 @Composable
 fun VolumeRow(volume: PlayerVolume) {
+    val s = LocalAppSettings.current
+    // Reddit, 1.7.9.1: "Volume bar like the progress bar" takes its style's height and thickness; else its own, as before.
+    val (idle, held) = if (s.volumeMatchesProgress) barHeights(s.scrubberStyle, s.scrubberThickness) else 6.dp to 10.dp
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Icon(PrismIcons.VolumeDown, null, tint = Color.White.copy(alpha = 0.5f), modifier = Modifier.size(20.dp))
         Spacer(Modifier.width(10.dp))
-        ThinSlider(volume.level, volume::drag, Modifier.weight(1f), volume::release, idleHeight = 6.dp, activeHeight = 10.dp)
+        ThinSlider(volume.level, volume::drag, Modifier.weight(1f).testTag("volumeBar"), volume::release, idleHeight = idle, activeHeight = held)
         Spacer(Modifier.width(10.dp))
         Icon(PrismIcons.VolumeUp, null, tint = Color.White.copy(alpha = 0.5f), modifier = Modifier.size(20.dp))
     }

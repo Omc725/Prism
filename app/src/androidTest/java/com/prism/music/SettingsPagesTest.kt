@@ -42,6 +42,50 @@ class SettingsPagesTest {
         Fixture.ready()
         Fixture.launch()
         compose.openSettings()
+        walk(pages)
+    }
+
+    /**
+     * The same in Spanish (#255: 1.7.9's Icons & shapes closed Prism in every language but English, its examples asking
+     * for drawings by their translated names, "Inicio"). Prism reads every word through [Strings.resources], so the
+     * Spanish ones are handed to it before it starts; page titles come from the same place.
+     */
+    @Test fun everySettingsPageOpensInSpanish() = walkIn("es")
+
+    /**
+     * And in Arabic's words (longer ones, six plural forms). Not laid out right to left: Android applies a per-app
+     * language by restarting the app, and here the app is the test's own process, so that part is checked by hand.
+     */
+    @Test fun everySettingsPageOpensInArabic() = walkIn("ar")
+
+    private fun walkIn(tag: String) {
+        val ctx = Fixture.context
+        val config = android.content.res.Configuration(ctx.resources.configuration).apply { setLocale(java.util.Locale.forLanguageTag(tag)) }
+        Strings.resources = ctx.createConfigurationContext(config).resources
+        try {
+            Fixture.ready()
+            Fixture.launch()
+            compose.openSettings(tr(R.string.settings))
+            walk(linkedMapOf(
+                tr(R.string.customize_prism) to listOf(
+                    R.string.looks, R.string.color_2, R.string.text, R.string.icons_shapes, R.string.glass_backgrounds,
+                    R.string.tabs_mini_player, R.string.home_library, R.string.player, R.string.lyrics,
+                ).map { tr(it) },
+                tr(R.string.playback_sound) to emptyList(),
+                tr(R.string.lyrics_sing) to emptyList(),
+                tr(R.string.controls_gestures) to emptyList(),
+                tr(R.string.recommendations_replay) to emptyList(),
+                tr(R.string.downloads_storage_data) to emptyList(),
+                tr(R.string.devices_connections) to listOf(tr(R.string.speakers_tvs_browser), tr(R.string.discord), "Last.fm"),
+                tr(R.string.language) to emptyList(),
+                tr(R.string.backup_about) to listOf(tr(R.string.open_source_licenses)),
+            ))
+        } finally {
+            Strings.resources = null
+        }
+    }
+
+    private fun walk(pages: Map<String, List<String>>) {
         for ((hub, inside) in pages) {
             open(hub)
             scrollToEnd()

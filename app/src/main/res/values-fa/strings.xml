@@ -3899,4 +3899,18 @@
     <string name="pages_fade_into_each_other">صفحه‌ها در هم محو می‌شوند</string>
     <string name="off_a_page_changes_at_once">اگر خاموش باشد، صفحه بی‌درنگ عوض می‌شود تا ضربه روی صفحه‌ای که در حال محوشدن است نیفتد.</string>
     <string name="fades_between_screens_keywords">انیمیشن جابه‌جایی محوشدن صفحه برگه</string>
+    <string name="hide_status_bar_on_the_player">فقط در پخش‌کننده پنهان شود</string>
+    <string name="only_while_the_player_its_lyrics">فقط وقتی پخش‌کننده، متن آهنگ یا صف باز است</string>
+    <string name="volume_bar_like_the_progress_bar">نوار صدا مثل نوار پیشرفت</string>
+    <string name="same_style_and_thickness">سبک و ضخامت نوار پیشرفت</string>
+    <string name="handle_at_the_top">دستگیره در بالا</string>
+    <string name="volume_bar_keywords">صدا نوار ضخامت نازک ضخیم ارتفاع یکسان پیشرفت</string>
+    <string name="player_handle_keywords">دستگیره نوار خاکستری قرص بالا کشیدن</string>
+    <string name="band_behind_the_navigation_buttons">نوار پشت دکمه‌های پیمایش</string>
+    <string name="nav_band_keywords">پیمایش نوار سایه سیاه تیره پایین سه دکمه</string>
+    <string name="keep_an_album_s_songs_whole">آهنگ‌های یک آلبوم کامل بمانند</string>
+    <string name="no_crossfade_between_songs_of_one_album">بدون محو متقابل میان دو آهنگ از یک آلبوم</string>
+    <string name="an_album_playing_through_never_blends">آلبومی که کامل پخش می‌شود هرگز محو متقابل نمی‌شود. این گزینه دو آهنگ آن را هم وقتی فهرست پخش یا پخش تصادفی کنار هم می‌گذارد کامل نگه می‌دارد.</string>
+    <string name="keep_albums_keywords">آلبوم بی‌وقفه پیوسته گذار محو متقابل خاموش</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

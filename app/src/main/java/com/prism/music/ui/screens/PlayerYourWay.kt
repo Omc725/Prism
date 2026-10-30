@@ -404,6 +404,10 @@ fun PlayerTitleGroup() {
             detail = { if (it == com.prism.music.data.prefs.ScrubberThumb.AUTO) tr(R.string.a_dot_with_the_thumb_style) else null },
             onSelect = { prefs.setScrubberThumb(it) },
         ) { KnobSample(it, s.scrubberThickness) }
+        // Reddit, 1.7.9.1: the volume bar as thick as the progress bar (its style's height and this thickness).
+        Toggle(tr(R.string.volume_bar_like_the_progress_bar), tr(R.string.same_style_and_thickness), s.volumeMatchesProgress) {
+            prefs.setVolumeMatchesProgress(it)
+        }
     }
 }
 

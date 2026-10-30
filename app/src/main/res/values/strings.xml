@@ -3922,4 +3922,18 @@
     <string name="pages_fade_into_each_other">Pages fade into each other</string>
     <string name="off_a_page_changes_at_once">Off, a page changes at once, so a tap can\'t land on the one fading out.</string>
     <string name="fades_between_screens_keywords">animation transition fade screen page tab</string>
+    <string name="hide_status_bar_on_the_player">Hide it only on the player</string>
+    <string name="only_while_the_player_its_lyrics">Only while the player, its lyrics or the queue are open</string>
+    <string name="volume_bar_like_the_progress_bar">Volume bar like the progress bar</string>
+    <string name="same_style_and_thickness">The progress bar\'s style and thickness</string>
+    <string name="handle_at_the_top">Handle at the top</string>
+    <string name="volume_bar_keywords">volume slider thick thin height match progress bar</string>
+    <string name="player_handle_keywords">handle grey gray bar pill top drag</string>
+    <string name="band_behind_the_navigation_buttons">Band behind the navigation buttons</string>
+    <string name="nav_band_keywords">navigation bar shadow black dark band bottom three button</string>
+    <string name="keep_an_album_s_songs_whole">Keep an album\'s songs whole</string>
+    <string name="no_crossfade_between_songs_of_one_album">No crossfade between two songs of one album</string>
+    <string name="an_album_playing_through_never_blends">An album playing through never blends. This also keeps two of its songs whole when a playlist or shuffle puts them side by side.</string>
+    <string name="keep_albums_keywords">album gapless seamless transition crossfade off</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

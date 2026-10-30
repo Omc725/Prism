@@ -3949,4 +3949,18 @@
     <string name="pages_fade_into_each_other">העמודים מתמזגים זה בזה</string>
     <string name="off_a_page_changes_at_once">כשהאפשרות כבויה העמוד מתחלף מיד, כך שנגיעה לא תיפול על העמוד שנעלם.</string>
     <string name="fades_between_screens_keywords">אנימציה מעבר עמעום מסך עמוד כרטיסייה</string>
+    <string name="hide_status_bar_on_the_player">להסתיר רק בנגן</string>
+    <string name="only_while_the_player_its_lyrics">רק כשהנגן, המילים או התור פתוחים</string>
+    <string name="volume_bar_like_the_progress_bar">פס עוצמת קול כמו פס ההתקדמות</string>
+    <string name="same_style_and_thickness">הסגנון והעובי של פס ההתקדמות</string>
+    <string name="handle_at_the_top">ידית למעלה</string>
+    <string name="volume_bar_keywords">עוצמה פס עובי דק עבה גובה זהה התקדמות</string>
+    <string name="player_handle_keywords">ידית פס אפור גלולה למעלה גרירה</string>
+    <string name="band_behind_the_navigation_buttons">פס מאחורי לחצני הניווט</string>
+    <string name="nav_band_keywords">ניווט סרגל צל שחור כהה פס למטה שלושה לחצנים</string>
+    <string name="keep_an_album_s_songs_whole">להשאיר שלמים שירים של אלבום</string>
+    <string name="no_crossfade_between_songs_of_one_album">בלי מעבר הדרגתי בין שני שירים מאותו אלבום</string>
+    <string name="an_album_playing_through_never_blends">אלבום שמתנגן ברצף אף פעם לא מתמזג. זה גם משאיר שלמים שניים משיריו כשפלייליסט או ערבוב שמים אותם זה לצד זה.</string>
+    <string name="keep_albums_keywords">אלבום ללא הפסקות רציף מעבר הדרגתי כבוי</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

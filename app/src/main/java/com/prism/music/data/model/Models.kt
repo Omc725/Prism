@@ -362,6 +362,9 @@ fun shownKinds(subtitle: String): String {
     return name + subtitle.substring(first.length)
 }
 
+/** YouTube's release kinds, in the English Prism reads them in ([com.prism.music.data.innertube.Parser]), never shown as they are. */
+val RELEASE_KINDS = setOf("Album", "Single", "EP")
+
 fun kindName(kind: String): String? = when (kind) {
     "Song" -> com.prism.music.R.string.kind_song
     "Video" -> com.prism.music.R.string.kind_video

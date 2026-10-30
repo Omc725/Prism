@@ -3999,4 +3999,18 @@
     <string name="pages_fade_into_each_other">Сторінки плавно змінюють одна одну</string>
     <string name="off_a_page_changes_at_once">Якщо вимкнути, сторінка змінюється одразу й дотик не потрапить на ту, що зникає.</string>
     <string name="fades_between_screens_keywords">анімація перехід згасання екран сторінка вкладка</string>
+    <string name="hide_status_bar_on_the_player">Приховувати лише в плеєрі</string>
+    <string name="only_while_the_player_its_lyrics">Лише поки відкрито плеєр, його текст або чергу</string>
+    <string name="volume_bar_like_the_progress_bar">Смуга гучності як смуга прогресу</string>
+    <string name="same_style_and_thickness">Стиль і товщина смуги прогресу</string>
+    <string name="handle_at_the_top">Ручка вгорі</string>
+    <string name="volume_bar_keywords">гучність смуга товщина тонка товста висота однакова прогрес</string>
+    <string name="player_handle_keywords">ручка сіра смуга пігулка вгорі перетягнути</string>
+    <string name="band_behind_the_navigation_buttons">Смуга за кнопками навігації</string>
+    <string name="nav_band_keywords">навігація панель тінь чорна темна смуга внизу три кнопки</string>
+    <string name="keep_an_album_s_songs_whole">Не змішувати пісні одного альбому</string>
+    <string name="no_crossfade_between_songs_of_one_album">Без кросфейду між двома піснями одного альбому</string>
+    <string name="an_album_playing_through_never_blends">Альбом, що грає повністю, ніколи не змішується. Це також лишає цілими дві його пісні, коли плейлист або перемішування ставить їх поруч.</string>
+    <string name="keep_albums_keywords">альбом без пауз безперервний перехід кросфейд вимкнено</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

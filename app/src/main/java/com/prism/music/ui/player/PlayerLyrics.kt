@@ -119,8 +119,11 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
-private val LYRIC_EASING = CubicBezierEasing(0.41f, 0f, 0.12f, 0.99f)
-private const val LYRIC_SETTLE_MS = 400
+// Moving from the first frame and easing out (#258, 1.7.9.1): the old curve (0.41, 0, 0.12, 0.99) over 400 ms barely
+// moved for its first ~100 ms and then rushed, so a slower phone (a Moto E7 Plus at ~15 frames a second) drew a line
+// change in about three frames, as a jump. 500 ms that start at once give it seven or eight.
+private val LYRIC_EASING = CubicBezierEasing(0.2f, 0.6f, 0.25f, 1f)
+private const val LYRIC_SETTLE_MS = 500
 private val FALLOFF_ALPHA = floatArrayOf(1f, 0.8f, 0.7f, 0.58f, 0.46f)
 private val FALLOFF_BLUR = arrayOf(0.dp, 1.dp, 1.dp, 1.7.dp, 2.4.dp)
 private const val UNSUNG_ALPHA = 0.38f

@@ -5,6 +5,7 @@ import com.prism.music.tr
 import com.prism.music.ui.theme.lit
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.graphics.drawscope.rotate
 import com.prism.music.ui.theme.PrismIcons
 import androidx.compose.animation.core.RepeatMode
@@ -206,6 +207,8 @@ fun SongRowLayout(
         modifier
             .fillMaxWidth()
             .combinedClickable(onClick = onClick, onLongClick = onLongClick)
+            // The playing song says so to TalkBack too, not only in color and the bars.
+            .then(if (playing) Modifier.semantics { stateDescription = tr(R.string.now_playing) } else Modifier)
             .padding(start = 16.dp, end = 4.dp, top = ui.gap(6.dp), bottom = ui.gap(6.dp)),
         verticalAlignment = Alignment.CenterVertically,
     ) {

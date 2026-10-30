@@ -3849,4 +3849,18 @@
     <string name="pages_fade_into_each_other">Các trang mờ dần sang nhau</string>
     <string name="off_a_page_changes_at_once">Khi tắt, trang đổi ngay lập tức nên lần chạm không rơi vào trang đang mờ đi.</string>
     <string name="fades_between_screens_keywords">hoạt ảnh chuyển cảnh mờ màn hình trang thẻ</string>
+    <string name="hide_status_bar_on_the_player">Chỉ ẩn trên trình phát</string>
+    <string name="only_while_the_player_its_lyrics">Chỉ khi trình phát, lời bài hát hoặc hàng chờ đang mở</string>
+    <string name="volume_bar_like_the_progress_bar">Thanh âm lượng giống thanh tiến trình</string>
+    <string name="same_style_and_thickness">Kiểu và độ dày của thanh tiến trình</string>
+    <string name="handle_at_the_top">Tay cầm ở trên cùng</string>
+    <string name="volume_bar_keywords">âm lượng thanh độ dày mỏng dày chiều cao giống tiến trình</string>
+    <string name="player_handle_keywords">tay cầm thanh xám viên thuốc trên cùng kéo</string>
+    <string name="band_behind_the_navigation_buttons">Dải sau các nút điều hướng</string>
+    <string name="nav_band_keywords">điều hướng thanh bóng đen tối dải dưới ba nút</string>
+    <string name="keep_an_album_s_songs_whole">Giữ nguyên các bài trong một album</string>
+    <string name="no_crossfade_between_songs_of_one_album">Không chuyển tiếp chồng giữa hai bài cùng album</string>
+    <string name="an_album_playing_through_never_blends">Album phát trọn vẹn không bao giờ chồng tiếng. Tùy chọn này cũng giữ nguyên hai bài của nó khi danh sách phát hoặc phát ngẫu nhiên đặt chúng cạnh nhau.</string>
+    <string name="keep_albums_keywords">album không ngắt liền mạch chuyển tiếp chồng tắt</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

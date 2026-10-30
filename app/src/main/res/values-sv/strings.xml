@@ -3899,4 +3899,18 @@
     <string name="pages_fade_into_each_other">Sidorna tonar över i varandra</string>
     <string name="off_a_page_changes_at_once">Av: sidan byts direkt, så ett tryck kan inte hamna på den som tonar bort.</string>
     <string name="fades_between_screens_keywords">animation övergång toning skärm sida flik</string>
+    <string name="hide_status_bar_on_the_player">Dölj den bara i spelaren</string>
+    <string name="only_while_the_player_its_lyrics">Bara medan spelaren, låttexten eller kön är öppen</string>
+    <string name="volume_bar_like_the_progress_bar">Volymreglage som förloppsindikatorn</string>
+    <string name="same_style_and_thickness">Förloppsindikatorns stil och tjocklek</string>
+    <string name="handle_at_the_top">Handtag överst</string>
+    <string name="volume_bar_keywords">volym reglage tjocklek tunn tjock höjd samma förlopp</string>
+    <string name="player_handle_keywords">handtag grå stapel piller överst dra</string>
+    <string name="band_behind_the_navigation_buttons">Band bakom navigeringsknapparna</string>
+    <string name="nav_band_keywords">navigering fält skugga svart mörk band nederst tre knappar</string>
+    <string name="keep_an_album_s_songs_whole">Låt ett albums låtar vara hela</string>
+    <string name="no_crossfade_between_songs_of_one_album">Ingen övertoning mellan två låtar från samma album</string>
+    <string name="an_album_playing_through_never_blends">Ett album som spelas igenom tonas aldrig över. Det här håller också två av dess låtar hela när en spellista eller blandning lägger dem bredvid varandra.</string>
+    <string name="keep_albums_keywords">album utan paus sömlös övergång övertoning av</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

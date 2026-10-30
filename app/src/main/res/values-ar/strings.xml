@@ -4099,4 +4099,18 @@
     <string name="pages_fade_into_each_other">تتلاشى الصفحات في بعضها</string>
     <string name="off_a_page_changes_at_once">عند إيقافه تتغير الصفحة فورًا، فلا تقع النقرة على الصفحة التي تختفي.</string>
     <string name="fades_between_screens_keywords">حركة انتقال تلاشي شاشة صفحة علامة تبويب</string>
+    <string name="hide_status_bar_on_the_player">إخفاؤه في المشغّل فقط</string>
+    <string name="only_while_the_player_its_lyrics">فقط أثناء فتح المشغّل أو كلماته أو قائمة الانتظار</string>
+    <string name="volume_bar_like_the_progress_bar">شريط الصوت مثل شريط التقدّم</string>
+    <string name="same_style_and_thickness">نمط شريط التقدّم وسُمكه</string>
+    <string name="handle_at_the_top">المقبض في الأعلى</string>
+    <string name="volume_bar_keywords">الصوت شريط سمك رفيع سميك ارتفاع مثل التقدم</string>
+    <string name="player_handle_keywords">مقبض شريط رمادي حبة أعلى سحب</string>
+    <string name="band_behind_the_navigation_buttons">شريط خلف أزرار التنقّل</string>
+    <string name="nav_band_keywords">التنقل شريط ظل أسود داكن أسفل ثلاثة أزرار</string>
+    <string name="keep_an_album_s_songs_whole">إبقاء أغاني الألبوم كاملة</string>
+    <string name="no_crossfade_between_songs_of_one_album">بلا تداخل بين أغنيتين من الألبوم نفسه</string>
+    <string name="an_album_playing_through_never_blends">الألبوم الذي يُشغَّل كاملاً لا يتداخل أبداً. وهذا يُبقي أيضاً أغنيتين منه كاملتين حين تضعهما قائمة تشغيل أو الترتيب العشوائي متجاورتين.</string>
+    <string name="keep_albums_keywords">ألبوم بلا فواصل متصل انتقال تداخل متوقف</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

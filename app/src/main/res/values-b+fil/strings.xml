@@ -3899,4 +3899,18 @@
     <string name="pages_fade_into_each_other">Nagfe-fade ang mga page sa isa’t isa</string>
     <string name="off_a_page_changes_at_once">Kapag naka-off, agad na nagpapalit ang page, kaya hindi tatama ang tap sa page na nawawala.</string>
     <string name="fades_between_screens_keywords">animation transition fade screen page tab</string>
+    <string name="hide_status_bar_on_the_player">Itago lang sa player</string>
+    <string name="only_while_the_player_its_lyrics">Habang bukas lang ang player, ang lyrics nito o ang queue</string>
+    <string name="volume_bar_like_the_progress_bar">Volume bar na kagaya ng progress bar</string>
+    <string name="same_style_and_thickness">Ang istilo at kapal ng progress bar</string>
+    <string name="handle_at_the_top">Hawakan sa itaas</string>
+    <string name="volume_bar_keywords">volume bar kapal manipis makapal taas pareho progress</string>
+    <string name="player_handle_keywords">hawakan abo bar pill itaas hila</string>
+    <string name="band_behind_the_navigation_buttons">Bandang nasa likod ng navigation buttons</string>
+    <string name="nav_band_keywords">navigation bar anino itim madilim banda ibaba tatlong button</string>
+    <string name="keep_an_album_s_songs_whole">Buuin ang mga kanta ng isang album</string>
+    <string name="no_crossfade_between_songs_of_one_album">Walang crossfade sa pagitan ng dalawang kanta ng iisang album</string>
+    <string name="an_album_playing_through_never_blends">Ang album na tumutugtog nang buo ay hindi naghahalo. Pinapanatili rin nitong buo ang dalawa sa mga kanta nito kapag pinagtabi ng playlist o shuffle.</string>
+    <string name="keep_albums_keywords">album walang patlang tuloy-tuloy transition crossfade off</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

@@ -230,6 +230,9 @@ object SettingsIndex {
         SettingEntry(P, tr(R.string.title_and_times), tr(R.string.progress_bar_color), tr(R.string.scrubber_color_accent_white_cover_spectrum)),
         SettingEntry(P, tr(R.string.title_and_times), tr(R.string.progress_bar_thickness), tr(R.string.scrubber_thick_thin_height_bold)),
         SettingEntry(P, tr(R.string.title_and_times), tr(R.string.knob_at_the_playhead), tr(R.string.scrubber_thumb_knob_dot_line_ring)),
+        SettingEntry(P, tr(R.string.title_and_times), tr(R.string.volume_bar_like_the_progress_bar), tr(R.string.volume_bar_keywords)),
+        SettingEntry(P, tr(R.string.show_on_the_player), tr(R.string.handle_at_the_top), tr(R.string.player_handle_keywords)),
+        SettingEntry(P, tr(R.string.show_on_the_player), tr(R.string.band_behind_the_navigation_buttons), tr(R.string.nav_band_keywords)),
         SettingEntry(P, tr(R.string.visualizer), tr(R.string.visualizer), tr(R.string.visualiser_bars_wave_ring_pulse_glow)),
         SettingEntry(P, tr(R.string.visualizer), tr(R.string.visualizer_color), tr(R.string.visualiser_colour_accent_white_cover)),
         SettingEntry(P, tr(R.string.look), tr(R.string.which_background), tr(R.string.player_background_own_design_photo_pattern)),
@@ -275,6 +278,7 @@ object SettingsIndex {
         SettingEntry(S, tr(R.string.crossfade), tr(R.string.automatic_length), needs = crossfade),
         SettingEntry(S, tr(R.string.crossfade), tr(R.string.length), needs = manualLength),
         SettingEntry(S, tr(R.string.crossfade), tr(R.string.match_tempo_and_beats_dj_style), tr(R.string.bpm_beatmatch), needs = crossfade),
+        SettingEntry(S, tr(R.string.crossfade), tr(R.string.keep_an_album_s_songs_whole), tr(R.string.keep_albums_keywords), needs = crossfade),
         SettingEntry(S, tr(R.string.crossfade), tr(R.string.how_they_cross), tr(R.string.curve_equal_power_linear_s_curve), needs = crossfade),
         SettingEntry(S, tr(R.string.crossfade), tr(R.string.crossfade_mark), tr(R.string.progress_bar_mark_where_next_song), needs = crossfade),
         SettingEntry(S, tr(R.string.crossfade), tr(R.string.covers_blend_too), tr(R.string.cover_artwork_dissolve_fade_crossfade_apple), needs = crossfade),
@@ -318,6 +322,7 @@ object SettingsIndex {
         // GitHub requests in 1.7.5 (#111 #115 #116).
         SettingEntry(LB, tr(R.string.liked_songs), tr(R.string.a_song_and_its_video_as), tr(R.string.merge_liked_music_video_duplicate_same)),
         SettingEntry(SettingsSection.INTERFACE, tr(R.string.screen), tr(R.string.hide_the_status_bar), tr(R.string.status_bar_clock_notifications_full_screen)),
+        SettingEntry(SettingsSection.INTERFACE, tr(R.string.screen), tr(R.string.hide_status_bar_on_the_player), tr(R.string.status_bar_clock_notifications_full_screen)),
         SettingEntry(SettingsSection.PLAYER, tr(R.string.under_the_title), tr(R.string.the_volume_slider_changes), tr(R.string.volume_independent_app_volume_prism_s)),
         // Lyrics, your way (1.7.5).
         SettingEntry(YL, tr(R.string.style), tr(R.string.lyrics_style), tr(R.string.prism_classic_karaoke_bold_card_glow)),

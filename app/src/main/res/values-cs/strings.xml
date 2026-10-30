@@ -3999,4 +3999,18 @@
     <string name="pages_fade_into_each_other">Stránky se do sebe prolínají</string>
     <string name="off_a_page_changes_at_once">Vypnuto: stránka se změní hned, takže klepnutí nemůže trefit tu, která mizí.</string>
     <string name="fades_between_screens_keywords">animace přechod prolínání obrazovka stránka karta</string>
+    <string name="hide_status_bar_on_the_player">Skrýt jen v přehrávači</string>
+    <string name="only_while_the_player_its_lyrics">Jen když je otevřený přehrávač, jeho text nebo fronta</string>
+    <string name="volume_bar_like_the_progress_bar">Lišta hlasitosti jako lišta průběhu</string>
+    <string name="same_style_and_thickness">Styl a tloušťka lišty průběhu</string>
+    <string name="handle_at_the_top">Úchyt nahoře</string>
+    <string name="volume_bar_keywords">hlasitost lišta tloušťka tenká tlustá výška stejná průběh</string>
+    <string name="player_handle_keywords">úchyt šedá lišta pilulka nahoře táhnout</string>
+    <string name="band_behind_the_navigation_buttons">Pruh za navigačními tlačítky</string>
+    <string name="nav_band_keywords">navigace lišta stín černý tmavý pruh dole tři tlačítka</string>
+    <string name="keep_an_album_s_songs_whole">Nechat skladby alba celé</string>
+    <string name="no_crossfade_between_songs_of_one_album">Bez prolínání mezi dvěma skladbami jednoho alba</string>
+    <string name="an_album_playing_through_never_blends">Album přehrávané celé se nikdy neprolíná. Nechá také celé dvě jeho skladby, když je seznam nebo náhodné přehrávání postaví vedle sebe.</string>
+    <string name="keep_albums_keywords">album bez mezer plynulý přechod prolínání vypnuto</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

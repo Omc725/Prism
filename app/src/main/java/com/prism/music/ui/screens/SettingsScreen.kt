@@ -182,13 +182,13 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
         GLASS -> listOf("liquid_glass", "glass_kind", "frosted_glass", "frosted_pages", "backdrops", "backdrop_dim", "backdrop_motion", "reduce_motion")
         INTERFACE -> listOf(
             "nav_style", "nav_labels", "nav_hide_on_scroll", "nav_tabs", "start_tab", "mini_player_style", "mini_skip_buttons",
-            "mini_prev_button", "mini_progress", "ui_density", "title_size", "card_size", "hide_status_bar",
+            "mini_prev_button", "mini_progress", "ui_density", "title_size", "card_size", "hide_status_bar", "hide_status_bar_player",
             "tab_names", "nav_bar_size", "nav_bar_fill", "mini_player_joined",
         )
         PLAYER -> listOf(
             "player_background", "player_backdrop_show", "transport_style", "scrubber_style", "cover_size", "player_art_corners",
             "full_bleed_artwork", "video_full_bleed", "art_shrink_on_pause", "show_playing_from", "player_shuffle_repeat", "hide_volume_bar",
-            "show_output_device", "immersive_art", "immersive_lyrics", "immersive_controls",
+            "show_output_device", "immersive_art", "immersive_lyrics", "immersive_controls", "player_handle", "player_nav_band",
         )
         LYRICS_LOOK -> listOf(
             "lyrics_align", "lyrics_scale", "lyrics_blur", "lyrics_progress_line", "lyrics_source_button", "lyrics_style", "lyrics_blur_amount", "lyrics_spacing",
@@ -989,7 +989,9 @@ private fun IconSettings() {
             },
         ) { f ->
             // Three: a fourth was squeezed to a dot in a third of a phone's width.
-            val icons = remember(f) { listOf(tr(R.string.home), tr(R.string.library), tr(R.string.heart)).map { com.prism.music.ui.theme.PrismIcons.preview(it, f) } }
+            // The drawings' own names (design/icons), never words on the screen: translated, "Inicio" had no drawing and
+            // the page closed Prism in every language but English (#255).
+            val icons = remember(f) { listOf("Home", "Library", "Heart").map { com.prism.music.ui.theme.PrismIcons.preview(it, f) } }
             Row(Modifier.fillMaxWidth().padding(10.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
                 icons.forEach { Icon(it, null, Modifier.size(22.dp), tint = MaterialTheme.colorScheme.onSurface) }
             }
@@ -1019,7 +1021,8 @@ private fun IconSettings() {
             // Cupertino is drawn by hand for its own icons; the others come from the drawings.
             val icons = remember(p) {
                 if (p == com.prism.music.ui.theme.IconPack.CUPERTINO) com.prism.music.ui.theme.PrismIcons.cupertinoPreview()
-                else listOf(tr(R.string.home), tr(R.string.search), tr(R.string.heart), tr(R.string.widget_play)).map { com.prism.music.ui.theme.PrismIcons.preview(it, com.prism.music.ui.theme.IconFill.OUTLINE, p) }
+                // The drawings' own names, never translated words (#255).
+                else listOf("Home", "Search", "Heart", "Play").map { com.prism.music.ui.theme.PrismIcons.preview(it, com.prism.music.ui.theme.IconFill.OUTLINE, p) }
             }
             Row(Modifier.fillMaxWidth().padding(10.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
                 icons.forEach { Icon(it, null, Modifier.size(22.dp), tint = MaterialTheme.colorScheme.onSurface) }
@@ -1300,6 +1303,10 @@ private fun androidx.compose.foundation.lazy.LazyListScope.layoutAndNavigation()
                         tr(R.string.hide_the_status_bar), tr(R.string.more_room_swipe_down_from_the), s.hideStatusBar,
                         info = tr(R.string.the_clock_battery_and_notification_icons),
                     ) { prefs.setHideStatusBar(it) }
+                    // Reddit, 1.7.9.1: only while the player is up (the rest of Prism keeps it). Moot with it hidden everywhere.
+                    if (!s.hideStatusBar) Toggle(
+                        tr(R.string.hide_status_bar_on_the_player), tr(R.string.only_while_the_player_its_lyrics), s.hideStatusBarPlayer,
+                    ) { prefs.setHideStatusBarPlayer(it) }
                 }
             }
             ResetPage(SettingsSection.INTERFACE)
@@ -1538,6 +1545,10 @@ private fun PlayerSettings() {
         Group(tr(R.string.show_on_the_player)) {
             ShowChips(
                 listOf(
+                    // Reddit, 1.7.9.1: the grey handle at the top can go (a swipe down still closes the player).
+                    ShowOption(tr(R.string.handle_at_the_top), s.playerHandle) { prefs.setPlayerHandle(it) },
+                    // #250: the dark band behind three-button navigation (off: the player shows through it).
+                    ShowOption(tr(R.string.band_behind_the_navigation_buttons), s.playerNavBand) { prefs.setPlayerNavBand(it) },
                     ShowOption(tr(R.string.from_the_album), s.showPlayingFrom) { prefs.setShowPlayingFrom(it) },
                     ShowOption(tr(R.string.best_part), s.bestPartButton) { prefs.setBestPartButton(it) },
                     ShowOption(tr(R.string.stream_quality), s.showQuality) { prefs.setShowQuality(it) },
@@ -1853,6 +1864,11 @@ private fun SoundPage() {
                     tr(R.string.match_tempo_and_beats_dj_style), tr(R.string.beats_line_up_while_songs_overlap), s.mixBeatMatch,
                     info = tr(R.string.the_next_song_plays_at_the),
                 ) { prefs.setMixBeatMatch(it) }
+                // #247: an album played as an album never blended; this keeps its songs whole anywhere they meet.
+                Toggle(
+                    tr(R.string.keep_an_album_s_songs_whole), tr(R.string.no_crossfade_between_songs_of_one_album), s.mixKeepAlbums,
+                    info = tr(R.string.an_album_playing_through_never_blends),
+                ) { prefs.setMixKeepAlbums(it) }
                 CrossfadeCurveCards()
                 Toggle(
                     tr(R.string.crossfade_mark), tr(R.string.where_the_next_song_comes_in), s.view.crossfadeMark,

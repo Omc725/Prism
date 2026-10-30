@@ -3849,4 +3849,18 @@
     <string name="pages_fade_into_each_other">Halaman memudar ke halaman berikutnya</string>
     <string name="off_a_page_changes_at_once">Jika mati, halaman langsung berganti, jadi ketukan tidak mengenai halaman yang sedang memudar.</string>
     <string name="fades_between_screens_keywords">animasi transisi pudar layar halaman tab</string>
+    <string name="hide_status_bar_on_the_player">Sembunyikan hanya di pemutar</string>
+    <string name="only_while_the_player_its_lyrics">Hanya saat pemutar, liriknya, atau antrean terbuka</string>
+    <string name="volume_bar_like_the_progress_bar">Bilah volume seperti bilah progres</string>
+    <string name="same_style_and_thickness">Gaya dan ketebalan bilah progres</string>
+    <string name="handle_at_the_top">Pegangan di atas</string>
+    <string name="volume_bar_keywords">volume bilah ketebalan tipis tebal tinggi sama progres</string>
+    <string name="player_handle_keywords">pegangan bilah abu-abu pil atas seret</string>
+    <string name="band_behind_the_navigation_buttons">Pita di belakang tombol navigasi</string>
+    <string name="nav_band_keywords">navigasi bilah bayangan hitam gelap pita bawah tiga tombol</string>
+    <string name="keep_an_album_s_songs_whole">Biarkan lagu satu album utuh</string>
+    <string name="no_crossfade_between_songs_of_one_album">Tanpa crossfade antara dua lagu dari satu album</string>
+    <string name="an_album_playing_through_never_blends">Album yang diputar penuh tidak pernah berbaur. Ini juga menjaga dua lagunya tetap utuh saat playlist atau acak menaruhnya berdampingan.</string>
+    <string name="keep_albums_keywords">album tanpa jeda mulus transisi crossfade mati</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

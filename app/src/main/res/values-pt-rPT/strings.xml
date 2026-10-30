@@ -3949,4 +3949,18 @@
     <string name="pages_fade_into_each_other">As páginas fundem-se umas nas outras</string>
     <string name="off_a_page_changes_at_once">Desligado, a página muda de imediato, por isso um toque não cai na que está a desaparecer.</string>
     <string name="fades_between_screens_keywords">animação transição esbater ecrã página separador</string>
+    <string name="hide_status_bar_on_the_player">Ocultar só no leitor</string>
+    <string name="only_while_the_player_its_lyrics">Só com o leitor, a letra ou a fila abertos</string>
+    <string name="volume_bar_like_the_progress_bar">Barra de volume igual à de progresso</string>
+    <string name="same_style_and_thickness">O estilo e a espessura da barra de progresso</string>
+    <string name="handle_at_the_top">Pega no topo</string>
+    <string name="volume_bar_keywords">volume barra espessura fina grossa altura igual progresso</string>
+    <string name="player_handle_keywords">pega barra cinzenta pílula topo arrastar</string>
+    <string name="band_behind_the_navigation_buttons">Faixa atrás dos botões de navegação</string>
+    <string name="nav_band_keywords">navegação barra sombra preta escura faixa em baixo três botões</string>
+    <string name="keep_an_album_s_songs_whole">Manter inteiras as músicas de um álbum</string>
+    <string name="no_crossfade_between_songs_of_one_album">Sem crossfade entre duas músicas do mesmo álbum</string>
+    <string name="an_album_playing_through_never_blends">Um álbum a tocar inteiro nunca mistura. Isto também mantém inteiras duas das suas músicas quando uma playlist ou o aleatório as põe lado a lado.</string>
+    <string name="keep_albums_keywords">álbum sem pausa contínuo transição crossfade desligado</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

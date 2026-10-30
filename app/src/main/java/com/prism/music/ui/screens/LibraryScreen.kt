@@ -119,6 +119,16 @@ private fun HistoryHeading(title: String) {
 
 private enum class SongSort(val label: String) { RECENT(tr(R.string.recently_liked)), TITLE(tr(R.string.title)), ARTIST(tr(R.string.artist)), ALBUM(tr(R.string.album)) }
 /** DOWNLOADED (Reddit 1.7): albums with the most downloaded songs first, the rest after in library order. */
+/** Library → Albums' filter (Reddit, 1.7.9.1): by the kind YouTube gives first in a release's subtitle ("Single • …"). */
+private enum class AlbumKind {
+    ALL, ALBUMS, SINGLES;
+
+    fun shows(a: com.prism.music.data.model.BrowseItem): Boolean {
+        val single = a.subtitle.split(" • ").firstOrNull()?.trim().let { it == "Single" || it == "EP" || it == tr(R.string.single) }
+        return when (this) { ALL -> true; ALBUMS -> !single; SINGLES -> single }
+    }
+}
+
 private enum class AlbumSort(val label: String) { LIBRARY(tr(R.string.library_order)), DOWNLOADED(tr(R.string.downloaded_first)), MOST(tr(R.string.most_songs)), TITLE(tr(R.string.title)), ARTIST(tr(R.string.artist)) }
 private enum class ArtistSort(val label: String) { LIBRARY(tr(R.string.library_order)), MOST(tr(R.string.most_songs)), NAME(tr(R.string.name)) }
 /** Saved by name ([com.prism.music.data.LibraryRepository.playlistSort]); CUSTOM is the listener's own order. */
@@ -231,6 +241,8 @@ fun LibraryScreen(bottomPadding: Dp) {
             AlbumSort.ARTIST -> albums.sortedWith(compareBy<com.prism.music.data.model.BrowseItem> { artistOf(it).lowercase() }.thenBy { it.title.lowercase() })
         }
     }
+    var albumKind by remember { mutableStateOf(AlbumKind.entries.firstOrNull { it.name == c.library.sortOf("library:albums:kind") } ?: AlbumKind.ALL) }
+    val albumKinds = remember(albums) { albums.map { AlbumKind.ALBUMS.shows(it) }.toSet() }
     val artistSongs = remember(mine) { mine.flatMap { s -> s.artists.mapNotNull { it.id } }.groupingBy { it }.eachCount() }
     val sortedArtists = remember(artists, artistSort, artistSongs, favorites) {
         val fav = favorites.map { it.id }.toSet()
@@ -464,7 +476,15 @@ fun LibraryScreen(bottomPadding: Dp) {
                         if (albums.isNotEmpty()) item(span = { GridItemSpan(maxLineSpan) }) {
                             SortBar(trp(R.plurals.n_albums, albums.size), AlbumSort.entries, albumSort, { it.label }) { albumSort = it; c.library.setSort("library:albums", it.name) }
                         }
-                        items(pinnedFirst(sortedAlbums), key = { "a" + it.id }) { a -> LibraryItem(shown(a), asList, onLongClick = { itemMenu = a }) { nav.open(a, onSong) } }
+                        // Albums or singles and EPs (Reddit, 1.7.9.1: YouTube's library fills with singles), when there are both.
+                        if (albumKinds.size > 1) item(span = { GridItemSpan(maxLineSpan) }) {
+                            Row(Modifier.padding(horizontal = 12.dp, vertical = 4.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                for ((kind, label) in listOf(AlbumKind.ALL to tr(R.string.all), AlbumKind.ALBUMS to tr(R.string.albums), AlbumKind.SINGLES to tr(R.string.singles_eps))) {
+                                    com.prism.music.ui.components.PrismChip(albumKind == kind, { albumKind = kind; c.library.setSort("library:albums:kind", kind.name) }, label)
+                                }
+                            }
+                        }
+                        items(pinnedFirst(sortedAlbums.filter { albumKind.shows(it) }), key = { "a" + it.id }) { a -> LibraryItem(shown(a), asList, onLongClick = { itemMenu = a }) { nav.open(a, onSong) } }
                     }
                     LibTab.ARTISTS -> {
                         if (artists.isNotEmpty()) item(span = { GridItemSpan(maxLineSpan) }) {

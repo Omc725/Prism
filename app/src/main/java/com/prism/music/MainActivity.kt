@@ -398,10 +398,11 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
         }
         // Settings → Layout & navigation → "Hide the status bar" (#115), and again each time Prism comes back to the front.
         val lifecycle = androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle
-        androidx.compose.runtime.DisposableEffect(settings.hideStatusBar, lifecycle) {
-            com.prism.music.ui.components.SystemBars.apply(rootView, settings.hideStatusBar)
+        androidx.compose.runtime.DisposableEffect(settings.hideStatusBar, settings.hideStatusBarPlayer, lifecycle) {
+            val bars = com.prism.music.ui.components.SystemBars
+            bars.apply(rootView, bars.hidden(settings))
             val watcher = androidx.lifecycle.LifecycleEventObserver { _, e ->
-                if (e == androidx.lifecycle.Lifecycle.Event.ON_RESUME) com.prism.music.ui.components.SystemBars.apply(rootView, c.settings.current.hideStatusBar)
+                if (e == androidx.lifecycle.Lifecycle.Event.ON_RESUME) bars.apply(rootView, bars.hidden(c.settings.current))
             }
             lifecycle.addObserver(watcher)
             onDispose { lifecycle.removeObserver(watcher) }
@@ -547,6 +548,12 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
             // mini player under it (they're only drawn, not hidden, to keep the player's slide smooth).
             val covered = playerOpen && song != null
             val underPlayer = if (covered) Modifier.semantics { hideFromAccessibility() } else Modifier
+            // "Hide it on the player" (Reddit, 1.7.9.1): the status bar goes as the player opens and comes back as it closes.
+            LaunchedEffect(covered, settings.hideStatusBarPlayer) {
+                val bars = com.prism.music.ui.components.SystemBars
+                bars.playerUp = covered
+                if (settings.hideStatusBarPlayer) bars.apply(rootView, bars.hidden(c.settings.current))
+            }
             Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
                 Box(
                     Modifier.fillMaxSize().then(underPlayer).nestedScroll(barScroll).hazeSource(haze)

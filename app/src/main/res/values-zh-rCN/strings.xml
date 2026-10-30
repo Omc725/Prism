@@ -3849,4 +3849,18 @@
     <string name="pages_fade_into_each_other">页面相互淡入淡出</string>
     <string name="off_a_page_changes_at_once">关闭后页面会立即切换，点按不会落在正在淡出的页面上。</string>
     <string name="fades_between_screens_keywords">动画 过渡 淡入淡出 屏幕 页面 标签</string>
+    <string name="hide_status_bar_on_the_player">仅在播放器中隐藏</string>
+    <string name="only_while_the_player_its_lyrics">仅在播放器、歌词或队列打开时</string>
+    <string name="volume_bar_like_the_progress_bar">音量条与进度条一致</string>
+    <string name="same_style_and_thickness">进度条的样式和粗细</string>
+    <string name="handle_at_the_top">顶部把手</string>
+    <string name="volume_bar_keywords">音量 条 粗细 细 粗 高度 一致 进度</string>
+    <string name="player_handle_keywords">把手 灰色 条 药丸 顶部 拖动</string>
+    <string name="band_behind_the_navigation_buttons">导航按钮后的色带</string>
+    <string name="nav_band_keywords">导航 栏 阴影 黑色 深色 色带 底部 三按钮</string>
+    <string name="keep_an_album_s_songs_whole">保持同一专辑的歌曲完整</string>
+    <string name="no_crossfade_between_songs_of_one_album">同一专辑的两首歌之间不交叉淡入淡出</string>
+    <string name="an_album_playing_through_never_blends">完整播放的专辑从不交叉淡入淡出。此选项还会在播放列表或随机播放把它的两首歌放在一起时保持完整。</string>
+    <string name="keep_albums_keywords">专辑 无缝 连续 过渡 交叉淡入淡出 关闭</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

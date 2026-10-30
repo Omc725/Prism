@@ -867,7 +867,9 @@ private fun androidx.compose.foundation.lazy.LazyListScope.releaseGrid(
 /** The artist part of a release's subtitle ("Album • KATSEYE" → "KATSEYE"); null when it only gives kind and year. */
 private fun releaseArtist(item: BrowseItem): String? =
     item.subtitle.split(" • ").map { it.trim() }
-        .firstOrNull { it.isNotBlank() && it !in setOf(tr(R.string.album), tr(R.string.single), "EP") && !(it.length == 4 && it.all(Char::isDigit)) }
+        // YouTube's kinds as Prism reads them (English, Parser.canonical), and as shown in Prism's language (#255's kind
+        // of slip: with only the translated ones, "Album" passed for the artist outside English).
+        .firstOrNull { it.isNotBlank() && it !in com.prism.music.data.model.RELEASE_KINDS && it != tr(R.string.album) && it != tr(R.string.single) && !(it.length == 4 && it.all(Char::isDigit)) }
 
 /** Playlists, mixes or artists as a vertical grid of large covers, two to a row. */
 private fun androidx.compose.foundation.lazy.LazyListScope.cardGrid(shelf: Shelf, showTitle: Boolean, open: (BrowseItem) -> Unit) {

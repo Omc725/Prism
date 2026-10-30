@@ -3899,4 +3899,18 @@
     <string name="pages_fade_into_each_other">صفحات ایک دوسرے میں گھلتے ہیں</string>
     <string name="off_a_page_changes_at_once">بند ہونے پر صفحہ فوراً بدلتا ہے، تاکہ ٹیپ غائب ہوتے صفحے پر نہ پڑے۔</string>
     <string name="fades_between_screens_keywords">اینیمیشن ٹرانزیشن فیڈ اسکرین صفحہ ٹیب</string>
+    <string name="hide_status_bar_on_the_player">صرف پلیئر پر چھپائیں</string>
+    <string name="only_while_the_player_its_lyrics">صرف جب پلیئر، اس کے بول یا قطار کھلی ہو</string>
+    <string name="volume_bar_like_the_progress_bar">والیوم بار پروگریس بار جیسا</string>
+    <string name="same_style_and_thickness">پروگریس بار کا انداز اور موٹائی</string>
+    <string name="handle_at_the_top">اوپر ہینڈل</string>
+    <string name="volume_bar_keywords">والیوم بار موٹائی پتلا موٹا اونچائی ایک جیسا پروگریس</string>
+    <string name="player_handle_keywords">ہینڈل سرمئی بار گولی اوپر کھینچیں</string>
+    <string name="band_behind_the_navigation_buttons">نیویگیشن بٹنوں کے پیچھے پٹی</string>
+    <string name="nav_band_keywords">نیویگیشن بار سایہ کالی گہری پٹی نیچے تین بٹن</string>
+    <string name="keep_an_album_s_songs_whole">ایک البم کے گانے پورے رکھیں</string>
+    <string name="no_crossfade_between_songs_of_one_album">ایک ہی البم کے دو گانوں کے درمیان کراس فیڈ نہیں</string>
+    <string name="an_album_playing_through_never_blends">پورا چلتا البم کبھی نہیں ملتا۔ یہ اس کے دو گانوں کو بھی پورا رکھتا ہے جب کوئی پلے لسٹ یا شفل انہیں ساتھ رکھ دے۔</string>
+    <string name="keep_albums_keywords">البم بغیر وقفہ مسلسل منتقلی کراس فیڈ بند</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

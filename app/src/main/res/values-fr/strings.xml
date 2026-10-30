@@ -3949,4 +3949,18 @@
     <string name="pages_fade_into_each_other">Les pages se fondent l’une dans l’autre</string>
     <string name="off_a_page_changes_at_once">Désactivé, la page change aussitôt : un appui ne peut pas tomber sur celle qui disparaît.</string>
     <string name="fades_between_screens_keywords">animation transition fondu écran page onglet</string>
+    <string name="hide_status_bar_on_the_player">La masquer seulement sur le lecteur</string>
+    <string name="only_while_the_player_its_lyrics">Seulement quand le lecteur, ses paroles ou la file d\'attente sont ouverts</string>
+    <string name="volume_bar_like_the_progress_bar">Barre de volume comme celle de progression</string>
+    <string name="same_style_and_thickness">Le style et l\'épaisseur de la barre de progression</string>
+    <string name="handle_at_the_top">Poignée en haut</string>
+    <string name="volume_bar_keywords">volume barre épaisseur fine épaisse hauteur pareil progression</string>
+    <string name="player_handle_keywords">poignée barre grise pilule haut glisser</string>
+    <string name="band_behind_the_navigation_buttons">Bande derrière les boutons de navigation</string>
+    <string name="nav_band_keywords">navigation barre ombre noire sombre bande bas trois boutons</string>
+    <string name="keep_an_album_s_songs_whole">Garder entiers les titres d\'un album</string>
+    <string name="no_crossfade_between_songs_of_one_album">Pas de fondu entre deux titres d\'un même album</string>
+    <string name="an_album_playing_through_never_blends">Un album lu en entier ne se fond jamais. Cela garde aussi entiers deux de ses titres quand une playlist ou la lecture aléatoire les met côte à côte.</string>
+    <string name="keep_albums_keywords">album sans blanc continu transition fondu désactivé</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

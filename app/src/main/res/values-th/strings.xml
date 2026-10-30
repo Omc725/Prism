@@ -3849,4 +3849,18 @@
     <string name="pages_fade_into_each_other">หน้าต่างๆ ค่อยๆ จางเข้าหากัน</string>
     <string name="off_a_page_changes_at_once">ถ้าปิด หน้าจะเปลี่ยนทันที การแตะจึงไม่ไปโดนหน้าที่กำลังจางหาย</string>
     <string name="fades_between_screens_keywords">แอนิเมชัน การเปลี่ยน จาง หน้าจอ หน้า แท็บ</string>
+    <string name="hide_status_bar_on_the_player">ซ่อนเฉพาะในเครื่องเล่น</string>
+    <string name="only_while_the_player_its_lyrics">เฉพาะตอนที่เครื่องเล่น เนื้อเพลง หรือคิวเปิดอยู่</string>
+    <string name="volume_bar_like_the_progress_bar">แถบระดับเสียงแบบเดียวกับแถบความคืบหน้า</string>
+    <string name="same_style_and_thickness">สไตล์และความหนาของแถบความคืบหน้า</string>
+    <string name="handle_at_the_top">ที่จับด้านบน</string>
+    <string name="volume_bar_keywords">ระดับเสียง แถบ ความหนา บาง หนา ความสูง เหมือน ความคืบหน้า</string>
+    <string name="player_handle_keywords">ที่จับ แถบสีเทา ยา ด้านบน ลาก</string>
+    <string name="band_behind_the_navigation_buttons">แถบด้านหลังปุ่มนำทาง</string>
+    <string name="nav_band_keywords">การนำทาง แถบ เงา สีดำ มืด ด้านล่าง สามปุ่ม</string>
+    <string name="keep_an_album_s_songs_whole">เล่นเพลงในอัลบั้มเดียวกันให้เต็ม</string>
+    <string name="no_crossfade_between_songs_of_one_album">ไม่เฟดข้ามระหว่างสองเพลงจากอัลบั้มเดียวกัน</string>
+    <string name="an_album_playing_through_never_blends">อัลบั้มที่เล่นต่อเนื่องจะไม่เฟดข้ามเลย ตัวเลือกนี้ยังทำให้สองเพลงของอัลบั้มเล่นเต็มเมื่อเพลย์ลิสต์หรือการสุ่มวางไว้ติดกัน</string>
+    <string name="keep_albums_keywords">อัลบั้ม ไม่มีช่วงเงียบ ต่อเนื่อง การเปลี่ยนเพลง เฟดข้าม ปิด</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

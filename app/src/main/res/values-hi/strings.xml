@@ -3899,4 +3899,18 @@
     <string name="pages_fade_into_each_other">पेज एक-दूसरे में घुलते हैं</string>
     <string name="off_a_page_changes_at_once">बंद होने पर पेज तुरंत बदलता है, ताकि टैप ग़ायब होते पेज पर न पड़े।</string>
     <string name="fades_between_screens_keywords">एनिमेशन ट्रांज़िशन फ़ेड स्क्रीन पेज टैब</string>
+    <string name="hide_status_bar_on_the_player">सिर्फ़ प्लेयर पर छिपाएँ</string>
+    <string name="only_while_the_player_its_lyrics">सिर्फ़ तब जब प्लेयर, उसके बोल या कतार खुली हो</string>
+    <string name="volume_bar_like_the_progress_bar">वॉल्यूम बार प्रोग्रेस बार जैसा</string>
+    <string name="same_style_and_thickness">प्रोग्रेस बार की शैली और मोटाई</string>
+    <string name="handle_at_the_top">ऊपर हैंडल</string>
+    <string name="volume_bar_keywords">वॉल्यूम बार मोटाई पतला मोटा ऊँचाई समान प्रोग्रेस</string>
+    <string name="player_handle_keywords">हैंडल ग्रे बार गोली ऊपर खींचें</string>
+    <string name="band_behind_the_navigation_buttons">नेविगेशन बटनों के पीछे की पट्टी</string>
+    <string name="nav_band_keywords">नेविगेशन बार छाया काली गहरी पट्टी नीचे तीन बटन</string>
+    <string name="keep_an_album_s_songs_whole">एक एल्बम के गाने पूरे रखें</string>
+    <string name="no_crossfade_between_songs_of_one_album">एक ही एल्बम के दो गानों के बीच क्रॉसफ़ेड नहीं</string>
+    <string name="an_album_playing_through_never_blends">पूरा बजता एल्बम कभी नहीं मिलता। यह उसके दो गानों को भी पूरा रखता है जब कोई प्लेलिस्ट या शफ़ल उन्हें साथ रख दे।</string>
+    <string name="keep_albums_keywords">एल्बम बिना रुकावट लगातार ट्रांज़िशन क्रॉसफ़ेड बंद</string>
+    <string name="grid_3x3">3 × 3</string>
 </resources>

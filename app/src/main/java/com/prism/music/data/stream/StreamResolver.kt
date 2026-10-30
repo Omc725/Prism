@@ -21,6 +21,7 @@ import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import okio.Buffer
 import okio.BufferedSource
 import okio.Timeout
@@ -141,6 +142,13 @@ class YouTubeStreamInterceptor(
         val start = m?.groupValues?.get(1)?.toLong() ?: 0L
         val clen = url.queryParameter("clen")?.toLongOrNull()
         val end = m?.groupValues?.get(2)?.toLongOrNull()?.let { e -> clen?.let { minOf(e, it - 1) } ?: e } ?: clen?.minus(1)
+        // Asked from the stream's end on (#206, Reddit: "Response code: 400" after every song): googlevideo answers that
+        // with a 400, which the player takes as an error, buffering and holding up the next song. HTTP's own answer is a
+        // 416 naming the length, which the player reads as the end of the file.
+        if (m != null && clen != null && start >= clen) {
+            return Response.Builder().request(req).protocol(okhttp3.Protocol.HTTP_1_1).code(416).message("Range Not Satisfiable")
+                .header("Content-Range", "bytes */$clen").body(ByteArray(0).toResponseBody(null)).build()
+        }
 
         if (chunkClient != null && clen != null && end != null && end - start + 1 > chunkSize) {
             val firstEnd = minOf(end, start + chunkSize - 1)

@@ -3984,4 +3984,10 @@
     <string name="plays_as_itself_again">Znovu se přehrává originál</string>
     <string name="playing_this_one">Tahle se přehrává</string>
     <string name="another_upload">Další nahrání</string>
+    <string name="unlimited">Bez omezení</string>
+    <string name="search_in_local_files">Hledat v Místních souborech</string>
+    <string name="fades_between_screens">Prolínání obrazovek</string>
+    <string name="pages_fade_into_each_other">Stránky se do sebe prolínají</string>
+    <string name="off_a_page_changes_at_once">Vypnuto: stránka se změní hned, takže klepnutí nemůže trefit tu, která mizí.</string>
+    <string name="fades_between_screens_keywords">animace přechod prolínání obrazovka stránka karta</string>
 </resources>

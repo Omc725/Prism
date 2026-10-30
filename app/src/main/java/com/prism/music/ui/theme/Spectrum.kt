@@ -217,9 +217,10 @@ object SpectrumPresets {
 
     /**
      * Up to five of a cover's swatches as a light: distinct (none within 28° of hue of another unless far apart in
-     * lightness), colorful enough to be a light, in hue order. Fewer than two: null (the cover has none to give).
+     * lightness), colorful enough to be a light, in hue order. A cover with one color gives shades of it; one with none
+     * (black and white, mostly white: #233 #235) a silver light, never Prism's rainbow, which isn't in the cover.
      */
-    fun fromCover(swatches: List<Int>): List<Int>? {
+    fun fromCover(swatches: List<Int>): List<Int> {
         val picked = ArrayList<Triple<Float, Float, Float>>()
         for (c in swatches) {
             val (h, s, l) = Color(c).toHsl()
@@ -228,9 +229,15 @@ object SpectrumPresets {
             picked += Triple(h, s, l)
             if (picked.size == 5) break
         }
-        if (picked.size < 2) return null
-        return picked.sortedBy { it.first }.map { (h, s, l) -> Color.hsl(h, s, l).toArgb() }
+        if (picked.size >= 2) return picked.sortedBy { it.first }.map { (h, s, l) -> Color.hsl(h, s, l).toArgb() }
+        picked.firstOrNull()?.let { (h, s, l) ->
+            return listOf(Color.hsl(h, s, (l - 0.2f).coerceAtLeast(0.22f)), Color.hsl(h, s, l), Color.hsl(h, s * 0.75f, (l + 0.2f).coerceAtMost(0.86f))).map { it.toArgb() }
+        }
+        return SILVER
     }
+
+    /** The light of a cover with no color in it. */
+    val SILVER: List<Int> = listOf(0xFF8E949C.toInt(), 0xFFC9CDD2.toInt(), 0xFFF4F5F7.toInt())
 
     /** The colors [key] (or, for "CUSTOM", [stops]) stands for; Prism's when there's nothing usable. */
     fun colorsFor(key: String, stops: List<Int>): List<Color> =

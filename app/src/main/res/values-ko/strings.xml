@@ -3834,4 +3834,10 @@
     <string name="plays_as_itself_again">다시 원곡으로 재생돼요</string>
     <string name="playing_this_one">재생 중인 버전</string>
     <string name="another_upload">다른 업로드</string>
+    <string name="unlimited">무제한</string>
+    <string name="search_in_local_files">로컬 파일에서 검색</string>
+    <string name="fades_between_screens">화면 전환 페이드</string>
+    <string name="pages_fade_into_each_other">페이지가 서로 겹치며 바뀌어요</string>
+    <string name="off_a_page_changes_at_once">끄면 페이지가 바로 바뀌어서, 사라지는 페이지를 잘못 누를 일이 없어요.</string>
+    <string name="fades_between_screens_keywords">애니메이션 전환 페이드 화면 페이지 탭</string>
 </resources>

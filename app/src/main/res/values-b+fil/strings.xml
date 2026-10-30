@@ -3884,4 +3884,10 @@
     <string name="plays_as_itself_again">Ang orihinal na ulit ang ipe-play</string>
     <string name="playing_this_one">Ito ang nagpe-play</string>
     <string name="another_upload">Ibang upload</string>
+    <string name="unlimited">Walang limit</string>
+    <string name="search_in_local_files">Maghanap sa Mga lokal na file</string>
+    <string name="fades_between_screens">Fade sa pagitan ng mga screen</string>
+    <string name="pages_fade_into_each_other">Nagfe-fade ang mga page sa isa’t isa</string>
+    <string name="off_a_page_changes_at_once">Kapag naka-off, agad na nagpapalit ang page, kaya hindi tatama ang tap sa page na nawawala.</string>
+    <string name="fades_between_screens_keywords">animation transition fade screen page tab</string>
 </resources>

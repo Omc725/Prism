@@ -720,9 +720,12 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                     scope.launch { swipe.animateTo(0f, spring(stiffness = Spring.StiffnessMediumLow)) }
                 },
             ) { _, d ->
-                if ((kotlin.math.abs(total) < threshold) != (kotlin.math.abs(total + d) < threshold)) haptics.threshold()
+                val now = c.settings.current
+                // #222: toward a swipe set to Nothing the cover stays still, and gives no tick.
+                val off = (if (total + d < 0f) now.coverSwipeLeft else now.coverSwipeRight) == com.prism.music.data.prefs.PlayerGesture.NONE
+                if (!off && (kotlin.math.abs(total) < threshold) != (kotlin.math.abs(total + d) < threshold)) haptics.threshold()
                 total += d
-                scope.launch { swipe.snapTo(total * 0.35f) }
+                scope.launch { swipe.snapTo(if (off) 0f else total * 0.35f) }
             }
         }
 

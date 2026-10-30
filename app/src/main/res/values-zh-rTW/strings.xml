@@ -3834,4 +3834,10 @@
     <string name="plays_as_itself_again">已改回播放原版</string>
     <string name="playing_this_one">正在播放這個版本</string>
     <string name="another_upload">另一個上傳版本</string>
+    <string name="unlimited">不限</string>
+    <string name="search_in_local_files">在本機檔案中搜尋</string>
+    <string name="fades_between_screens">畫面間淡入淡出</string>
+    <string name="pages_fade_into_each_other">頁面彼此淡入淡出</string>
+    <string name="off_a_page_changes_at_once">關閉後頁面會立即切換，點按不會落在正在淡出的頁面上。</string>
+    <string name="fades_between_screens_keywords">動畫 轉場 淡入淡出 畫面 頁面 分頁</string>
 </resources>

@@ -3934,4 +3934,10 @@
     <string name="plays_as_itself_again">Volta a tocar a original</string>
     <string name="playing_this_one">Esta é a que está tocando</string>
     <string name="another_upload">Outro envio</string>
+    <string name="unlimited">Ilimitado</string>
+    <string name="search_in_local_files">Buscar em Arquivos locais</string>
+    <string name="fades_between_screens">Transições entre telas</string>
+    <string name="pages_fade_into_each_other">As páginas se fundem umas nas outras</string>
+    <string name="off_a_page_changes_at_once">Desligado, a página muda na hora, então um toque não cai na que está sumindo.</string>
+    <string name="fades_between_screens_keywords">animação transição esmaecer tela página aba</string>
 </resources>

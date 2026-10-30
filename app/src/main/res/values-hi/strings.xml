@@ -3884,4 +3884,10 @@
     <string name="plays_as_itself_again">फिर से मूल चल रहा है</string>
     <string name="playing_this_one">यही चल रहा है</string>
     <string name="another_upload">दूसरा अपलोड</string>
+    <string name="unlimited">असीमित</string>
+    <string name="search_in_local_files">लोकल फ़ाइलों में खोजें</string>
+    <string name="fades_between_screens">स्क्रीन के बीच फ़ेड</string>
+    <string name="pages_fade_into_each_other">पेज एक-दूसरे में घुलते हैं</string>
+    <string name="off_a_page_changes_at_once">बंद होने पर पेज तुरंत बदलता है, ताकि टैप ग़ायब होते पेज पर न पड़े।</string>
+    <string name="fades_between_screens_keywords">एनिमेशन ट्रांज़िशन फ़ेड स्क्रीन पेज टैब</string>
 </resources>

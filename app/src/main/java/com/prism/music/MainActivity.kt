@@ -20,6 +20,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
@@ -31,6 +33,8 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -357,14 +361,17 @@ private fun rememberArtworkColor(song: Song?, settings: com.prism.music.data.pre
                 val req = ImageRequest.Builder(context).data(hiRes(url, 160)).allowHardware(false).build()
                 val bmp = (context.imageLoader.execute(req) as? SuccessResult)?.image?.toBitmap() ?: return@runCatching null
                 val p = Palette.from(bmp).generate()
+                // A tint on a speck of the picture isn't the cover's color (#236): swatches under 2% of it are left out.
+                val total = p.swatches.sumOf { it.population }.coerceAtLeast(1)
                 val stops = com.prism.music.ui.theme.SpectrumPresets.fromCover(
-                    listOfNotNull(p.vibrantSwatch, p.lightVibrantSwatch, p.darkVibrantSwatch, p.mutedSwatch, p.lightMutedSwatch, p.dominantSwatch).map { it.rgb or (0xFF shl 24) },
+                    listOfNotNull(p.vibrantSwatch, p.lightVibrantSwatch, p.darkVibrantSwatch, p.mutedSwatch, p.lightMutedSwatch, p.dominantSwatch)
+                        .filter { it.population * 50 >= total }.map { it.rgb or (0xFF shl 24) },
                 )
                 com.prism.music.ui.theme.pickSwatch(p, swatch, vivid)?.let { Color(it) } to stops
             }.getOrNull()
         } ?: return@LaunchedEffect
         made.first?.let { color = it }
-        com.prism.music.ui.theme.SpectrumPresets.coverStops = made.second ?: emptyList()
+        com.prism.music.ui.theme.SpectrumPresets.coverStops = made.second
     }
     return color
 }
@@ -548,14 +555,16 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                   CompositionLocalProvider(com.prism.music.ui.components.LocalHiddenByPlayer provides hiddenByPlayer) {
                     // The same cross-fade both ways, and for the back gesture too: left to its default,
                     // a predictive back (swipe from the edge) shrinks the page like a card instead.
+                    // "Fades between screens" off (#227): pages swap at once, so a tap can't land on the one fading out.
+                    val fadeMs = if (settings.behavior.screenFades) 700 else 0
                     NavHost(
                         navController, startDestination = start,
-                        enterTransition = { fadeIn(tween(700)) },
-                        exitTransition = { fadeOut(tween(700)) },
-                        popEnterTransition = { fadeIn(tween(700)) },
-                        popExitTransition = { fadeOut(tween(700)) },
-                        predictivePopEnterTransition = { fadeIn(tween(700)) },
-                        predictivePopExitTransition = { fadeOut(tween(700)) },
+                        enterTransition = { if (fadeMs == 0) EnterTransition.None else fadeIn(tween(fadeMs)) },
+                        exitTransition = { if (fadeMs == 0) ExitTransition.None else fadeOut(tween(fadeMs)) },
+                        popEnterTransition = { if (fadeMs == 0) EnterTransition.None else fadeIn(tween(fadeMs)) },
+                        popExitTransition = { if (fadeMs == 0) ExitTransition.None else fadeOut(tween(fadeMs)) },
+                        predictivePopEnterTransition = { if (fadeMs == 0) EnterTransition.None else fadeIn(tween(fadeMs)) },
+                        predictivePopExitTransition = { if (fadeMs == 0) ExitTransition.None else fadeOut(tween(fadeMs)) },
                     ) {
                         composable(Routes.WELCOME) {
                             WelcomeScreen(
@@ -1037,11 +1046,20 @@ private fun TabItem(tab: Tab, selected: Boolean, labels: NavLabels, compact: Flo
             verticalArrangement = Arrangement.Center,
         ) {
             Icon(icon, tab.label, tint = fg, modifier = Modifier.size(24.dp).then(if (selected) Modifier.tabTint(tabTint) else Modifier))
-            if (compact < 0.98f) Text(
-                tab.label, color = fg, style = MaterialTheme.typography.labelSmall,
-                maxLines = 1,
-                modifier = Modifier.padding(top = 2.dp).height(lerp(16.dp, 0.dp, compact)).graphicsLayer { alpha = (1f - compact * 1.6f).coerceIn(0f, 1f) },
-            )
+            // #237: a long name ("Liked songs") gets smaller rather than cut off, kept clear of the rounded corners, and
+            // its line keeps its full height with big text; the bar slimming down only hides it.
+            if (compact < 0.98f) {
+                val style = MaterialTheme.typography.labelSmall
+                val lineHeight = with(androidx.compose.ui.platform.LocalDensity.current) { style.lineHeight.toDp() }.coerceAtLeast(16.dp)
+                Box(Modifier.padding(top = 2.dp).height(lerp(lineHeight, 0.dp, compact)).clipToBounds().graphicsLayer { alpha = (1f - compact * 1.6f).coerceIn(0f, 1f) }) {
+                    Text(
+                        tab.label, color = fg, style = style, maxLines = 1, softWrap = false,
+                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                        autoSize = androidx.compose.foundation.text.TextAutoSize.StepBased(minFontSize = androidx.compose.ui.unit.TextUnit(8f, androidx.compose.ui.unit.TextUnitType.Sp), maxFontSize = style.fontSize),
+                        modifier = Modifier.padding(horizontal = 6.dp).wrapContentHeight(unbounded = true),
+                    )
+                }
+            }
         }
         // The picked tab grows into a capsule with its name beside the icon.
         NavLabels.SELECTED -> Box(modifier.then(spectrumLine).then(click), contentAlignment = Alignment.Center) {

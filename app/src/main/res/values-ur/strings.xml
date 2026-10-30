@@ -3884,4 +3884,10 @@
     <string name="plays_as_itself_again">دوبارہ اصل چل رہا ہے</string>
     <string name="playing_this_one">یہی چل رہا ہے</string>
     <string name="another_upload">ایک اور اپ لوڈ</string>
+    <string name="unlimited">لامحدود</string>
+    <string name="search_in_local_files">مقامی فائلوں میں تلاش کریں</string>
+    <string name="fades_between_screens">اسکرینوں کے درمیان فیڈ</string>
+    <string name="pages_fade_into_each_other">صفحات ایک دوسرے میں گھلتے ہیں</string>
+    <string name="off_a_page_changes_at_once">بند ہونے پر صفحہ فوراً بدلتا ہے، تاکہ ٹیپ غائب ہوتے صفحے پر نہ پڑے۔</string>
+    <string name="fades_between_screens_keywords">اینیمیشن ٹرانزیشن فیڈ اسکرین صفحہ ٹیب</string>
 </resources>

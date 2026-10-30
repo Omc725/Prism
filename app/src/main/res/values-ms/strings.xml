@@ -3834,4 +3834,10 @@
     <string name="plays_as_itself_again">Versi asal dimainkan semula</string>
     <string name="playing_this_one">Ini yang sedang dimainkan</string>
     <string name="another_upload">Muat naik lain</string>
+    <string name="unlimited">Tanpa had</string>
+    <string name="search_in_local_files">Cari dalam Fail setempat</string>
+    <string name="fades_between_screens">Peralihan antara skrin</string>
+    <string name="pages_fade_into_each_other">Halaman pudar ke halaman lain</string>
+    <string name="off_a_page_changes_at_once">Jika dimatikan, halaman bertukar serta-merta, jadi ketikan tidak terkena halaman yang sedang pudar.</string>
+    <string name="fades_between_screens_keywords">animasi peralihan pudar skrin halaman tab</string>
 </resources>

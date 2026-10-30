@@ -3834,4 +3834,10 @@
     <string name="plays_as_itself_again">已改回播放原版</string>
     <string name="playing_this_one">正在播放这个版本</string>
     <string name="another_upload">另一个上传版本</string>
+    <string name="unlimited">不限</string>
+    <string name="search_in_local_files">在本地文件中搜索</string>
+    <string name="fades_between_screens">屏幕间淡入淡出</string>
+    <string name="pages_fade_into_each_other">页面相互淡入淡出</string>
+    <string name="off_a_page_changes_at_once">关闭后页面会立即切换，点按不会落在正在淡出的页面上。</string>
+    <string name="fades_between_screens_keywords">动画 过渡 淡入淡出 屏幕 页面 标签</string>
 </resources>

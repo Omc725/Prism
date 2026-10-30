@@ -3984,4 +3984,10 @@
     <string name="plays_as_itself_again">Znów odtwarzany jest oryginał</string>
     <string name="playing_this_one">Ta jest odtwarzana</string>
     <string name="another_upload">Inny przesłany plik</string>
+    <string name="unlimited">Bez limitu</string>
+    <string name="search_in_local_files">Szukaj w Plikach lokalnych</string>
+    <string name="fades_between_screens">Przenikanie ekranów</string>
+    <string name="pages_fade_into_each_other">Strony przenikają się nawzajem</string>
+    <string name="off_a_page_changes_at_once">Wyłączone: strona zmienia się od razu, więc dotknięcie nie trafi w tę, która znika.</string>
+    <string name="fades_between_screens_keywords">animacja przejście przenikanie ekran strona karta</string>
 </resources>

@@ -173,13 +173,21 @@ fun MiniPlayer(
                 ) { change, d ->
                     change.consume()
                     raw += d
-                    val after = if (raw >= 0f) raw else (raw / 3f).coerceAtLeast(upMost)
+                    // #222: a way with no gesture set (Settings → Player → Gestures: Nothing) doesn't move the card at all.
+                    val now = container.settings.current
+                    val after = when {
+                        raw >= 0f -> if (now.miniSwipeDown == PlayerGesture.NONE) 0f else raw
+                        now.miniSwipeUp == PlayerGesture.NONE -> 0f
+                        else -> (raw / 3f).coerceAtLeast(upMost)
+                    }
                     if ((pull.value < stopAt) != (after < stopAt) || (pull.value > upAt) != (after > upAt)) haptics.threshold()
                     scope.launch { pull.snapTo(after) }
                 }
             }
             .pointerInput(Unit) {
+                var rawX = 0f
                 detectHorizontalDragGestures(
+                    onDragStart = { rawX = drag.value },
                     onDragEnd = {
                         scope.launch {
                             val now = container.settings.current
@@ -194,7 +202,10 @@ fun MiniPlayer(
                     },
                 ) { _, d ->
                     val before = drag.value
-                    val after = before + d
+                    rawX += d
+                    // #222: nor sideways, toward a swipe set to Nothing.
+                    val now = container.settings.current
+                    val after = if ((if (rawX < 0f) now.miniSwipeLeft else now.miniSwipeRight) == PlayerGesture.NONE) 0f else rawX
                     if ((kotlin.math.abs(before) < 140f) != (kotlin.math.abs(after) < 140f)) haptics.threshold()
                     scope.launch { drag.snapTo(after) }
                 }

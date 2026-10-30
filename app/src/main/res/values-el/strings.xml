@@ -3884,4 +3884,10 @@
     <string name="plays_as_itself_again">Παίζει ξανά η αρχική</string>
     <string name="playing_this_one">Παίζει αυτή</string>
     <string name="another_upload">Άλλη μεταφόρτωση</string>
+    <string name="unlimited">Απεριόριστο</string>
+    <string name="search_in_local_files">Αναζήτηση στα Τοπικά αρχεία</string>
+    <string name="fades_between_screens">Σβήσιμο μεταξύ οθονών</string>
+    <string name="pages_fade_into_each_other">Οι σελίδες σβήνουν η μία στην άλλη</string>
+    <string name="off_a_page_changes_at_once">Απενεργοποιημένο, η σελίδα αλλάζει αμέσως, ώστε ένα πάτημα να μην πέφτει σε αυτή που σβήνει.</string>
+    <string name="fades_between_screens_keywords">κίνηση μετάβαση σβήσιμο οθόνη σελίδα καρτέλα</string>
 </resources>

@@ -229,6 +229,8 @@ data class BehaviorPrefs(
     val scrollShowsControls: Boolean = true,
     /** Playlists' genre chips, each song's genre and Group by genre (1.7.9, Reddit); off, a playlist is just its songs in order. */
     val playlistGenres: Boolean = true,
+    /** Pages fade into each other (#227: off, a page swaps at once, so a tap can't land on the one fading out). */
+    val screenFades: Boolean = true,
 )
 
 /** Picture-in-picture for a playing video (1.7.8, #167). */
@@ -733,6 +735,9 @@ val defaultLyricsOrder = listOf(
     LyricsSource.NETEASE, LyricsSource.LRCLIB, LyricsSource.UNISON, LyricsSource.GENIUS,
 )
 
+/** "Room for sung songs" at its last step: no limit (#238). */
+const val SING_ROOM_UNLIMITED = Int.MAX_VALUE
+
 data class AppSettings(
     val onboarded: Boolean = false,
     // Account
@@ -833,7 +838,7 @@ data class AppSettings(
     val singOnCellular: Boolean = false,
     /** Settings → Lyrics → Sing: the playing and next songs are got ready even while Sing is off, so it starts at once. */
     val singAlwaysReady: Boolean = false,
-    /** How much room Sing's separated vocals may take, in MB. */
+    /** How much room Sing's separated vocals may take, in MB; [SING_ROOM_UNLIMITED] for no limit (#238). */
     val singCacheMb: Int = 1024,
     /** DJ mode's energy curve (picked in the queue, where DJ mode is switched on for the queue playing). */
     val djFlow: com.prism.music.playback.DjFlow = com.prism.music.playback.DjFlow.STEADY,
@@ -1488,6 +1493,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val queueLocked = booleanPreferencesKey("queue_locked")
         val scrollShowsControls = booleanPreferencesKey("scroll_shows_controls")
         val playlistGenres = booleanPreferencesKey("playlist_genres")
+        val screenFades = booleanPreferencesKey("screen_fades")
         val crossfadeMark = booleanPreferencesKey("crossfade_mark")
         val blendCovers = booleanPreferencesKey("blend_covers")
         val buttonsPill = booleanPreferencesKey("player_buttons_pill")
@@ -1583,7 +1589,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 "session_buttons", "cover_swipe_left", "cover_swipe_right", "cover_swipe_up", "cover_double_tap", "cover_long_press",
                 "mini_swipe_left", "mini_swipe_right", "mini_swipe_down", "mini_swipe_up",
                 // 1.7.8 ([BehaviorPrefs]).
-                "lock_portrait", "pause_on_mute", "pip_mode", "panel_swipes", "recent_shows", "queue_locked", "scroll_shows_controls", "playlist_genres",
+                "lock_portrait", "pause_on_mute", "pip_mode", "panel_swipes", "recent_shows", "queue_locked", "scroll_shows_controls", "playlist_genres", "screen_fades",
                 // 1.7.8 ([SoundPrefs]).
                 "crossfade_curve", "normalize_target", "normalize_albums", "music_speed", "music_pitch",
                 "skip_silence_episodes", "sleep_fade", "pause_fade",
@@ -1846,6 +1852,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 queueLocked = p[K.queueLocked] ?: d.behavior.queueLocked,
                 scrollShowsControls = p[K.scrollShowsControls] ?: d.behavior.scrollShowsControls,
                 playlistGenres = p[K.playlistGenres] ?: d.behavior.playlistGenres,
+                screenFades = p[K.screenFades] ?: d.behavior.screenFades,
             ),
             uiDensity = p.enum(K.uiDensity, d.uiDensity),
             titleSize = p.enum(K.titleSize, d.titleSize),
@@ -2340,6 +2347,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setQueueLocked(v: Boolean) = edit { it[K.queueLocked] = v }
     fun setScrollShowsControls(v: Boolean) = edit { it[K.scrollShowsControls] = v }
     fun setPlaylistGenres(v: Boolean) = edit { it[K.playlistGenres] = v }
+    fun setScreenFades(v: Boolean) = edit { it[K.screenFades] = v }
     fun setCrossfadeMark(v: Boolean) = edit { it[K.crossfadeMark] = v }
     fun setBlendCovers(v: Boolean) = edit { it[K.blendCovers] = v }
     fun setButtonsPill(v: Boolean) = edit { it[K.buttonsPill] = v }

@@ -3884,4 +3884,10 @@
     <string name="plays_as_itself_again">Spielt wieder das Original</string>
     <string name="playing_this_one">Diese läuft gerade</string>
     <string name="another_upload">Weiterer Upload</string>
+    <string name="unlimited">Unbegrenzt</string>
+    <string name="search_in_local_files">In Lokale Dateien suchen</string>
+    <string name="fades_between_screens">Überblenden zwischen Seiten</string>
+    <string name="pages_fade_into_each_other">Seiten blenden ineinander über</string>
+    <string name="off_a_page_changes_at_once">Aus: Die Seite wechselt sofort, so trifft ein Tippen nicht die, die gerade ausblendet.</string>
+    <string name="fades_between_screens_keywords">Animation Übergang Überblenden Bildschirm Seite Tab</string>
 </resources>

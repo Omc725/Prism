@@ -3984,4 +3984,10 @@
     <string name="plays_as_itself_again">Знову звучить оригінал</string>
     <string name="playing_this_one">Звучить ця</string>
     <string name="another_upload">Інше завантаження</string>
+    <string name="unlimited">Без обмежень</string>
+    <string name="search_in_local_files">Шукати в Локальних файлах</string>
+    <string name="fades_between_screens">Переходи між екранами</string>
+    <string name="pages_fade_into_each_other">Сторінки плавно змінюють одна одну</string>
+    <string name="off_a_page_changes_at_once">Якщо вимкнути, сторінка змінюється одразу й дотик не потрапить на ту, що зникає.</string>
+    <string name="fades_between_screens_keywords">анімація перехід згасання екран сторінка вкладка</string>
 </resources>

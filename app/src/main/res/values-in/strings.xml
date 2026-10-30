@@ -3834,4 +3834,10 @@
     <string name="plays_as_itself_again">Versi asli diputar lagi</string>
     <string name="playing_this_one">Ini yang sedang diputar</string>
     <string name="another_upload">Unggahan lain</string>
+    <string name="unlimited">Tanpa batas</string>
+    <string name="search_in_local_files">Cari di File lokal</string>
+    <string name="fades_between_screens">Transisi antarlayar</string>
+    <string name="pages_fade_into_each_other">Halaman memudar ke halaman berikutnya</string>
+    <string name="off_a_page_changes_at_once">Jika mati, halaman langsung berganti, jadi ketukan tidak mengenai halaman yang sedang memudar.</string>
+    <string name="fades_between_screens_keywords">animasi transisi pudar layar halaman tab</string>
 </resources>

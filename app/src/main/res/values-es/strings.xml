@@ -3934,4 +3934,10 @@
     <string name="plays_as_itself_again">Vuelve a sonar la original</string>
     <string name="playing_this_one">Esta es la que suena</string>
     <string name="another_upload">Otra subida</string>
+    <string name="unlimited">Sin límite</string>
+    <string name="search_in_local_files">Buscar en Archivos locales</string>
+    <string name="fades_between_screens">Transiciones entre pantallas</string>
+    <string name="pages_fade_into_each_other">Las páginas se funden entre sí</string>
+    <string name="off_a_page_changes_at_once">Desactivado, la página cambia al instante, así que un toque no puede caer en la que se está desvaneciendo.</string>
+    <string name="fades_between_screens_keywords">animación transición fundido pantalla página pestaña</string>
 </resources>

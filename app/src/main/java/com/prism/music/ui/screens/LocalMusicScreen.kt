@@ -258,8 +258,16 @@ fun LocalMusicScreen(bottomPadding: Dp) {
         val byId = tracks.associateBy { it.song.id }
         recentIds.mapNotNull { byId[it]?.song }
     }
+    // Search in Local files (#225): every word typed has to turn up in the title, the artists or the album, as on playlists.
+    var query by rememberSaveable { mutableStateOf("") }
+    val found = remember(tracks, sort, query) {
+        val words = query.trim().lowercase().split(Regex("\\s+")).filter { it.isNotEmpty() }
+        if (words.isEmpty()) emptyList()
+        else sorted(tracks, sort).map { it.song }.filter { s -> "${s.title} ${s.artistText} ${s.album?.title.orEmpty()}".lowercase().let { hay -> words.all { it in hay } } }
+    }
     val section = sections.getOrNull(pager.currentPage)
     fun playable(): Pair<List<Song>, String> = when {
+        query.isNotBlank() && album == null && artist == null && !openRecent -> found to tr(R.string.local_files)
         album != null -> album.tracks.map { it.song } to album.title
         artist != null -> artist.albums.flatMap { a -> a.tracks.filter { t -> t in artist.tracks } }.map { it.song } to artist.name
         openRecent -> recent to tr(R.string.recently_played)
@@ -342,20 +350,29 @@ fun LocalMusicScreen(bottomPadding: Dp) {
             openRecent -> if (recent.isEmpty()) EmptyState(PrismIcons.History, tr(R.string.nothing_played_yet), tr(R.string.songs_from_your_phone_that_you))
                 else TrackList(recent, tr(R.string.recently_played), bottomPadding)
             else -> {
-                SectionChips(sections, pager) { editing = true }
-                // Sideways swipes on a song queue it (SwipeToQueue), so the sections change from the chips.
-                HorizontalPager(pager, Modifier.weight(1f), userScrollEnabled = false) { page ->
-                    when (sections.getOrNull(page)) {
-                        LocalSection.SONGS -> SongsPage(songsSorted, sort, { saveOrders(orders.copy(songs = it)) }, tr(R.string.local_files), bottomPadding)
-                        LocalSection.FAVOURITES -> if (favourites.isEmpty()) EmptyState(PrismIcons.Heart, tr(R.string.no_favorites_yet), tr(R.string.like_songs_from_your_phone_on))
-                            else SongsPage(favourites, sort, { saveOrders(orders.copy(songs = it)) }, tr(R.string.favorites), bottomPadding)
-                        LocalSection.ARTISTS -> ArtistsPage(sortedArtists(artists, orders.artists), bottomPadding, orders.artists, { saveOrders(orders.copy(artists = it)) }) { openArtist = it.key }
-                        LocalSection.ALBUMS -> AlbumsPage(sortedAlbums(albums, orders.albums), bottomPadding, orders.albums, { saveOrders(orders.copy(albums = it)) }) { openAlbum = it.id }
-                        LocalSection.ADDED_SONGS -> TrackList(addedSongs, tr(R.string.recently_added), bottomPadding)
-                        LocalSection.ADDED_ALBUMS -> AlbumsPage(addedAlbums, bottomPadding) { openAlbum = it.id }
-                        LocalSection.DOWNLOADS -> if (downloads.isEmpty()) EmptyState(PrismIcons.DownloadDone, tr(R.string.no_downloads_yet), tr(R.string.songs_you_download_in_prism_show))
-                            else TrackList(downloads, tr(R.string.downloads), bottomPadding)
-                        null -> {}
+                com.prism.music.ui.components.SearchField(
+                    query, tr(R.string.search_in_local_files), { query = it },
+                    Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 4.dp),
+                )
+                if (query.isNotBlank()) {
+                    if (found.isEmpty()) EmptyState(PrismIcons.Search, tr(R.string.no_matches), tr(R.string.nothing_in_matches, tr(R.string.local_files), query.trim()) + ".")
+                    else TrackList(found, tr(R.string.local_files), bottomPadding)
+                } else {
+                    SectionChips(sections, pager) { editing = true }
+                    // Sideways swipes on a song queue it (SwipeToQueue), so the sections change from the chips.
+                    HorizontalPager(pager, Modifier.weight(1f), userScrollEnabled = false) { page ->
+                        when (sections.getOrNull(page)) {
+                            LocalSection.SONGS -> SongsPage(songsSorted, sort, { saveOrders(orders.copy(songs = it)) }, tr(R.string.local_files), bottomPadding)
+                            LocalSection.FAVOURITES -> if (favourites.isEmpty()) EmptyState(PrismIcons.Heart, tr(R.string.no_favorites_yet), tr(R.string.like_songs_from_your_phone_on))
+                                else SongsPage(favourites, sort, { saveOrders(orders.copy(songs = it)) }, tr(R.string.favorites), bottomPadding)
+                            LocalSection.ARTISTS -> ArtistsPage(sortedArtists(artists, orders.artists), bottomPadding, orders.artists, { saveOrders(orders.copy(artists = it)) }) { openArtist = it.key }
+                            LocalSection.ALBUMS -> AlbumsPage(sortedAlbums(albums, orders.albums), bottomPadding, orders.albums, { saveOrders(orders.copy(albums = it)) }) { openAlbum = it.id }
+                            LocalSection.ADDED_SONGS -> TrackList(addedSongs, tr(R.string.recently_added), bottomPadding)
+                            LocalSection.ADDED_ALBUMS -> AlbumsPage(addedAlbums, bottomPadding) { openAlbum = it.id }
+                            LocalSection.DOWNLOADS -> if (downloads.isEmpty()) EmptyState(PrismIcons.DownloadDone, tr(R.string.no_downloads_yet), tr(R.string.songs_you_download_in_prism_show))
+                                else TrackList(downloads, tr(R.string.downloads), bottomPadding)
+                            null -> {}
+                        }
                     }
                 }
             }

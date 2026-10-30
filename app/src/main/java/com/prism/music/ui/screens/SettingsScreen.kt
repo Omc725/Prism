@@ -854,6 +854,7 @@ private fun GlassSettings() {
                 val prefs = LocalContainer.current.settings
                 Group(tr(R.string.motion)) {
                     Toggle(tr(R.string.reduce_motion), tr(R.string.calmer_quicker_animations), s.reduceMotion, info = tr(R.string.no_drifting_backgrounds_no_artwork_bounce)) { prefs.setReduceMotion(it) }
+                    Toggle(tr(R.string.fades_between_screens), tr(R.string.pages_fade_into_each_other), s.behavior.screenFades, info = tr(R.string.off_a_page_changes_at_once)) { prefs.setScreenFades(it) }
                 }
             }
     }
@@ -1990,8 +1991,13 @@ private fun SingSettings() {
             tr(R.string.get_songs_ready_while_sing_is), tr(R.string.so_sing_starts_at_once_when), s.singAlwaysReady,
             info = tr(R.string.the_playing_song_and_the_next),
         ) { c.settings.setSingAlwaysReady(it) }
-        SliderSetting(tr(R.string.room_for_sung_songs), s.singCacheMb.toFloat(), 256f..4096f, { "${(it / 1024f).let { gb -> if (gb >= 1) "%.1f GB".format(gb) else "${it.roundToInt()} MB" }}" }, steps = 14) {
-            c.settings.setSingCacheMb(it.roundToInt())
+        // One step past 4 GB is "Unlimited" (#238).
+        val top = 4096f + 256f
+        SliderSetting(
+            tr(R.string.room_for_sung_songs), s.singCacheMb.toFloat().coerceAtMost(top), 256f..top,
+            { if (it >= top - 1f) tr(R.string.unlimited) else "${(it / 1024f).let { gb -> if (gb >= 1) "%.1f GB".format(gb) else "${it.roundToInt()} MB" }}" }, steps = 15,
+        ) {
+            c.settings.setSingCacheMb(if (it >= top - 1f) com.prism.music.data.prefs.SING_ROOM_UNLIMITED else it.roundToInt())
         }
         Item(tr(R.string.clear_sung_songs), tr(R.string.using, formatMb(used)), info = tr(R.string.songs_are_worked_out_again_the), onClick = { c.sing.store.clear(); used = 0 })
     }

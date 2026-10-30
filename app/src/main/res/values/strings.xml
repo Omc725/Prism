@@ -3906,4 +3906,11 @@
     <string name="playing_this_one">Playing this one</string>
     <!-- The same recording put on YouTube Music a second time (same album and length), in the list of a song's versions. -->
     <string name="another_upload">Another upload</string>
+    <!-- The last step of "Room for sung songs": no limit. -->
+    <string name="unlimited">Unlimited</string>
+    <string name="search_in_local_files">Search in Local files</string>
+    <string name="fades_between_screens">Fades between screens</string>
+    <string name="pages_fade_into_each_other">Pages fade into each other</string>
+    <string name="off_a_page_changes_at_once">Off, a page changes at once, so a tap can\'t land on the one fading out.</string>
+    <string name="fades_between_screens_keywords">animation transition fade screen page tab</string>
 </resources>

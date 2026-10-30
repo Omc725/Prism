@@ -3834,4 +3834,10 @@
     <string name="plays_as_itself_again">Đã phát lại bản gốc</string>
     <string name="playing_this_one">Đang phát bản này</string>
     <string name="another_upload">Bản tải lên khác</string>
+    <string name="unlimited">Không giới hạn</string>
+    <string name="search_in_local_files">Tìm trong Tệp trên máy</string>
+    <string name="fades_between_screens">Hiệu ứng mờ giữa các màn hình</string>
+    <string name="pages_fade_into_each_other">Các trang mờ dần sang nhau</string>
+    <string name="off_a_page_changes_at_once">Khi tắt, trang đổi ngay lập tức nên lần chạm không rơi vào trang đang mờ đi.</string>
+    <string name="fades_between_screens_keywords">hoạt ảnh chuyển cảnh mờ màn hình trang thẻ</string>
 </resources>

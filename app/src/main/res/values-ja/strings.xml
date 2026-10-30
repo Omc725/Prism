@@ -3834,4 +3834,10 @@
     <string name="plays_as_itself_again">オリジナルに戻しました</string>
     <string name="playing_this_one">再生中のバージョン</string>
     <string name="another_upload">別のアップロード</string>
+    <string name="unlimited">無制限</string>
+    <string name="search_in_local_files">ローカル ファイル内を検索</string>
+    <string name="fades_between_screens">画面切り替えのフェード</string>
+    <string name="pages_fade_into_each_other">ページが重なり合うように切り替わります</string>
+    <string name="off_a_page_changes_at_once">オフにすると画面がすぐに切り替わり、消えかけのページをタップしてしまうことがなくなります。</string>
+    <string name="fades_between_screens_keywords">アニメーション 切り替え フェード 画面 ページ タブ</string>
 </resources>

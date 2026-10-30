@@ -3934,4 +3934,10 @@
     <string name="plays_as_itself_again">Se redă din nou originalul</string>
     <string name="playing_this_one">Aceasta se redă</string>
     <string name="another_upload">Altă încărcare</string>
+    <string name="unlimited">Nelimitat</string>
+    <string name="search_in_local_files">Caută în Fișiere locale</string>
+    <string name="fades_between_screens">Tranziții între ecrane</string>
+    <string name="pages_fade_into_each_other">Paginile se estompează una în alta</string>
+    <string name="off_a_page_changes_at_once">Dezactivat, pagina se schimbă imediat, așa că o atingere nu poate ajunge pe cea care dispare.</string>
+    <string name="fades_between_screens_keywords">animație tranziție estompare ecran pagină filă</string>
 </resources>

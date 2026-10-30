@@ -55,6 +55,16 @@ were rebuilt so they keep finding music around what you play, and stop going rou
 - **Genres can be turned off on playlists**: the sort menu's "Show genres", or Settings → Customize Prism → Home & Library →
   "Genres on playlists". Off, a playlist has no genre chips or genre labels and keeps its own order.
 
+### Small requests (GitHub)
+
+- **Search in Local files** (#225): a search box above the sections; every word typed has to turn up in the title,
+  the artists or the album, as on playlists. Play and Shuffle at the top play what it found.
+- **"Room for sung songs" can be Unlimited** (#238): one step past 4 GB.
+- **A gesture set to Nothing doesn't move anything** (#222): the mini player stays still when swiped toward a way with
+  no gesture, and the player's cover too (it used to slide and spring back).
+- **Fades between screens can be turned off** (#227, Customize Prism → Glass & backgrounds → Motion): pages then change
+  at once, so a tap can't land on the page that's fading out. On by default, as before.
+
 ### Fixes
 
 - **The accent from the cover is the cover's color** (Reddit): a few pixels of another color no longer decide it (a deep
@@ -85,6 +95,15 @@ were rebuilt so they keep finding music around what you play, and stop going rou
   artist's song. A video of two songs still plays as it is.
 - **Sliders show their number** (#209): the ones that only said a word ("Balanced", "Airy") now say both
   ("Airy · 140%"), and Backgrounds' Softness shows one too, so you can come back to exactly the same place.
+- **Long tab names fit the floating bar** (#237): "Liked songs" on a floating bar with labels got cut off; a name now
+  gets a little smaller to fit its tab, and keeps its full height with big text.
+- **"From the cover" is the cover's colors** (#233 #235 #236): a black-and-white or mostly white cover gave Prism's
+  rainbow light; it now gives a silver one, and a cover with one color gives shades of it. A speck of color on a small
+  part of the picture no longer counts.
+- **YouTube's words in Prism's language** (#234): song credits' headings and other text YouTube writes came in the
+  phone's language while Prism was in English. They now follow the language Prism is in (Settings → Language).
+- **Opening a mix from Home the first time** (#228) is in Prism's startup profile now, so it's ready instead of being
+  worked out on the spot; "Fades between screens" off makes opening and closing pages lighter still.
 
 ## 1.7.8
 

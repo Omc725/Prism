@@ -3934,4 +3934,10 @@
     <string name="plays_as_itself_again">Torna a essere riprodotto l’originale</string>
     <string name="playing_this_one">È quella in riproduzione</string>
     <string name="another_upload">Un altro caricamento</string>
+    <string name="unlimited">Illimitato</string>
+    <string name="search_in_local_files">Cerca in File locali</string>
+    <string name="fades_between_screens">Dissolvenze tra le schermate</string>
+    <string name="pages_fade_into_each_other">Le pagine si dissolvono l’una nell’altra</string>
+    <string name="off_a_page_changes_at_once">Disattivato, la pagina cambia subito, così un tocco non finisce su quella che sta svanendo.</string>
+    <string name="fades_between_screens_keywords">animazione transizione dissolvenza schermata pagina scheda</string>
 </resources>

@@ -3934,4 +3934,10 @@
     <string name="plays_as_itself_again">המקור מושמע שוב</string>
     <string name="playing_this_one">זו הגרסה שמושמעת</string>
     <string name="another_upload">העלאה נוספת</string>
+    <string name="unlimited">ללא הגבלה</string>
+    <string name="search_in_local_files">חיפוש בקבצים מקומיים</string>
+    <string name="fades_between_screens">מעברי עמעום בין מסכים</string>
+    <string name="pages_fade_into_each_other">העמודים מתמזגים זה בזה</string>
+    <string name="off_a_page_changes_at_once">כשהאפשרות כבויה העמוד מתחלף מיד, כך שנגיעה לא תיפול על העמוד שנעלם.</string>
+    <string name="fades_between_screens_keywords">אנימציה מעבר עמעום מסך עמוד כרטיסייה</string>
 </resources>

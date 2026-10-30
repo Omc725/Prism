@@ -3884,4 +3884,10 @@
     <string name="plays_as_itself_again">Originalet spelas igen</string>
     <string name="playing_this_one">Den här spelas</string>
     <string name="another_upload">En annan uppladdning</string>
+    <string name="unlimited">Obegränsat</string>
+    <string name="search_in_local_files">Sök i Lokala filer</string>
+    <string name="fades_between_screens">Övertoning mellan skärmar</string>
+    <string name="pages_fade_into_each_other">Sidorna tonar över i varandra</string>
+    <string name="off_a_page_changes_at_once">Av: sidan byts direkt, så ett tryck kan inte hamna på den som tonar bort.</string>
+    <string name="fades_between_screens_keywords">animation övergång toning skärm sida flik</string>
 </resources>

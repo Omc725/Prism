@@ -3884,4 +3884,10 @@
     <string name="plays_as_itself_again">دوباره نسخهٔ اصلی پخش می‌شود</string>
     <string name="playing_this_one">این نسخه در حال پخش است</string>
     <string name="another_upload">بارگذاری دیگر</string>
+    <string name="unlimited">بدون محدودیت</string>
+    <string name="search_in_local_files">جستجو در فایل‌های محلی</string>
+    <string name="fades_between_screens">محوشدن بین صفحه‌ها</string>
+    <string name="pages_fade_into_each_other">صفحه‌ها در هم محو می‌شوند</string>
+    <string name="off_a_page_changes_at_once">اگر خاموش باشد، صفحه بی‌درنگ عوض می‌شود تا ضربه روی صفحه‌ای که در حال محوشدن است نیفتد.</string>
+    <string name="fades_between_screens_keywords">انیمیشن جابه‌جایی محوشدن صفحه برگه</string>
 </resources>

@@ -3934,4 +3934,10 @@
     <string name="plays_as_itself_again">L’original est de nouveau lu</string>
     <string name="playing_this_one">C’est celle-ci qui est lue</string>
     <string name="another_upload">Autre mise en ligne</string>
+    <string name="unlimited">Illimité</string>
+    <string name="search_in_local_files">Rechercher dans Fichiers locaux</string>
+    <string name="fades_between_screens">Fondus entre les écrans</string>
+    <string name="pages_fade_into_each_other">Les pages se fondent l’une dans l’autre</string>
+    <string name="off_a_page_changes_at_once">Désactivé, la page change aussitôt : un appui ne peut pas tomber sur celle qui disparaît.</string>
+    <string name="fades_between_screens_keywords">animation transition fondu écran page onglet</string>
 </resources>

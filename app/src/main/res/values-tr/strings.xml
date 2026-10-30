@@ -3884,4 +3884,10 @@
     <string name="plays_as_itself_again">Yeniden orijinali çalıyor</string>
     <string name="playing_this_one">Çalan bu</string>
     <string name="another_upload">Başka bir yükleme</string>
+    <string name="unlimited">Sınırsız</string>
+    <string name="search_in_local_files">Yerel dosyalarda ara</string>
+    <string name="fades_between_screens">Ekranlar arası geçişler</string>
+    <string name="pages_fade_into_each_other">Sayfalar birbirine geçerek değişir</string>
+    <string name="off_a_page_changes_at_once">Kapalıyken sayfa hemen değişir, böylece dokunuş kaybolmakta olan sayfaya gitmez.</string>
+    <string name="fades_between_screens_keywords">animasyon geçiş solma ekran sayfa sekme</string>
 </resources>

@@ -3984,4 +3984,10 @@
     <string name="plays_as_itself_again">Снова звучит оригинал</string>
     <string name="playing_this_one">Звучит эта</string>
     <string name="another_upload">Другая загрузка</string>
+    <string name="unlimited">Без ограничений</string>
+    <string name="search_in_local_files">Поиск в Локальных файлах</string>
+    <string name="fades_between_screens">Переходы между экранами</string>
+    <string name="pages_fade_into_each_other">Страницы плавно сменяют друг друга</string>
+    <string name="off_a_page_changes_at_once">Если выключить, страница меняется сразу и нажатие не попадёт на исчезающую.</string>
+    <string name="fades_between_screens_keywords">анимация переход затухание экран страница вкладка</string>
 </resources>

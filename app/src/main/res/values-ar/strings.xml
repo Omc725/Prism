@@ -4084,4 +4084,10 @@
     <string name="plays_as_itself_again">يُشغَّل الأصلي مجددًا</string>
     <string name="playing_this_one">هذا ما يُشغَّل الآن</string>
     <string name="another_upload">رفع آخر</string>
+    <string name="unlimited">بلا حد</string>
+    <string name="search_in_local_files">البحث في الملفات المحلية</string>
+    <string name="fades_between_screens">التلاشي بين الشاشات</string>
+    <string name="pages_fade_into_each_other">تتلاشى الصفحات في بعضها</string>
+    <string name="off_a_page_changes_at_once">عند إيقافه تتغير الصفحة فورًا، فلا تقع النقرة على الصفحة التي تختفي.</string>
+    <string name="fades_between_screens_keywords">حركة انتقال تلاشي شاشة صفحة علامة تبويب</string>
 </resources>

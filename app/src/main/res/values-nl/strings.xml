@@ -3884,4 +3884,10 @@
     <string name="plays_as_itself_again">Speelt weer het origineel</string>
     <string name="playing_this_one">Deze speelt nu</string>
     <string name="another_upload">Andere upload</string>
+    <string name="unlimited">Onbeperkt</string>
+    <string name="search_in_local_files">Zoeken in Lokale bestanden</string>
+    <string name="fades_between_screens">Overgangen tussen schermen</string>
+    <string name="pages_fade_into_each_other">Pagina’s vloeien in elkaar over</string>
+    <string name="off_a_page_changes_at_once">Uit: een pagina wisselt meteen, zodat een tik niet op de verdwijnende pagina terechtkomt.</string>
+    <string name="fades_between_screens_keywords">animatie overgang vervagen scherm pagina tabblad</string>
 </resources>

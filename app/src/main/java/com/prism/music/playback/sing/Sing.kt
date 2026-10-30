@@ -239,7 +239,9 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
         } finally {
             com.prism.music.playback.AudioDiagnostics.log("background", "Sing separation of $id ended after ${(System.nanoTime() - started) / 1_000_000} ms")
             scratch.delete()
-            store.trim(c.settings.current.singCacheMb * 1_048_576L, setOfNotNull(id, c.player.currentSong.value?.id))
+            // "Unlimited" (#238): every sung song stays until the listener clears them.
+            val room = c.settings.current.singCacheMb
+            if (room < com.prism.music.data.prefs.SING_ROOM_UNLIMITED) store.trim(room * 1_048_576L, setOfNotNull(id, c.player.currentSong.value?.id))
         }
     }
 }

@@ -3884,4 +3884,10 @@
     <string name="plays_as_itself_again">Újra az eredeti szól</string>
     <string name="playing_this_one">Ez szól most</string>
     <string name="another_upload">Másik feltöltés</string>
+    <string name="unlimited">Korlátlan</string>
+    <string name="search_in_local_files">Keresés a Helyi fájlokban</string>
+    <string name="fades_between_screens">Áttűnés a képernyők között</string>
+    <string name="pages_fade_into_each_other">Az oldalak egymásba úsznak</string>
+    <string name="off_a_page_changes_at_once">Kikapcsolva az oldal azonnal vált, így egy koppintás nem érheti az eltűnőt.</string>
+    <string name="fades_between_screens_keywords">animáció átmenet áttűnés képernyő oldal lap</string>
 </resources>

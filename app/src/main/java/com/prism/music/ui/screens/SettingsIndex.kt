@@ -163,6 +163,7 @@ object SettingsIndex {
         SettingEntry(G, tr(R.string.glass), tr(R.string.frosted_glass), tr(R.string.blur_transparent)),
         SettingEntry(G, tr(R.string.glass), tr(R.string.frosted_pages), tr(R.string.blur_artist_album_playlist)),
         SettingEntry(G, tr(R.string.motion), tr(R.string.reduce_motion), tr(R.string.animations_accessibility)),
+        SettingEntry(G, tr(R.string.motion), tr(R.string.fades_between_screens), tr(R.string.fades_between_screens_keywords)),
         // Layout & navigation
         SettingEntry(L, tr(R.string.navigation_bar), tr(R.string.style), tr(R.string.tab_bar_bottom_bar)),
         SettingEntry(L, tr(R.string.navigation_bar), tr(R.string.labels), tr(R.string.tab_bar_names),

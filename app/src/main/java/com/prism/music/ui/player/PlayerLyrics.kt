@@ -1003,7 +1003,7 @@ fun LyricsPanel(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    tr(R.string.lyrics_from, state.lyrics?.source?.label ?: "—") + if (state.lyrics?.wordSynced == true) tr(R.string.karaoke) else "",
+                    tr(R.string.lyrics_from, state.lyrics?.source?.label ?: "—") + if (state.lyrics?.wordSynced == true) " " + tr(R.string.karaoke).trimStart() else "",
                     style = MaterialTheme.typography.labelMedium, color = Color.White.copy(alpha = 0.4f),
                 )
                 if (onChangeSource != null) Icon(PrismIcons.ChevronRight, null, Modifier.padding(start = 2.dp).size(14.dp), tint = Color.White.copy(alpha = 0.3f))

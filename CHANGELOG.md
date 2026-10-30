@@ -75,6 +75,9 @@ were rebuilt so they keep finding music around what you play, and stop going rou
 - **The widget's play button can take another color** (Reddit): hold a Prism widget → Settings (or Customize Prism →
   Icons & shapes → Home-screen widgets) → Play button: your light (as before), white, the cover's color or one of
   yours, for the play button and the progress line. Android 12 and later.
+- **Settings → Lyrics' examples come to rest**: they play their line three times when the page opens or a setting
+  changes, then hold part-way through. Looping for as long as the page was open, they kept a screen reader from ever
+  settling there on Android 9 (and kept the phone drawing).
 - **The accent from the cover is the cover's color** (Reddit): a few pixels of another color no longer decide it (a deep
   blue night with two pink lights gave a pink accent). A color now has to fill a real part of the picture. A
   black-and-white cover gives a grey accent, as it looks (its slight tint used to turn into a color); "Always colorful"

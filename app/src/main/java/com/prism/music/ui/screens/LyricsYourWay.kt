@@ -2,12 +2,7 @@ package com.prism.music.ui.screens
 
 import com.prism.music.R
 import com.prism.music.tr
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -28,8 +23,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.animation.core.withInfiniteAnimationFrameMillis
 import androidx.compose.runtime.State
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -91,16 +87,38 @@ private val SAMPLE_LINE = LyricLine(
 private val SAMPLE_BEFORE = LyricLine(-1, tr(R.string.somewhere_a_light_is_turning_on))
 private val SAMPLE_AFTER = LyricLine(-1, tr(R.string.we_follow_the_line_of_the))
 
-/** The examples' clock: round and round the sample line, or held part-way through with Reduce motion. */
+/** Where the examples rest: part-way through the line, a few words sung. */
+private const val SAMPLE_REST_MS = 1500L
+/** Times round the sample line when the page opens or a setting changes, before the examples rest. */
+private const val SAMPLE_LOOPS = 3
+
+/**
+ * The examples' clock: [SAMPLE_LOOPS] times round the sample line whenever the page opens or a setting changes, then
+ * held part-way through (at once with Reduce motion). Not round and round for as long as the page is open: Prism's
+ * sweep lays its line out again every frame, and while any accessibility service is on, each layout is reported to it,
+ * so the page never went quiet (1.7.9's Android 9 check couldn't read the screen there at all).
+ */
 @Composable
 private fun rememberSampleClock(): State<Long> {
-    val still = LocalAppSettings.current.reduceMotion
-    if (still) return remember { mutableLongStateOf(1500L) }
-    val t by rememberInfiniteTransition(label = "lyricSample").animateFloat(
-        -400f, 3600f, infiniteRepeatable(tween(4000, easing = LinearEasing), RepeatMode.Restart), label = "lyricClock",
-    )
-    return remember { derivedStateOf { t.toLong() } }
+    val s = LocalAppSettings.current
+    val clock = remember { mutableLongStateOf(SAMPLE_REST_MS) }
+    LaunchedEffect(s) {
+        // Still with Reduce motion, and with Android's animations turned off (as the infinite transition before it was).
+        val moving = !s.reduceMotion && (coroutineContext[androidx.compose.ui.MotionDurationScale]?.scaleFactor ?: 1f) > 0f
+        if (moving) repeat(SAMPLE_LOOPS) {
+            val start = withInfiniteAnimationFrameMillis { it }
+            var now = start
+            while (now - start < SAMPLE_LOOP_MS) {
+                clock.longValue = SAMPLE_FROM_MS + (now - start)
+                now = withInfiniteAnimationFrameMillis { it }
+            }
+        }
+        clock.longValue = SAMPLE_REST_MS
+    }
+    return clock
 }
+private const val SAMPLE_FROM_MS = -400L
+private const val SAMPLE_LOOP_MS = 4000L
 
 /** The lyrics' typeface on its weight axis (as the lyrics page uses it), for Prism's sweep in the examples. */
 @Composable
@@ -133,7 +151,9 @@ fun LyricsSample(look: LyricsLook, modifier: Modifier = Modifier, ground: Brush?
         fontWeight = FontWeight(look.weight), textAlign = if (centred) TextAlign.Center else TextAlign.Start,
     )
     val bg = ground ?: look.card?.let { SolidColor(it) } ?: Brush.verticalGradient(listOf(Color(0xFF2A2140), SampleDark))
-    Box(modifier.clip(RoundedCornerShape(12.dp)).background(bg).padding(horizontal = 12.dp, vertical = 10.dp)) {
+    // A picture of the style, not text to read: its line changes every frame, and as text it kept accessibility busy
+    // for as long as the page was open (Android 9's screen reader never settled there; the card's own title says it).
+    Box(modifier.clearAndSetSemantics { }.clip(RoundedCornerShape(12.dp)).background(bg).padding(horizontal = 12.dp, vertical = 10.dp)) {
         Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy((5 * look.spacing).dp)) {
             if (lines >= 3) RestingLine(look.shown(SAMPLE_BEFORE), style, look, 0.8f * look.othersAlpha, Modifier.fillMaxWidth(), maxLines = 1)
             Column(Modifier.fillMaxWidth()) {

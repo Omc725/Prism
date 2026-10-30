@@ -3,7 +3,6 @@ package com.prism.music
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
-import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
@@ -45,8 +44,17 @@ class LyricsSourceButtonTest {
         val song = local.tracks.value.first { it.song.title == "Prism source tone" }.song
         InstrumentationRegistry.getInstrumentation().runOnMainSync { Fixture.container.player.playQueue(listOf(song), 0, QueueSource(QueueKind.OTHER, "Source test")) }
 
-        // The full player, then its lyrics.
-        compose.clickWhenFound(hasText("Prism source tone") and hasClickAction(), 20_000)
+        // The full player, by the link a widget's cover uses (a click by the song's title found a Home row listing it,
+        // and UiAutomator can't read the screen while music plays), then its lyrics.
+        compose.waitForText("Prism source tone", 20_000)
+        Fixture.context.startActivity(
+            android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("prism://player"))
+                .setClass(Fixture.context, PrismActivity::class.java)
+                .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP),
+        )
+        // Paused: a playing player never lets Compose go idle, and the test reads the screen through it.
+        Thread.sleep(2_000)
+        InstrumentationRegistry.getInstrumentation().runOnMainSync { Fixture.container.player.setPlaying(false) }
         compose.clickWhenFound(hasContentDescription("Lyrics") and hasClickAction(), 15_000)
         compose.waitUntil(10_000) { compose.onAllNodes(hasContentDescription("Close lyrics")).fetchSemanticsNodes().isNotEmpty() }
         assertTrue("off by default: no source button", compose.onAllNodes(hasTestTag("lyricsSourceButton")).fetchSemanticsNodes().isEmpty())

@@ -146,9 +146,11 @@ fun LyricsSourceButton(state: LyricsState, onClick: () -> Unit, modifier: Modifi
             style = MaterialTheme.typography.labelLarge, color = Color.White.copy(alpha = 0.85f),
             maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false),
         )
-        // Timed word by word (" · Karaoke"), quieter than the source.
+        // Timed word by word (" · Karaoke"), quieter than the source. Android drops the string's leading space, so the
+        // gap is padding (it read "LyricsPlus· Karaoke" on the phone).
         if (lyrics?.wordSynced == true && !state.loading) Text(
-            tr(R.string.karaoke), style = MaterialTheme.typography.labelLarge, color = Color.White.copy(alpha = 0.55f), maxLines = 1,
+            tr(R.string.karaoke).trimStart(), style = MaterialTheme.typography.labelLarge, color = Color.White.copy(alpha = 0.55f),
+            maxLines = 1, modifier = Modifier.padding(start = 5.dp),
         )
         Icon(PrismIcons.ChevronDown, null, Modifier.padding(start = 4.dp).size(16.dp), tint = Color.White.copy(alpha = 0.5f))
     }

@@ -67,7 +67,9 @@ class RecordedNetwork(private val record: Boolean) : Interceptor {
         val bytes = response.peekBody(MAX_RECORDING).bytes()
         if (bytes.size >= MAX_RECORDING) return
         val text = type?.charset() != null || kind.contains("json") || kind.startsWith("text/") || kind.contains("xml") || kind.contains("javascript")
-        val rec = Recording(response.code, type?.toString(), if (text) bytes.decodeToString() else Base64.encodeToString(bytes, Base64.NO_WRAP), !text)
+        // Google API keys out (YouTube's pages carry their web client's key): the recordings are published in the repo,
+        // where GitHub's secret scanning flags one. Prism never reads a key from an answer.
+        val rec = Recording(response.code, type?.toString(), if (text) GOOGLE_KEY.replace(bytes.decodeToString(), "REDACTED_GOOGLE_API_KEY") else Base64.encodeToString(bytes, Base64.NO_WRAP), !text)
         // To /sdcard through the test's shell (Prism's own files are cleared before the next test); tools/record.ps1
         // pulls them into src/androidTest/assets/recorded/.
         val ui = instrumentation.uiAutomation
@@ -84,6 +86,7 @@ class RecordedNetwork(private val record: Boolean) : Interceptor {
         private const val TAG = "PrismTestNet"
         private const val MAX_RECORDING = 4L * 1024 * 1024
         const val RECORDED = "/sdcard/prism-tests/recorded"
+        private val GOOGLE_KEY = Regex("AIza[0-9A-Za-z_-]{35}")
 
         /** Answers a test sets for itself, by the start of the address (each test runs in a fresh app). */
         val answers: MutableMap<String, String> = java.util.concurrent.ConcurrentHashMap()

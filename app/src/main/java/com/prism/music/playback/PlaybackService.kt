@@ -904,7 +904,12 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         val attempts = retries[id] ?: 0
         // A download whose file can't be read (#183: "Skipping atom with length > 2147483647", stitched from two formats
         // by a download that resumed in another one): it's fetched again, and the song streams meanwhile.
-        val unreadable = generateSequence(error as Throwable) { it.cause }.any { it is androidx.media3.common.ParserException }
+        // Also the reader tripping over the bytes (1.7.9's check, "Woke Up Older": a cached part that mixed two versions
+        // of the song threw ArrayIndexOutOfBounds in the loader, "Unexpected exception loading stream"): every tap after
+        // read the same part and failed, since only a ParserException let it go.
+        val unreadable = generateSequence(error as Throwable) { it.cause }.any {
+            it is androidx.media3.common.ParserException || it is androidx.media3.exoplayer.upstream.Loader.UnexpectedLoaderException
+        }
         if (unreadable && retries["file:$id"] == null && c.downloads.redownload(id)) {
             retries["file:$id"] = 1
             AudioDiagnostics.log("song", "$id: its download can't be read (${(error.cause ?: error).message?.take(80)}); downloading it again and streaming it now")
@@ -1937,8 +1942,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     }
 
     private fun savedLength(id: String): Long = c.localLossless.matched[id]?.size ?: runCatching {
-        listOf(c.downloadCache, c.playerCache).firstNotNullOfOrNull { cache ->
-            androidx.media3.datasource.cache.ContentMetadata.getContentLength(cache.getContentMetadata(id)).takeIf { it > 0 }
+        listOf(c.downloadCache to id, c.playerCache to c.songCacheKey(id)).firstNotNullOfOrNull { (cache, key) ->
+            androidx.media3.datasource.cache.ContentMetadata.getContentLength(cache.getContentMetadata(key)).takeIf { it > 0 }
         } ?: 0L
     }.getOrDefault(0L)
 

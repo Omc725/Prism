@@ -298,11 +298,11 @@ class AppContainer(val app: Application) {
      */
     internal fun audioOnPhone(id: String, scratch: File): android.net.Uri? {
         if (id.startsWith(com.prism.music.data.model.Song.LOCAL_PREFIX)) return localMusic.uriFor(id)
-        for (cache in listOf(downloadCache, playerCache)) {
-            if (!cache.fullyCached(id, 0, C.LENGTH_UNSET.toLong())) continue
+        for ((cache, key) in listOf(downloadCache to id, playerCache to songCacheKey(id))) {
+            if (!cache.fullyCached(key, 0, C.LENGTH_UNSET.toLong())) continue
             val ok = runCatching {
                 val source = CacheDataSource(cache, null)
-                source.open(DataSpec.Builder().setUri("prism://audio/$id").setKey(id).build())
+                source.open(DataSpec.Builder().setUri("prism://audio/$id").setKey(key).build())
                 try {
                     scratch.outputStream().use { out ->
                         val buf = ByteArray(64 * 1024)
@@ -515,7 +515,7 @@ class AppContainer(val app: Application) {
     /** Whether a song plays without the network: a file on the phone, a finished download, or a song cached whole. */
     fun availableOffline(id: String): Boolean =
         id.startsWith(com.prism.music.data.model.Song.LOCAL_PREFIX) || downloads.isDownloaded(id) ||
-            runCatching { playerCache.fullyCached(id, 0, C.LENGTH_UNSET.toLong()) }.getOrDefault(false)
+            runCatching { playerCache.fullyCached(songCacheKey(id), 0, C.LENGTH_UNSET.toLong()) }.getOrDefault(false)
 
     private fun Cache.fullyCached(key: String, position: Long, length: Long): Boolean {
         val total = ContentMetadata.getContentLength(getContentMetadata(key))
@@ -531,9 +531,17 @@ class AppContainer(val app: Application) {
     val soundFrom = ConcurrentHashMap<String, String>()
 
     /**
-     * Plays [pick] in [song]'s place from now on (null: its own sound again). What was kept of the version before goes:
-     * its cached bytes and measurements, and a download comes down again as the new one. Playing now, the song starts
-     * again where it was.
+     * The song cache's key for song [id]'s sound: a picked version ([versions]) is kept under that recording's own id, so
+     * the two recordings' bytes never mix. They shared the song's key before, cleared at each pick while the player was
+     * still saving the one it had been playing: what it saved after went in under the song, and back on its own
+     * recording the song couldn't be read and stopped playing (1.7.9's check, "Woke Up Older").
+     */
+    fun songCacheKey(id: String): String = versions.of(id) ?: id
+
+    /**
+     * Plays [pick] in [song]'s place from now on (null: its own sound again). The version's measurements go, and a
+     * download comes down again as the new one (each recording keeps its own cached part, [songCacheKey]). Playing now,
+     * the song starts again where it was.
      */
     fun pickVersion(song: com.prism.music.data.model.Song, pick: com.prism.music.data.SongVersions.Pick?) {
         if (versions.of(song.id) == pick?.id?.takeIf { it != song.id }) return
@@ -543,8 +551,6 @@ class AppContainer(val app: Application) {
         scope.launch(Dispatchers.Main) {
             player.reloadIfCurrent(song.id) {
                 kotlinx.coroutines.withContext(Dispatchers.IO) {
-                    prebuffered.remove(song.id)
-                    runCatching { playerCache.removeResource(song.id) }
                     mixTempo.forget(song.id)
                     waves.forget(song.id)
                     downloads.redownload(song.id)
@@ -559,12 +565,16 @@ class AppContainer(val app: Application) {
         val song = uri.lastPathSegment ?: return spec
         // Played (and cached) as the video it plays from, so its bytes never mix with the song's own. Downloads keep
         // the song's own key, so they aren't swapped.
-        val id = (if (useCaches) soundFrom[song] else null) ?: song
+        val sound = if (useCaches) soundFrom[song] else null
+        // A picked version is cached under its own id too ([songCacheKey]); its download is the song's (fetched again
+        // as the version when it was picked).
+        val id = sound ?: if (useCaches) songCacheKey(song) else song
         if (useCaches) {
-            if (downloadCache.fullyCached(id, spec.position, spec.length)) {
+            val saved = sound ?: song
+            if (downloadCache.fullyCached(saved, spec.position, spec.length)) {
                 streamDetails[song] = "Downloaded" to streamDetails[song]?.second
                 onStreamResolved?.invoke(song)
-                return spec.buildUpon().setKey(id).build()
+                return spec.buildUpon().setKey(saved).build()
             }
             if (playerCache.fullyCached(id, spec.position, spec.length)) {
                 streamDetails[song] = "Cached" to streamDetails[song]?.second
@@ -574,9 +584,10 @@ class AppContainer(val app: Application) {
         }
         // The listener's own upload (#101): only their account may play it, so it's asked for that way at once instead of
         // after two refusals.
-        if (uri.getQueryParameter("upload") == "1") streams.forAccount(id)
+        if (uri.getQueryParameter("upload") == "1") streams.forAccount(sound ?: song)
         val s = try {
-            streams.resolve(id)
+            // The song's id, not its version's: the resolver plays the version for it.
+            streams.resolve(sound ?: song)
         } catch (e: Exception) {
             throw IOException(e.message ?: tr(R.string.couldn_t_resolve_stream), e)
         }
@@ -629,8 +640,9 @@ class AppContainer(val app: Application) {
 
     /** [id]'s cached part can't be read: it goes, with its format. Blocking (the cache's own lock). */
     fun forgetCachedAudio(id: String) {
-        runCatching { playerCache.removeResource(id) }
-        cacheFormats.edit().remove(id).apply()
+        val key = songCacheKey(id)
+        runCatching { playerCache.removeResource(key) }
+        cacheFormats.edit().remove(key).apply()
     }
 
     /** A download was removed (or is being fetched again): its format no longer binds the next one. */
@@ -669,16 +681,18 @@ class AppContainer(val app: Application) {
         if (metered && !cellular) return
         // [whole] (Settings → Load ahead): the whole song, so it plays without buffering; it needs the stream's size.
         if (whole && s.contentLength <= 0) return
-        if (!whole && prebuffered.containsKey(id)) return
+        // Saved under the key the player reads it by (a picked version's own, [songCacheKey]).
+        val key = songCacheKey(id)
+        if (!whole && prebuffered.containsKey(key)) return
         val bytes = if (whole) s.contentLength else PREBUFFER_BYTES.let { if (s.contentLength > 0) minOf(it, s.contentLength) else it }
-        if (playerCache.isCached(id, 0, bytes)) return
-        val spec = DataSpec.Builder().setUri(s.audioUrl).setKey(id).setPosition(0).setLength(bytes).build()
+        if (playerCache.isCached(key, 0, bytes)) return
+        val spec = DataSpec.Builder().setUri(s.audioUrl).setKey(key).setPosition(0).setLength(bytes).build()
         val source = CacheDataSource(playerCache, OkHttpDataSource.Factory(streamHttp).createDataSource())
         runCatching { androidx.media3.datasource.cache.CacheWriter(source, spec, null, null).cache() }
             .onSuccess {
-                prebuffered[id] = s.itag
+                prebuffered[key] = s.itag
                 // Saved whole: say so, so it plays from here offline too (#213).
-                if (whole) markWhole(playerCache, id, s.contentLength)
+                if (whole) markWhole(playerCache, key, s.contentLength)
             }
             .onFailure { android.util.Log.w("PrismStream", "Couldn't save the start of $id ahead: $it") }
     }

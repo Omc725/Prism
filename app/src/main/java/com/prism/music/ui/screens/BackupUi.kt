@@ -13,6 +13,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -59,40 +62,46 @@ fun rememberBackupFlow(onDone: (Boolean) -> Unit = {}): () -> Unit {
     val scope = rememberCoroutineScope()
     var asking by remember { mutableStateOf(false) }
     var busy by remember { mutableStateOf(false) }
-    var withDownloads by remember { mutableStateOf(false) }
+    // What goes in (#149): everything but the downloaded audio, as before; any part can stay out (to share your settings
+    // without your listening or your sign-in).
+    var parts by remember { mutableStateOf(com.prism.music.data.BackupPart.entries.toSet() - com.prism.music.data.BackupPart.DOWNLOADS) }
     val save = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
         if (uri == null) { onDone(false); return@rememberLauncherForActivityResult }
         busy = true
         scope.launch {
-            val r = runCatching { c.backup.export(uri, withDownloads) }
+            val r = runCatching { c.backup.export(uri, parts) }
             busy = false
             Toast.makeText(context, (r.exceptionOrNull()?.let { "Backup failed: ${it.message}" } ?: "Backed up").localized(context), Toast.LENGTH_SHORT).show()
             onDone(r.isSuccess)
         }
     }
     if (asking) {
-        var small by remember { mutableLongStateOf(0L) }
-        var full by remember { mutableLongStateOf(0L) }
-        LaunchedEffect(Unit) { small = c.backup.estimate(false); full = c.backup.estimate(true) }
+        var size by remember { mutableLongStateOf(0L) }
+        LaunchedEffect(parts) { size = c.backup.estimate(parts) }
         AlertDialog(
             onDismissRequest = { asking = false },
             title = { Text("Back up Prism".localized()) },
             text = {
-                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text("Your library, Replay history, settings, sign-in, covers and backgrounds go into one file. Keep it private: it can sign in as you.".localized())
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Column(Modifier.weight(1f)) {
-                            Text("Include downloaded songs".localized(), style = MaterialTheme.typography.bodyLarge)
-                            Text(
-                                if (withDownloads) "About %s".localized(sizeText(full)) else "About %s; downloads are fetched again after restoring".localized(sizeText(small)),
-                                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
+                Column(Modifier.verticalScroll(rememberScrollState())) {
+                    Text("Pick what goes into the file.".localized(), style = MaterialTheme.typography.bodyMedium)
+                    Spacer(Modifier.height(6.dp))
+                    com.prism.music.data.BackupPart.entries.forEach { part ->
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            PrismCheck(part in parts, label = part.label.localized()) { on -> parts = if (on) parts + part else parts - part }
+                            Column(Modifier.weight(1f).padding(vertical = 6.dp)) {
+                                Text(part.label.localized(), style = MaterialTheme.typography.bodyLarge)
+                                Text(part.detail.localized(), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
                         }
-                        PrismSwitch(withDownloads, { withDownloads = it })
                     }
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        ("About ${sizeText(size)}." + if (com.prism.music.data.BackupPart.ACCOUNTS in parts) " Keep it private: it can sign in as you." else "").localized(),
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 }
             },
-            confirmButton = { PrismTextButton(onClick = { asking = false; save.launch(backupName()) }) { Text("Choose where".localized()) } },
+            confirmButton = { PrismTextButton(onClick = { asking = false; save.launch(backupName()) }, enabled = parts.isNotEmpty()) { Text("Choose where".localized()) } },
             dismissButton = { PrismTextButton(onClick = { asking = false }) { Text("Cancel".localized()) } },
         )
     }
@@ -110,10 +119,19 @@ fun rememberRestoreFlow(): () -> Unit {
     var busy by remember { mutableStateOf(false) }
     val open = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { picked = it }
     picked?.let { uri ->
+        // What the file holds: only those parts are replaced (#149); the rest stays as it is here.
+        val parts by androidx.compose.runtime.produceState<Set<com.prism.music.data.BackupPart>?>(null, uri) { value = c.backup.partsOf(uri) }
         AlertDialog(
             onDismissRequest = { picked = null },
             title = { Text("Restore this backup?".localized()) },
-            text = { Text("Prism's library, history and settings on this phone are replaced with the backup's, then Prism restarts.".localized()) },
+            text = {
+                Text(
+                    parts?.let { p ->
+                        ("It holds: " + com.prism.music.data.BackupPart.entries.filter { it in p }.joinToString(", ") { it.label.localized(context).lowercase().replaceFirstChar(Char::uppercase) } +
+                            ". Those are replaced with the backup's on this phone; the rest stays as it is. Then Prism restarts.").localized(context)
+                    } ?: "Prism's library, history and settings on this phone are replaced with the backup's, then Prism restarts.".localized(),
+                )
+            },
             confirmButton = {
                 PrismTextButton(onClick = {
                     picked = null
@@ -155,8 +173,8 @@ fun BackupGroup() {
     val backup = rememberBackupFlow()
     val restore = rememberRestoreFlow()
     Group("Backup") {
-        Item("Back up", "Library, Replay, settings and sign-in, to a file", onClick = backup)
-        Item("Restore from a backup", "Replaces what's here, then restarts", onClick = restore)
+        Item("Back up", "Settings, library, Replay, sign-in: you pick", onClick = backup)
+        Item("Restore from a backup", "Replaces what the backup holds, then restarts", onClick = restore)
     }
 }
 

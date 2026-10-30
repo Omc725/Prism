@@ -369,6 +369,10 @@ fun PlayerScrubber(positionMs: Long, durationMs: Long, centerLabel: @Composable 
     val shift by pc.lyricShift.collectAsState()
     val bestMark = best?.takeIf { it.songId == current?.id && LocalAppSettings.current.bestPartButton }
         ?.startMs?.let { ((it - shift).toFloat() / duration).takeIf { f -> f in 0.01f..0.99f } }
+    // Where the crossfade into the next song starts (A6, an option): once it's known, while Crossfade is on.
+    val blend by c.mixState.mark.collectAsState()
+    val blendMark = blend?.takeIf { LocalAppSettings.current.view.crossfadeMark && it.songId == current?.id }
+        ?.let { (it.startMs.toFloat() / duration).takeIf { f -> f in 0.01f..0.99f } }
     val times = MaterialTheme.typography.labelMedium.copy(fontFeatureSettings = "tnum")
     val settings = LocalAppSettings.current
     val fill = scrubberFill(settings.scrubberColor, current?.thumbnail)
@@ -407,7 +411,7 @@ fun PlayerScrubber(positionMs: Long, durationMs: Long, centerLabel: @Composable 
             thumb = knob != com.prism.music.data.prefs.ScrubberThumb.NONE,
             thumbShape = knob,
             spectrum = true,
-            marks = listOfNotNull(bestMark),
+            marks = listOfNotNull(bestMark, blendMark),
             fill = fill,
             wave = wave,
             pulse = pulse?.let { level -> { level.floatValue } },
@@ -796,10 +800,13 @@ fun PlayerActionRow(
     val chosen = settings.playerButtons.filter { it != PlayerButton.VIDEO || settings.showVideoSwitch }
     // Six to a row still fits a small phone: the buttons narrow a little past four.
     val glyph = when { chosen.size >= 6 -> 46.dp; chosen.size == 5 -> 50.dp; else -> 56.dp }
+    // In one glass capsule (1.7), or (1.7.8, #155) as separate buttons spread across the row, as Prism 1.6 had them.
+    val pill = settings.view.buttonsPill
     Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         Row(
-            Modifier.clip(CircleShape).background(Color.White.copy(alpha = 0.10f)).border(1.dp, Color.White.copy(alpha = 0.16f), CircleShape).padding(5.dp),
-            horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically,
+            if (pill) Modifier.clip(CircleShape).background(Color.White.copy(alpha = 0.10f)).border(1.dp, Color.White.copy(alpha = 0.16f), CircleShape).padding(5.dp)
+            else Modifier.fillMaxWidth(),
+            horizontalArrangement = if (pill) Arrangement.spacedBy(4.dp) else Arrangement.Center, verticalAlignment = Alignment.CenterVertically,
         ) {
             AnimatedContent(
                 queueOpen,
@@ -824,7 +831,10 @@ fun PlayerActionRow(
                         PillSegment(PrismIcons.Autoplay, "Autoplay", settings.autoplay, width = PILL_SEGMENT_WIDTH_TRIPLE) { c.settings.setAutoplay(!settings.autoplay) }
                     }
                     BottomGlyph(PrismIcons.Queue, "Up next", true, onToggleQueue)
-                } else Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+                } else Row(
+                    if (pill) Modifier else Modifier.fillMaxWidth(),
+                    horizontalArrangement = if (pill) Arrangement.spacedBy(4.dp) else Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically,
+                ) {
                     for (b in chosen) PlayerButtonGlyph(b, glyph, lyricsOpen, videoMode, videoAvailable, videoLoading, onToggleLyrics, onToggleQueue, onVideoMode, onButton)
                 }
             }
@@ -883,15 +893,15 @@ private fun PlayerButtonGlyph(
             )
         }
         PlayerButton.RADIO -> BottomGlyph(PrismIcons.Radio, stringResource(R.string.player_radio), false, { pc.playRadio(s) }, width, enabled = !s.isLocal)
-        // Songs a little faster or slower (1.7.4): each tap the next speed; the speed itself shows while it isn't 1×.
+        // Songs faster or slower (1.7.4), and higher or lower (1.7.8): a tap opens Speed & pitch; the speed shows while it isn't 1×.
         PlayerButton.SPEED -> {
             val speed by pc.musicSpeed.collectAsState()
-            val next = MUSIC_SPEEDS[(MUSIC_SPEEDS.indexOf(speed) + 1).mod(MUSIC_SPEEDS.size)]
+            val pitch by pc.musicPitch.collectAsState()
             val haptics = rememberHaptics()
-            if (speed == 1f) BottomGlyph(PrismIcons.Speed, stringResource(R.string.player_speed), false, { pc.setMusicSpeed(next) }, width, enabled = !s.isLive)
+            if (speed == 1f) BottomGlyph(PrismIcons.Speed, (if (pitch == 0) "Speed & pitch" else "Speed & pitch, pitch moved").localized(), pitch != 0, { onButton(b) }, width, enabled = !s.isLive)
             else Box(
                 Modifier.size(width = width, height = BOTTOM_ACTION_SIZE).clip(CircleShape).background(Color.White.copy(alpha = 0.16f))
-                    .clickable(onClickLabel = "Playback speed ${speedText(speed)}".localized()) { haptics.tick(); pc.setMusicSpeed(next) },
+                    .clickable(onClickLabel = "Speed & pitch, ${speedText(speed)}".localized()) { haptics.tick(); onButton(b) },
                 contentAlignment = Alignment.Center,
             ) {
                 Text(speedText(speed), style = MaterialTheme.typography.labelLarge.copy(fontFeatureSettings = "tnum"), color = Color.White)
@@ -1083,8 +1093,8 @@ fun OutputCaption() {
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
         )
-        // The cast mark says the line opens speakers and TVs (Reddit 1.7: "where's the cast button?").
-        if (!away) {
+        // The cast mark says the line opens speakers and TVs (Reddit 1.7: "where's the cast button?"); it can go (#149).
+        if (!away && settings.view.castMark) {
             Spacer(Modifier.width(7.dp))
             Icon(PrismIcons.Cast, "Play on a speaker or TV".localized(), Modifier.size(14.dp), tint = Color.White.copy(alpha = 0.62f))
         }

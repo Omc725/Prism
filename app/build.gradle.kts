@@ -25,8 +25,8 @@ android {
         applicationId = "com.prism.music"
         minSdk = 26
         targetSdk = 36
-        versionCode = 47
-        versionName = "1.7.7.1"
+        versionCode = 48
+        versionName = "1.7.8"
         vectorDrawables { useSupportLibrary = true }
         // The name under the launcher icon; a side-by-side build (below) is called "Prism Dev" so it can't be mistaken for Prism.
         manifestPlaceholders["appLabel"] = "@string/app_name"
@@ -37,6 +37,8 @@ android {
             rootProject.file("local.properties").takeIf { it.exists() }?.inputStream()?.use { load(it) }
         }
         buildConfigField("String", "LASTFM_API_KEY", "\"${localProps.getProperty("lastfm.apiKey", "")}\"")
+        // Scrobbling (1.7.8) signs its requests with the API account's shared secret; without one it isn't offered.
+        buildConfigField("String", "LASTFM_SECRET", "\"${localProps.getProperty("lastfm.secret", "")}\"")
     }
 
     // Releases are signed with the key in keystore.properties (gitignored, with the .jks beside it).

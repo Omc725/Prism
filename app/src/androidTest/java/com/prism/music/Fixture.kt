@@ -71,6 +71,44 @@ object Fixture {
         ui.executeShellCommand("screencap -p /sdcard/prism-tests/$name.png").use { java.io.FileInputStream(it.fileDescriptor).readBytes() }
     }
 
+    /**
+     * A silent WAV of [seconds] in Music/, as a music file the phone's media store lists under [title]. Android 10+
+     * through the store itself; Android 9 has no RELATIVE_PATH, so the file is written there (the storage permission
+     * Prism declares up to 9) and the media scanner lists it, its title from the file's name. Delete it with its uri.
+     */
+    fun tone(title: String, seconds: Int = 25): android.net.Uri {
+        val rate = 8_000
+        val samples = rate * seconds
+        val data = java.io.ByteArrayOutputStream()
+        fun le32(v: Int) = data.write(byteArrayOf(v.toByte(), (v shr 8).toByte(), (v shr 16).toByte(), (v shr 24).toByte()))
+        fun le16(v: Int) = data.write(byteArrayOf(v.toByte(), (v shr 8).toByte()))
+        data.write("RIFF".toByteArray()); le32(36 + samples * 2); data.write("WAVEfmt ".toByteArray())
+        le32(16); le16(1); le16(1); le32(rate); le32(rate * 2); le16(2); le16(16)
+        data.write("data".toByteArray()); le32(samples * 2); data.write(ByteArray(samples * 2))
+        if (android.os.Build.VERSION.SDK_INT < 29) {
+            InstrumentationRegistry.getInstrumentation().uiAutomation
+                .grantRuntimePermission(context.packageName, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            @Suppress("DEPRECATION")
+            val dir = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_MUSIC).apply { mkdirs() }
+            val file = java.io.File(dir, "$title.wav").apply { writeBytes(data.toByteArray()) }
+            val found = java.util.concurrent.LinkedBlockingQueue<android.net.Uri>()
+            android.media.MediaScannerConnection.scanFile(context, arrayOf(file.path), arrayOf("audio/wav")) { _, uri -> uri?.let { found.put(it) } }
+            return found.poll(20, java.util.concurrent.TimeUnit.SECONDS) ?: error("the media scanner didn't list $file")
+        }
+        val resolver = context.contentResolver
+        val values = android.content.ContentValues().apply {
+            put(android.provider.MediaStore.Audio.Media.DISPLAY_NAME, "$title.wav")
+            put(android.provider.MediaStore.Audio.Media.TITLE, title)
+            put(android.provider.MediaStore.Audio.Media.MIME_TYPE, "audio/wav")
+            put(android.provider.MediaStore.Audio.Media.RELATIVE_PATH, "Music/")
+            put(android.provider.MediaStore.Audio.Media.IS_PENDING, 1)
+        }
+        val uri = resolver.insert(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values)!!
+        resolver.openOutputStream(uri)!!.use { it.write(data.toByteArray()) }
+        resolver.update(uri, android.content.ContentValues().apply { put(android.provider.MediaStore.Audio.Media.IS_PENDING, 0) }, null, null)
+        return uri
+    }
+
     /** Opens Prism as its launcher icon does. */
     fun launch(): ActivityScenario<PrismActivity> = ActivityScenario.launch(PrismActivity::class.java)
 }

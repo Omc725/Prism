@@ -121,6 +121,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     override fun onCreate() {
         super.onCreate()
         PlaybackServices.running = this::class.java
+        if (com.prism.music.BuildConfig.DEBUG) PlaybackServices.failForTest = { onPlayerError(it) }
         AudioDiagnostics.init(this)
         // Media3's own audio warnings (spurious AudioTrack timestamps, position jumps…) go into the diagnostics too.
         androidx.media3.common.util.Log.setLogger(object : androidx.media3.common.util.Log.Logger {
@@ -486,6 +487,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
 
     override fun onDestroy() {
         if (PlaybackServices.running == this::class.java) PlaybackServices.running = null
+        PlaybackServices.failForTest = null
         flushPlayTime()
         saveEpisodePosition()
         saveQueue()

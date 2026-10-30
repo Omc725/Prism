@@ -98,27 +98,5 @@ class IssueRound179Test {
         compose.waitUntil(5_000) { !Fixture.container.settings.current.behavior.screenFades }
     }
 
-    /** A 25-second silent WAV in Music/, as a music file the phone's media store lists under [title]. */
-    private fun addTone(title: String): android.net.Uri {
-        val rate = 8_000
-        val samples = rate * 25
-        val data = java.io.ByteArrayOutputStream()
-        fun le32(v: Int) = data.write(byteArrayOf(v.toByte(), (v shr 8).toByte(), (v shr 16).toByte(), (v shr 24).toByte()))
-        fun le16(v: Int) = data.write(byteArrayOf(v.toByte(), (v shr 8).toByte()))
-        data.write("RIFF".toByteArray()); le32(36 + samples * 2); data.write("WAVEfmt ".toByteArray())
-        le32(16); le16(1); le16(1); le32(rate); le32(rate * 2); le16(2); le16(16)
-        data.write("data".toByteArray()); le32(samples * 2); data.write(ByteArray(samples * 2))
-        val resolver = Fixture.context.contentResolver
-        val values = ContentValues().apply {
-            put(MediaStore.Audio.Media.DISPLAY_NAME, "$title.wav")
-            put(MediaStore.Audio.Media.TITLE, title)
-            put(MediaStore.Audio.Media.MIME_TYPE, "audio/wav")
-            put(MediaStore.Audio.Media.RELATIVE_PATH, "Music/")
-            put(MediaStore.Audio.Media.IS_PENDING, 1)
-        }
-        val uri = resolver.insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values)!!
-        resolver.openOutputStream(uri)!!.use { it.write(data.toByteArray()) }
-        resolver.update(uri, ContentValues().apply { put(MediaStore.Audio.Media.IS_PENDING, 0) }, null, null)
-        return uri
-    }
+    private fun addTone(title: String) = Fixture.tone(title)
 }

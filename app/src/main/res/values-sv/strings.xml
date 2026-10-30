@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">Låttextens justering</string>
     <string name="lyrics_focus">Låttextens fokus</string>
     <string name="lyrics_progress_line">Låttextens förloppslinje</string>
+    <string name="lyrics_source_button">Knapp för låttextkälla</string>
+    <string name="lyrics_source_button_info">En knapp bredvid Sjung som visar var låttexten kommer ifrån; tryck för att välja en annan källa.</string>
+    <string name="tour_179_language">Prism på ditt språk</string>
+    <string name="tour_179_language_body">31 språk. Prism följer telefonens språk, eller så väljer du ett annat.</string>
+    <string name="tour_179_language_youtube">Låtarnas medverkande och YouTubes egna hyllor kommer också på det språket</string>
+    <string name="tour_179_versions">Spela en annan version, när en låt spelas som fel inspelning</string>
+    <string name="tour_179_playlists">Ett reglage på långa spellistor och genrer du kan stänga av</string>
+    <string name="tour_179_lyrics_button">Låttextens källa bredvid %1$s igen, om du vill</string>
+    <string name="tour_179_widget">Din egen färg på en widgets spelaknapp</string>
     <string name="lyrics_size">Låttextens storlek</string>
     <string name="library_view">Biblioteksvy</string>
     <string name="library_tabs_views">Vyer för bibliotekets flikar</string>

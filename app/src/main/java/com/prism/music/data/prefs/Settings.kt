@@ -813,6 +813,8 @@ data class AppSettings(
     val lyricsBlur: Boolean = true,
     /** The thin line of split light under the line being sung (lyrics page and immersive). */
     val lyricsProgressLine: Boolean = true,
+    /** A glass button beside Sing under the open lyrics: where they come from; a tap picks another source (1.7.9). */
+    val lyricsSourceButton: Boolean = false,
     /** Each screen's background (screen name -> "STYLE" or "PHOTO|path"); missing means the default. */
     val backdrops: Map<String, String> = emptyMap(),
     /** How much the theme color washes over custom backgrounds (0 = none). */
@@ -1259,6 +1261,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val spatialAmount = floatPreferencesKey("soft_spatial_amount")
         val lyricsBlur = booleanPreferencesKey("lyrics_blur")
         val lyricsProgressLine = booleanPreferencesKey("lyrics_progress_line")
+        val lyricsSourceButton = booleanPreferencesKey("lyrics_source_button")
         val backdrops = stringPreferencesKey("backdrops")
         val backdropDim = floatPreferencesKey("backdrop_dim")
         val backdropMotion = booleanPreferencesKey("backdrop_motion")
@@ -1520,7 +1523,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 playerLayout, vinylTonearm, playerDeck, playerButtons, scrubberColor, playerTitleAlign, playerTitleSize, playerTitleScroll,
                 playerTimes, meshSpeed, meshIntensity, playerBlur, canvasFillsBackground,
                 scrubberThickness, scrubberThumb, visualizer, visualizerColor,
-                lyricsBlur, lyricsScale, lyricsProgressLine, hideStatusBar,
+                lyricsBlur, lyricsScale, lyricsProgressLine, lyricsSourceButton, hideStatusBar,
                 tabNames, navBarSize, navBarFill, miniPlayerJoined, libraryViews, libraryColumns, librarySubtitles,
                 homeHeader, homeHeaderHeight,
                 cornerScale, songShape, albumShape, artistShape, playerShape, buttonShape, playOutlined,
@@ -1553,7 +1556,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 playerLayout to 's', vinylTonearm to 'b', playerDeck to 's', playerButtons to 's', scrubberColor to 's', playerTitleAlign to 's',
                 playerTitleSize to 's', playerTitleScroll to 'b', playerTimes to 's', meshSpeed to 'f', meshIntensity to 'f', playerBlur to 'f',
                 canvasFillsBackground to 'b', scrubberThickness to 'f', scrubberThumb to 's', visualizer to 's', visualizerColor to 's',
-                lyricsAlign to 's', lyricsBlur to 'b', lyricsProgressLine to 'b', lyricsScale to 'f',
+                lyricsAlign to 's', lyricsBlur to 'b', lyricsProgressLine to 'b', lyricsSourceButton to 'b', lyricsScale to 'f',
                 libraryView to 's', libraryViews to 's', libraryColumns to 's', librarySubtitles to 'b', playlistHeroCover to 'b',
                 homeHeader to 's', homeHeaderHeight to 's', replayThemeColors to 'b', replayCard to 's', hideStatusBar to 'b',
                 cornerScale to 'f', songShape to 's', albumShape to 's', artistShape to 's', playerShape to 's', buttonShape to 's', playOutlined to 'b',
@@ -1687,6 +1690,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
             spatialAmount = p[K.spatialAmount] ?: d.spatialAmount,
             lyricsBlur = p[K.lyricsBlur] ?: d.lyricsBlur,
             lyricsProgressLine = p[K.lyricsProgressLine] ?: d.lyricsProgressLine,
+            lyricsSourceButton = p[K.lyricsSourceButton] ?: d.lyricsSourceButton,
             backdrops = p[K.backdrops]?.let { runCatching { json.decodeFromString<Map<String, String>>(it) }.getOrNull() } ?: d.backdrops,
             backdropDim = p[K.backdropDim] ?: d.backdropDim,
             backdropMotion = p[K.backdropMotion] ?: d.backdropMotion,
@@ -2140,6 +2144,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setSpatialAmount(v: Float) = edit { it[K.spatialAmount] = v }
     fun setLyricsBlur(v: Boolean) = edit { it[K.lyricsBlur] = v }
     fun setLyricsProgressLine(v: Boolean) = edit { it[K.lyricsProgressLine] = v }
+    fun setLyricsSourceButton(v: Boolean) = edit { it[K.lyricsSourceButton] = v }
     fun setBackdrops(v: Map<String, String>) = edit { it[K.backdrops] = json.encodeToString<Map<String, String>>(v) }
     fun setBackdropDim(v: Float) = edit { it[K.backdropDim] = v }
     fun setBackdropMotion(v: Boolean) = edit { it[K.backdropMotion] = v }

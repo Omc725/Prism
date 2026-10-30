@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">가사 정렬</string>
     <string name="lyrics_focus">가사 초점</string>
     <string name="lyrics_progress_line">가사 진행 선</string>
+    <string name="lyrics_source_button">가사 출처 버튼</string>
+    <string name="lyrics_source_button_info">따라 부르기 옆에 가사의 출처를 보여 주는 버튼. 탭하면 다른 출처를 고를 수 있습니다.</string>
+    <string name="tour_179_language">내 언어로 쓰는 Prism</string>
+    <string name="tour_179_language_body">31개 언어. Prism은 휴대전화의 언어를 따르며, 다른 언어를 고를 수도 있습니다.</string>
+    <string name="tour_179_language_youtube">곡 크레딧과 YouTube 자체 섹션도 그 언어로 나옵니다</string>
+    <string name="tour_179_versions">곡이 잘못된 녹음으로 재생될 때 다른 버전 재생</string>
+    <string name="tour_179_playlists">긴 재생목록의 슬라이더와 끌 수 있는 장르</string>
+    <string name="tour_179_lyrics_button">원하면 가사 출처를 다시 %1$s 옆에</string>
+    <string name="tour_179_widget">위젯 재생 버튼을 원하는 색으로</string>
     <string name="lyrics_size">가사 크기</string>
     <string name="library_view">보관함 보기</string>
     <string name="library_tabs_views">보관함 탭 보기</string>

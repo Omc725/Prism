@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">محاذاة الكلمات</string>
     <string name="lyrics_focus">تركيز الكلمات</string>
     <string name="lyrics_progress_line">خط تقدّم الكلمات</string>
+    <string name="lyrics_source_button">زر مصدر الكلمات</string>
+    <string name="lyrics_source_button_info">زر بجانب «الغناء» يبيّن مصدر الكلمات؛ اضغط عليه لاختيار مصدر آخر.</string>
+    <string name="tour_179_language">Prism بلغتك</string>
+    <string name="tour_179_language_body">31 لغة. يتبع Prism لغة هاتفك، أو يمكنك اختيار لغة أخرى.</string>
+    <string name="tour_179_language_youtube">اعتمادات الأغاني ورفوف YouTube نفسها تأتي بها أيضًا</string>
+    <string name="tour_179_versions">تشغيل إصدار آخر، عندما تُشغَّل أغنية بتسجيل خاطئ</string>
+    <string name="tour_179_playlists">شريط تمرير في قوائم التشغيل الطويلة، وأنواع موسيقية يمكنك إخفاؤها</string>
+    <string name="tour_179_lyrics_button">مصدر الكلمات بجانب «%1$s» من جديد، إن أردت</string>
+    <string name="tour_179_widget">لون من اختيارك لزر التشغيل في الأداة</string>
     <string name="lyrics_size">حجم الكلمات</string>
     <string name="library_view">طريقة عرض المكتبة</string>
     <string name="library_tabs_views">طرق عرض علامات تبويب المكتبة</string>

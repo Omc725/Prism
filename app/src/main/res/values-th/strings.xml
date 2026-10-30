@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">การจัดแนวเนื้อเพลง</string>
     <string name="lyrics_focus">โฟกัสเนื้อเพลง</string>
     <string name="lyrics_progress_line">เส้นความคืบหน้าของเนื้อเพลง</string>
+    <string name="lyrics_source_button">ปุ่มแหล่งที่มาของเนื้อเพลง</string>
+    <string name="lyrics_source_button_info">ปุ่มข้างร้องตามที่บอกว่าเนื้อเพลงมาจากไหน แตะเพื่อเลือกแหล่งอื่น</string>
+    <string name="tour_179_language">Prism ในภาษาของคุณ</string>
+    <string name="tour_179_language_body">31 ภาษา Prism ใช้ภาษาตามโทรศัพท์ของคุณ หรือเลือกภาษาอื่นก็ได้</string>
+    <string name="tour_179_language_youtube">เครดิตเพลงและชั้นวางของ YouTube เองก็มาเป็นภาษานั้นด้วย</string>
+    <string name="tour_179_versions">เล่นเวอร์ชันอื่น เมื่อเพลงเล่นเป็นการบันทึกที่ไม่ถูกต้อง</string>
+    <string name="tour_179_playlists">แถบเลื่อนในเพลย์ลิสต์ยาว และแนวเพลงที่ปิดได้</string>
+    <string name="tour_179_lyrics_button">แหล่งที่มาของเนื้อเพลงอยู่ข้าง %1$s อีกครั้ง หากต้องการ</string>
+    <string name="tour_179_widget">สีของคุณเองสำหรับปุ่มเล่นของวิดเจ็ต</string>
     <string name="lyrics_size">ขนาดเนื้อเพลง</string>
     <string name="library_view">มุมมองคลังเพลง</string>
     <string name="library_tabs_views">มุมมองของแท็บในคลังเพลง</string>

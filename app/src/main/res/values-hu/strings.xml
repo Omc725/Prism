@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">Dalszöveg igazítása</string>
     <string name="lyrics_focus">Dalszöveg fókusza</string>
     <string name="lyrics_progress_line">Dalszöveg folyamatjelző vonala</string>
+    <string name="lyrics_source_button">Dalszövegforrás gomb</string>
+    <string name="lyrics_source_button_info">Egy gomb az Éneklés mellett, amely megmutatja, honnan származik a dalszöveg; koppints rá másik forrás választásához.</string>
+    <string name="tour_179_language">A Prism a te nyelveden</string>
+    <string name="tour_179_language_body">31 nyelv. A Prism a telefonod nyelvét követi, vagy választhatsz másikat.</string>
+    <string name="tour_179_language_youtube">A dalok közreműködői és a YouTube saját polcai is ezen a nyelven jönnek</string>
+    <string name="tour_179_versions">Másik változat lejátszása, ha egy dal rossz felvételként szól</string>
+    <string name="tour_179_playlists">Csúszka a hosszú lejátszási listákon, és kikapcsolható műfajok</string>
+    <string name="tour_179_lyrics_button">A dalszöveg forrása újra a(z) %1$s mellett, ha szeretnéd</string>
+    <string name="tour_179_widget">Saját szín a widget lejátszás gombjához</string>
     <string name="lyrics_size">Dalszöveg mérete</string>
     <string name="library_view">Könyvtár nézete</string>
     <string name="library_tabs_views">Könyvtár lapjainak nézetei</string>

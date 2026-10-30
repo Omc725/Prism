@@ -54,6 +54,8 @@ were rebuilt so they keep finding music around what you play, and stop going rou
   jump through the playlist, with the song's number beside your finger.
 - **Genres can be turned off on playlists**: the sort menu's "Show genres", or Settings → Customize Prism → Home & Library →
   "Genres on playlists". Off, a playlist has no genre chips or genre labels and keeps its own order.
+- **The lyrics' source beside Sing again, as an option**: Customize Prism → Lyrics → Look → "Lyrics source button". With the lyrics open, a glass button at their lower left, the size of Sing's, says where they come from
+  ("LRCLIB · Karaoke") and opens the Lyrics source sheet. Off by default; the line at the lyrics' end stays either way.
 
 ### Small requests (GitHub)
 
@@ -67,6 +69,12 @@ were rebuilt so they keep finding music around what you play, and stop going rou
 
 ### Fixes
 
+- **"Response code: 400" at the end of a song** (#206, Reddit): when the player asked for a song's stream from its very
+  last byte, YouTube answered with an error instead of "nothing left", so the song buffered, showed the 400 and the
+  next one was slow to start. Prism now answers that itself as the end of the song.
+- **The widget's play button can take another color** (Reddit): hold a Prism widget → Settings (or Customize Prism →
+  Icons & shapes → Home-screen widgets) → Play button: your light (as before), white, the cover's color or one of
+  yours, for the play button and the progress line. Android 12 and later.
 - **The accent from the cover is the cover's color** (Reddit): a few pixels of another color no longer decide it (a deep
   blue night with two pink lights gave a pink accent). A color now has to fill a real part of the picture. A
   black-and-white cover gives a grey accent, as it looks (its slight tint used to turn into a color); "Always colorful"

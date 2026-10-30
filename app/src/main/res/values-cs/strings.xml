@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">Zarovnání textů</string>
     <string name="lyrics_focus">Zaostření textů</string>
     <string name="lyrics_progress_line">Čára průběhu textů</string>
+    <string name="lyrics_source_button">Tlačítko zdroje textů</string>
+    <string name="lyrics_source_button_info">Tlačítko vedle Zpívání, které ukazuje, odkud texty pocházejí; klepnutím vybereš jiný zdroj.</string>
+    <string name="tour_179_language">Prism ve tvém jazyce</string>
+    <string name="tour_179_language_body">31 jazyků. Prism se řídí jazykem telefonu, nebo si můžeš vybrat jiný.</string>
+    <string name="tour_179_language_youtube">V něm přicházejí i autoři skladeb a vlastní police YouTube</string>
+    <string name="tour_179_versions">Přehrát jinou verzi, když skladba hraje ve špatné nahrávce</string>
+    <string name="tour_179_playlists">Posuvník u dlouhých playlistů a žánry, které lze vypnout</string>
+    <string name="tour_179_lyrics_button">Zdroj textů opět vedle tlačítka %1$s, pokud chceš</string>
+    <string name="tour_179_widget">Vlastní barva tlačítka přehrávání na widgetu</string>
     <string name="lyrics_size">Velikost textů</string>
     <string name="library_view">Zobrazení knihovny</string>
     <string name="library_tabs_views">Zobrazení karet knihovny</string>

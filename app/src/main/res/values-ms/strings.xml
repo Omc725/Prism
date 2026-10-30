@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">Penjajaran lirik</string>
     <string name="lyrics_focus">Fokus lirik</string>
     <string name="lyrics_progress_line">Garis kemajuan lirik</string>
+    <string name="lyrics_source_button">Butang sumber lirik</string>
+    <string name="lyrics_source_button_info">Butang di sebelah Nyanyi yang menunjukkan asal lirik; ketik untuk memilih sumber lain.</string>
+    <string name="tour_179_language">Prism dalam bahasa anda</string>
+    <string name="tour_179_language_body">31 bahasa. Prism mengikut bahasa telefon anda, atau anda boleh memilih yang lain.</string>
+    <string name="tour_179_language_youtube">Kredit lagu dan rak YouTube sendiri juga hadir dalam bahasa itu</string>
+    <string name="tour_179_versions">Mainkan versi lain, apabila lagu dimainkan dengan rakaman yang salah</string>
+    <string name="tour_179_playlists">Peluncur pada senarai main panjang, dan genre yang boleh anda matikan</string>
+    <string name="tour_179_lyrics_button">Sumber lirik di sebelah %1$s semula, jika anda mahu</string>
+    <string name="tour_179_widget">Warna anda sendiri untuk butang main widget</string>
     <string name="lyrics_size">Saiz lirik</string>
     <string name="library_view">Paparan pustaka</string>
     <string name="library_tabs_views">Paparan tab pustaka</string>

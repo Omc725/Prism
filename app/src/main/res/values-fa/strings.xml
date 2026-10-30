@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">تراز متن آهنگ</string>
     <string name="lyrics_focus">تمرکز متن آهنگ</string>
     <string name="lyrics_progress_line">خط پیشرفت متن آهنگ</string>
+    <string name="lyrics_source_button">دکمهٔ منبع متن آهنگ</string>
+    <string name="lyrics_source_button_info">دکمه‌ای کنار «همخوانی» که نشان می‌دهد متن آهنگ از کجا آمده است؛ برای انتخاب منبع دیگر روی آن بزنید.</string>
+    <string name="tour_179_language">Prism به زبان شما</string>
+    <string name="tour_179_language_body">۳۱ زبان. Prism از زبان گوشی شما پیروی می‌کند، یا می‌توانید زبان دیگری انتخاب کنید.</string>
+    <string name="tour_179_language_youtube">اعتبارهای آهنگ‌ها و قفسه‌های خود YouTube هم به همین زبان می‌آیند</string>
+    <string name="tour_179_versions">پخش نسخه‌ای دیگر، وقتی آهنگ با ضبط اشتباه پخش می‌شود</string>
+    <string name="tour_179_playlists">یک لغزنده برای فهرست‌های پخش طولانی، و ژانرهایی که می‌توانید خاموششان کنید</string>
+    <string name="tour_179_lyrics_button">منبع متن آهنگ دوباره کنار «%1$s»، اگر بخواهید</string>
+    <string name="tour_179_widget">رنگ دلخواه شما برای دکمهٔ پخش ویجت</string>
     <string name="lyrics_size">اندازه متن آهنگ</string>
     <string name="library_view">نمای کتابخانه</string>
     <string name="library_tabs_views">نماهای زبانه‌های کتابخانه</string>

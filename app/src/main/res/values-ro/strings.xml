@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">Alinierea versurilor</string>
     <string name="lyrics_focus">Focalizarea versurilor</string>
     <string name="lyrics_progress_line">Linia de progres a versurilor</string>
+    <string name="lyrics_source_button">Buton pentru sursa versurilor</string>
+    <string name="lyrics_source_button_info">Un buton lângă Cântă care arată de unde provin versurile; atinge-l pentru a alege altă sursă.</string>
+    <string name="tour_179_language">Prism în limba ta</string>
+    <string name="tour_179_language_body">31 de limbi. Prism urmează limba telefonului sau poți alege alta.</string>
+    <string name="tour_179_language_youtube">Creditele pieselor și rafturile YouTube vin și ele în această limbă</string>
+    <string name="tour_179_versions">Redă altă versiune, când o piesă cântă înregistrarea greșită</string>
+    <string name="tour_179_playlists">Un cursor pe playlisturile lungi și genuri pe care le poți dezactiva</string>
+    <string name="tour_179_lyrics_button">Sursa versurilor din nou lângă %1$s, dacă vrei</string>
+    <string name="tour_179_widget">Culoarea ta pentru butonul de redare al unui widget</string>
     <string name="lyrics_size">Mărimea versurilor</string>
     <string name="library_view">Vizualizarea Bibliotecii</string>
     <string name="library_tabs_views">Vizualizările filelor din Bibliotecă</string>

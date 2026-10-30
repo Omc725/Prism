@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">Söz hizalaması</string>
     <string name="lyrics_focus">Söz odağı</string>
     <string name="lyrics_progress_line">Söz ilerleme çizgisi</string>
+    <string name="lyrics_source_button">Söz kaynağı düğmesi</string>
+    <string name="lyrics_source_button_info">Söyle’nin yanında sözlerin nereden geldiğini gösteren bir düğme; başka bir kaynak seçmek için dokunun.</string>
+    <string name="tour_179_language">Kendi dilinde Prism</string>
+    <string name="tour_179_language_body">31 dil. Prism telefonunun dilini izler ya da başka birini seçebilirsin.</string>
+    <string name="tour_179_language_youtube">Şarkı künyeleri ve YouTube’un kendi rafları da bu dilde gelir</string>
+    <string name="tour_179_versions">Şarkı yanlış kayıtla çaldığında başka bir sürümü çal</string>
+    <string name="tour_179_playlists">Uzun çalma listelerinde bir kaydırıcı ve kapatılabilen türler</string>
+    <string name="tour_179_lyrics_button">İstersen söz kaynağı yeniden %1$s düğmesinin yanında</string>
+    <string name="tour_179_widget">Widget’ın oynat düğmesi için kendi rengin</string>
     <string name="lyrics_size">Söz boyutu</string>
     <string name="library_view">Kitaplık görünümü</string>
     <string name="library_tabs_views">Kitaplık sekmelerinin görünümleri</string>

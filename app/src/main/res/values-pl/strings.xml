@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">Wyrównanie tekstu</string>
     <string name="lyrics_focus">Skupienie tekstu</string>
     <string name="lyrics_progress_line">Linia postępu tekstu</string>
+    <string name="lyrics_source_button">Przycisk źródła tekstu</string>
+    <string name="lyrics_source_button_info">Przycisk obok Śpiewaj, który pokazuje, skąd pochodzi tekst; dotknij go, aby wybrać inne źródło.</string>
+    <string name="tour_179_language">Prism w twoim języku</string>
+    <string name="tour_179_language_body">31 języków. Prism używa języka telefonu albo możesz wybrać inny.</string>
+    <string name="tour_179_language_youtube">Twórcy utworów i własne półki YouTube też pojawiają się w tym języku</string>
+    <string name="tour_179_versions">Odtwórz inną wersję, gdy utwór gra w złym nagraniu</string>
+    <string name="tour_179_playlists">Suwak na długich playlistach i gatunki, które można wyłączyć</string>
+    <string name="tour_179_lyrics_button">Źródło tekstu znów obok przycisku %1$s, jeśli chcesz</string>
+    <string name="tour_179_widget">Własny kolor przycisku odtwarzania na widżecie</string>
     <string name="lyrics_size">Rozmiar tekstu</string>
     <string name="library_view">Widok biblioteki</string>
     <string name="library_tabs_views">Widoki kart biblioteki</string>

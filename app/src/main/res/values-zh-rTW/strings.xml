@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">歌詞對齊方式</string>
     <string name="lyrics_focus">歌詞焦點</string>
     <string name="lyrics_progress_line">歌詞進度線</string>
+    <string name="lyrics_source_button">歌詞來源按鈕</string>
+    <string name="lyrics_source_button_info">「歡唱」旁的按鈕，顯示歌詞的來源；輕觸即可選擇其他來源。</string>
+    <string name="tour_179_language">用你的語言使用 Prism</string>
+    <string name="tour_179_language_body">31 種語言。Prism 跟隨手機的語言，你也可以另選一種。</string>
+    <string name="tour_179_language_youtube">歌曲製作人員和 YouTube 自己的欄目也會以該語言顯示</string>
+    <string name="tour_179_versions">播放其他版本：當歌曲播放的是錯誤的錄音時</string>
+    <string name="tour_179_playlists">長播放清單上的滑桿，以及可以關閉的曲風</string>
+    <string name="tour_179_lyrics_button">如果需要，歌詞來源可再次顯示在「%1$s」旁邊</string>
+    <string name="tour_179_widget">為小工具的播放按鈕選擇你自己的顏色</string>
     <string name="lyrics_size">歌詞大小</string>
     <string name="library_view">音樂庫檢視</string>
     <string name="library_tabs_views">音樂庫分頁的檢視方式</string>

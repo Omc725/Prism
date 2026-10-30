@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">Căn lề lời bài hát</string>
     <string name="lyrics_focus">Tiêu điểm lời bài hát</string>
     <string name="lyrics_progress_line">Đường tiến trình lời bài hát</string>
+    <string name="lyrics_source_button">Nút nguồn lời bài hát</string>
+    <string name="lyrics_source_button_info">Một nút bên cạnh Hát cùng cho biết lời bài hát lấy từ đâu; chạm vào để chọn nguồn khác.</string>
+    <string name="tour_179_language">Prism bằng ngôn ngữ của bạn</string>
+    <string name="tour_179_language_body">31 ngôn ngữ. Prism theo ngôn ngữ của điện thoại, hoặc bạn có thể chọn ngôn ngữ khác.</string>
+    <string name="tour_179_language_youtube">Thông tin nghệ sĩ của bài hát và các kệ riêng của YouTube cũng hiện bằng ngôn ngữ đó</string>
+    <string name="tour_179_versions">Phát phiên bản khác, khi bài hát phát nhầm bản thu</string>
+    <string name="tour_179_playlists">Thanh trượt trong danh sách phát dài, và thể loại có thể tắt</string>
+    <string name="tour_179_lyrics_button">Nguồn lời bài hát lại ở cạnh %1$s, nếu bạn muốn</string>
+    <string name="tour_179_widget">Màu riêng cho nút phát của tiện ích</string>
     <string name="lyrics_size">Cỡ lời bài hát</string>
     <string name="library_view">Chế độ xem Thư viện</string>
     <string name="library_tabs_views">Chế độ xem các thẻ Thư viện</string>

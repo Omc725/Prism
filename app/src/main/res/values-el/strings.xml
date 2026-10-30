@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">Στοίχιση στίχων</string>
     <string name="lyrics_focus">Εστίαση στίχων</string>
     <string name="lyrics_progress_line">Γραμμή προόδου στίχων</string>
+    <string name="lyrics_source_button">Κουμπί πηγής στίχων</string>
+    <string name="lyrics_source_button_info">Ένα κουμπί δίπλα στο «Τραγούδα» που δείχνει από πού προέρχονται οι στίχοι· πάτα το για να διαλέξεις άλλη πηγή.</string>
+    <string name="tour_179_language">Το Prism στη γλώσσα σου</string>
+    <string name="tour_179_language_body">31 γλώσσες. Το Prism ακολουθεί τη γλώσσα του τηλεφώνου σου, ή μπορείς να διαλέξεις άλλη.</string>
+    <string name="tour_179_language_youtube">Και οι συντελεστές των τραγουδιών και τα ράφια του ίδιου του YouTube έρχονται σε αυτήν</string>
+    <string name="tour_179_versions">Αναπαραγωγή άλλης εκδοχής, όταν ένα τραγούδι παίζει σε λάθος ηχογράφηση</string>
+    <string name="tour_179_playlists">Ένας ολισθητής στις μεγάλες λίστες και είδη που μπορείς να κρύψεις</string>
+    <string name="tour_179_lyrics_button">Η πηγή των στίχων ξανά δίπλα στο «%1$s», αν το θέλεις</string>
+    <string name="tour_179_widget">Το δικό σου χρώμα για το κουμπί αναπαραγωγής ενός widget</string>
     <string name="lyrics_size">Μέγεθος στίχων</string>
     <string name="library_view">Προβολή βιβλιοθήκης</string>
     <string name="library_tabs_views">Προβολές καρτελών βιβλιοθήκης</string>

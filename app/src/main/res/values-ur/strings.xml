@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">بولوں کی ترتیبِ متن</string>
     <string name="lyrics_focus">بولوں کا فوکس</string>
     <string name="lyrics_progress_line">بولوں کی پروگریس لائن</string>
+    <string name="lyrics_source_button">بولوں کے ماخذ کا بٹن</string>
+    <string name="lyrics_source_button_info">«گائیں» کے ساتھ ایک بٹن جو دکھاتا ہے کہ بول کہاں سے آئے ہیں؛ دوسرا ماخذ چننے کے لیے اسے تھپتھپائیں۔</string>
+    <string name="tour_179_language">آپ کی زبان میں Prism</string>
+    <string name="tour_179_language_body">31 زبانیں۔ Prism آپ کے فون کی زبان اپناتا ہے، یا آپ کوئی اور منتخب کر سکتے ہیں۔</string>
+    <string name="tour_179_language_youtube">گانوں کے کریڈٹس اور YouTube کی اپنی شیلفیں بھی اسی زبان میں آتی ہیں</string>
+    <string name="tour_179_versions">کوئی اور ورژن چلائیں، جب گانا غلط ریکارڈنگ میں بجے</string>
+    <string name="tour_179_playlists">لمبی پلے لسٹس میں سلائیڈر، اور اصناف جنہیں آپ بند کر سکتے ہیں</string>
+    <string name="tour_179_lyrics_button">بولوں کا ماخذ پھر سے «%1$s» کے ساتھ، اگر آپ چاہیں</string>
+    <string name="tour_179_widget">ویجیٹ کے پلے بٹن کے لیے آپ کا اپنا رنگ</string>
     <string name="lyrics_size">بولوں کا سائز</string>
     <string name="library_view">لائبریری کا منظر</string>
     <string name="library_tabs_views">لائبریری ٹیبز کے منظر</string>

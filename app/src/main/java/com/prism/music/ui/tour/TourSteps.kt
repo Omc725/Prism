@@ -47,6 +47,8 @@ object Tour {
     private const val V1_7_7 = 46
     /** Prism 1.7.8 (build 48): sound, your way; Sing simpler; Classic Prism; your requests. */
     private const val V1_7_8 = 48
+    /** Prism 1.7.9 (build 49): Prism in 31 languages; your requests. */
+    private const val V1_7_9 = 49
 
     /** Every step, in the order they're shown. */
     val steps: List<TourStep> = listOf(
@@ -372,6 +374,24 @@ object Tour {
                 tr(R.string.lyrics_into_your_m4a_files_and),
             ),
             listOf(PrismIcons.Queue, PrismIcons.Calendar),
+        ),
+        TourStep(
+            V1_7_9, PrismIcons.Globe, tr(R.string.tour_179_language),
+            tr(R.string.tour_179_language_body),
+            listOf(tr(R.string.tour_179_language_youtube)),
+            showMe = Routes.settings("language"),
+        ),
+        TourStep(
+            V1_7_9, PrismIcons.QueueMusic, tr(R.string.also_new),
+            tr(R.string.from_your_requests),
+            listOf(
+                tr(R.string.tour_179_versions),
+                tr(R.string.tour_179_playlists),
+                tr(R.string.search_in_local_files),
+                tr(R.string.tour_179_lyrics_button, tr(R.string.sing)),
+                tr(R.string.tour_179_widget),
+            ),
+            listOf(PrismIcons.Lyrics, PrismIcons.Palette),
         ),
         TourStep(
             V1_7, PrismIcons.Update, tr(R.string.stay_in_the_loop),

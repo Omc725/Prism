@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">Выравнивание текста</string>
     <string name="lyrics_focus">Фокус текста</string>
     <string name="lyrics_progress_line">Линия прогресса текста</string>
+    <string name="lyrics_source_button">Кнопка источника текста</string>
+    <string name="lyrics_source_button_info">Кнопка рядом с «Подпевай», показывающая, откуда взят текст; нажми, чтобы выбрать другой источник.</string>
+    <string name="tour_179_language">Prism на твоём языке</string>
+    <string name="tour_179_language_body">31 язык. Prism следует языку телефона, или можно выбрать другой.</string>
+    <string name="tour_179_language_youtube">Авторы песен и собственные подборки YouTube тоже приходят на нём</string>
+    <string name="tour_179_versions">Включить другую версию, если песня играет не в той записи</string>
+    <string name="tour_179_playlists">Ползунок в длинных плейлистах и жанры, которые можно отключить</string>
+    <string name="tour_179_lyrics_button">Источник текста снова рядом с «%1$s», если хочешь</string>
+    <string name="tour_179_widget">Свой цвет для кнопки воспроизведения на виджете</string>
     <string name="lyrics_size">Размер текста</string>
     <string name="library_view">Вид библиотеки</string>
     <string name="library_tabs_views">Вид вкладок библиотеки</string>

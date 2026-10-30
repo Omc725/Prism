@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">歌词对齐方式</string>
     <string name="lyrics_focus">歌词焦点</string>
     <string name="lyrics_progress_line">歌词进度线</string>
+    <string name="lyrics_source_button">歌词来源按钮</string>
+    <string name="lyrics_source_button_info">“跟唱”旁的按钮，显示歌词的来源；轻点即可选择其他来源。</string>
+    <string name="tour_179_language">用你的语言使用 Prism</string>
+    <string name="tour_179_language_body">31 种语言。Prism 跟随手机的语言，你也可以另选一种。</string>
+    <string name="tour_179_language_youtube">歌曲制作人员和 YouTube 自己的栏目也会以该语言显示</string>
+    <string name="tour_179_versions">播放其他版本：当歌曲播放的是错误的录音时</string>
+    <string name="tour_179_playlists">长播放列表上的滑块，以及可以关闭的流派</string>
+    <string name="tour_179_lyrics_button">如果需要，歌词来源可再次显示在“%1$s”旁边</string>
+    <string name="tour_179_widget">为小组件的播放按钮选择你自己的颜色</string>
     <string name="lyrics_size">歌词大小</string>
     <string name="library_view">音乐库视图</string>
     <string name="library_tabs_views">音乐库各标签的视图</string>

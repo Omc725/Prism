@@ -238,7 +238,8 @@ object LookLabels {
         "show_output_device" to tr(R.string.output_device), "full_bleed_artwork" to tr(R.string.edge_to_edge_cover), "video_full_bleed" to tr(R.string.edge_to_edge_video),"hide_volume_bar" to tr(R.string.hide_volume_bar),
         "show_playing_from" to tr(R.string.playing_from), "player_shuffle_repeat" to tr(R.string.shuffle_repeat), "immersive_art" to tr(R.string.immersive_cover),
         "immersive_lyrics" to tr(R.string.immersive_lyrics), "immersive_controls" to tr(R.string.immersive_controls), "lyrics_align" to tr(R.string.lyrics_alignment),
-        "lyrics_blur" to tr(R.string.lyrics_focus), "lyrics_progress_line" to tr(R.string.lyrics_progress_line), "lyrics_scale" to tr(R.string.lyrics_size),
+        "lyrics_blur" to tr(R.string.lyrics_focus), "lyrics_progress_line" to tr(R.string.lyrics_progress_line),
+        "lyrics_source_button" to tr(R.string.lyrics_source_button), "lyrics_scale" to tr(R.string.lyrics_size),
         "library_view" to tr(R.string.library_view), "library_views" to tr(R.string.library_tabs_views), "library_columns" to tr(R.string.library_columns),
         "library_subtitles" to tr(R.string.library_details), "home_header" to tr(R.string.top_of_home), "home_header_height" to tr(R.string.top_of_home_s_height),
         "playlist_hero_cover" to tr(R.string.playlist_picture), "replay_theme_colors" to tr(R.string.replay_in_your_colors),
@@ -399,7 +400,7 @@ object LookLabels {
             "panel_player", "queue_headings", "cast_mark", "immersive_video", "bleed_fit", "cover_flight", "video_controls_hide", "crossfade_mark", "blend_covers", "player_buttons_pill",
         ),
         "lyrics" to setOf(
-            "lyrics_align", "lyrics_blur", "lyrics_progress_line", "lyrics_scale", "lyrics_style", "lyrics_blur_amount", "lyrics_spacing",
+            "lyrics_align", "lyrics_blur", "lyrics_progress_line", "lyrics_source_button", "lyrics_scale", "lyrics_style", "lyrics_blur_amount", "lyrics_spacing",
             "lyrics_others_alpha", "lyrics_sung_color", "lyrics_sung_custom", "lyrics_other_color", "lyrics_other_custom", "lyrics_weight",
             "lyrics_backing_size", "lyrics_shadow", "lyrics_uppercase", "lyrics_ahead", "lyrics_position", "lyrics_extra_size", "lyrics_extra_color",
             "lyrics_extra_italic", "lyrics_extra_place", "lyrics_background", "immersive_background", "lyrics_bg_color", "lyrics_bg_color2", "lyrics_everywhere",

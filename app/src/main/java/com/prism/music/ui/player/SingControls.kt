@@ -6,6 +6,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Arrangement
@@ -35,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -97,12 +99,59 @@ fun toggleSing(c: com.prism.music.AppContainer, onNeedsDownload: () -> Unit) {
     SingUi.say(if (!on) tr(R.string.sing_off) else if (c.player.currentSong.value?.let { c.sing.store.complete(it.id) } == true) tr(R.string.sing) else tr(R.string.sing_getting_ready))
 }
 
-/** Sing's button at the lower right of the lyrics (nothing for what can't be sung: live streams, podcasts). */
+/**
+ * The buttons under the open lyrics: Sing's at the lower right (nothing for what can't be sung: live streams, podcasts),
+ * and with Settings → Lyrics → "Lyrics source button" (1.7.9, asked for after 1.7.8 moved the source to the lyrics'
+ * end) the source at the lower left.
+ */
 @Composable
-fun SingButtonRow(song: Song, onNeedsDownload: () -> Unit, modifier: Modifier = Modifier) {
+fun LyricsButtonsRow(song: Song, state: LyricsState, onChangeSource: () -> Unit, onNeedsDownload: () -> Unit, modifier: Modifier = Modifier) {
     val c = LocalContainer.current
-    if (!c.sing.supported || !c.sing.canSing(song)) return
-    Row(modifier.fillMaxWidth().padding(end = 4.dp), horizontalArrangement = Arrangement.End) { SingButton(song, onNeedsDownload) }
+    val singable = c.sing.supported && c.sing.canSing(song)
+    val source = LocalAppSettings.current.lyricsSourceButton
+    if (!singable && !source) return
+    Box(modifier.fillMaxWidth().padding(horizontal = 4.dp)) {
+        if (source) LyricsSourceButton(state, onChangeSource, Modifier.align(Alignment.CenterStart).padding(end = if (singable) SING_BUTTON + 12.dp else 0.dp))
+        if (singable) Box(Modifier.align(Alignment.CenterEnd)) { SingButton(song, onNeedsDownload) }
+    }
+}
+
+/**
+ * Where the lyrics come from, as a glass button of Sing's height and shape: the source (and "Karaoke" when the words
+ * are timed), and a tap opens the Lyrics source sheet.
+ */
+@Composable
+fun LyricsSourceButton(state: LyricsState, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    val shape = LocalUi.current.button
+    val haptics = rememberHaptics()
+    val lyrics = state.lyrics
+    Row(
+        modifier.height(SING_BUTTON).clip(shape)
+            .background(Color.White.copy(alpha = 0.10f))
+            .border(1.dp, Color.White.copy(alpha = 0.16f), shape)
+            .clickable(onClickLabel = tr(R.string.change_lyrics_source)) { haptics.tick(); onClick() }
+            .testTag("lyricsSourceButton")
+            .padding(start = 12.dp, end = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (state.loading) com.prism.music.ui.components.PrismSpinner(Modifier.size(16.dp), stroke = 2.dp)
+        else Icon(PrismIcons.Lyrics, null, tint = Color.White.copy(alpha = 0.85f), modifier = Modifier.size(18.dp))
+        Spacer(Modifier.width(8.dp))
+        Text(
+            when {
+                state.loading -> tr(R.string.looking_for_lyrics)
+                lyrics == null -> tr(R.string.no_lyrics_found)
+                else -> lyrics.source.label
+            },
+            style = MaterialTheme.typography.labelLarge, color = Color.White.copy(alpha = 0.85f),
+            maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false),
+        )
+        // Timed word by word (" · Karaoke"), quieter than the source.
+        if (lyrics?.wordSynced == true && !state.loading) Text(
+            tr(R.string.karaoke), style = MaterialTheme.typography.labelLarge, color = Color.White.copy(alpha = 0.55f), maxLines = 1,
+        )
+        Icon(PrismIcons.ChevronDown, null, Modifier.padding(start = 4.dp).size(16.dp), tint = Color.White.copy(alpha = 0.5f))
+    }
 }
 
 /**

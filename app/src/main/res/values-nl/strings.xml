@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">Uitlijning van songtekst</string>
     <string name="lyrics_focus">Focus van songtekst</string>
     <string name="lyrics_progress_line">Voortgangslijn van songtekst</string>
+    <string name="lyrics_source_button">Knop voor songtekstbron</string>
+    <string name="lyrics_source_button_info">Een knop naast Meezingen die laat zien waar de songtekst vandaan komt; tik erop om een andere bron te kiezen.</string>
+    <string name="tour_179_language">Prism in jouw taal</string>
+    <string name="tour_179_language_body">31 talen. Prism volgt de taal van je telefoon, of je kiest een andere.</string>
+    <string name="tour_179_language_youtube">Ook de credits van nummers en YouTubes eigen schappen komen in die taal</string>
+    <string name="tour_179_versions">Een andere versie afspelen, als een nummer de verkeerde opname speelt</string>
+    <string name="tour_179_playlists">Een schuifbalk bij lange playlists, en genres die je kunt uitzetten</string>
+    <string name="tour_179_lyrics_button">De bron van de songtekst weer naast %1$s, als je dat wilt</string>
+    <string name="tour_179_widget">Je eigen kleur voor de afspeelknop van een widget</string>
     <string name="lyrics_size">Grootte van songtekst</string>
     <string name="library_view">Weergave van bibliotheek</string>
     <string name="library_tabs_views">Weergaven van bibliotheektabbladen</string>

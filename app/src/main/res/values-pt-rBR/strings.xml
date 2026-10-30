@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">Alinhamento da letra</string>
     <string name="lyrics_focus">Foco da letra</string>
     <string name="lyrics_progress_line">Linha de progresso da letra</string>
+    <string name="lyrics_source_button">Botão da fonte da letra</string>
+    <string name="lyrics_source_button_info">Um botão ao lado de Cantar que mostra de onde vem a letra; toque nele para escolher outra fonte.</string>
+    <string name="tour_179_language">Prism no seu idioma</string>
+    <string name="tour_179_language_body">31 idiomas. O Prism segue o do seu celular, ou você pode escolher outro.</string>
+    <string name="tour_179_language_youtube">Os créditos das músicas e as prateleiras do próprio YouTube também vêm nele</string>
+    <string name="tour_179_versions">Tocar outra versão, quando uma música toca a gravação errada</string>
+    <string name="tour_179_playlists">Um controle deslizante nas playlists longas e gêneros que você pode desativar</string>
+    <string name="tour_179_lyrics_button">A fonte da letra de novo ao lado de %1$s, se quiser</string>
+    <string name="tour_179_widget">Sua própria cor para o botão de tocar de um widget</string>
     <string name="lyrics_size">Tamanho da letra</string>
     <string name="library_view">Visualização da Biblioteca</string>
     <string name="library_tabs_views">Visualizações das abas da Biblioteca</string>

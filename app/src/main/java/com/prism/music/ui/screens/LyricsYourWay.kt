@@ -210,6 +210,7 @@ fun LyricsLookDetails() {
     if (android.os.Build.VERSION.SDK_INT < 31 && s.lyricsBlurAmount > 0f) Note(tr(R.string.focus_blur_needs_android_12_or))
     SliderSetting(tr(R.string.background_vocals), s.lyricsBackingSize, 0.4f..0.9f, { tr(R.string.of_the_line, (it * 100).roundToInt()) }) { prefs.setLyricsBackingSize(it) }
     Toggle(tr(R.string.progress_line), tr(R.string.split_light_under_the_line_being), s.lyricsProgressLine) { prefs.setLyricsProgressLine(it) }
+    Toggle(tr(R.string.lyrics_source_button), tr(R.string.lyrics_source_button_info), s.lyricsSourceButton) { prefs.setLyricsSourceButton(it) }
     Toggle(tr(R.string.shadow), tr(R.string.helps_the_words_read_over_photos), s.lyricsShadow) { prefs.setLyricsShadow(it) }
     Toggle(tr(R.string.capitals), tr(R.string.every_line_in_capitals), s.lyricsUppercase) { prefs.setLyricsUppercase(it) }
 }

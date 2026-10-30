@@ -3208,6 +3208,15 @@
     <string name="lyrics_alignment">Lyrics alignment</string>
     <string name="lyrics_focus">Lyrics focus</string>
     <string name="lyrics_progress_line">Lyrics progress line</string>
+    <string name="lyrics_source_button">Lyrics source button</string>
+    <string name="lyrics_source_button_info">A button beside Sing that shows where the lyrics come from; tap it to pick another source.</string>
+    <string name="tour_179_language">Prism in your language</string>
+    <string name="tour_179_language_body">31 languages. Prism follows your phone\'s, or you can pick another one.</string>
+    <string name="tour_179_language_youtube">Song credits and YouTube\'s own shelves come in it too</string>
+    <string name="tour_179_versions">Play a different version, when a song plays as the wrong recording</string>
+    <string name="tour_179_playlists">A slider on long playlists, and genres you can turn off</string>
+    <string name="tour_179_lyrics_button">The lyrics\' source beside %1$s again, if you want it</string>
+    <string name="tour_179_widget">Your own color for a widget\'s play button</string>
     <string name="lyrics_size">Lyrics size</string>
     <string name="library_view">Library view</string>
     <string name="library_tabs_views">Library tabs\' views</string>

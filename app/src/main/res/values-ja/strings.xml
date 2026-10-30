@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">歌詞の配置</string>
     <string name="lyrics_focus">歌詞のフォーカス</string>
     <string name="lyrics_progress_line">歌詞のプログレスライン</string>
+    <string name="lyrics_source_button">歌詞ソースボタン</string>
+    <string name="lyrics_source_button_info">「シング」の横に歌詞の取得元を表示するボタン。タップすると別のソースを選べます。</string>
+    <string name="tour_179_language">あなたの言語で Prism を</string>
+    <string name="tour_179_language_body">31 言語に対応。スマートフォンの言語に合わせるか、別の言語を選べます。</string>
+    <string name="tour_179_language_youtube">曲のクレジットや YouTube 自体の棚もその言語で表示されます</string>
+    <string name="tour_179_versions">別のバージョンを再生：曲が違う録音で流れたときに</string>
+    <string name="tour_179_playlists">長いプレイリストにスライダー、ジャンル表示はオフにもできます</string>
+    <string name="tour_179_lyrics_button">歌詞の取得元をまた「%1$s」の横に（お好みで）</string>
+    <string name="tour_179_widget">ウィジェットの再生ボタンを好きな色に</string>
     <string name="lyrics_size">歌詞のサイズ</string>
     <string name="library_view">ライブラリの表示</string>
     <string name="library_tabs_views">ライブラリのタブの表示</string>

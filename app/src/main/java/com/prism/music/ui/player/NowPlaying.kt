@@ -1039,8 +1039,8 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                     Column(swipes, horizontalAlignment = Alignment.CenterHorizontally) {
                         val deckGap = if (roomyCover) 12.dp else 18.dp
                         // With the lyrics open: Sing's one button at their lower right (1.7.8, V; their source is a line
-                        // at their end now).
-                        if (lyricsOpen) SingButtonRow(song, onNeedsDownload = { showSing = true }, modifier = Modifier.padding(bottom = 6.dp))
+                        // at their end), and the source as a button at the lower left when asked for (1.7.9).
+                        if (lyricsOpen) LyricsButtonsRow(song, lyricsState, onChangeSource = { showProviders = true }, onNeedsDownload = { showSing = true }, modifier = Modifier.padding(bottom = 6.dp))
                         // Minimal: play, and gestures for the rest (the lyrics and queue still have the whole deck).
                         if (layout == com.prism.music.data.prefs.PlayerLayout.MINIMAL && !lyricsOpen && !queueOpen && !statsOpen) {
                             MinimalPlay(isPlaying, buffering)

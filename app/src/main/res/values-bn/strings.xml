@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">লিরিক্সের সারিবদ্ধতা</string>
     <string name="lyrics_focus">লিরিক্সের ফোকাস</string>
     <string name="lyrics_progress_line">লিরিক্সের অগ্রগতি রেখা</string>
+    <string name="lyrics_source_button">লিরিক্সের উৎস বোতাম</string>
+    <string name="lyrics_source_button_info">«গলা মেলান»-এর পাশে একটি বোতাম যা দেখায় লিরিক্স কোথা থেকে এসেছে; অন্য উৎস বেছে নিতে এতে ট্যাপ করুন।</string>
+    <string name="tour_179_language">আপনার ভাষায় Prism</string>
+    <string name="tour_179_language_body">৩১টি ভাষা। Prism আপনার ফোনের ভাষা মেনে চলে, অথবা অন্য একটি বেছে নিতে পারেন।</string>
+    <string name="tour_179_language_youtube">গানের ক্রেডিট আর YouTube-এর নিজের তাকগুলোও সেই ভাষায় আসে</string>
+    <string name="tour_179_versions">অন্য সংস্করণ চালান, যখন গানটি ভুল রেকর্ডিং হিসেবে বাজে</string>
+    <string name="tour_179_playlists">লম্বা প্লেলিস্টে একটি স্লাইডার, আর বন্ধ করা যায় এমন ঘরানা</string>
+    <string name="tour_179_lyrics_button">লিরিক্সের উৎস আবার «%1$s»-এর পাশে, চাইলে</string>
+    <string name="tour_179_widget">উইজেটের প্লে বোতামের জন্য আপনার নিজের রং</string>
     <string name="lyrics_size">লিরিক্সের আকার</string>
     <string name="library_view">লাইব্রেরির ভিউ</string>
     <string name="library_tabs_views">লাইব্রেরির ট্যাবের ভিউ</string>

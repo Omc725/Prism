@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">Pagkakahanay ng lyrics</string>
     <string name="lyrics_focus">Focus ng lyrics</string>
     <string name="lyrics_progress_line">Progress line ng lyrics</string>
+    <string name="lyrics_source_button">Button ng pinagmulan ng lyrics</string>
+    <string name="lyrics_source_button_info">Isang button sa tabi ng Kumanta na nagpapakita kung saan galing ang lyrics; i-tap ito para pumili ng ibang source.</string>
+    <string name="tour_179_language">Prism sa wika mo</string>
+    <string name="tour_179_language_body">31 na wika. Sinusunod ng Prism ang wika ng phone mo, o puwede kang pumili ng iba.</string>
+    <string name="tour_179_language_youtube">Pati ang credits ng kanta at ang sariling shelves ng YouTube ay nasa wikang iyon</string>
+    <string name="tour_179_versions">Mag-play ng ibang bersyon, kapag maling recording ang tumutugtog</string>
+    <string name="tour_179_playlists">Slider sa mahahabang playlist, at mga genre na puwede mong i-off</string>
+    <string name="tour_179_lyrics_button">Ang source ng lyrics sa tabi ng %1$s ulit, kung gusto mo</string>
+    <string name="tour_179_widget">Sarili mong kulay para sa play button ng widget</string>
     <string name="lyrics_size">Laki ng lyrics</string>
     <string name="library_view">View ng library</string>
     <string name="library_tabs_views">Mga view ng tab ng library</string>

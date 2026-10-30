@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">יישור המילים</string>
     <string name="lyrics_focus">מיקוד המילים</string>
     <string name="lyrics_progress_line">קו ההתקדמות של המילים</string>
+    <string name="lyrics_source_button">כפתור מקור המילים</string>
+    <string name="lyrics_source_button_info">כפתור ליד „שירה” שמראה מאיפה המילים מגיעות; הקשה עליו בוחרת מקור אחר.</string>
+    <string name="tour_179_language">Prism בשפה שלך</string>
+    <string name="tour_179_language_body">31 שפות. Prism עוקב אחרי השפה של הטלפון, או שאפשר לבחור שפה אחרת.</string>
+    <string name="tour_179_language_youtube">גם קרדיטים של שירים והמדפים של YouTube עצמו מגיעים בה</string>
+    <string name="tour_179_versions">ניגון גרסה אחרת, כשהשיר מתנגן בהקלטה הלא נכונה</string>
+    <string name="tour_179_playlists">מחוון ברשימות השמעה ארוכות, וז׳אנרים שאפשר לכבות</string>
+    <string name="tour_179_lyrics_button">מקור המילים שוב ליד „%1$s”, אם רוצים</string>
+    <string name="tour_179_widget">צבע משלך לכפתור הניגון של ווידג׳ט</string>
     <string name="lyrics_size">גודל המילים</string>
     <string name="library_view">תצוגת הספרייה</string>
     <string name="library_tabs_views">תצוגות כרטיסיות הספרייה</string>

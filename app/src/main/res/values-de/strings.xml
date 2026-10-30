@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">Ausrichtung des Songtexts</string>
     <string name="lyrics_focus">Fokus des Songtexts</string>
     <string name="lyrics_progress_line">Fortschrittslinie im Songtext</string>
+    <string name="lyrics_source_button">Songtext-Quelle als Taste</string>
+    <string name="lyrics_source_button_info">Eine Taste neben „Mitsingen“, die zeigt, woher der Songtext kommt; antippen, um eine andere Quelle zu wählen.</string>
+    <string name="tour_179_language">Prism in deiner Sprache</string>
+    <string name="tour_179_language_body">31 Sprachen. Prism folgt der Sprache deines Handys, oder du wählst eine andere.</string>
+    <string name="tour_179_language_youtube">Auch die Songcredits und YouTubes eigene Regale kommen in ihr</string>
+    <string name="tour_179_versions">Eine andere Version spielen, wenn ein Song in der falschen Aufnahme läuft</string>
+    <string name="tour_179_playlists">Ein Schieberegler für lange Playlists und Genres, die du ausblenden kannst</string>
+    <string name="tour_179_lyrics_button">Die Quelle des Songtexts wieder neben „%1$s“, wenn du willst</string>
+    <string name="tour_179_widget">Deine eigene Farbe für die Wiedergabetaste eines Widgets</string>
     <string name="lyrics_size">Größe des Songtexts</string>
     <string name="library_view">Ansicht der Mediathek</string>
     <string name="library_tabs_views">Ansichten der Mediathek-Tabs</string>

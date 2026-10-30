@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">बोल का अलाइनमेंट</string>
     <string name="lyrics_focus">बोल का फ़ोकस</string>
     <string name="lyrics_progress_line">बोल की प्रोग्रेस लाइन</string>
+    <string name="lyrics_source_button">बोल के स्रोत का बटन</string>
+    <string name="lyrics_source_button_info">«साथ गाएं» के बगल में एक बटन जो दिखाता है कि बोल कहाँ से आए हैं; दूसरा स्रोत चुनने के लिए इसे टैप करें।</string>
+    <string name="tour_179_language">आपकी भाषा में Prism</string>
+    <string name="tour_179_language_body">31 भाषाएँ। Prism आपके फ़ोन की भाषा अपनाता है, या आप कोई दूसरी चुन सकते हैं।</string>
+    <string name="tour_179_language_youtube">गानों के क्रेडिट और YouTube की अपनी शेल्फ़ भी उसी भाषा में आती हैं</string>
+    <string name="tour_179_versions">दूसरा वर्शन चलाएँ, जब कोई गाना गलत रिकॉर्डिंग में बजे</string>
+    <string name="tour_179_playlists">लंबी प्लेलिस्ट में स्लाइडर, और ऐसी शैलियाँ जिन्हें आप बंद कर सकते हैं</string>
+    <string name="tour_179_lyrics_button">बोल का स्रोत फिर से «%1$s» के बगल में, अगर आप चाहें</string>
+    <string name="tour_179_widget">विजेट के प्ले बटन के लिए आपका अपना रंग</string>
     <string name="lyrics_size">बोल का साइज़</string>
     <string name="library_view">लाइब्रेरी व्यू</string>
     <string name="library_tabs_views">लाइब्रेरी टैब के व्यू</string>

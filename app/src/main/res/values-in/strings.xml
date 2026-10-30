@@ -3200,6 +3200,15 @@
     <string name="lyrics_alignment">Perataan lirik</string>
     <string name="lyrics_focus">Fokus lirik</string>
     <string name="lyrics_progress_line">Garis progres lirik</string>
+    <string name="lyrics_source_button">Tombol sumber lirik</string>
+    <string name="lyrics_source_button_info">Tombol di samping Nyanyi yang menunjukkan asal lirik; ketuk untuk memilih sumber lain.</string>
+    <string name="tour_179_language">Prism dalam bahasamu</string>
+    <string name="tour_179_language_body">31 bahasa. Prism mengikuti bahasa ponselmu, atau kamu bisa memilih yang lain.</string>
+    <string name="tour_179_language_youtube">Kredit lagu dan rak milik YouTube sendiri juga hadir dalam bahasa itu</string>
+    <string name="tour_179_versions">Putar versi lain, saat lagu diputar dengan rekaman yang salah</string>
+    <string name="tour_179_playlists">Penggeser di playlist panjang, dan genre yang bisa kamu matikan</string>
+    <string name="tour_179_lyrics_button">Sumber lirik di samping %1$s lagi, jika kamu mau</string>
+    <string name="tour_179_widget">Warnamu sendiri untuk tombol putar widget</string>
     <string name="lyrics_size">Ukuran lirik</string>
     <string name="library_view">Tampilan Koleksi</string>
     <string name="library_tabs_views">Tampilan tab Koleksi</string>

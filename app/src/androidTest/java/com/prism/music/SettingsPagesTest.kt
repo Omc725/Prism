@@ -1,0 +1,82 @@
+package com.prism.music
+
+import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasScrollToNodeAction
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeUp
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+
+/**
+ * Every Settings page opens and scrolls to its end without crashing (1.7.9's check: Downloads, storage & data crashed
+ * as soon as its Smart Downloads estimate passed 1,000 songs, "1,363" read back as a number). Pages are lazy, so each
+ * one is scrolled all the way down: a group below the fold is only drawn then.
+ */
+@RunWith(AndroidJUnit4::class)
+class SettingsPagesTest {
+    @get:Rule val compose = createEmptyComposeRule()
+    @get:Rule val shots = ScreenshotOnFailure()
+
+    private val device by lazy { UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()) }
+
+    /** Hub page → the pages inside it (opened from it). */
+    private val pages = linkedMapOf(
+        "Customize Prism" to listOf("Looks", "Color", "Text", "Icons & shapes", "Glass & backgrounds", "Tabs & mini player", "Home & Library", "Player", "Lyrics"),
+        "Playback & sound" to emptyList(),
+        "Lyrics & Sing" to emptyList(),
+        "Controls & gestures" to emptyList(),
+        "Recommendations & Replay" to emptyList(),
+        "Downloads, storage & data" to emptyList(),
+        "Devices & connections" to listOf("Speakers, TVs & browser", "Discord", "Last.fm"),
+        "Language" to emptyList(),
+        "Backup & about" to listOf("Open-source licenses"),
+    )
+
+    @Test fun everySettingsPageOpensAndScrolls() {
+        Fixture.ready()
+        Fixture.launch()
+        compose.openSettings()
+        for ((hub, inside) in pages) {
+            open(hub)
+            scrollToEnd()
+            for (page in inside) {
+                open(page)
+                scrollToEnd()
+                back()
+            }
+            // Back on the hub (kept where it was scrolled; the next page's row is scrolled to when opened).
+            back()
+        }
+    }
+
+    private fun open(title: String) {
+        compose.clickWhenFound(hasText(title) and hasClickAction(), 15_000)
+        compose.waitForIdle()
+    }
+
+    /** Swipes the page up until nothing new comes into view (at most 40 swipes). */
+    private fun scrollToEnd() {
+        var last = ""
+        repeat(40) {
+            val pageNodes = compose.onAllNodes(hasScrollToNodeAction()).fetchSemanticsNodes()
+            if (pageNodes.isEmpty()) return
+            compose.onAllNodes(hasScrollToNodeAction())[0].performTouchInput { swipeUp() }
+            compose.waitForIdle()
+            val now = compose.onAllNodes(hasText("", substring = true)).fetchSemanticsNodes()
+                .joinToString("|") { n -> n.config.getOrElseNullable(androidx.compose.ui.semantics.SemanticsProperties.Text) { null }?.joinToString() ?: "" }
+            if (now == last) return
+            last = now
+        }
+    }
+
+    private fun back() {
+        device.pressBack()
+        compose.waitForIdle()
+    }
+}

@@ -2221,7 +2221,7 @@ private fun DownloadSettings() {
             val used = pickBytes + cacheBytes
             val usedText = if (used < 1_073_741_824L) "${used / 1_048_576} MB" else tr(R.string.t_1f_gb).format(used / 1_073_741_824.0)
             Note(
-                smartSongEstimate(gb, s.audioQuality).let { n -> trp(R.plurals.about_n_songs_used, n.toInt(), n, usedText) }.format(freeGb) +
+                smartSongEstimate(gb, s.audioQuality).let { n -> trp(R.plurals.about_n_songs_used, n.coerceAtMost(Int.MAX_VALUE.toLong()).toInt(), "%,d".format(n), usedText) }.format(freeGb) +
                     if (gb > freeGb) tr(R.string.it_stops_when_storage_runs_low) else ""
             )
             PrismSlider(

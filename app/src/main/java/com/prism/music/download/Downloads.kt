@@ -718,6 +718,6 @@ private fun kbps(q: AudioQuality) = when (q) { AudioQuality.HIGH -> 150; AudioQu
 /** Rough size of a download at a quality; long mixes and missing durations count as a typical song. */
 fun estimatedSongBytes(durationSec: Int, q: AudioQuality): Long = (durationSec.takeIf { it in 30..1200 } ?: 210) * kbps(q) * 125L
 
-fun smartSongEstimate(gb: Float, q: AudioQuality): String =
-    "%,d".format((gb * 1_073_741_824.0 / estimatedSongBytes(210, q)).toLong())
+fun smartSongEstimate(gb: Float, q: AudioQuality): Long =
+    (gb * 1_073_741_824.0 / estimatedSongBytes(210, q)).toLong()
 

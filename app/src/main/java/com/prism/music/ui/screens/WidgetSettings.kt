@@ -96,6 +96,10 @@ private fun WidgetSettingsScreen(id: Int, style: WidgetStyle, onDone: () -> Unit
     if (picking) com.prism.music.ui.components.ColorPickerSheet(tr(R.string.widget_color), o.color, onDismiss = { picking = false }) {
         change(o.copy(background = WidgetBackground.COLOR, color = it))
     }
+    var pickingButton by remember { mutableStateOf(false) }
+    if (pickingButton) com.prism.music.ui.components.ColorPickerSheet(tr(R.string.play_button), o.buttonColor, onDismiss = { pickingButton = false }) {
+        change(o.copy(buttons = com.prism.music.widget.WidgetButtons.COLOR, buttonColor = it))
+    }
     Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).statusBarsPadding()) {
         Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(tr(R.string.widget), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f))
@@ -118,6 +122,15 @@ private fun WidgetSettingsScreen(id: Int, style: WidgetStyle, onDone: () -> Unit
             }
             Group(tr(R.string.text)) {
                 Chips(WidgetText.entries, o.text, { it.label }) { change(o.copy(text = it)) }
+            }
+            // The play button and progress line (Reddit, 1.7.9); "Your light" is how they were.
+            if (com.prism.music.widget.Widgets.hasButtonColor(style)) Group(tr(R.string.play_button)) {
+                Chips(com.prism.music.widget.WidgetButtons.entries, o.buttons, { it.label }) { b ->
+                    if (b == com.prism.music.widget.WidgetButtons.COLOR && o.buttons != b) pickingButton = true else change(o.copy(buttons = b))
+                }
+                if (o.buttons == com.prism.music.widget.WidgetButtons.COLOR) Item(tr(R.string.pick_the_color), null, onClick = { pickingButton = true }) {
+                    Box(Modifier.size(24.dp).clip(CircleShape).background(Color(o.buttonColor)))
+                }
             }
             Group(tr(R.string.show)) {
                 if (style != WidgetStyle.COVER && style != WidgetStyle.DISC) Toggle(tr(R.string.cover), null, o.cover) { change(o.copy(cover = it)) }

@@ -12,6 +12,12 @@ enum class WidgetBackground(val label: String) { DESIGN(tr(R.string.as_designed)
 enum class WidgetText(val label: String) { AUTO(tr(R.string.as_designed)), WHITE(tr(R.string.white)), BLACK(tr(R.string.black)) }
 
 /**
+ * The play button's and progress line's color (1.7.9, Reddit: "a setting to change THIS color?"): your light, as
+ * before, or white, the cover's color, or one of yours. A widget's views can only be tinted from Android 12 on.
+ */
+enum class WidgetButtons(val label: String) { LIGHT(tr(R.string.your_light)), WHITE(tr(R.string.white)), COVER(tr(R.string.the_cover_s_color)), COLOR(tr(R.string.your_color)) }
+
+/**
  * One placed widget's own settings (1.7.7, W1): two Prism widgets on a home screen can look different. Stored per
  * appWidgetId; a widget without any looks as its style was designed, as before 1.7.7.
  */
@@ -27,6 +33,9 @@ data class WidgetOptions(
     val like: Boolean = true,
     val skips: Boolean = true,
     val progress: Boolean = true,
+    val buttons: WidgetButtons = WidgetButtons.LIGHT,
+    /** [WidgetButtons.COLOR]'s color. */
+    val buttonColor: Int = 0xFFFFFFFF.toInt(),
 ) {
     val isDefault: Boolean get() = this == WidgetOptions()
 }

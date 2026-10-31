@@ -65,6 +65,7 @@ import com.prism.music.ui.LocalNavigator
 import com.prism.music.ui.Load
 import com.prism.music.ui.Routes
 import com.prism.music.ui.components.ItemCard
+import com.prism.music.ui.components.LoadingState
 import com.prism.music.ui.components.PrismChip
 import com.prism.music.ui.components.PrismTextButton
 import com.prism.music.ui.components.SectionHeader
@@ -190,7 +191,12 @@ internal fun SearchLanding(
                     }
                 }
                 SearchSection.MOODS -> {
-                    val ranked = (moods.state as? Load.Ok)?.value ?: return@forEach
+                    val ranked = (moods.state as? Load.Ok)?.value ?: run {
+                        if (moods.state is Load.Loading) {
+                            item(key = "moods-loading") { LoadingState() }
+                        }
+                        return@forEach
+                    }
                     // "For you" is Prism's own ranking; the groups after it leave out what it already shows.
                     val shown = HashSet<String>()
                     val forYou = ranked.picks.take(8).onEach { shown += it.id + "|" + it.params }
@@ -212,7 +218,8 @@ internal fun SearchLanding(
                 }
             }
         }
-        item(key = "arrange") {
+        val loading = SearchSection.MOODS in settings.searchSections && moods.state is Load.Loading && opened.isEmpty() && recents.isEmpty() && artists.isEmpty()
+        if (!loading) item(key = "arrange") {
             Box(Modifier.fillMaxWidth().padding(top = 18.dp), contentAlignment = Alignment.Center) {
                 PrismTextButton(onClick = { arranging = true }) {
                     Icon(PrismIcons.SwapVertical, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(tr(R.string.arrange_this_page))

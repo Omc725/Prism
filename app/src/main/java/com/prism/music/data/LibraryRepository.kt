@@ -225,9 +225,41 @@ class LibraryRepository(private val c: AppContainer) {
             lastError.value = null
             // Likes from YouTube Music are in: bring the Liked songs playlist (if there is one) in line.
             c.likedPlaylist.syncInBackground(full = true)
+            c.scope.launch(Dispatchers.IO) { runCatching { syncAutoDownloadPlaylists() } }
         } catch (e: Exception) {
             lastError.value = e.friendlyMessage()
             syncState.value = SyncState.ERROR
+        }
+    }
+
+    /**
+     * Downloads new songs for playlists marked for auto-download, skipping failed downloads (#298).
+     */
+    suspend fun syncAutoDownloadPlaylists() = withContext(Dispatchers.IO) {
+        val autoSync = c.settings.current.autoDownloadPlaylists
+        if (autoSync.isEmpty()) return@withContext
+        for (pid in autoSync) {
+            syncPlaylistDownloads(pid)
+        }
+    }
+
+    suspend fun syncPlaylistDownloads(playlistId: String) = withContext(Dispatchers.IO) {
+        val norm = playlistId.removePrefix("VL")
+        val local = c.prismLibrary.lists.value.firstOrNull { it.id.removePrefix("VL") == norm }
+        val songs = if (local != null) {
+            local.songs
+        } else {
+            val fullId = if (!norm.startsWith("VL") && !norm.startsWith("PL") && !norm.startsWith("RD")) "VL$norm" else norm
+            if (c.network.isOnline()) {
+                runCatching { c.ytm.playlistAll(fullId, 1000).songs }.getOrNull()
+                    ?: c.offline.page(fullId)?.songs
+                    ?: emptyList()
+            } else {
+                c.offline.page(fullId)?.songs ?: emptyList()
+            }
+        }
+        if (songs.isNotEmpty()) {
+            c.downloads.downloadSyncable(songs)
         }
     }
 

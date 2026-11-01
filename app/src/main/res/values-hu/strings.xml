@@ -3949,4 +3949,13 @@
     <string name="tour_1792_gestures">A lejátszó mozdulatai a vezérlők körül is</string>
     <string name="tour_1792_colors">A minilejátszó haladása a kiemelőszínedben, a szóló dal az album színében</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Szélétől széléig érő borítóval nem: a szalag eltakarja</string>
+
+    <string name="sync_downloads_for_playlists">Letöltések szinkronizálása a lejátszási listákhoz</string>
+    <string name="sync_downloads_for_playlists_summary">A kiválasztott lejátszási listákhoz adott új dalok automatikus letöltése</string>
+    <string name="sync_playlist_downloads">Letöltések szinkronizálása</string>
+    <string name="stop_syncing_downloads">Letöltések szinkronizálásának leállítása</string>
+    <string name="no_playlists_synced">Nincs kiválasztva</string>
+    <string name="n_playlists_synced">%1$d kiválasztva</string>
+    <string name="downloads_will_sync_automatically">Az új dalok automatikusan letöltődnek</string>
+    <string name="downloads_sync_turned_off">A letöltések szinkronizálása kikapcsolva</string>
 </resources>

@@ -3949,4 +3949,13 @@
     <string name="tour_1792_gestures">پلیئر کے اشارے کنٹرولز کے آس پاس بھی</string>
     <string name="tour_1792_colors">منی پلیئر کی پیش رفت آپ کے رنگ میں، چلتا گانا البم کے رنگ میں</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">کنارے تک کور کے ساتھ نہیں: بینر اسے ڈھانپ دیتا ہے</string>
+
+    <string name="sync_downloads_for_playlists">پلے لسٹس کے لیے ڈاؤن لوڈز ہم آہنگ کریں</string>
+    <string name="sync_downloads_for_playlists_summary">منتخب کردہ پلے لسٹس میں شامل کیے گئے نئے گانے خودکار طور پر ڈاؤن لوڈ کریں</string>
+    <string name="sync_playlist_downloads">ڈاؤن لوڈز ہم آہنگ کریں</string>
+    <string name="stop_syncing_downloads">ڈاؤن لوڈز کی ہم آہنگی روکیں</string>
+    <string name="no_playlists_synced">کوئی منتخب نہیں</string>
+    <string name="n_playlists_synced">%1$d منتخب کردہ</string>
+    <string name="downloads_will_sync_automatically">نئے گانے خودکار طور پر ڈاؤن لوڈ ہو جائیں گے</string>
+    <string name="downloads_sync_turned_off">ڈاؤن لوڈ کی ہم آہنگی بند ہو گئی</string>
 </resources>

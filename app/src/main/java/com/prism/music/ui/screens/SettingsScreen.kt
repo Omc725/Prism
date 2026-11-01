@@ -15,6 +15,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -2243,6 +2245,7 @@ private fun DownloadSettings() {
     val nav = LocalNavigator.current
     val context = LocalContext.current
     var cacheBytes by remember { mutableLongStateOf(c.songCacheBytes()) }
+    var syncedPlaylistsSheet by remember { mutableStateOf(false) }
     Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
         Group(tr(R.string.downloads)) {
             Item(tr(R.string.manage_downloads), tr(R.string.see_and_delete_what_s_on), onClick = { nav.go(Routes.DOWNLOADS) }) { Chevron() }
@@ -2251,7 +2254,13 @@ private fun DownloadSettings() {
                 prefs.setDownloadLikes(it)
                 if (it) c.downloads.downloadAll(c.library.liked.value)
             }
+            Item(
+                tr(R.string.sync_downloads_for_playlists),
+                if (s.autoDownloadPlaylists.isEmpty()) tr(R.string.no_playlists_synced) else tr(R.string.n_playlists_synced, s.autoDownloadPlaylists.size),
+                onClick = { syncedPlaylistsSheet = true },
+            ) { Chevron() }
         }
+        if (syncedPlaylistsSheet) SyncedPlaylistsSheet { syncedPlaylistsSheet = false }
         Group(tr(R.string.smart_downloads)) {
             Toggle(
                 tr(R.string.smart_downloads), tr(R.string.songs_you_ll_likely_play_ready), s.smartDownloads,
@@ -2335,6 +2344,76 @@ private fun DownloadSettings() {
                 tr(R.string.get_songs_ready_for_sing_on), tr(R.string.a_few_mb_a_song), s.singOnCellular,
                 info = tr(R.string.sing_needs_each_song_whole_on),
             ) { prefs.setSingOnCellular(it) }
+        }
+    }
+}
+
+@Composable
+private fun SyncedPlaylistsSheet(onDismiss: () -> Unit) {
+    val c = LocalContainer.current
+    val s = LocalAppSettings.current
+    val prefs = c.settings
+    val playlists by c.library.playlists.collectAsState()
+    val prismLists by c.prismLibrary.lists.collectAsState()
+    val signedIn = s.isLoggedIn
+
+    val mine = remember(playlists, prismLists, signedIn) {
+        prismLists.map { it.item() } +
+            (if (signedIn) playlists.filterIsInstance<com.prism.music.data.model.PlaylistItem>().filter { !it.id.startsWith("LM") && !it.isMix } else emptyList())
+    }
+    var query by remember { mutableStateOf("") }
+    val shown = remember(mine, query) {
+        if (query.isBlank()) mine else mine.filter { it.title.contains(query.trim(), ignoreCase = true) }
+    }
+
+    com.prism.music.ui.components.PrismSheet(onDismiss) { _ ->
+        Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(bottom = 24.dp)) {
+            Text(tr(R.string.sync_downloads_for_playlists), style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(horizontal = 20.dp))
+            Text(
+                tr(R.string.sync_downloads_for_playlists_summary),
+                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 4.dp, bottom = 12.dp),
+            )
+            if (mine.size > 8) {
+                com.prism.music.ui.components.SearchField(query, tr(R.string.find_a_playlist), { query = it }, Modifier.padding(horizontal = 20.dp, vertical = 6.dp))
+            }
+            if (mine.isEmpty()) {
+                Text(
+                    tr(R.string.your_playlists_show_up_here_once),
+                    style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(20.dp),
+                )
+            } else {
+                shown.forEach { p ->
+                    val norm = p.id.removePrefix("VL")
+                    val checked = norm in s.autoDownloadPlaylists
+                    Row(
+                        Modifier.fillMaxWidth().clickable {
+                            val next = !checked
+                            prefs.setAutoDownloadPlaylist(norm, next)
+                            if (next) c.scope.launch(kotlinx.coroutines.Dispatchers.IO) { c.library.syncPlaylistDownloads(norm) }
+                        }.padding(horizontal = 20.dp, vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        com.prism.music.ui.components.Artwork(
+                            c.covers.art(p), Modifier.size(46.dp),
+                            com.prism.music.ui.theme.LocalUi.current.smallArt, size = 120, placeholderIcon = PrismIcons.QueueMusic,
+                        )
+                        Spacer(Modifier.width(14.dp))
+                        Column(Modifier.weight(1f)) {
+                            Text(p.title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            if (p.subtitle.isNotBlank()) {
+                                Text(p.subtitle.removePrefix("Playlist • "), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            }
+                        }
+                        Spacer(Modifier.width(8.dp))
+                        PrismCheck(checked, label = p.title) { next ->
+                            prefs.setAutoDownloadPlaylist(norm, next)
+                            if (next) c.scope.launch(kotlinx.coroutines.Dispatchers.IO) { c.library.syncPlaylistDownloads(norm) }
+                        }
+                    }
+                }
+            }
         }
     }
 }

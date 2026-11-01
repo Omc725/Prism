@@ -3999,4 +3999,13 @@
     <string name="tour_1792_gestures">I gesti del player anche intorno ai controlli</string>
     <string name="tour_1792_colors">L\'avanzamento del mini player nel tuo colore d\'accento, il brano in riproduzione nel colore dell\'album</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Non con la copertina a tutto schermo: il banner la copre</string>
+
+    <string name="sync_downloads_for_playlists">Sincronizza download per le playlist</string>
+    <string name="sync_downloads_for_playlists_summary">Scarica automaticamente i nuovi brani aggiunti alle playlist selezionate</string>
+    <string name="sync_playlist_downloads">Sincronizza download</string>
+    <string name="stop_syncing_downloads">Interrompi sincronizzazione download</string>
+    <string name="no_playlists_synced">Nessuna selezionata</string>
+    <string name="n_playlists_synced">%1$d selezionate</string>
+    <string name="downloads_will_sync_automatically">I nuovi brani verranno scaricati automaticamente</string>
+    <string name="downloads_sync_turned_off">Sincronizzazione download disattivata</string>
 </resources>

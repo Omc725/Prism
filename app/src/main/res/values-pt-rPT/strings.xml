@@ -3999,4 +3999,13 @@
     <string name="tour_1792_gestures">Os gestos do leitor também à volta dos controlos</string>
     <string name="tour_1792_colors">O progresso do minileitor no seu destaque, a música a tocar na cor do álbum</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Não com a capa em ecrã inteiro: o banner tapa-a</string>
+
+    <string name="sync_downloads_for_playlists">Sincronizar transferências para playlists</string>
+    <string name="sync_downloads_for_playlists_summary">Transferir automaticamente novas músicas adicionadas às playlists selecionadas</string>
+    <string name="sync_playlist_downloads">Sincronizar transferências</string>
+    <string name="stop_syncing_downloads">Parar de sincronizar transferências</string>
+    <string name="no_playlists_synced">Nenhuma selecionada</string>
+    <string name="n_playlists_synced">%1$d selecionada(s)</string>
+    <string name="downloads_will_sync_automatically">Novas músicas serão transferidas automaticamente</string>
+    <string name="downloads_sync_turned_off">Sincronização de transferências desativada</string>
 </resources>

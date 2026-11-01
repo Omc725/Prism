@@ -373,6 +373,7 @@ object SettingsIndex {
         SettingEntry(D, tr(R.string.downloads), tr(R.string.manage_downloads), tr(R.string.offline_delete)),
         SettingEntry(D, tr(R.string.downloads), tr(R.string.download_on_wi_fi_only), tr(R.string.cellular_mobile_data)),
         SettingEntry(D, tr(R.string.downloads), tr(R.string.download_liked_songs_automatically), tr(R.string.offline_likes)),
+        SettingEntry(D, tr(R.string.downloads), tr(R.string.sync_downloads_for_playlists)),
         SettingEntry(D, tr(R.string.smart_downloads), tr(R.string.smart_downloads), tr(R.string.offline_cache_storage_space)),
         SettingEntry(D, tr(R.string.smart_downloads), tr(R.string.space_to_use), tr(R.string.storage_cache_size_gb)),
         SettingEntry(D, tr(R.string.mobile_data), tr(R.string.smart_downloads_on_mobile_data), "cellular", needs = smart),

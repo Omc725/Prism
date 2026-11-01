@@ -512,6 +512,18 @@ class DownloadRepository(private val context: Context, private val c: AppContain
 
     fun downloadAll(songs: List<Song>) = songs.forEach(::download)
 
+    /**
+     * Downloads [songs] for auto-synced playlists, skipping songs that are already downloaded or failed ([DownloadFailures], #298).
+     */
+    fun downloadSyncable(songs: List<Song>) {
+        val fail = _failures.value
+        val dl = _downloads.value
+        songs.filter { s ->
+            !s.isLocal && dl[s.id]?.state != Download.STATE_COMPLETED &&
+                s.id !in fail && dl[s.id]?.state != Download.STATE_FAILED
+        }.forEach { download(it) }
+    }
+
     // ------------------------------------------------------------ Music videos
 
     /** The video saved for [songId], once all of it is here (what video mode plays offline). */

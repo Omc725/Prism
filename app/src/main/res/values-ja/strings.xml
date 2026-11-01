@@ -3899,4 +3899,13 @@
     <string name="tour_1792_gestures">操作ボタンのまわりでもプレーヤーのジェスチャー</string>
     <string name="tour_1792_colors">ミニプレーヤーの進行をアクセントカラーで、再生中の曲をアルバムの色で</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">全幅のカバーでは使えません（バナーに隠れます）</string>
+
+    <string name="sync_downloads_for_playlists">プレイリストのダウンロードを同期</string>
+    <string name="sync_downloads_for_playlists_summary">選択したプレイリストに追加された新しい曲を自動的にダウンロード</string>
+    <string name="sync_playlist_downloads">ダウンロードを同期</string>
+    <string name="stop_syncing_downloads">ダウンロードの同期を停止</string>
+    <string name="no_playlists_synced">未選択</string>
+    <string name="n_playlists_synced">%1$d 件選択中</string>
+    <string name="downloads_will_sync_automatically">新しい曲は自動的にダウンロードされます</string>
+    <string name="downloads_sync_turned_off">ダウンロードの同期をオフにしました</string>
 </resources>

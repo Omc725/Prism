@@ -979,6 +979,8 @@ data class AppSettings(
     val offlineGb: Float = 5f,
     /** Smart Downloads may download its picks on mobile data too. */
     val smartDownloadsCellular: Boolean = false,
+    /** Playlists marked to automatically download new songs (#298). */
+    val autoDownloadPlaylists: Set<String> = emptySet(),
     // Audio effects
     val eq: EqSettings = EqSettings(bassBoost = 32, virtualizer = 6, loudnessGainMb = 39),
     /** Prism Spatial, the software spatializer. */
@@ -1368,6 +1370,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val smartDownloadGb = floatPreferencesKey("smart_download_gb")
         val offlineGb = floatPreferencesKey("offline_gb")
         val smartDownloadsCellular = booleanPreferencesKey("smart_downloads_cellular")
+        val autoDownloadPlaylists = stringPreferencesKey("auto_download_playlists")
         val eq = stringPreferencesKey("eq")
         val homeLayout = stringPreferencesKey("home_layout")
         val autoAddSections = booleanPreferencesKey("auto_add_sections")
@@ -1633,7 +1636,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 "audio_diagnostics", "search_keyboard", "double_tap_seek_seconds", "stop_on_swipe_away", "data_saver",
                 "video_continues", "lossless", "lossless_local", "normalize", "skip_silence", "mix", "mix_seconds", "mix_auto",
                 "mix_beat_match", "mix_tempo_cellular", "content_country", "video_max_height", "cache_size_mb", "download_wifi_only",
-                "download_likes", "smart_downloads", "smart_download_gb", "offline_gb", "smart_downloads_cellular", "eq",
+                "download_likes", "auto_download_playlists", "smart_downloads", "smart_download_gb", "offline_gb", "smart_downloads_cellular", "eq",
                 "home_layout", "auto_add_sections", "home_hide_kinds", "home_header_picture", "search_sections", "search_chips", "replay_hours", "greeting_text", "greeting_show_name", "home_shortcuts",
                 "home_recent_tiles", "home_playlists", "home_customize_button", "home_continue", "quick_picks_radio",
                 "home_customize_top_button", "home_podcasts_button", "font_stamp", "lyrics_font_name", "local_sections", "local_sort",
@@ -1824,6 +1827,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 (p[K.smartDownloadGb] ?: d.smartDownloadGb) + if (cacheMb <= 0) 20f else cacheMb / 1024f
             },
             smartDownloadsCellular = p[K.smartDownloadsCellular] ?: d.smartDownloadsCellular,
+            autoDownloadPlaylists = p[K.autoDownloadPlaylists]?.split(',')?.filter { it.isNotBlank() }?.map { it.removePrefix("VL") }?.toSet() ?: d.autoDownloadPlaylists,
             eq = p[K.eq]?.let { runCatching { json.decodeFromString<EqSettings>(it) }.getOrNull() } ?: d.eq,
             homeLayout = p[K.homeLayout]?.let {
                 runCatching { json.decodeFromString<List<HomeSectionConfig>>(it) }.getOrNull()
@@ -2281,6 +2285,15 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setSmartDownloadGb(v: Float) = edit { it[K.smartDownloadGb] = v }
     fun setOfflineGb(v: Float) = edit { it[K.offlineGb] = v }
     fun setSmartDownloadsCellular(v: Boolean) = edit { it[K.smartDownloadsCellular] = v }
+    fun setAutoDownloadPlaylist(playlistId: String, enable: Boolean) = edit {
+        val norm = playlistId.removePrefix("VL")
+        val now = (it[K.autoDownloadPlaylists]?.split(',')?.filter { k -> k.isNotBlank() }?.map { id -> id.removePrefix("VL") }?.toSet() ?: emptySet())
+            .let { s -> if (enable) s + norm else s - norm }
+        it[K.autoDownloadPlaylists] = now.joinToString(",")
+    }
+    fun setAutoDownloadPlaylists(playlistIds: Set<String>) = edit {
+        it[K.autoDownloadPlaylists] = playlistIds.map { id -> id.removePrefix("VL") }.joinToString(",")
+    }
     fun setEq(v: EqSettings) = edit { it[K.eq] = json.encodeToString(EqSettings.serializer(), v) }
     fun setHomeLayout(v: List<HomeSectionConfig>) = edit {
         it[K.homeLayout] = json.encodeToString(kotlinx.serialization.builtins.ListSerializer(HomeSectionConfig.serializer()), v)

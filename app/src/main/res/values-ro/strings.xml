@@ -3999,4 +3999,13 @@
     <string name="tour_1792_gestures">Gesturile playerului și în jurul comenzilor</string>
     <string name="tour_1792_colors">Progresul mini playerului în accentul tău, melodia redată în culoarea albumului</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Nu cu coperta pe tot ecranul: bannerul o acoperă</string>
+
+    <string name="sync_downloads_for_playlists">Sincronizează descărcările pentru liste</string>
+    <string name="sync_downloads_for_playlists_summary">Descarcă automat melodiile noi adăugate în listele selectate</string>
+    <string name="sync_playlist_downloads">Sincronizează descărcările</string>
+    <string name="stop_syncing_downloads">Oprește sincronizarea descărcărilor</string>
+    <string name="no_playlists_synced">Niciuna selectată</string>
+    <string name="n_playlists_synced">%1$d selectate</string>
+    <string name="downloads_will_sync_automatically">Melodiile noi vor fi descărcate automat</string>
+    <string name="downloads_sync_turned_off">Sincronizarea descărcărilor a fost dezactivată</string>
 </resources>

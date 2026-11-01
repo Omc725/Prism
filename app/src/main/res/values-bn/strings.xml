@@ -3949,4 +3949,13 @@
     <string name="tour_1792_gestures">প্লেয়ারের জেসচার কন্ট্রোলের চারপাশেও</string>
     <string name="tour_1792_colors">মিনি প্লেয়ারের অগ্রগতি আপনার রঙে, চলমান গান অ্যালবামের রঙে</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">কিনারা-জোড়া কভারের সাথে নয়: ব্যানার সেটি ঢেকে দেয়</string>
+
+    <string name="sync_downloads_for_playlists">প্লেলিস্টের জন্য ডাউনলোড সিঙ্ক করুন</string>
+    <string name="sync_downloads_for_playlists_summary">নির্বাচিত প্লেলিস্টে যোগ করা নতুন গান স্বয়ংক্রিয়ভাবে ডাউনলোড করুন</string>
+    <string name="sync_playlist_downloads">ডাউনলোড সিঙ্ক করুন</string>
+    <string name="stop_syncing_downloads">ডাউনলোড সিঙ্ক করা বন্ধ করুন</string>
+    <string name="no_playlists_synced">কোনোটি নির্বাচিত নয়</string>
+    <string name="n_playlists_synced">%1$d নির্বাচিত</string>
+    <string name="downloads_will_sync_automatically">নতুন গান স্বয়ংক্রিয়ভাবে ডাউনলোড হবে</string>
+    <string name="downloads_sync_turned_off">ডাউনলোড সিঙ্ক বন্ধ করা হয়েছে</string>
 </resources>

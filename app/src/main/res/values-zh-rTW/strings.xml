@@ -3899,4 +3899,13 @@
     <string name="tour_1792_gestures">控制按鈕周圍也能用的播放器手勢</string>
     <string name="tour_1792_colors">迷你播放器進度使用你的強調色，正在播放的歌曲使用專輯顏色</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">全寬封面時無效：橫幅會遮住它</string>
+
+    <string name="sync_downloads_for_playlists">同步播放清單下載</string>
+    <string name="sync_downloads_for_playlists_summary">自動下載新增至所選播放清單的新歌曲</string>
+    <string name="sync_playlist_downloads">同步下載</string>
+    <string name="stop_syncing_downloads">停止同步下載</string>
+    <string name="no_playlists_synced">未選取</string>
+    <string name="n_playlists_synced">已選取 %1$d 個</string>
+    <string name="downloads_will_sync_automatically">新歌曲將自動下載</string>
+    <string name="downloads_sync_turned_off">已關閉下載同步</string>
 </resources>

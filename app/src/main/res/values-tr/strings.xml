@@ -3949,4 +3949,13 @@
     <string name="tour_1792_gestures">Oynatıcının hareketleri kontrollerin çevresinde de</string>
     <string name="tour_1792_colors">Mini oynatıcının ilerlemesi vurgu renginizde, çalan şarkı albümün renginde</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Kenardan kenara kapakla olmaz: afiş onu kapatır</string>
+
+    <string name="sync_downloads_for_playlists">Çalma listesi indirmelerini eşitle</string>
+    <string name="sync_downloads_for_playlists_summary">Seçilen çalma listelerine yeni eklenen şarkıları otomatik indir</string>
+    <string name="sync_playlist_downloads">İndirmeleri eşitle</string>
+    <string name="stop_syncing_downloads">İndirme eşitlemesini durdur</string>
+    <string name="no_playlists_synced">Hiçbiri seçilmedi</string>
+    <string name="n_playlists_synced">%1$d seçildi</string>
+    <string name="downloads_will_sync_automatically">Yeni şarkılar otomatik olarak indirilecek</string>
+    <string name="downloads_sync_turned_off">İndirme eşitlemesi kapatıldı</string>
 </resources>

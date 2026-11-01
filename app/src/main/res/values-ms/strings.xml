@@ -3899,4 +3899,13 @@
     <string name="tour_1792_gestures">Gerak isyarat pemain juga di sekeliling kawalan</string>
     <string name="tour_1792_colors">Kemajuan pemain mini dalam warna aksen anda, lagu yang dimainkan dalam warna album</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Tidak dengan kulit tepi ke tepi: sepanduk menutupnya</string>
+
+    <string name="sync_downloads_for_playlists">Segerakkan muat turun untuk senarai main</string>
+    <string name="sync_downloads_for_playlists_summary">Muat turun lagu baharu yang ditambahkan ke senarai main yang dipilih secara automatik</string>
+    <string name="sync_playlist_downloads">Segerakkan muat turun</string>
+    <string name="stop_syncing_downloads">Hentikan penyegerakan muat turun</string>
+    <string name="no_playlists_synced">Tiada yang dipilih</string>
+    <string name="n_playlists_synced">%1$d dipilih</string>
+    <string name="downloads_will_sync_automatically">Lagu baharu akan dimuat turun secara automatik</string>
+    <string name="downloads_sync_turned_off">Penyegerakan muat turun dimatikan</string>
 </resources>

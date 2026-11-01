@@ -3949,4 +3949,13 @@
     <string name="tour_1792_gestures">Spelarens gester även runt kontrollerna</string>
     <string name="tour_1792_colors">Miniplayerns förlopp i din accentfärg, låten som spelas i albumets färg</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Inte med omslag kant till kant: bannern täcker det</string>
+
+    <string name="sync_downloads_for_playlists">Synkronisera nedladdningar för spellistor</string>
+    <string name="sync_downloads_for_playlists_summary">Ladda automatiskt ned nya låtar som lagts till i valda spellistor</string>
+    <string name="sync_playlist_downloads">Synkronisera nedladdningar</string>
+    <string name="stop_syncing_downloads">Sluta synkronisera nedladdningar</string>
+    <string name="no_playlists_synced">Ingen vald</string>
+    <string name="n_playlists_synced">%1$d valda</string>
+    <string name="downloads_will_sync_automatically">Nya låtar laddas ned automatiskt</string>
+    <string name="downloads_sync_turned_off">Nedladdningssynkronisering avstängd</string>
 </resources>

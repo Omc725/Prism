@@ -308,6 +308,13 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
         kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { c.warmUp(first.id) }
     }
 
+    val isPlaylist = type == CollectionType.PLAYLIST || type == CollectionType.PRISM
+    val autoSync = isPlaylist && (page.id.removePrefix("VL") in settings.autoDownloadPlaylists)
+    LaunchedEffect(page.id, songs.size, autoSync) {
+        if (!autoSync) return@LaunchedEffect
+        c.downloads.downloadSyncable(songs)
+    }
+
     // Genres are detected quietly per artist, a few at a time; chips fill in as each batch lands.
     // Main genres come first, then any clear second genre an artist also has.
     LaunchedEffect(page.id, songs.size) {
@@ -462,6 +469,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
             // with one tap).
             val n = page.songs.size
             confirm = tr(R.string.delete_the_of_from_this_phone, com.prism.music.data.model.songCount(n), page.title) to {
+                if (autoSync) c.settings.setAutoDownloadPlaylist(page.id.removePrefix("VL"), false)
                 c.downloads.removeMany(page.songs.map { it.id })
                 Toast.makeText(context, trp(R.plurals.removed_n_downloads, n), Toast.LENGTH_SHORT).show()
             }
@@ -788,6 +796,21 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                 )
                 if (type != CollectionType.DOWNLOADS) add(
                     SheetItem(if (allDownloaded) PrismIcons.Delete else PrismIcons.Download, if (allDownloaded) tr(R.string.remove_downloads) else tr(R.string.download_all)) { toggleDownloads() },
+                )
+                if (isPlaylist) add(
+                    SheetItem(
+                        if (autoSync) PrismIcons.Sync else PrismIcons.SyncOff,
+                        if (autoSync) tr(R.string.stop_syncing_downloads) else tr(R.string.sync_playlist_downloads),
+                    ) {
+                        val willSync = !autoSync
+                        c.settings.setAutoDownloadPlaylist(page.id.removePrefix("VL"), willSync)
+                        if (willSync) c.downloads.downloadSyncable(songs)
+                        Toast.makeText(
+                            context,
+                            if (willSync) tr(R.string.downloads_will_sync_automatically) else tr(R.string.downloads_sync_turned_off),
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    },
                 )
                 live.page.artists.firstOrNull { it.id != null }?.let { a -> add(SheetItem(PrismIcons.Person, tr(R.string.go_to, a.name)) { nav.go(Routes.artist(a.id!!)) }) }
                 if (type == CollectionType.LIKED) add(

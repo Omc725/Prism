@@ -4049,4 +4049,13 @@
     <string name="tour_1792_gestures">Жести плеєра й навколо кнопок</string>
     <string name="tour_1792_colors">Прогрес міні-плеєра у вашому акценті, трек, що грає, у кольорі альбому</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Не з обкладинкою на всю ширину: банер її закриває</string>
+
+    <string name="sync_downloads_for_playlists">Синхронізувати завантаження для списків відтворення</string>
+    <string name="sync_downloads_for_playlists_summary">Автоматично завантажувати нові пісні з вибраних списків відтворення</string>
+    <string name="sync_playlist_downloads">Синхронізувати завантаження</string>
+    <string name="stop_syncing_downloads">Зупинити синхронізацію завантажень</string>
+    <string name="no_playlists_synced">Нічого не вибрано</string>
+    <string name="n_playlists_synced">Вибрано: %1$d</string>
+    <string name="downloads_will_sync_automatically">Нові пісні завантажуватимуться автоматично</string>
+    <string name="downloads_sync_turned_off">Синхронізацію завантажень вимкнено</string>
 </resources>

@@ -3999,4 +3999,13 @@
     <string name="tour_1792_gestures">מחוות הנגן גם סביב הפקדים</string>
     <string name="tour_1792_colors">התקדמות הנגן המוקטן בצבע ההדגשה שלך, השיר שמתנגן בצבע האלבום</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">לא עם עטיפה מקצה לקצה: הבאנר מכסה אותה</string>
+
+    <string name="sync_downloads_for_playlists">סנכרן הורדות עבור פלייליסטים</string>
+    <string name="sync_downloads_for_playlists_summary">הורד אוטומטית שירים חדשים שנוספו לפלייליסטים שנבחרו</string>
+    <string name="sync_playlist_downloads">סנכרן הורדות</string>
+    <string name="stop_syncing_downloads">הפסק לסנכרן הורדות</string>
+    <string name="no_playlists_synced">לא נבחר דבר</string>
+    <string name="n_playlists_synced">%1$d נבחרו</string>
+    <string name="downloads_will_sync_automatically">שירים חדשים יורדו אוטומטית</string>
+    <string name="downloads_sync_turned_off">סנכרון ההורדות כבוי</string>
 </resources>

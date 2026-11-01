@@ -3899,4 +3899,13 @@
     <string name="tour_1792_gestures">컨트롤 주변에서도 플레이어 제스처</string>
     <string name="tour_1792_colors">미니 플레이어 진행 바를 강조 색으로, 재생 중인 곡을 앨범 색으로</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">가장자리까지 채운 커버에서는 안 됨: 배너가 가립니다</string>
+
+    <string name="sync_downloads_for_playlists">재생목록 다운로드 동기화</string>
+    <string name="sync_downloads_for_playlists_summary">선택한 재생목록에 추가된 새 노래 자동 다운로드</string>
+    <string name="sync_playlist_downloads">다운로드 동기화</string>
+    <string name="stop_syncing_downloads">다운로드 동기화 중지</string>
+    <string name="no_playlists_synced">선택 안 됨</string>
+    <string name="n_playlists_synced">%1$d개 선택됨</string>
+    <string name="downloads_will_sync_automatically">새 노래가 자동으로 다운로드됩니다</string>
+    <string name="downloads_sync_turned_off">다운로드 동기화가 꺼졌습니다</string>
 </resources>

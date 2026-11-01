@@ -3999,4 +3999,13 @@
     <string name="tour_1792_gestures">Los gestos del reproductor también alrededor de los controles</string>
     <string name="tour_1792_colors">El progreso del minirreproductor en tu acento, la canción que suena en el color del álbum</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">No con la portada a pantalla completa: el banner la tapa</string>
+
+    <string name="sync_downloads_for_playlists">Sincronizar descargas de listas de reproducción</string>
+    <string name="sync_downloads_for_playlists_summary">Descargar automáticamente las canciones nuevas agregadas a las listas seleccionadas</string>
+    <string name="sync_playlist_downloads">Sincronizar descargas</string>
+    <string name="stop_syncing_downloads">Detener sincronización de descargas</string>
+    <string name="no_playlists_synced">Ninguna seleccionada</string>
+    <string name="n_playlists_synced">%1$d seleccionada(s)</string>
+    <string name="downloads_will_sync_automatically">Las canciones nuevas se descargarán automáticamente</string>
+    <string name="downloads_sync_turned_off">Sincronización de descargas desactivada</string>
 </resources>
